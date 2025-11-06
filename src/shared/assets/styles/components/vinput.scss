@@ -1,0 +1,58 @@
+@layer components {
+  .form-input-component {
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .password-icon {
+      &:hover {
+        color: theme('colors.primary');
+        transition: all 0.5s;
+        transform: scale(1.2);
+      }
+    }
+
+    .form-input {
+      transition: all 0.5s;
+      box-shadow: theme('boxShadow.md');
+      background-color: theme('colors.inputBg');
+      color: theme('colors.mainText');
+      padding-left: 50px;
+      outline: none;
+      width: 100%;
+      border-radius: theme('borderRadius.md');
+
+      &:hover {
+        box-shadow: theme('boxShadow.lg');
+      }
+
+      &:focus {
+        box-shadow: theme('boxShadow.lg');
+      }
+
+      &.input-style {
+        height: 40px;
+        padding: 0 16px;
+        font-weight: 300;
+        display: flex;
+        align-items: center;
+        border: 2px solid transparent;
+        min-width: 200px;
+      }
+
+      &.input-errorBorder {
+        transition: all 0.1s;
+        border-color: theme('colors.red.500');
+      }
+
+      &.left-slot {
+        padding-left: 50px;
+      }
+
+      &.right-slot {
+        padding-right: 50px;
+      }
+    }
+  }
+}

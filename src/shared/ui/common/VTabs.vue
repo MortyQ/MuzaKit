@@ -22,7 +22,7 @@ export interface TabSelectedPayload {
   tab?: ITab
 }
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   tabs: ITab[]
   loader?: boolean
   reset?: boolean
@@ -34,7 +34,10 @@ const props = defineProps<{
    *   Parent must call the provided callback to complete the switch
    */
   tabSelectionMode?: "auto" | "controlled"
-}>();
+}>(), {
+  useHash: true,
+  tabSelectionMode: "auto",
+});
 
 const emits = defineEmits<{
   tabSelected: [payload: TabSelectedPayload]
@@ -44,7 +47,7 @@ const emits = defineEmits<{
 const getInitialTab = (): number | string => {
   // First, try to get tab from URL hash (synchronously, before render)
   // Only if useHash is enabled (default true)
-  if (props.useHash !== false && route.hash) {
+  if (props.useHash && route.hash) {
     const hashTabId = route.hash.replace("#tab-", "");
     const tabFromHash = props.tabs.find((tab) => String(tab.id) === hashTabId);
     if (tabFromHash) {
@@ -71,7 +74,7 @@ const selectTab = (tabId: number | string, updateRoute = true) => {
     currentTabId.value = tabId;
 
     // Update URL hash only if useHash is enabled (default true)
-    if (props.useHash !== false && updateRoute && route.hash !== `#tab-${tabId}`) {
+    if (props.useHash && updateRoute && route.hash !== `#tab-${tabId}`) {
       router.push({
         hash: `#tab-${tabId}`,
         query: route.query,
@@ -233,7 +236,7 @@ defineExpose({
       :aria-labelledby="`tab-${currentTabId}`"
       class="flex-1 flex flex-col min-h-0"
     >
-      <div class="flex-1 overflow-auto pt-4">
+      <div class="flex-1 pt-4">
         <slot :name="`${currentTabId}`" />
       </div>
     </div>
