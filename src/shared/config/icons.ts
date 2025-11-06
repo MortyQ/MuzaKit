@@ -125,6 +125,9 @@ export const iconMap: Record<string, Component> = {
   "lucide:star": defineAsyncComponent(() => import("~icons/lucide/star")),
   "lucide:moon": defineAsyncComponent(() => import("~icons/lucide/moon")),
   "lucide:sun": defineAsyncComponent(() => import("~icons/lucide/sun")),
+  "lucide:arrow-up-down": defineAsyncComponent(() => import("~icons/lucide/arrow-up-down")),
+  "lucide:arrow-down": defineAsyncComponent(() => import("~icons/lucide/arrow-down")),
+  "lucide:arrow-up": defineAsyncComponent(() => import("~icons/lucide/arrow-up")),
 };
 
 /**

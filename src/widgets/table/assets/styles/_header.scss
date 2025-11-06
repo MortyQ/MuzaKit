@@ -120,14 +120,17 @@
   // Text alignment
   &--left {
     text-align: left;
+    justify-content: flex-start;
   }
 
   &--center {
     text-align: center;
+    justify-content: center;
   }
 
   &--right {
     text-align: right;
+    justify-content: flex-end;
   }
 
   // Fixed header has higher z-index (always on top)
@@ -156,16 +159,48 @@
     align-items: center;
     justify-content: center;
   }
+
+  &--sortable {
+    .table-header-sort {
+      cursor: pointer;
+
+      &:hover {
+        .sort-icon {
+          opacity: 0.6;
+        }
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: -2px;
+        border-radius: 4px;
+      }
+    }
+  }
+
+  &--sorted {
+    background-color: color-mix(in srgb, var(--color-primary, #3b82f6) 8%, transparent);
+  }
 }
 
 // Label in header - clean, readable
+.table-header-content {
+  position: relative; // Container for absolute positioned resize handle
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+  padding-right: 8px; // space for resize handle
+  height: 100%; // Full height to contain resize handle
+}
+
 .table-header-label {
   user-select: none;
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding-right: 1rem; // space for resize handle
 }
 
 // Resize handle - subtle, modern appearance
@@ -174,24 +209,30 @@
   right: 0;
   top: 0;
   bottom: 0;
-  width: $table-resize-handle-width;
+  width: 8px; // Wider for better interaction
   cursor: col-resize;
   z-index: 20;
   display: flex;
   align-items: center;
+  justify-content: center;
 
-  // Barely visible by default
+  // Slightly visible by default with a subtle border
   background-color: transparent;
-  transition: background-color $transition-fast;
+  border-right: 1px solid color-mix(in srgb, theme('colors.cardBorder') 50%, transparent 50%);
+  transition: all $transition-fast;
 
-  // Hover state - subtle indicator
+  // Hover state - more visible
   &:hover {
-    background-color: color-mix(in srgb, theme('colors.primary') 25%, transparent 75%);
+    background-color: color-mix(in srgb, theme('colors.primary') 15%, transparent 85%);
+    border-right-color: theme('colors.primary');
+    border-right-width: 2px;
   }
 
   // Active state - clear feedback
   &:active {
-    background-color: theme('colors.primary');
+    background-color: color-mix(in srgb, theme('colors.primary') 25%, transparent 75%);
+    border-right-color: theme('colors.primary');
+    border-right-width: 2px;
   }
 }
 
@@ -215,4 +256,11 @@
   position: sticky;
   top: 0;
   z-index: 3;
+}
+
+.table-header-sort {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
 }

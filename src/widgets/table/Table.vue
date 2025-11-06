@@ -6,13 +6,13 @@ import TableCheckboxCell from "./components/TableCheckboxCell.vue";
 import TableHeaderCheckbox from "./components/TableHeaderCheckbox.vue";
 import TableHeaderGrouped from "./components/TableHeaderGrouped.vue";
 import TableHeaderSimple from "./components/TableHeaderSimple.vue";
-import TablePagination from "./components/TablePagination.vue";
 import TableRow from "./components/TableRow.vue";
 import { useColumnResize } from "./composables/useColumnResize";
 import { useExpandableTable } from "./composables/useExpandableTable";
 import { useFixedColumns } from "./composables/useFixedColumns";
 import { useGroupedHeaders } from "./composables/useGroupedHeaders";
 import { useTableSelection } from "./composables/useTableSelection";
+import { useTableSort } from "./composables/useTableSort";
 import { useVirtualTable } from "./composables/useVirtualTable";
 import type { Column, ExpandableRow, HeaderCell } from "./types/index";
 
@@ -25,6 +25,9 @@ const props = withDefaults(defineProps<TableProps>(), {
   virtualized: true,
   rowHeight: 50,
   expandMode: "auto",
+  sort: () => ({ type: "server", multiple: true }),
+  page: 1,
+  pageSize: 10,
 });
 
 const emit = defineEmits<TableEmits>();
@@ -95,20 +98,47 @@ const tableHeight = computed(() => {
   return props.height;
 });
 
+// Sort logic - must be before dataToDisplay usage
+const sortStateRef = computed({
+  get: () => props.sortState || [],
+  set: (val) => emit("update:sort-state", val),
+});
+
+const {
+  getSortState,
+  handleSortClick,
+  sortedData,
+} = useTableSort({
+  sort: props.sort,
+  sortState: sortStateRef,
+  columns: columnsRef,
+  page: computed(() => props.page),
+  pageSize: computed(() => props.pageSize),
+  data: computed(() => props.data), // Pass data for frontend sorting
+  onRequest: (payload) => emit("request", payload),
+  onSort: (payload) => emit("sort", payload),
+  onUpdateSortState: (sortState) => emit("update:sort-state", sortState),
+});
+
+// Use sorted data for frontend, original data for server
+const dataToDisplay = computed(() => {
+  return props.sort?.type === "front" ? sortedData.value : props.data;
+});
+
 // Automatic expandable detection by presence of children
 const isExpandable = computed(() =>
-  props.data.some(row => row.children && row.children.length > 0),
+  dataToDisplay.value.some(row => row.children && row.children.length > 0),
 );
 
 // Expandable logic (if there are children)
-const dataRef = computed(() => props.data);
+const dataRef = computed(() => dataToDisplay.value);
 const expandableLogic = isExpandable.value
   ? useExpandableTable(dataRef)
   : null;
 
 // Data for rendering (with flatten if expandable, otherwise regular)
 const displayData = computed(() => {
-  return expandableLogic ? expandableLogic.flattenedData.value : props.data;
+  return expandableLogic ? expandableLogic.flattenedData.value : dataToDisplay.value;
 });
 
 // Multi-select logic
@@ -157,6 +187,11 @@ const gridStyles = computed(() => {
     gridAutoRows: "auto", // All rows auto-sized (headers get height from CSS)
   };
 });
+
+// Handler for sort click from header
+const onHeaderSortClick = (column: Column) => {
+  handleSortClick(column);
+};
 
 // Handle row click
 const onRowClick = (row: Record<string, unknown>) => {
@@ -330,19 +365,25 @@ onUnmounted(() => {
     </div>
 
     <!-- Loading state -->
-    <div
-      v-if="loading"
-      class="table-loading"
-    >
-      <VLoader />
-    </div>
+    <div class="table-container-wrapper">
+      <!-- Loading Overlay -->
+      <Transition name="fade">
+        <div
+          v-if="loading"
+          class="table-loading-overlay"
+        >
+          <div class="table-loading-backdrop" />
+          <div class="table-loading-spinner">
+            <VLoader />
+          </div>
+        </div>
+      </Transition>
 
-    <!-- Table -->
-    <template v-else>
       <!-- Scroll container -->
       <div
         ref="scrollContainerRef"
         class="table-scroll-container table-scrollbar-styled"
+        :class="{ 'table-scroll-container--loading': loading }"
         :style="{ height: tableHeight }"
       >
         <!-- Grid container -->
@@ -358,8 +399,10 @@ onUnmounted(() => {
             :get-fixed-styles="getFixedStyles"
             :get-group-width="getGroupWidth"
             :get-group-fixed-styles="getGroupFixedStyles"
+            :get-sort-state="getSortState"
             @resize-start="startResize"
             @resize-dblclick="autoFitColumn"
+            @sort-click="onHeaderSortClick"
           >
             <!-- Checkbox header slot - always render when multi-select enabled -->
             <template
@@ -375,6 +418,17 @@ onUnmounted(() => {
               <div
                 v-else
                 class="table-header-checkbox-cell table-header-checkbox-cell--empty"
+              />
+            </template>
+
+            <!-- Forward custom header slots -->
+            <template
+              v-for="column in columnsForData"
+              #[`header-${column.key}`]="slotProps"
+            >
+              <slot
+                :name="`header-${column.key}`"
+                v-bind="slotProps"
               />
             </template>
           </component>
@@ -523,13 +577,69 @@ onUnmounted(() => {
           </template>
         </div>
       </div>
-    </template>
-
-    <!-- Pagination -->
-    <TablePagination />
+    </div>
   </div>
 </template>
 
 <style lang="scss">
 @use './assets/styles/table.scss';
 </style>
+
+<style scoped lang="scss">
+// Loading overlay styles
+.table-container-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-loading-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+
+  @media (prefers-color-scheme: dark) {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.table-loading-spinner {
+  position: relative;
+  z-index: 1;
+}
+
+.table-scroll-container--loading {
+  pointer-events: none;
+  user-select: none;
+}
+
+// Fade transition for loading overlay
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
+

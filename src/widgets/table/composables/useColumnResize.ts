@@ -2,7 +2,7 @@ import { ref, computed, type Ref } from "vue";
 
 import type { Column, ResizeState } from "../types";
 
-const MIN_COLUMN_WIDTH = 80; // minimum column width in px
+const MIN_COLUMN_WIDTH = 85; // minimum column width in px
 const DEFAULT_COLUMN_WIDTH = 150; // default width in px
 
 export function useColumnResize(columns: Ref<Column[]>) {

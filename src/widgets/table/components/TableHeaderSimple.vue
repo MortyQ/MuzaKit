@@ -3,11 +3,17 @@ import type { Column } from "../types";
 import TableHeader from "./TableHeader.vue";
 
 interface Props {
-  columns: Column[] // Union type to support both simple and grouped
+  columns: Column[]
   // eslint-disable-next-line no-unused-vars
   getColumnClasses: (_column: Column) => string[]
   // eslint-disable-next-line no-unused-vars
   getFixedStyles: (_column: Column) => Record<string, string>
+  // eslint-disable-next-line no-unused-vars
+  getSortState: (_columnKey: string) => {
+    isSorted: boolean
+    order: "asc" | "desc" | null
+    index: number
+  }
 }
 
 defineProps<Props>();
@@ -15,6 +21,7 @@ defineProps<Props>();
 const emit = defineEmits<{
   "resize-start": [columnKey: string, event: MouseEvent]
   "resize-dblclick": [columnKey: string]
+  "sort-click": [column: Column]
 }>();
 
 const handleResizeStart = (columnKey: string, event: MouseEvent) => {
@@ -23,6 +30,10 @@ const handleResizeStart = (columnKey: string, event: MouseEvent) => {
 
 const handleResizeDblClick = (columnKey: string) => {
   emit("resize-dblclick", columnKey);
+};
+
+const handleSortClick = (column: Column) => {
+  emit("sort-click", column);
 };
 </script>
 
@@ -34,13 +45,26 @@ const handleResizeDblClick = (columnKey: string) => {
     <TableHeader
       v-for="column in columns"
       :key="column.key"
+      :column="column"
       :label="column.label"
       :align="column.align"
       :column-key="column.key"
+      :is-sorted="getSortState(column.key).isSorted"
+      :sort-order="getSortState(column.key).order"
+      :sort-index="getSortState(column.key).index"
       :class="getColumnClasses(column)"
       :style="getFixedStyles(column)"
+      @sort-click="handleSortClick(column)"
       @resize-start="handleResizeStart"
       @resize-dblclick="handleResizeDblClick"
     />
+    <!-- Forward slot for custom header content -->
+    <!--      <template #default="slotProps">-->
+    <!--        <slot-->
+    <!--          :name="`header-${column.key}`"-->
+    <!--          v-bind="slotProps"-->
+    <!--        />-->
+    <!--      </template>-->
+    <!--    </TableHeader>-->
   </div>
 </template>

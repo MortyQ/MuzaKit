@@ -1,4 +1,4 @@
-import type { Column, ExpandableRow, MultiSelectConfig } from "@/widgets/table/types/index";
+import type { Column, ExpandableRow, MultiSelectConfig, SortConfig, SortItem, RequestPayload, FrontSortPayload } from "@/widgets/table/types/index";
 
 export type TableProps = {
   columns: Column[]
@@ -17,6 +17,15 @@ export type TableProps = {
    *   Parent must call the provided callback to toggle expansion
    */
   expandMode?: "auto" | "controlled"
+
+  // Sorting configuration
+  sort?: SortConfig // Sort configuration: { type: 'front' | 'server', multiple: true }
+  sortState?: SortItem[] // v-model:sort-state - current sort state
+
+  // Pagination (for @request event)
+  page?: number
+  pageSize?: number
+  totalItems?: number
 };
 
 export type UseTableProps = {
@@ -24,10 +33,13 @@ export type UseTableProps = {
   data: Record<string, unknown>[]
 };
 
-
 export interface TableEmits {
-  "page-change": [page: number]
   "row-click": [row: Record<string, unknown>]
   "update:selected-rows": [selectedRows: ExpandableRow[]]
   "expand-click": [{ row: ExpandableRow, column: Column, callback: () => void, expanded: boolean }]
+
+  // Sorting & Pagination
+  "update:sort-state": [sortState: SortItem[]]
+  request: [payload: RequestPayload] // Unified event for server-side operations (includes page, sort, etc)
+  sort: [payload: FrontSortPayload] // Frontend sort event
 }

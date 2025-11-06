@@ -14,7 +14,7 @@ const columnsGrouped: Column[] = [
     children: [
       { key: "id", label: "ID", width: "80px", align: "center", fixed: "left" },
       { key: "name", label: "Full Name", width: "200px", fixed: "left" },
-      { key: "age", label: "Age", width: "100px", align: "center",  fixed: "left" },
+      { key: "age", label: "Age", width: "100px", align: "left",  fixed: "left" },
     ],
   },
   { key: "startDate", label: "Start Date", width: "130px" },
