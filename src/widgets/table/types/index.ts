@@ -7,6 +7,10 @@ export interface Column {
   fixed?: "left" | "right" // Fix column (sticky) to left or right
   children?: Column[]   // Nested columns for grouped headers (AG-Grid style)
   sortable?: boolean    // Enable sorting for this column
+  // Custom sort value getter - return the value to sort by
+  // If not provided, default behavior is to use column.key
+  // eslint-disable-next-line no-unused-vars
+  sortValue?: <T = Record<string, unknown>>(row: T, key: string) => unknown
 }
 
 export interface HeaderCell {

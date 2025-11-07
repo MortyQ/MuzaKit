@@ -17,9 +17,6 @@ interface UseTableSortOptions<T = Record<string, unknown>> {
   pageSize?: Ref<number>
   // For frontend sorting
   data?: Ref<T[]>
-  // Custom value getter for frontend sorting
-  // eslint-disable-next-line no-unused-vars
-  getValue?: (row: T, key: string) => unknown
   // Callbacks
   // eslint-disable-next-line no-unused-vars
   onRequest?: (payload: RequestPayload) => void
@@ -33,10 +30,10 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
   const {
     sort = {},
     sortState: propSortState,
+    columns,
     page,
     pageSize,
     data,
-    getValue,
     onRequest,
     onSort,
     onUpdateSortState,
@@ -84,15 +81,19 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
   // ========================================
 
   /**
-   * Get value from row by key with fallback
+   * Get value from row by key with support for sortValue
    */
-  const getRowValue = (row: T, key: string): unknown => {
-    if (getValue) {
-      return getValue(row, key);
+  const getRowValue = (row: T, columnKey: string): unknown => {
+    // Find column definition
+    const column = columns.value.find((col) => col.key === columnKey);
+
+    // Use custom sortValue if provided
+    if (column?.sortValue) {
+      return column.sortValue(row, columnKey);
     }
 
     // Default implementation with nested key support
-    const keys = key.split(".");
+    const keys = columnKey.split(".");
     let value: unknown = row;
 
     for (const k of keys) {

@@ -20,7 +20,7 @@ const serverColumns: Column[] = [
 ];
 
 // Simulate server request
-const handleServerRequest = async ({ page, pageSize, sort }: RequestPayload) => {
+const handleServerRequest = async ({ sort }: RequestPayload) => {
   serverLoading.value = true;
 
   // Simulate API delay
@@ -49,8 +49,6 @@ const handleServerRequest = async ({ page, pageSize, sort }: RequestPayload) => 
 
   serverData.value = sortedData;
   serverLoading.value = false;
-
-  console.log("Server request:", { page, pageSize, sort });
 };
 
 // Frontend sorting example
@@ -59,37 +57,30 @@ const frontSortState = ref<SortItem[]>([]);
 
 const frontColumns: Column[] = [
   { key: "id", label: "ID", width: "80px", sortable: true },
-  { key: "name", label: "Name", width: "2fr", sortable: true },
-  { key: "age", label: "Age", width: "100px", sortable: true },
-  { key: "position", label: "Position", width: "150px", sortable: true },
+  {
+    key: "name",
+    label: "Name",
+    width: "2fr",
+    sortable: true,
+    // Default behavior - no sortValue needed for simple string sorting
+  },
+  {
+    key: "age",
+    label: "Age",
+    width: "100px",
+    sortable: true,
+    // Custom sort rule - treat as number
+    sortValue: (row: any) => Number(row.age) || 0,
+  },
+  {
+    key: "position",
+    label: "Position",
+    width: "150px",
+    sortable: true,
+    // Custom sort rule - case-insensitive string comparison
+    sortValue: (row: any) => String(row.position || "").toLowerCase(),
+  },
 ];
-
-const handleFrontSort = ({ column, order, sortState }: any) => {
-  console.log("Frontend sort:", { column, order, sortState });
-
-  // Apply sorting locally (synchronous - no loader needed)
-  let sorted = [...mockDataUsers];
-
-  if (sortState.length > 0) {
-    sorted.sort((a, b) => {
-      for (const sortItem of sortState) {
-        const aValue = a[sortItem.column];
-        const bValue = b[sortItem.column];
-
-        if (aValue === bValue) continue;
-
-        const comparison = String(aValue).localeCompare(String(bValue), undefined, {
-          numeric: true,
-        });
-
-        return sortItem.order === "asc" ? comparison : -comparison;
-      }
-      return 0;
-    });
-  }
-
-  frontData.value = sorted;
-};
 
 // Single-sort example
 const singleData = ref([...mockDataUsers]);
@@ -175,7 +166,6 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
         :data="frontData"
         :sort="{ type: 'front', multiple: true }"
         height="400px"
-        @sort="handleFrontSort"
       />
     </div>
 
