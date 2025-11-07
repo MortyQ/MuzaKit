@@ -124,14 +124,7 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
         Click on different columns to add multiple sorts.
         Click same column to cycle: none → asc → desc → none
       </p>
-      <div class="section-info">
-        <strong>Current sort:</strong>
-        <code v-if="serverSortState.length > 0">{{ JSON.stringify(serverSortState) }}</code>
-        <span
-          v-else
-          class="text-muted"
-        >No sorting applied</span>
-      </div>
+
       <Table
         v-model:sort-state="serverSortState"
         :columns="serverColumns"
@@ -143,8 +136,23 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
         @request="handleServerRequest"
       />
     </div>
-
+    <div class="section-info">
+      <strong>Current sort:</strong>
+      <code v-if="serverSortState.length > 0">{{ JSON.stringify(serverSortState) }}</code>
+      <span
+        v-else
+        class="text-muted"
+      >No sorting applied</span>
+    </div>
     <!-- Frontend Multi-Sort -->
+
+    <Table
+      v-model:sort-state="frontSortState"
+      :columns="frontColumns"
+      :data="frontData"
+      :sort="{ type: 'front', multiple: true }"
+      height="400px"
+    />
     <div class="section">
       <h2 class="section-title">
         Frontend Multi-Sort
@@ -160,16 +168,19 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
           class="text-muted"
         >No sorting applied</span>
       </div>
-      <Table
-        v-model:sort-state="frontSortState"
-        :columns="frontColumns"
-        :data="frontData"
-        :sort="{ type: 'front', multiple: true }"
-        height="400px"
-      />
     </div>
 
     <!-- Single-Sort -->
+
+    <Table
+      v-model:sort-state="singleSortState"
+      :columns="singleColumns"
+      :data="singleData"
+      :loading="singleLoading"
+      :sort="{ type: 'server', multiple: false }"
+      height="400px"
+      @request="handleSingleRequest"
+    />
     <div class="section">
       <h2 class="section-title">
         Single-Sort Mode
@@ -185,15 +196,6 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
           class="text-muted"
         >No sorting applied</span>
       </div>
-      <Table
-        v-model:sort-state="singleSortState"
-        :columns="singleColumns"
-        :data="singleData"
-        :loading="singleLoading"
-        :sort="{ type: 'server', multiple: false }"
-        height="400px"
-        @request="handleSingleRequest"
-      />
     </div>
   </div>
 </template>
