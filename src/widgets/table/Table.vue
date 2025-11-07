@@ -394,7 +394,10 @@ onUnmounted(() => {
         >
           <div class="table-loading-backdrop" />
           <div class="table-loading-spinner">
-            <VLoader />
+            <VLoader
+              size="large"
+              variant="primary"
+            />
           </div>
         </div>
       </Transition>
@@ -616,62 +619,3 @@ onUnmounted(() => {
 <style lang="scss">
 @use './assets/styles/table.scss';
 </style>
-
-<style scoped lang="scss">
-// Loading overlay styles
-.table-container-wrapper {
-  position: relative;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.table-loading-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.table-loading-backdrop {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-
-  @media (prefers-color-scheme: dark) {
-    background-color: rgba(0, 0, 0, 0.6);
-  }
-}
-
-.table-loading-spinner {
-  position: relative;
-  z-index: 1;
-}
-
-.table-scroll-container--loading {
-  pointer-events: none;
-  user-select: none;
-}
-
-// Fade transition for loading overlay
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
-

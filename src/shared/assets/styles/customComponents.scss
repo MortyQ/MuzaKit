@@ -2,6 +2,7 @@
 @use './components/vcheckbox.scss';
 @use './components/vbutton.scss';
 @use './components/vinput.scss';
+@use './components/vloader';
 
 @layer components {
   .page-title {

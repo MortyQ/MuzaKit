@@ -1,0 +1,55 @@
+.table-container-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-loading-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  // Subtle backdrop - less aggressive
+  background-color: color-mix(in srgb, theme('colors.cardBg') 85%, transparent 15%);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.table-loading-spinner {
+  position: relative;
+  z-index: 1;
+  // Simple and clean - no card, just the loader
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-scroll-container--loading {
+  pointer-events: none;
+  user-select: none;
+}
+
+// Fade transition for loading overlay
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
