@@ -75,6 +75,15 @@ export interface FrontSortPayload {
   sortState: SortItem[] // Full sort state for multi-sort
 }
 
+// Pagination configuration
+export interface PaginationConfig {
+  page: number                  // Current page (1-based)
+  pageSize: number              // Items per page
+  total: number                 // Total items count (required for server pagination)
+  pageSizeOptions?: number[]    // Available page size options (default: [10, 25, 50, 100])
+  showSizeChanger?: boolean     // Show page size selector (default: true)
+}
+
 // Re-export selection types
 export type { MultiSelectConfig, SelectionMode, CheckboxState } from "./selection";
 

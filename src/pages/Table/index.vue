@@ -3,6 +3,7 @@ import DefaultTablesTab from "@/pages/Table/components/DefaultTablesTab.vue";
 import ExpandTableTab from "@/pages/Table/components/ExpandTableTab.vue";
 import FixedColumnsTestTab from "@/pages/Table/components/FixedColumnsTestTab.vue";
 import GroupedHeadersTab from "@/pages/Table/components/GroupedHeadersTab.vue";
+import PaginationTab from "@/pages/Table/components/PaginationTab.vue";
 import SelectionTab from "@/pages/Table/components/SelectionTab.vue";
 import SortingTab from "@/pages/Table/components/SortingTab.vue";
 import VTabs from "@/shared/ui/common/VTabs.vue";
@@ -10,6 +11,7 @@ import VTabs from "@/shared/ui/common/VTabs.vue";
 const tabs = [
   { id: "default", label: "Simple Tables", component: DefaultTablesTab },
   { id: "sorting", label: "Sorting", component: SortingTab },
+  { id: "pagination", label: "Pagination", component: PaginationTab },
   { id: "expand", label: "Expand Table", component: ExpandTableTab },
   { id: "fixed", label: "Fixed Columns", component: FixedColumnsTestTab },
   { id: "grouped", label: "Grouped Headers", component: GroupedHeadersTab },

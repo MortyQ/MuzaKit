@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 
 import Table from "@/widgets/table/Table.vue";
 import type { Column, RequestPayload, SortItem } from "@/widgets/table/types";
@@ -9,6 +9,12 @@ import { mockDataUsers } from "@/widgets/table/utils/mockData";
 const serverData = ref([...mockDataUsers]);
 const serverSortState = ref<SortItem[]>([]);
 const serverLoading = ref(false);
+
+const pagination = reactive({
+  page: 1,
+  pageSize: 10,
+  total: mockDataUsers.length,
+});
 
 const serverColumns: Column[] = [
   { key: "id", label: "ID", width: "80px", sortable: true },
@@ -20,7 +26,7 @@ const serverColumns: Column[] = [
 ];
 
 // Simulate server request
-const handleServerRequest = async ({ sort }: RequestPayload) => {
+const handleServerRequest = async ({ sort, page }: RequestPayload) => {
   serverLoading.value = true;
 
   // Simulate API delay
@@ -47,6 +53,7 @@ const handleServerRequest = async ({ sort }: RequestPayload) => {
     });
   }
 
+  pagination.page = page || 1;
   serverData.value = sortedData;
   serverLoading.value = false;
 };
@@ -130,9 +137,12 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
         :columns="serverColumns"
         :data="serverData"
         :loading="serverLoading"
-        :page="1"
-        :page-size="10"
         height="400px"
+        :pagination="{
+          page: pagination.page,
+          pageSize: 10,
+          total: serverData.length,
+        }"
         @request="handleServerRequest"
       />
     </div>
@@ -177,7 +187,7 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
       :columns="singleColumns"
       :data="singleData"
       :loading="singleLoading"
-      :sort="{ type: 'server', multiple: false }"
+      :sort="{ type: 'front', multiple: true }"
       height="400px"
       @request="handleSingleRequest"
     />

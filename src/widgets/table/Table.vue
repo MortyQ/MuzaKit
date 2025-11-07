@@ -18,6 +18,7 @@ import type { Column, ExpandableRow, HeaderCell } from "./types/index";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VLoader from "@/shared/ui/common/VLoader.vue";
+import TablePagination from "@/widgets/table/components/TablePagination.vue";
 import { TableEmits, TableProps } from "@/widgets/table/types/props";
 
 const props = withDefaults(defineProps<TableProps>(), {
@@ -112,12 +113,9 @@ const {
   sort: props.sort,
   sortState: sortStateRef,
   columns: columnsRef,
-  page: computed(() => props.page),
-  pageSize: computed(() => props.pageSize),
+  page: computed(() => props.pagination?.page || 1),
+  pageSize: computed(() => props.pagination?.pageSize || 10),
   data: computed(() => props.data), // Pass data for frontend sorting
-  onRequest: (payload) => emit("request", payload),
-  onSort: (payload) => emit("sort", payload),
-  onUpdateSortState: (sortState) => emit("update:sort-state", sortState),
 });
 
 // Use sorted data for frontend, original data for server
@@ -196,6 +194,17 @@ const onHeaderSortClick = (column: Column) => {
 // Handle row click
 const onRowClick = (row: Record<string, unknown>) => {
   emit("row-click", row);
+};
+
+// Handle pagination change (page or pageSize)
+const handlePaginationChange = ({ page, pageSize }: { page: number, pageSize: number }) => {
+  if (!props.pagination || props.loading) return; // Prevent changes during loading
+
+  emit("request", {
+    page,
+    pageSize,
+    sort: sortStateRef.value,
+  });
 };
 
 const handleToggleRow = (id: string | number, row: ExpandableRow, column: Column) => {
@@ -578,6 +587,18 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- Pagination (only for server-side) -->
+    <TablePagination
+      v-if="pagination"
+      :page="pagination.page"
+      :page-size="pagination.pageSize"
+      :total="pagination.total"
+      :page-size-options="pagination.pageSizeOptions || [10, 25, 50, 100]"
+      :show-size-changer="pagination.showSizeChanger !== false"
+      :loading="loading"
+      @page-change="handlePaginationChange"
+    />
   </div>
 </template>
 

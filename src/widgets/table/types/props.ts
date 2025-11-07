@@ -1,4 +1,4 @@
-import type { Column, ExpandableRow, MultiSelectConfig, SortConfig, SortItem, RequestPayload, FrontSortPayload } from "@/widgets/table/types/index";
+import type { Column, ExpandableRow, MultiSelectConfig, SortConfig, SortItem, RequestPayload, FrontSortPayload, PaginationConfig } from "@/widgets/table/types/index";
 
 export type TableProps = {
   columns: Column[]
@@ -22,10 +22,8 @@ export type TableProps = {
   sort?: SortConfig // Sort configuration: { type: 'front' | 'server', multiple: true }
   sortState?: SortItem[] // v-model:sort-state - current sort state
 
-  // Pagination (for @request event)
-  page?: number
-  pageSize?: number
-  totalItems?: number
+  // Pagination configuration (server-side only)
+  pagination?: PaginationConfig
 };
 
 export type UseTableProps = {
