@@ -28,10 +28,10 @@ const serverColumns: Column[] = [
 // Simulate server request
 const handleServerRequest = async ({ sort, page }: RequestPayload) => {
   serverLoading.value = true;
-
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 500));
 
+  pagination.page = page;
   // Simulate server-side sorting
   let sortedData = [...mockDataUsers];
 
@@ -53,7 +53,7 @@ const handleServerRequest = async ({ sort, page }: RequestPayload) => {
     });
   }
 
-  pagination.page = page || 1;
+
   serverData.value = sortedData;
   serverLoading.value = false;
 };
@@ -138,11 +138,7 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
         :data="serverData"
         :loading="serverLoading"
         height="400px"
-        :pagination="{
-          page: pagination.page,
-          pageSize: 10,
-          total: serverData.length,
-        }"
+        :pagination="pagination"
         @request="handleServerRequest"
       />
     </div>
@@ -187,7 +183,7 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
       :columns="singleColumns"
       :data="singleData"
       :loading="singleLoading"
-      :sort="{ type: 'front', multiple: true }"
+      :sort="{ type: 'server', multiple: false }"
       height="400px"
       @request="handleSingleRequest"
     />
@@ -200,7 +196,7 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
       </p>
       <div class="section-info">
         <strong>Current sort:</strong>
-        <code v-if="singleSortState.length > 0">{{ JSON.stringify(singleSortState[0]) }}</code>
+        <code v-if="singleSortState.length > 0">{{ JSON.stringify(singleSortState) }}</code>
         <span
           v-else
           class="text-muted"

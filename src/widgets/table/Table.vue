@@ -107,16 +107,32 @@ const sortStateRef = computed({
 
 const {
   getSortState,
-  handleSortClick,
+  handleSortClick: internalHandleSortClick,
   sortedData,
 } = useTableSort({
   sort: props.sort,
   sortState: sortStateRef,
   columns: columnsRef,
-  page: computed(() => props.pagination?.page || 1),
-  pageSize: computed(() => props.pagination?.pageSize || 10),
+  page: computed(() => props.pagination?.page),
+  pageSize: computed(() => props.pagination?.pageSize),
   data: computed(() => props.data), // Pass data for frontend sorting
+  onRequest: (payload) => {
+    // For server-side: emit request with pagination data if available
+    if (props.pagination) {
+      emit("request", payload);
+    } else {
+      // Without pagination, emit request with just sort
+      emit("request", payload);
+    }
+  },
+  onSort: (payload) => emit("sort", payload),
+  onUpdateSortState: (sortState) => emit("update:sort-state", sortState),
 });
+
+// Wrapper for sort click to ensure proper handling
+const handleSortClick = (column: Column) => {
+  internalHandleSortClick(column);
+};
 
 // Use sorted data for frontend, original data for server
 const dataToDisplay = computed(() => {
@@ -185,11 +201,6 @@ const gridStyles = computed(() => {
     gridAutoRows: "auto", // All rows auto-sized (headers get height from CSS)
   };
 });
-
-// Handler for sort click from header
-const onHeaderSortClick = (column: Column) => {
-  handleSortClick(column);
-};
 
 // Handle row click
 const onRowClick = (row: Record<string, unknown>) => {
@@ -411,7 +422,7 @@ onUnmounted(() => {
             :get-sort-state="getSortState"
             @resize-start="startResize"
             @resize-dblclick="autoFitColumn"
-            @sort-click="onHeaderSortClick"
+            @sort-click="handleSortClick"
           >
             <!-- Checkbox header slot - always render when multi-select enabled -->
             <template

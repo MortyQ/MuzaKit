@@ -263,11 +263,13 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
       }
     } else {
       // Server sort - emit @request event
-      onRequest?.({
-        page: page?.value || 1,
-        pageSize: pageSize?.value || 10,
+      // Only include page/pageSize if they are provided (pagination enabled)
+      const payload: RequestPayload = {
+        page: page?.value ?? 1,
+        pageSize: pageSize?.value ?? 10,
         sort: newSortState,
-      });
+      };
+      onRequest?.(payload);
     }
   };
 
@@ -285,11 +287,12 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
 
     // Trigger request with empty sort
     if (sortConfig.value.type === "server") {
-      onRequest?.({
-        page: page?.value || 1,
-        pageSize: pageSize?.value || 10,
+      const payload: RequestPayload = {
+        page: page?.value ?? 1,
+        pageSize: pageSize?.value ?? 10,
         sort: [],
-      });
+      };
+      onRequest?.(payload);
     }
   };
 
