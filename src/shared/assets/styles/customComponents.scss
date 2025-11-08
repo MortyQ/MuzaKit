@@ -1,8 +1,9 @@
-@use './components/vcard.scss';
-@use './components/vcheckbox.scss';
-@use './components/vbutton.scss';
-@use './components/vinput.scss';
-@use './components/vloader';
+@use './components/_vcard.scss';
+@use './components/_vcheckbox.scss';
+@use './components/_vbutton.scss';
+@use './components/_vinput.scss';
+@use './components/_vdropdown';
+@use './components/_vsearch';
 
 @layer components {
   .page-title {

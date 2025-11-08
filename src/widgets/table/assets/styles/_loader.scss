@@ -24,7 +24,7 @@
   right: 0;
   bottom: 0;
   // Subtle backdrop - less aggressive
-  background-color: color-mix(in srgb, theme('colors.cardBg') 85%, transparent 15%);
+  background-color: color-mix(in srgb, theme('colors.cardBg') 75%, transparent 15%);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 }

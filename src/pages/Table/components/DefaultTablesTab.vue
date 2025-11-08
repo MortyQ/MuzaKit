@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Table from "@/widgets/table/Table.vue";
-import TableToolbar from "@/widgets/table/components/TableToolbar.vue";
 import type { Column } from "@/widgets/table/types";
 import { mockDataUsers, mockDataUsersTotalRow } from "@/widgets/table/utils/mockData";
 
@@ -25,21 +24,21 @@ const columnsRegular: Column[] = [
 <template>
   <div class="page-container gap-5">
     <Table
+      :toolbar="{
+        enabled: true,
+        title: 'Default Table'
+      }"
       :columns="columnsRegular"
       :data="mockDataUsers"
       :total-row="mockDataUsersTotalRow"
       height="40vh"
-    >
-      <template #toolbar>
-        <TableToolbar />
-      </template>
-    </Table>
+    />
 
     <Table
       :columns="columnsRegular"
       :data="mockDataUsers"
       :total-row="mockDataUsersTotalRow"
-      height="35vh"
+      height="30vh"
     />
   </div>
 </template>

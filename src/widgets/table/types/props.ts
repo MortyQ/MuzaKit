@@ -1,4 +1,4 @@
-import type { Column, ExpandableRow, MultiSelectConfig, SortConfig, SortItem, RequestPayload, FrontSortPayload, PaginationConfig } from "@/widgets/table/types/index";
+import type { Column, ExpandableRow, MultiSelectConfig, SortConfig, SortItem, RequestPayload, FrontSortPayload, PaginationConfig, ToolbarConfig, ExportOptions } from "@/widgets/table/types/index";
 
 export type TableProps = {
   columns: Column[]
@@ -24,6 +24,13 @@ export type TableProps = {
 
   // Pagination configuration (server-side only)
   pagination?: PaginationConfig
+
+  // Toolbar configuration
+  toolbar?: ToolbarConfig
+  exportOptions?: ExportOptions
+
+  // Search model (v-model:search)
+  search?: string
 };
 
 export type UseTableProps = {
@@ -40,4 +47,8 @@ export interface TableEmits {
   "update:sort-state": [sortState: SortItem[]]
   request: [payload: RequestPayload] // Unified event for server-side operations (includes page, sort, etc)
   sort: [payload: FrontSortPayload] // Frontend sort event
+
+  // Toolbar events
+  "update:search": [query: string]
+  "toolbar:export": [format: string, selectedOnly?: boolean]
 }

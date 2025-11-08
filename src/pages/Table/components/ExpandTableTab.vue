@@ -3,7 +3,6 @@ import { reactive, ref } from "vue";
 
 import VMultiSelect from "@/shared/ui/common/VMultiSelect.vue";
 import Table from "@/widgets/table/Table.vue";
-import TableToolbar from "@/widgets/table/components/TableToolbar.vue";
 import { Column, type RequestPayload } from "@/widgets/table/types";
 import { mockDataExpandable, mockDataExpandableTotalRow } from "@/widgets/table/utils/mockData";
 
@@ -13,8 +12,15 @@ const pagination = reactive({
   total: mockDataExpandable.length,
 });
 
+
+const search = ref("");
+const sort = ref([]);
 const serverData = ref([...mockDataExpandable]);
 const serverLoading = ref(false);
+
+const loaders = reactive({
+  exportLoader: false,
+});
 
 const columnsExpandable: Column[] = [
   // All left fixed columns in a row
@@ -52,6 +58,13 @@ const accountStatusList = [
   },
 ];
 
+const exportFormats = ref([
+  { label: "Export as CSV", value: "csv", icon: "mdi:file-delimited", loader: loaders.exportLoader },
+  { label: "Export as Excel", value: "excel", icon: "mdi:file-excel", loader: loaders.exportLoader },
+  { label: "Export as PDF", value: "pdf", icon: "mdi:file-pdf-box", loader: loaders.exportLoader },
+]);
+// Handlers
+
 const handleServerRequest = async ({ sort, page }: RequestPayload) => {
   serverLoading.value = true;
   // Simulate API delay
@@ -87,24 +100,43 @@ const handleServerRequest = async ({ sort, page }: RequestPayload) => {
 const expandAction = ({ callback }) => {
   callback();
 };
+
+const exportFunc = (format: string) => {
+  loaders.exportLoader = true;
+  console.log("EXPORT", format);
+};
+
 </script>
 
 <template>
   <div class="page-container">
     <Table
+      v-model:sort-state="sort"
+      v-model:search="search"
       :columns="columnsExpandable"
       :data="serverData"
       :total-row="mockDataExpandableTotalRow"
       expand-mode="controlled"
       :pagination="pagination"
       :loading="serverLoading"
+      :toolbar="{
+        enabled: true,
+        title: 'Expandable Table',
+        search: true,
+        actions: {
+          refresh: true,
+          resetSort: true,
+          export: 'multi',
+        }
+      }"
+      :export-options="{
+        formats: exportFormats,
+        selectedOnly: false,
+      }"
+      @toolbar:export="exportFunc"
       @expand-click="expandAction"
       @request="handleServerRequest"
     >
-      <template #toolbar>
-        <TableToolbar />
-      </template>
-
       <template #cell-status="{depth, value}">
         TEXT  TEXT  TEXT  TEXT {{ value }}: {{ depth }}
       </template>

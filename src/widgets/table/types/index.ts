@@ -1,3 +1,6 @@
+// Export toolbar types
+export * from "./toolbar";
+
 // Formatter types
 export type CurrencyFormatter = "USD" | "EUR" | "GBP" | "UAH" | string;
 export type DateFormatter = "short" | "long" | "time" | "datetime" | string;
@@ -97,7 +100,7 @@ export interface SortConfig {
 
 export interface RequestPayload {
   page: number
-  pageSize: number
+  pageSize?: number
   sort: SortItem[]      // Always array, even for single sort
 }
 

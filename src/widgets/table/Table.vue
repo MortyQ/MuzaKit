@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onUnmounted, type Component } from "vue";
+import { ref, computed, watch, onUnmounted, useSlots, useAttrs, type Component } from "vue";
 
 import TableCell from "./components/TableCell.vue";
 import TableCheckboxCell from "./components/TableCheckboxCell.vue";
@@ -7,6 +7,7 @@ import TableHeaderCheckbox from "./components/TableHeaderCheckbox.vue";
 import TableHeaderGrouped from "./components/TableHeaderGrouped.vue";
 import TableHeaderSimple from "./components/TableHeaderSimple.vue";
 import TableRow from "./components/TableRow.vue";
+import TableToolbar from "./components/TableToolbar.vue";
 import { useColumnResize } from "./composables/useColumnResize";
 import { useExpandableTable } from "./composables/useExpandableTable";
 import { useFixedColumns } from "./composables/useFixedColumns";
@@ -28,12 +29,75 @@ const props = withDefaults(defineProps<TableProps>(), {
   rowHeight: 50,
   expandMode: "auto",
   sort: () => ({ type: "server", multiple: true }),
-  page: 1,
-  pageSize: 10,
+  toolbar: undefined,
+  exportOptions: undefined,
+  search: "",
 });
 
 const emit = defineEmits<TableEmits>();
 
+const $slots = useSlots();
+const $attrs = useAttrs();
+
+// Toolbar search model (v-model:search)
+const searchModel = computed({
+  get: () => props.search || "",
+  set: (value: string) => emit("update:search", value),
+});
+
+// Toolbar enabled check
+const toolbarEnabled = computed(() => {
+  return props.toolbar?.enabled || $slots.toolbar;
+});
+
+// Toolbar event handlers
+const handleToolbarRefresh = () => {
+  // Check if parent has a listener for this event
+  const hasListener = $attrs["onToolbar:refresh"];
+
+  if (hasListener) {
+    // Parent wants to handle refresh manually
+    // Emit event through $attrs to trigger parent's @toolbar:refresh handler
+    const handler = $attrs["onToolbar:refresh"] as Function;
+    handler();
+  } else {
+    // Built-in refresh logic: reset sort and pagination
+    sortStateRef.value = [];
+
+    // Emit request event (works for both with/without pagination)
+    emit("request", {
+      page: props.pagination?.page ?? 1,
+      pageSize: props.pagination?.pageSize ?? 10,
+      sort: [],
+    });
+  }
+};
+
+const handleToolbarResetSort = () => {
+  // Check if parent has a listener for this event
+  const hasListener = $attrs["onToolbar:reset-sort"];
+
+  if (hasListener) {
+    // Parent wants to handle reset sort manually
+    // Emit event through $attrs to trigger parent's @toolbar:reset-sort handler
+    const handler = $attrs["onToolbar:reset-sort"] as Function;
+    handler();
+  } else {
+    // Built-in reset sort logic: clear sort state and emit request
+    sortStateRef.value = [];
+
+    // Emit request event with current page (works for both with/without pagination)
+    emit("request", {
+      page: props.pagination?.page ?? 1,
+      pageSize: props.pagination?.pageSize ?? 10,
+      sort: [],
+    });
+  }
+};
+
+const handleToolbarExport = (format: string, selectedOnly?: boolean) => {
+  emit("toolbar:export", format, selectedOnly);
+};
 
 // Total row visibility - simply check for presence
 const shouldShowTotal = computed(() => props.totalRow !== undefined);
@@ -117,15 +181,7 @@ const {
   page: computed(() => props.pagination?.page),
   pageSize: computed(() => props.pagination?.pageSize),
   data: computed(() => props.data), // Pass data for frontend sorting
-  onRequest: (payload) => {
-    // For server-side: emit request with pagination data if available
-    if (props.pagination) {
-      emit("request", payload);
-    } else {
-      // Without pagination, emit request with just sort
-      emit("request", payload);
-    }
-  },
+  onRequest: (payload) => emit("request", payload),
   onSort: (payload) => emit("sort", payload),
   onUpdateSortState: (sortState) => emit("update:sort-state", sortState),
 });
@@ -416,14 +472,49 @@ onUnmounted(() => {
 <template>
   <div
     class="table-wrapper"
-    :class="{ 'table-wrapper--with-toolbar': $slots.toolbar }"
+    :class="{ 'table-wrapper--with-toolbar': toolbarEnabled }"
   >
-    <!-- Toolbar slot (optional) -->
+    <!-- Toolbar section -->
     <div
-      v-if="$slots.toolbar"
+      v-if="toolbarEnabled"
       class="table-toolbar-slot"
     >
-      <slot name="toolbar" />
+      <!-- Custom toolbar via slot -->
+      <slot
+        v-if="$slots.toolbar"
+        name="toolbar"
+      />
+
+      <!-- Props-based toolbar -->
+      <TableToolbar
+        v-else-if="toolbar?.enabled"
+        v-model:search="searchModel"
+        :config="toolbar"
+        :export-options="exportOptions"
+        @refresh="handleToolbarRefresh"
+        @reset-sort="handleToolbarResetSort"
+        @export="handleToolbarExport"
+      >
+        <!-- Forward slots to TableToolbar -->
+        <template
+          v-if="$slots['toolbar-title']"
+          #title
+        >
+          <slot name="toolbar-title" />
+        </template>
+        <template
+          v-if="$slots['toolbar-search']"
+          #search
+        >
+          <slot name="toolbar-search" />
+        </template>
+        <template
+          v-if="$slots['toolbar-actions']"
+          #actions
+        >
+          <slot name="toolbar-actions" />
+        </template>
+      </TableToolbar>
     </div>
 
     <!-- Loading state -->

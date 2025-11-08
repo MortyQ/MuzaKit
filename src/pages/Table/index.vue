@@ -7,10 +7,12 @@ import GroupedHeadersTab from "@/pages/Table/components/GroupedHeadersTab.vue";
 import PaginationTab from "@/pages/Table/components/PaginationTab.vue";
 import SelectionTab from "@/pages/Table/components/SelectionTab.vue";
 import SortingTab from "@/pages/Table/components/SortingTab.vue";
+import ToolbarTab from "@/pages/Table/components/ToolbarTab.vue";
 import VTabs from "@/shared/ui/common/VTabs.vue";
 
 const tabs = [
   { id: "default", label: "Simple Tables", component: DefaultTablesTab },
+  { id: "toolbar", label: "Toolbar", component: ToolbarTab },
   { id: "sorting", label: "Sorting", component: SortingTab },
   { id: "pagination", label: "Pagination", component: PaginationTab },
   { id: "formatters", label: "Formatters", component: FormattersTab },
