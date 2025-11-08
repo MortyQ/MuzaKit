@@ -11,6 +11,7 @@ import { useColumnResize } from "./composables/useColumnResize";
 import { useExpandableTable } from "./composables/useExpandableTable";
 import { useFixedColumns } from "./composables/useFixedColumns";
 import { useGroupedHeaders } from "./composables/useGroupedHeaders";
+import { useTableFormatters } from "./composables/useTableFormatters";
 import { useTableSelection } from "./composables/useTableSelection";
 import { useTableSort } from "./composables/useTableSort";
 import { useVirtualTable } from "./composables/useVirtualTable";
@@ -128,6 +129,47 @@ const {
   onSort: (payload) => emit("sort", payload),
   onUpdateSortState: (sortState) => emit("update:sort-state", sortState),
 });
+
+// Formatter composable
+const { formatCellValue } = useTableFormatters();
+
+// Helper function to get formatted cell value
+const getCellValue = (value: unknown, column: Column, row: Record<string, unknown>) => {
+  if (!column.format) {
+    return value;
+  }
+  const formatted = formatCellValue(value, column, row);
+  // If it's an object with text property, return the text for display
+  if (
+    formatted &&
+    typeof formatted === "object" &&
+    !Array.isArray(formatted) &&
+    "text" in formatted &&
+    typeof (formatted as any).text !== "undefined"
+  ) {
+    return (formatted as { text: string }).text;
+  }
+  return formatted;
+};
+
+// Helper function to get CSS class for formatted cell
+const getCellClass = (value: unknown, column: Column, row: Record<string, unknown>) => {
+  if (!column.format) {
+    return undefined;
+  }
+  const formatted = formatCellValue(value, column, row);
+  // If it's an object with class property, return the class
+  if (
+    formatted &&
+    typeof formatted === "object" &&
+    !Array.isArray(formatted) &&
+    "class" in formatted &&
+    typeof (formatted as any).class === "string"
+  ) {
+    return (formatted as { class: string }).class;
+  }
+  return undefined;
+};
 
 // Wrapper for sort click to ensure proper handling
 const handleSortClick = (column: Column) => {
@@ -498,7 +540,6 @@ onUnmounted(() => {
             <TableCell
               v-for="(column, colIndex) in columnsForData"
               :key="`${item.key}-${column.key}`"
-              :value="item.row[column.key]"
               :align="column.align"
               :depth="getRowDepth(item.row)"
               :class="getColumnClasses(column)"
@@ -533,9 +574,14 @@ onUnmounted(() => {
                     :index="item.index"
                     :depth="getRowDepth(item.row)"
                   >
-                    <!-- Default rendering -->
-                    <span :title="!column.interactive ? String(item.row[column.key]) : undefined">
-                      {{ item.row[column.key] }}
+                    <!-- Default rendering with formatter -->
+                    <span
+                      :class="getCellClass(item.row[column.key], column, item.row)"
+                      :title="!column.interactive
+                        ? String(getCellValue(item.row[column.key], column, item.row))
+                        : undefined"
+                    >
+                      {{ getCellValue(item.row[column.key], column, item.row) }}
                     </span>
                   </slot>
                 </div>
@@ -563,9 +609,7 @@ onUnmounted(() => {
             <TableCell
               v-for="(column, colIndex) in columnsForData"
               :key="`total-${column.key}`"
-              :value="totalRow[column.key]"
               :align="column.align"
-              :depth="0"
               class="table-total-cell"
               :class="getColumnClasses(column)"
               :style="getFixedStyles(column)"
@@ -587,11 +631,14 @@ onUnmounted(() => {
                     :value="totalRow[column.key]"
                     :column="column"
                   >
-                    <!-- Default rendering -->
+                    <!-- Default rendering with formatter -->
                     <span
-                      :title="!column.interactive ? String(totalRow[column.key]) : undefined"
+                      :class="getCellClass(totalRow[column.key], column, totalRow)"
+                      :title="!column.interactive
+                        ? String(getCellValue(totalRow[column.key], column, totalRow))
+                        : undefined"
                     >
-                      {{ totalRow[column.key] }}
+                      {{ getCellValue(totalRow[column.key], column, totalRow) }}
                     </span>
                   </slot>
                 </div>

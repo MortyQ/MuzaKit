@@ -2,7 +2,7 @@
 import { computed } from "vue";
 
 interface Props {
-  value: unknown
+  value?: unknown
   align?: "left" | "center" | "right"
   depth?: number
   isFirstColumn?: boolean
@@ -12,6 +12,7 @@ const props = withDefaults(defineProps<Props>(), {
   align: "left",
   depth: 0,
   isFirstColumn: false,
+  value: undefined,
 });
 
 // Calculate padding for indent of nested rows
@@ -34,13 +35,6 @@ const computedPaddingLeft = computed(() => {
     }"
     :style="{ paddingLeft: computedPaddingLeft }"
   >
-    <slot>
-      <div
-        class="table-cell-text table-cell-text--truncate"
-        :title="String(value)"
-      >
-        {{ value }}
-      </div>
-    </slot>
+    <slot />
   </div>
 </template>

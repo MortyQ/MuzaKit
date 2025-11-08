@@ -1,3 +1,32 @@
+// Formatter types
+export type CurrencyFormatter = "USD" | "EUR" | "GBP" | "UAH" | string;
+export type DateFormatter = "short" | "long" | "time" | "datetime" | string;
+export type NumberFormatter = "default" | "compact" | "percent" | "decimal";
+
+export interface ColumnFormatOptions {
+  // Currency formatting
+  currency?: boolean | CurrencyFormatter | { code: CurrencyFormatter; decimals?: number }
+
+  // Percentage formatting
+  percentage?: boolean | { decimals?: number; multiplier?: boolean }
+
+  // Number formatting
+  number?: NumberFormatter | { type?: NumberFormatter; decimals?: number }
+
+  // Date formatting
+  date?: DateFormatter | { format?: DateFormatter; locale?: string }
+
+  // Boolean formatting
+  boolean?: { trueText?: string; falseText?: string; colored?: boolean }
+
+  // File size formatting
+  fileSize?: boolean | { decimals?: number }
+
+  // Custom formatter function
+  // eslint-disable-next-line no-unused-vars
+  formatter?: (value: unknown, row?: Record<string, unknown>) => string | number
+}
+
 export interface Column {
   key: string           // Key from data object
   label: string         // Header text
@@ -11,6 +40,9 @@ export interface Column {
   // If not provided, default behavior is to use column.key
   // eslint-disable-next-line no-unused-vars
   sortValue?: <T = Record<string, unknown>>(row: T, key: string) => unknown
+
+  // Formatting options (mutually exclusive - only one should be used)
+  format?: ColumnFormatOptions
 }
 
 export interface HeaderCell {
