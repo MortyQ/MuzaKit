@@ -33,6 +33,7 @@ const columnsExpandable: Column[] = [
   { key: "position", label: "Position" },
   { key: "status", label: "Status" },
   { key: "performance", label: "Rating", sortable: true },
+  { key: "accountStatus", label: "Account Status", width: "200px", interactive: true },
   { key: "startDate", label: "Start Date" },
   { key: "projects", label: "Projects" },
   { key: "location", label: "Location" },
@@ -40,7 +41,6 @@ const columnsExpandable: Column[] = [
   { key: "budget", label: "Budget" },
   { key: "revenue", label: "Revenue"  },
   // Right fixed at the end
-  { key: "accountStatus", label: "Account Status", width: "200px", interactive: true },
 ];
 
 const accountStatusList = [
