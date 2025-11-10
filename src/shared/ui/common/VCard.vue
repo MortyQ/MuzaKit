@@ -79,6 +79,7 @@ const props = withDefaults(defineProps<CardProps>(), {
   image: "",
   imageAlt: "",
   href: "",
+  padding: "sm",
 });
 
 const emit = defineEmits<CardEmits>();
