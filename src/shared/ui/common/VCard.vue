@@ -70,6 +70,15 @@ const props = withDefaults(defineProps<CardProps>(), {
   radius: "md",
   as: "div",
   target: "_self",
+  loading: false,
+  disabled: false,
+  title: "",
+  subtitle: "",
+  description: "",
+  icon: "",
+  image: "",
+  imageAlt: "",
+  href: "",
 });
 
 const emit = defineEmits<CardEmits>();
