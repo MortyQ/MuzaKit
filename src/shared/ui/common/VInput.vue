@@ -18,7 +18,6 @@ type Props = {
   // eslint-disable-next-line vue/require-prop-types
   modelValue?: string | number;
   type?: string;
-  placeholder?: string;
   disabled?: boolean;
   supportText?: string;
   validation?: Validation;
@@ -64,22 +63,26 @@ const sizeClasses = computed(() => {
   return sizes[props.size];
 });
 
-const handleInput = (e: Event) => {
-  const value = (e.target as HTMLInputElement).value;
-  const sanitizedValue = DOMPurify.sanitize(value, { ALLOWED_TAGS: [] });
-  emit("update:modelValue", sanitizedValue);
-};
+const internalValue = computed({
+  get: () => props.modelValue ?? "",
+  set: (value: string) => {
+    const sanitizedValue = DOMPurify.sanitize(value, { ALLOWED_TAGS: [] });
+    emit("update:modelValue", sanitizedValue);
+  },
+});
 </script>
 
 <template>
   <div class="v-input-wrapper">
     <!-- Label -->
-    <label
-      v-if="name"
-      class="v-input-label"
-    >
-      {{ name }}
-    </label>
+    <slot name="name">
+      <label
+        v-if="props.name"
+        class="v-input-label"
+      >
+        {{ props.name }}
+      </label>
+    </slot>
 
     <!-- Input Container -->
     <div class="v-input-container">
@@ -99,6 +102,7 @@ const handleInput = (e: Event) => {
 
       <!-- Input Field -->
       <input
+        v-model="internalValue"
         :type="currentInputType"
         class="v-input"
         :class="[
@@ -111,14 +115,10 @@ const handleInput = (e: Event) => {
             'cursor-pointer': type === 'date',
           },
         ]"
-        :disabled="disabled"
-        :value="modelValue"
-        :placeholder="placeholder"
         v-bind="$attrs"
-        @input="handleInput"
+        :disabled="disabled"
       >
 
-      <!-- Right Icon Slot / Password Toggle -->
       <div
         v-if="$slots['icon-right'] || props.type === 'password'"
         class="v-input-icon v-input-icon-right"
@@ -140,24 +140,28 @@ const handleInput = (e: Event) => {
     </div>
 
     <!-- Support Text -->
-    <p
-      v-if="supportText && !validation?.$error"
-      class="v-input-support-text"
-    >
-      {{ supportText }}
-    </p>
+    <slot name="support-text">
+      <p
+        v-if="supportText && !validation?.$error"
+        class="v-input-support-text"
+      >
+        {{ supportText }}
+      </p>
+    </slot>
 
     <!-- Error Message -->
     <transition
       name="error-slide"
       mode="out-in"
     >
-      <p
-        v-if="validation?.$error"
-        class="v-input-error-message"
-      >
-        {{ validation?.$errors[0]?.$message }}
-      </p>
+      <slot name="error-message">
+        <p
+          v-if="validation?.$error"
+          class="v-input-error-message"
+        >
+          {{ validation?.$errors[0]?.$message }}
+        </p>
+      </slot>
     </transition>
   </div>
 </template>

@@ -1,0 +1,44 @@
+<script setup lang="ts">
+import DefaultTablesTab from "@/pages/Table/components/DefaultTablesTab.vue";
+import ExpandTableTab from "@/pages/Table/components/ExpandTableTab.vue";
+import FixedColumnsTestTab from "@/pages/Table/components/FixedColumnsTestTab.vue";
+import FormattersTab from "@/pages/Table/components/FormattersTab.vue";
+import GroupedHeadersTab from "@/pages/Table/components/GroupedHeadersTab.vue";
+import PaginationTab from "@/pages/Table/components/PaginationTab.vue";
+import SelectionTab from "@/pages/Table/components/SelectionTab.vue";
+import SortingTab from "@/pages/Table/components/SortingTab.vue";
+import ToolbarTab from "@/pages/Table/components/ToolbarTab.vue";
+import VTabs from "@/shared/ui/common/VTabs.vue";
+
+const tabs = [
+  { id: "default", label: "Simple Tables", component: DefaultTablesTab },
+  { id: "toolbar", label: "Toolbar", component: ToolbarTab },
+  { id: "sorting", label: "Sorting", component: SortingTab },
+  { id: "pagination", label: "Pagination", component: PaginationTab },
+  { id: "formatters", label: "Formatters", component: FormattersTab },
+  { id: "expand", label: "Expand Table", component: ExpandTableTab },
+  { id: "fixed", label: "Fixed Columns", component: FixedColumnsTestTab },
+  { id: "grouped", label: "Grouped Headers", component: GroupedHeadersTab },
+  { id: "selection", label: "Multi-Select", component: SelectionTab },
+];
+</script>
+
+<template>
+  <div class="page-container">
+    <VTabs
+      :tabs="tabs"
+      use-hash
+    >
+      <template
+        v-for="tab in tabs"
+        :key="tab.id"
+        #[tab.id]
+      >
+        <component
+          :is="tab.component"
+          v-if="tab.component"
+        />
+      </template>
+    </VTabs>
+  </div>
+</template>

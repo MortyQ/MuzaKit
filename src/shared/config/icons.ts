@@ -36,6 +36,7 @@ export const iconMap: Record<string, Component> = {
   "mdi:check": defineAsyncComponent(() => import("~icons/mdi/check")),
   "mdi:close-thick": defineAsyncComponent(() => import("~icons/mdi/close-thick")),
   "mdi:save": defineAsyncComponent(() => import("~icons/mdi/content-save")),
+  "mdi:sort-variant-remove": defineAsyncComponent(() => import("~icons/mdi/sort-variant-remove")),
 
   // Status & Alerts
   "mdi:alert": defineAsyncComponent(() => import("~icons/mdi/alert")),
@@ -83,6 +84,9 @@ export const iconMap: Record<string, Component> = {
   "mdi:file-delimited": defineAsyncComponent(() => import("~icons/mdi/file-delimited")),
   "mdi:folder-zip": defineAsyncComponent(() => import("~icons/mdi/folder-zip")),
   "mdi:check-circle-outline": defineAsyncComponent(() => import("~icons/mdi/check-circle-outline")),
+  "mdi:filter-outline": defineAsyncComponent(() => import("~icons/mdi/filter-outline")),
+  "mdi:refresh": defineAsyncComponent(() => import("~icons/mdi/refresh")),
+  "mdi:file-excel": defineAsyncComponent(() => import("~icons/mdi/file-excel")),
 
   // Theme
   "mdi:moon": defineAsyncComponent(() => import("~icons/mdi/weather-night")),
@@ -123,6 +127,9 @@ export const iconMap: Record<string, Component> = {
   "lucide:star": defineAsyncComponent(() => import("~icons/lucide/star")),
   "lucide:moon": defineAsyncComponent(() => import("~icons/lucide/moon")),
   "lucide:sun": defineAsyncComponent(() => import("~icons/lucide/sun")),
+  "lucide:arrow-up-down": defineAsyncComponent(() => import("~icons/lucide/arrow-up-down")),
+  "lucide:arrow-down": defineAsyncComponent(() => import("~icons/lucide/arrow-down")),
+  "lucide:arrow-up": defineAsyncComponent(() => import("~icons/lucide/arrow-up")),
 };
 
 /**

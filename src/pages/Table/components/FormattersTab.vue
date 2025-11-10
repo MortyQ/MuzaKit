@@ -1,0 +1,452 @@
+<script setup lang="ts">
+import { ref } from "vue";
+
+import VCard from "@/shared/ui/common/VCard.vue";
+import { formatCurrency } from "@/shared/utils";
+import Table from "@/widgets/table/Table.vue";
+import type { Column } from "@/widgets/table/types";
+
+// Sample data for formatters demo
+const formatterData = ref([
+  {
+    id: 1,
+    name: "John Doe",
+    salary: -75000,
+    bonus: 0.15,
+    score: 4.756,
+    views: 1234567,
+    file_size: 1048576,
+    hired: new Date("2022-03-15"),
+    active: true,
+    discount: 25,
+    revenue: -150000,
+    cost: 120000,
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    salary: 95000,
+    bonus: 0.22,
+    score: 4.923,
+    views: 8765432,
+    file_size: 524288,
+    hired: new Date("2021-07-22"),
+    active: true,
+    discount: 15,
+    revenue: 200000,
+    cost: 140000,
+  },
+  {
+    id: 3,
+    name: "Mike Johnson",
+    salary: 62000,
+    bonus: 0.08,
+    score: 3.845,
+    views: 456789,
+    file_size: 2097152,
+    hired: new Date("2023-01-10"),
+    active: false,
+    discount: 30,
+    revenue: 100000,
+    cost: 85000,
+  },
+  {
+    id: 4,
+    name: "Sarah Williams",
+    salary: 110000,
+    bonus: 0.25,
+    score: 4.967,
+    views: 12345678,
+    file_size: 10485760,
+    hired: new Date("2020-05-05"),
+    active: true,
+    discount: 10,
+    revenue: 300000,
+    cost: 180000,
+  },
+  {
+    id: 5,
+    name: "Tom Brown",
+    salary: 58000,
+    bonus: 0.05,
+    score: 3.521,
+    views: 234567,
+    file_size: 131072,
+    hired: new Date("2023-09-18"),
+    active: true,
+    discount: 20,
+    revenue: 80000,
+    cost: 70000,
+  },
+]);
+
+// Currency formatter
+const currencyColumns: Column[] = [
+  { key: "id", label: "ID", width: "80px" },
+  { key: "name", label: "Name", width: "180px" },
+  {
+    key: "salary",
+    label: "Salary (USD)",
+    align: "right",
+    format: { currency: true },
+  },
+  {
+    key: "revenue",
+    label: "Revenue (EUR)",
+    align: "right",
+    format: { currency: { code: "EUR", decimals: 0 } },
+  },
+];
+
+// Percentage formatter
+const percentageColumns: Column[] = [
+  { key: "id", label: "ID", width: "80px" },
+  { key: "name", label: "Name", width: "180px" },
+  {
+    key: "bonus",
+    label: "Bonus (Multiplier)",
+    align: "right",
+    format: { percentage: { decimals: 1, multiplier: true } },
+  },
+  {
+    key: "discount",
+    label: "Discount",
+    align: "right",
+    format: { percentage: { decimals: 0 } },
+  },
+];
+
+// Number formatter
+const numberColumns: Column[] = [
+  { key: "id", label: "ID", width: "80px" },
+  { key: "name", label: "Name", width: "180px" },
+  {
+    key: "views",
+    label: "Views (Compact)",
+    align: "right",
+    format: { number: "compact" },
+  },
+  {
+    key: "score",
+    label: "Score (Decimal)",
+    align: "center",
+    format: { number: { type: "decimal", decimals: 2 } },
+  },
+];
+
+// Date & Boolean formatter
+const mixedColumns: Column[] = [
+  { key: "id", label: "ID", width: "80px" },
+  { key: "name", label: "Name", width: "180px" },
+  {
+    key: "hired",
+    label: "Hired Date",
+    format: { date: "long" },
+  },
+  {
+    key: "active",
+    label: "Status",
+    align: "center",
+    format: { boolean: { trueText: "✓ Active", falseText: "✗ Inactive" } },
+  },
+];
+
+// File size formatter
+const fileSizeColumns: Column[] = [
+  { key: "id", label: "ID", width: "80px" },
+  { key: "name", label: "Name", width: "180px" },
+  {
+    key: "file_size",
+    label: "File Size",
+    align: "right",
+    format: { fileSize: true },
+  },
+];
+
+// Custom formatter
+const customColumns: Column[] = [
+  { key: "id", label: "ID", width: "80px" },
+  { key: "name", label: "Name", width: "180px" },
+  {
+    key: "salary",
+    label: "Salary",
+    align: "right",
+    format: { currency: "USD" },
+  },
+  {
+    key: "profit_margin",
+    label: "Profit Margin",
+    align: "right",
+    format: {
+      formatter: (_value, row) => {
+        if (!row) return "N/A";
+        const revenue = Number(row.revenue);
+        const cost = Number(row.cost);
+        const margin = ((revenue - cost) / revenue) * 100;
+        return `${margin.toFixed(1)}%`;
+      },
+    },
+  },
+  {
+    key: "total_comp",
+    label: "Total Compensation",
+    align: "right",
+    format: {
+      formatter: (_value, row) => {
+        if (!row) return "N/A";
+        const salary = Number(row.salary);
+        const bonus = Number(row.bonus);
+        const total = salary + (salary * bonus);
+        return formatCurrency(total);
+      },
+    },
+  },
+];
+
+// All formatters combined
+const allFormattersColumns: Column[] = [
+  { key: "id", label: "ID", width: "60px" },
+  { key: "name", label: "Name", width: "140px" },
+  {
+    key: "salary",
+    label: "Salary",
+    align: "right",
+    width: "110px",
+    format: { currency: { code: "USD", decimals: 0 } },
+  },
+  {
+    key: "bonus",
+    label: "Bonus",
+    align: "right",
+    width: "90px",
+    format: { percentage: { decimals: 0, multiplier: true } },
+  },
+  {
+    key: "views",
+    label: "Views",
+    align: "right",
+    width: "90px",
+    format: { number: "compact" },
+  },
+  {
+    key: "hired",
+    label: "Hired",
+    width: "110px",
+    format: { date: "short" },
+  },
+  {
+    key: "active",
+    label: "Active",
+    align: "center",
+    width: "80px",
+    format: { boolean: {} },
+  },
+];
+</script>
+
+<template>
+  <div class="formatters-tab">
+    <!-- Header -->
+    <div class="formatters-header">
+      <h2>Table Formatters</h2>
+      <p>Automatic cell value formatting for common data types</p>
+    </div>
+
+    <!-- Currency Formatter -->
+    <div class="grid grid-cols-2 gap-5">
+      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
+        <h3>Currency Formatter</h3>
+        <p class="section-description">
+          Format numbers as currency with symbols and custom decimal places
+        </p>
+        <Table
+          :data="formatterData"
+          :columns="currencyColumns"
+          row-key="id"
+        />
+        <div class="code-example">
+          <code>
+            format: { currency: true  } // -$75,000.00<br>
+            format: { currency: { code: "EUR", decimals: 0 } } // €150000
+          </code>
+        </div>
+      </VCard>
+
+      <!-- Percentage Formatter -->
+      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
+        <h3>Percentage Formatter</h3>
+        <p class="section-description">
+          Display numbers as percentages with optional multiplication
+        </p>
+        <Table
+          :data="formatterData"
+          :columns="percentageColumns"
+          row-key="id"
+        />
+        <div class="code-example">
+          <code>
+            format: { percentage: { decimals: 1, multiplier: true } } // 0.15 → 15.0%<br>
+            format: { percentage: { decimals: 0 } } // 25 → 25%
+          </code>
+        </div>
+      </VCard>
+
+      <!-- Number Formatter -->
+      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
+        <h3>Number Formatter</h3>
+        <p class="section-description">
+          Format numbers with compact notation or fixed decimals
+        </p>
+        <Table
+          :data="formatterData"
+          :columns="numberColumns"
+          row-key="id"
+        />
+        <div class="code-example">
+          <code>
+            format: { number: "compact" } // 1234567 → 1.2M<br>
+            format: { number: { type: "decimal", decimals: 2 } } // 4.756 → 4.76
+          </code>
+        </div>
+      </VCard>
+
+      <!-- Date & Boolean Formatters -->
+      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
+        <h3>Date & Boolean Formatters</h3>
+        <p class="section-description">
+          Format dates and booleans with custom labels
+        </p>
+        <Table
+          :data="formatterData"
+          :columns="mixedColumns"
+          row-key="id"
+        />
+        <div class="code-example">
+          <code>
+            format: { date: "long" } // November 7, 2025<br>
+            format: { boolean: { trueText: "✓ Active", falseText: "✗ Inactive", colored: true } }
+          </code>
+        </div>
+      </VCard>
+
+      <!-- File Size Formatter -->
+      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
+        <h3>File Size Formatter</h3>
+        <p class="section-description">
+          Convert bytes to human-readable file sizes
+        </p>
+        <Table
+          :data="formatterData"
+          :columns="fileSizeColumns"
+          row-key="id"
+        />
+        <div class="code-example">
+          <code>
+            format: { fileSize: true } // 1048576 → 1.00 MB
+          </code>
+        </div>
+      </VCard>
+
+      <!-- Custom Formatter -->
+      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
+        <h3>Custom Formatter</h3>
+        <p class="section-description">
+          Use custom functions with access to full row data
+        </p>
+        <Table
+          :data="formatterData"
+          :columns="customColumns"
+          row-key="id"
+        />
+        <div class="code-example">
+          <code>
+            format: {<br>
+            &nbsp;&nbsp;formatter: (_value, row) => {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;const margin =<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((row.revenue - row.cost) / row.revenue) * 100;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;return `${margin.toFixed(1)}%`;<br>
+            &nbsp;&nbsp;}<br>
+            }
+          </code>
+        </div>
+      </VCard>
+
+      <!-- All Formatters Combined -->
+      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
+        <h3>All Formatters Combined</h3>
+        <p class="section-description">
+          Multiple formatters working together in one table
+        </p>
+        <Table
+          :data="formatterData"
+          :columns="allFormattersColumns"
+          row-key="id"
+        />
+      </VCard>
+
+      <!-- Documentation Link -->
+      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
+        <h3>📚 Full Documentation</h3>
+        <p>
+          For complete documentation including all options and examples, see:
+          <code>src/docs/table/FORMATTERS_USAGE.md</code>
+        </p>
+      </VCard>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.formatters-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.formatters-header {
+  h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+}
+
+.demo-section {
+  padding: 24px;
+
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .section-description {
+    margin: 0 0 16px 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .code-example {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border-primary);
+
+    code {
+      font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono",
+        Consolas, "Courier New", monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-primary);
+    }
+  }
+}
+</style>
+
