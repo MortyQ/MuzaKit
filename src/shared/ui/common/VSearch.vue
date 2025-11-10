@@ -66,7 +66,10 @@ onUnmounted(() => {
     <!-- Search Icon -->
     <span
       class="search-icon"
-      :class="isFocused ? 'text-primary' : 'text-secondaryText'"
+      :class="[
+        isFocused ? 'text-primary' : 'text-secondaryText',
+        { 'search-icon-textarea': props.textArea }
+      ]"
     >
       <VIcon
         icon="mdi:search"
@@ -114,3 +117,5 @@ onUnmounted(() => {
     </button>
   </div>
 </template>
+
+

@@ -70,15 +70,3 @@ const iconStyles = computed(() => ({
     <component :is="iconComponent" />
   </span>
 </template>
-
-<style scoped>
-.v-icon {
-  line-height: 1;
-}
-
-.v-icon svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-</style>

@@ -3,7 +3,6 @@ import { computed } from "vue";
 import { RouterLink } from "vue-router";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import VLoader from "@/shared/ui/common/VLoader.vue";
 
 const slots = defineSlots();
 
@@ -75,17 +74,17 @@ const isRouterLink = computed(() => !!props.to);
       v-if="$slots.iconLeft || props.loader || props.icon"
       class="flex items-center justify-center"
     >
-      <VLoader
+      <VIcon
         v-if="props.loader"
-        variant="circle"
-        size="small"
+        icon="mdi:loading"
+        :size="32"
+        :loading="props.loader"
       />
       <template v-else>
         <slot name="iconLeft">
           <VIcon
             v-if="props.icon"
             :icon="props.icon"
-            class="w-[20px] h-[20px]"
           />
         </slot>
       </template>
@@ -101,7 +100,7 @@ const isRouterLink = computed(() => !!props.to);
     </div>
     <span
       v-if="$slots.iconRight"
-      class="pl-[12px]"
+      class="flex items-center justify-center"
     >
       <slot name="iconRight" />
     </span>
