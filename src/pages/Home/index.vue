@@ -85,7 +85,10 @@ function reset() {
       </section>
 
       <!-- Counter Demo -->
-      <VCard size="sm">
+      <VCard
+        size="xl"
+        class="border-2 border-neutral"
+      >
         <h2 class="text-2xl font-semibold mb-4">
           Interactive Demo
         </h2>

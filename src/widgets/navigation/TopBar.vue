@@ -3,7 +3,7 @@ import VButton from "@/shared/ui/common/VButton.vue";
 
 const topbarMenu = [
   { name: "Home", to: "/" },
-  { name: "About", to: "/about" },
+  // { name: "About", to: "/about" },
   { name: "Components", to: "/components" },
   { name: "UI Gallery", to: "/ui-gallery" },
   { name: "Table", to: "/table" },

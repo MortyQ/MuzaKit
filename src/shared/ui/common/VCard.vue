@@ -1,15 +1,73 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 
-import type { CardProps, CardEmits, CardSlots } from "@/shared/types/components/card";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import BaseLoader from "@/shared/ui/common/VLoader.vue";
 
+// Define card sizes
+export type CardSize = "fit" | "sm" | "md" | "lg" | "xl" | "full";
+
+// Define card variants
+export type CardVariant = "default" | "elevated" | "outlined" | "ghost";
+
+// Define border radius options
+export type CardRadius = "none" | "sm" | "md" | "lg" | "xl" | "full";
+
+// Define padding options
+export type CardPadding = "none" | "sm" | "md" | "lg" | "xl";
+
+type CardProps = {
+  // Main content
+  title?: string;
+  subtitle?: string;
+  description?: string;
+
+  // Visual settings
+  variant?: CardVariant;
+  size?: CardSize;
+  radius?: CardRadius;
+  padding?: CardPadding;
+
+  // States
+  loading?: boolean;
+  disabled?: boolean;
+  clickable?: boolean;
+
+  // Icons and images
+  icon?: string;
+  image?: string;
+  imageAlt?: string;
+
+  // Additional settings
+  as?: string;
+  href?: string;
+  target?: "_blank" | "_self" | "_parent" | "_top";
+};
+
+// Component events
+type CardEmits = {
+  click: [event: MouseEvent];
+};
+
+// Component slots
+type CardSlots = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  default?: () => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  header?: () => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  footer?: () => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  loading?: () => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  image?: () => any;
+};
+
+
 const props = withDefaults(defineProps<CardProps>(), {
   variant: "default",
-  size: "md",
+  size: "full",
   radius: "md",
-  padding: "md",
   as: "div",
   target: "_self",
 });
@@ -34,17 +92,19 @@ const componentTag = computed(() => {
 const cardClasses = computed(() => {
   const classes = ["card"];
 
-  // Card variant - always apply variant class for consistency
+  // Card variant
   classes.push(`card--${props.variant}`);
 
-  // Size
+  // Size - ONLY controls width
   classes.push(`card--${props.size}`);
 
   // Border radius
   classes.push(`card--radius-${props.radius}`);
 
-  // Padding
-  classes.push(`card--padding-${props.padding}`);
+  // Padding - if specified, overrides default
+  if (props.padding) {
+    classes.push(`card--padding-${props.padding}`);
+  }
 
   // States
   if (props.disabled) classes.push("card--disabled");
