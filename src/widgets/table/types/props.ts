@@ -50,5 +50,7 @@ export interface TableEmits {
 
   // Toolbar events
   "update:search": [query: string]
+  "toolbar:refresh": []
+  "toolbar:reset-sort": []
   "toolbar:export": [format: string, selectedOnly?: boolean]
 }

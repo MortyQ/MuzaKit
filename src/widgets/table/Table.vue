@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onUnmounted, useSlots, useAttrs, type Component } from "vue";
+import { ref, computed, watch, onUnmounted, useSlots, type Component } from "vue";
 
 import TableCell from "./components/TableCell.vue";
 import TableCheckboxCell from "./components/TableCheckboxCell.vue";
@@ -37,7 +37,6 @@ const props = withDefaults(defineProps<TableProps>(), {
 const emit = defineEmits<TableEmits>();
 
 const $slots = useSlots();
-const $attrs = useAttrs();
 
 // Toolbar search model (v-model:search)
 const searchModel = computed({
@@ -52,47 +51,51 @@ const toolbarEnabled = computed(() => {
 
 // Toolbar event handlers
 const handleToolbarRefresh = () => {
-  // Check if parent has a listener for this event
-  const hasListener = $attrs["onToolbar:refresh"];
+  // Always emit the event so parent can listen to it
+  emit("toolbar:refresh");
 
-  if (hasListener) {
-    // Parent wants to handle refresh manually
-    // Emit event through $attrs to trigger parent's @toolbar:refresh handler
-    const handler = $attrs["onToolbar:refresh"] as Function;
-    handler();
-  } else {
-    // Built-in refresh logic: reset sort and pagination
-    sortStateRef.value = [];
+  // Check refresh action mode from config
+  const refreshMode = props.toolbar?.actions?.refresh;
 
-    // Emit request event (works for both with/without pagination)
-    emit("request", {
-      page: props.pagination?.page ?? 1,
-      pageSize: props.pagination?.pageSize ?? 10,
-      sort: [],
-    });
+  // Apply built-in behavior only if mode is 'default', true, or not specified
+  // If mode is 'custom', only emit event without built-in behavior
+  if (refreshMode === "custom") {
+    return; // Parent handles everything manually
   }
+
+  // Built-in refresh logic: reset sort and pagination
+  sortStateRef.value = [];
+
+  // Emit request event (works for both with/without pagination)
+  emit("request", {
+    page: props.pagination?.page ?? 1,
+    pageSize: props.pagination?.pageSize ?? 10,
+    sort: [],
+  });
 };
 
 const handleToolbarResetSort = () => {
-  // Check if parent has a listener for this event
-  const hasListener = $attrs["onToolbar:reset-sort"];
+  // Always emit the event so parent can listen to it
+  emit("toolbar:reset-sort");
 
-  if (hasListener) {
-    // Parent wants to handle reset sort manually
-    // Emit event through $attrs to trigger parent's @toolbar:reset-sort handler
-    const handler = $attrs["onToolbar:reset-sort"] as Function;
-    handler();
-  } else {
-    // Built-in reset sort logic: clear sort state and emit request
-    sortStateRef.value = [];
+  // Check reset sort action mode from config
+  const resetSortMode = props.toolbar?.actions?.resetSort;
 
-    // Emit request event with current page (works for both with/without pagination)
-    emit("request", {
-      page: props.pagination?.page ?? 1,
-      pageSize: props.pagination?.pageSize ?? 10,
-      sort: [],
-    });
+  // Apply built-in behavior only if mode is 'default', true, or not specified
+  // If mode is 'custom', only emit event without built-in behavior
+  if (resetSortMode === "custom") {
+    return; // Parent handles everything manually
   }
+
+  // Built-in reset sort logic: clear sort state and emit request
+  sortStateRef.value = [];
+
+  // Emit request event with current page (works for both with/without pagination)
+  emit("request", {
+    page: props.pagination?.page ?? 1,
+    pageSize: props.pagination?.pageSize ?? 10,
+    sort: [],
+  });
 };
 
 const handleToolbarExport = (format: string, selectedOnly?: boolean) => {

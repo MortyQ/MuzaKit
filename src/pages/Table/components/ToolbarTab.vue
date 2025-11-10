@@ -109,8 +109,16 @@ const codeExample = `<Table
     subtitle: 'Manage your team members',
     search: true,
     actions: {
-      refresh: true,
-      resetSort: true,
+      // Refresh modes:
+      // - true/'default': Built-in behavior (resets sort & pagination)
+      // - 'custom': Only emits event, no built-in behavior
+      refresh: true, // or 'custom'
+
+      // Reset sort modes:
+      // - true/'default': Built-in behavior (clears sort state)
+      // - 'custom': Only emits event, no built-in behavior
+      resetSort: true, // or 'custom'
+
       export: 'single', // or 'multi'
     },
   }"
@@ -162,7 +170,8 @@ const codeExample = `<Table
       title="Manual Control (Custom Handlers)"
     >
       <p class="demo-description">
-        Toolbar with custom event handlers - you have full control over refresh and reset behavior
+        Toolbar with custom event handlers - you have full control over refresh and reset behavior.
+        Use 'custom' mode to disable built-in behavior.
       </p>
 
       <Table
@@ -175,8 +184,8 @@ const codeExample = `<Table
           subtitle: 'With manual event listeners',
           search: true,
           actions: {
-            refresh: true,
-            resetSort: true,
+            refresh: 'custom',
+            resetSort: 'custom',
             export: 'single',
           },
         }"

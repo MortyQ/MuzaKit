@@ -31,15 +31,20 @@ export interface ToolbarConfig {
    */
   actions?: {
     /**
-     * Show refresh button
+     * Refresh button behavior
+     * - true/'default': Built-in behavior (resets sort & pagination)
+     * - 'custom': Only emits @toolbar:refresh event, no built-in behavior
+     * - false: Button hidden
      */
-    refresh?: boolean;
+    refresh?: boolean | "default" | "custom";
 
     /**
-     * Show reset sort button
-     * When clicked, uses built-in reset logic unless overridden by @toolbar:reset-sort event
+     * Reset sort button behavior
+     * - true/'default': Built-in behavior (clears sort state)
+     * - 'custom': Only emits @toolbar:reset-sort event, no built-in behavior
+     * - false: Button hidden
      */
-    resetSort?: boolean;
+    resetSort?: boolean | "default" | "custom";
 
     /**
      * Export functionality

@@ -164,26 +164,83 @@ const handleExport = async (format, selectedOnly) => {
       enabled: true,
       title: 'Auto-Reset Table',
       actions: {
-        refresh: true,
-        resetSort: true
+        refresh: true,        // or 'default' - same behavior
+        resetSort: true       // or 'default' - same behavior
       }
     }"
     @request="handleServerRequest"
   />
   <!-- 
     Refresh button automatically:
+    - Emits @toolbar:refresh event
     - Clears sort state
     - Resets to page 1
     - Calls @request with clean state
     
     Reset Sort button automatically:
+    - Emits @toolbar:reset-sort event
     - Clears sort state
     - Calls @request with current page and empty sort
+    
+    You can still listen to events, but built-in behavior will apply!
   -->
 </template>
 ```
 
-### 4. Manual Control (Advanced)
+### 4. Manual Control with Custom Mode (Advanced)
+
+```vue
+<script setup>
+import { ref } from 'vue';
+
+const isRefreshing = ref(false);
+
+const handleRefresh = async () => {
+  isRefreshing.value = true;
+  try {
+    // Your custom refresh logic
+    await fetchData();
+    await clearCache();
+    // Maybe show a toast notification
+  } finally {
+    isRefreshing.value = false;
+  }
+};
+
+const handleResetSort = () => {
+  // Your custom reset logic
+  customSortState.value = [];
+  // Maybe update URL params
+  router.push({ query: { ...route.query, sort: undefined } });
+};
+</script>
+
+<template>
+  <Table
+    :columns="columns"
+    :data="data"
+    :loading="isRefreshing"
+    :toolbar="{
+      enabled: true,
+      title: 'Custom Control Table',
+      actions: {
+        refresh: 'custom',      // ONLY emits event, no built-in behavior
+        resetSort: 'custom'     // ONLY emits event, no built-in behavior
+      }
+    }"
+    @toolbar:refresh="handleRefresh"
+    @toolbar:reset-sort="handleResetSort"
+  />
+  <!-- 
+    With 'custom' mode:
+    - Events are emitted
+    - NO built-in behavior applied
+    - You have full control
+  -->
+</template>
+```
+
+### 5. Mixed Mode
 
 ```vue
 <script setup>

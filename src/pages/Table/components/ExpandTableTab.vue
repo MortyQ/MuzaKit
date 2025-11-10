@@ -105,7 +105,6 @@ const exportFunc = (format: string) => {
   loaders.exportLoader = true;
   console.log("EXPORT", format);
 };
-
 </script>
 
 <template>
