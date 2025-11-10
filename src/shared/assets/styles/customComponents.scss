@@ -6,6 +6,10 @@
 @use './components/_vsearch';
 @use "./components/_vloader";
 @use "./components/_vicon";
+@use "./components/_vmodal";
+@use "./components/_vswitch";
+@use "./components/_vtabs";
+@use "./components/_vtoast";
 
 @layer components {
   .page-title {

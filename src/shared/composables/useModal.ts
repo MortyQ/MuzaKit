@@ -1,6 +1,6 @@
 import { computed, onBeforeUnmount } from "vue";
 
-import { useModalStore } from "@/features/modal/composables/useModalStore";
+import { useModalRegisterer } from "./useModalRegister";
 
 /**
  * Composable for managing modal state
@@ -27,26 +27,26 @@ import { useModalStore } from "@/features/modal/composables/useModalStore";
  * </template>
  * ```
  */
-export function useModal(id: string, autoUnregister = true) {
-  const modalStore = useModalStore();
+export const useModal = (id: string, autoUnregister = true) => {
+  const registerer = useModalRegisterer();
 
   // Register modal on creation
-  modalStore.register(id);
+  registerer.register(id);
 
   // Computed properties
-  const isOpen = computed(() => modalStore.isOpen(id));
-  const zIndex = computed(() => modalStore.getZIndex(id));
-  const modal = computed(() => modalStore.getModal(id));
+  const isOpen = computed(() => registerer.isOpen.value(id));
+  const zIndex = computed(() => registerer.getZIndex.value(id));
+  const modal = computed(() => registerer.getModal.value(id));
 
   // Methods
-  const open = () => modalStore.open(id);
-  const close = () => modalStore.close(id);
-  const toggle = () => modalStore.toggle(id);
+  const open = () => registerer.open(id);
+  const close = () => registerer.close(id);
+  const toggle = () => registerer.toggle(id);
 
   // Cleanup on unmount
   if (autoUnregister) {
     onBeforeUnmount(() => {
-      modalStore.unregister(id);
+      registerer.unregister(id);
     });
   }
 
@@ -58,4 +58,4 @@ export function useModal(id: string, autoUnregister = true) {
     close,
     toggle,
   };
-}
+};

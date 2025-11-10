@@ -1,0 +1,21 @@
+@layer components {
+  .w-11 {
+    width: 44px;
+  }
+
+  .h-6 {
+    height: 24px;
+  }
+
+  .left-1 {
+    left: 4px;
+  }
+
+  .top-1 {
+    top: 4px;
+  }
+
+  .translate-x-5 {
+    transform: translateX(20px);
+  }
+}

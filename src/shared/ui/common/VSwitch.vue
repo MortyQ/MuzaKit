@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, useAttrs } from "vue";
+import { computed, useAttrs, useId } from "vue";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
 
@@ -11,11 +11,15 @@ interface Props {
   trueLabel?: string;
   falseLabel?: string;
   color?: string;
+  id?: string;
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits(["update:modelValue"]);
 const attrs = useAttrs();
+
+// Generate unique ID for input if not provided
+const inputId = computed(() => props.id || `v-switch-${useId()}`);
 
 const isChecked = computed({
   get: () => !!props.modelValue,
@@ -49,11 +53,13 @@ const switchClass = computed(() => {
 
 <template>
   <label
+    :for="inputId"
     :class="props.disabled ? 'opacity-60 cursor-not-allowed' : ''"
     class="inline-flex items-center cursor-pointer select-none"
   >
     <span class="relative flex items-center">
       <input
+        :id="inputId"
         :checked="isChecked"
         :disabled="props.disabled"
         class="peer sr-only"
@@ -100,25 +106,3 @@ const switchClass = computed(() => {
     </span>
   </label>
 </template>
-
-<style scoped>
-  .w-11 {
-    width: 44px;
-  }
-
-  .h-6 {
-    height: 24px;
-  }
-
-  .left-1 {
-    left: 4px;
-  }
-
-  .top-1 {
-    top: 4px;
-  }
-
-  .translate-x-5 {
-    transform: translateX(20px);
-  }
-</style>

@@ -27,7 +27,6 @@ const tabs = [
   <div class="page-container">
     <VTabs
       :tabs="tabs"
-      use-hash
     >
       <template
         v-for="tab in tabs"

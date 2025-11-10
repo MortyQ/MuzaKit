@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import DOMPurify from "dompurify";
-import { ref, computed } from "vue";
+import { ref, computed, useId } from "vue";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
 
@@ -23,6 +23,7 @@ type Props = {
   validation?: Validation;
   icon?: string;
   size?: "sm" | "md" | "lg";
+  id?: string;
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -35,7 +36,11 @@ const props = withDefaults(defineProps<Props>(), {
   validation: undefined,
   icon: "",
   modelValue: "",
+  id: undefined,
 });
+
+// Generate unique ID for input if not provided
+const inputId = computed(() => props.id || `v-input-${useId()}`);
 
 const emit = defineEmits<{
   "update:modelValue": [value: string]
@@ -78,6 +83,7 @@ const internalValue = computed({
     <slot name="name">
       <label
         v-if="props.name"
+        :for="inputId"
         class="v-input-label"
       >
         {{ props.name }}
@@ -102,6 +108,7 @@ const internalValue = computed({
 
       <!-- Input Field -->
       <input
+        :id="inputId"
         v-model="internalValue"
         :type="currentInputType"
         class="v-input"

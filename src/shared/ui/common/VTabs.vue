@@ -242,29 +242,3 @@ defineExpose({
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Hide scrollbar but keep functionality */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-/* Remove ALL focus/outline effects like GitHub */
-.tab-button {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.tab-button:focus,
-.tab-button:focus-visible,
-.tab-button:active {
-  outline: none !important;
-  box-shadow: none !important;
-}
-</style>
-

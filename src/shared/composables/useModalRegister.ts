@@ -1,5 +1,4 @@
-import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { computed, ref } from "vue";
 
 export interface Modal {
   id: string;
@@ -7,15 +6,10 @@ export interface Modal {
   zIndex: number;
 }
 
-/**
- * Modal store for managing multiple modal windows
- * Supports z-index management for stacking modals
- */
-export const useModalStore = defineStore("modal", () => {
-  // State
-  const modals = ref<Map<string, Modal>>(new Map());
-  const zIndexCounter = 1000;
+const modals = ref<Map<string, Modal>>(new Map());
+const zIndexCounter = 1000;
 
+export const useModalRegisterer = () => {
   // Getters
   const getModal = computed(() => (id: string) => modals.value.get(id));
 
@@ -96,4 +90,4 @@ export const useModalStore = defineStore("modal", () => {
     toggle,
     closeAll,
   };
-});
+};

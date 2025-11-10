@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import DOMPurify from "dompurify";
 import debounce from "lodash.debounce";
-import { computed, onUnmounted, ref } from "vue";
+import { computed, onUnmounted, ref, useId } from "vue";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
 
@@ -12,6 +12,7 @@ type Props = {
   debounceProp?: boolean
   textArea?: boolean
   loading?: boolean
+  id?: string
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -21,7 +22,11 @@ const props = withDefaults(defineProps<Props>(), {
   modelValue: "",
   textArea: false,
   placeholder:"",
+  id: undefined,
 });
+
+// Generate unique ID for input if not provided
+const inputId = computed(() => props.id || `v-search-${useId()}`);
 
 const emit = defineEmits<{
   "update:modelValue": [value: string]
@@ -80,6 +85,7 @@ onUnmounted(() => {
     <!-- Input Field -->
     <input
       v-if="!props.textArea"
+      :id="inputId"
       ref="inputRef"
       :placeholder="props.placeholder ?? 'Search...'"
       :value="internalValue"
@@ -94,6 +100,7 @@ onUnmounted(() => {
     <!-- Textarea Field -->
     <textarea
       v-else
+      :id="inputId"
       ref="inputRef"
       :placeholder="props.placeholder ?? 'Type here...'"
       :value="internalValue"
