@@ -4,7 +4,6 @@ import VCheckbox from "@/shared/ui/common/VCheckbox.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VInput from "@/shared/ui/common/VInput.vue";
 import VMultiSelect from "@/shared/ui/common/VMultiSelect.vue";
-import VSearch from "@/shared/ui/common/VSearch.vue";
 import VSwitch from "@/shared/ui/common/VSwitch.vue";
 import VTabs from "@/shared/ui/common/VTabs.vue";
 
@@ -408,74 +407,6 @@ export const componentsList = [
     ],
   },
   {
-    name: "VSearch",
-    anchor: "vsearch",
-    description:
-            "Modern search input and textarea component with debounce, clear button, animated search icon, and focus effects. Supports both single-line and multi-line text input.",
-    component: VSearch,
-    props: [
-      {
-        name: "modelValue",
-        type: "string",
-        default: '""',
-        description: "Input value (v-model)",
-      },
-      {
-        name: "placeholder",
-        type: "string",
-        default: '"Search..." | "Type here..."',
-        description: "Placeholder text for input/textarea",
-      },
-      {
-        name: "debounceProp",
-        type: "boolean",
-        default: "true",
-        description: "Enable debounce (800ms delay)",
-      },
-      {
-        name: "textArea",
-        type: "boolean",
-        default: "false",
-        description: "Render as textarea instead of input",
-      },
-      {
-        name: "loading",
-        type: "boolean",
-        default: "false",
-        description: "Show loading state (reserved for future use)",
-      },
-      {
-        name: "text",
-        type: "string",
-        default: '"Search"',
-        description: "Label text (currently unused)",
-      },
-    ],
-    examples: [
-      {
-        title: "Basic Search Input with Debounce",
-        exampleProps: { modelValue: "", placeholder: "Search products..." },
-        code: `<VSearch v-model="searchQuery" placeholder="Search products..." />`,
-      },
-      {
-        title: "Search without Debounce",
-        exampleProps: { modelValue: "", placeholder: "Instant search", debounceProp: false },
-        code: `<VSearch v-model="searchQuery" placeholder="Instant search" :debounceProp="false" />`,
-      },
-      {
-        title: "Textarea Mode",
-        exampleProps: { modelValue: "", placeholder: "Enter your message...", textArea: true },
-        code: `<VSearch v-model="message" placeholder="Enter your message..." :textArea="true" />`,
-      },
-      {
-        title: "With Initial Value",
-        exampleProps: { modelValue: "Vue.js", placeholder: "Search..." },
-        code: `<VSearch v-model="searchQuery" placeholder="Search..." />
-<!-- searchQuery = "Vue.js" -->`,
-      },
-    ],
-  },
-  {
     name: "VIcon",
     anchor: "vicon",
     description:
@@ -556,7 +487,7 @@ export const componentsList = [
     name: "VInput",
     anchor: "vinput",
     description:
-            "Modern input component with icon support, validation states, password toggle, multiple sizes, and XSS protection. Fully themed with light/dark mode support.",
+            "Universal input component with icon support, validation states, password toggle, search with debounce (type='search' includes native browser clear button), textarea support, multiple sizes, and XSS protection. Fully themed with light/dark mode support.",
     component: VInput,
     props: [
       {
@@ -612,6 +543,30 @@ export const componentsList = [
         type: '"sm" | "md" | "lg"',
         default: '"md"',
         description: "Input size (sm: 36px, md: 44px, lg: 48px)",
+      },
+      {
+        name: "debounce",
+        type: "boolean | number",
+        default: "false",
+        description: "Enable debounce (true = 800ms, or custom delay in ms)",
+      },
+      {
+        name: "loading",
+        type: "boolean",
+        default: "false",
+        description: "Show loading spinner in left icon",
+      },
+      {
+        name: "textarea",
+        type: "boolean",
+        default: "false",
+        description: "Render as textarea instead of input",
+      },
+      {
+        name: "rows",
+        type: "number",
+        default: "4",
+        description: "Number of rows for textarea",
       },
     ],
     examples: [
@@ -709,6 +664,67 @@ export const componentsList = [
     $errors: [{ $message: 'Please enter a valid email address' }] 
   }" 
 />`,
+      },
+      {
+        title: "Search with Debounce",
+        exampleProps: {
+          type: "search",
+          placeholder: "Search products...",
+          debounce: true,
+        },
+        code: `<VInput 
+  v-model="searchQuery" 
+  type="search"
+  placeholder="Search products..."
+  debounce
+/>`,
+      },
+      {
+        title: "Search without Debounce",
+        exampleProps: {
+          type: "search",
+          placeholder: "Instant search",
+          debounce: false,
+        },
+        code: `<VInput 
+  v-model="searchQuery" 
+  type="search"
+  placeholder="Instant search"
+  :debounce="false"
+/>`,
+      },
+      {
+        title: "Textarea with Debounce",
+        exampleProps: {
+          type: "search",
+          placeholder: "Enter your message...",
+          textarea: true,
+          debounce: true,
+          rows: 5,
+        },
+        code: `<VInput 
+  v-model="message" 
+  placeholder="Enter your message..."
+  textarea
+  debounce
+  :rows="5"
+/>`,
+      },
+      {
+        title: "Search with Initial Value",
+        exampleProps: {
+          type: "search",
+          placeholder: "Search...",
+          modelValue: "Vue.js",
+          debounce: true,
+        },
+        code: `<VInput 
+  v-model="searchQuery" 
+  type="search"
+  placeholder="Search..."
+  debounce
+/>
+<!-- searchQuery = "Vue.js" -->`,
       },
     ],
   },
