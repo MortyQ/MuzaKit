@@ -104,6 +104,11 @@ const itemClasses = computed(() => {
     "relative", // For accent bar positioning
   ];
 
+  // Add w-full only when sidebar is expanded (prevents icon shifting on collapse)
+  if (!isCollapsed.value) {
+    baseClasses.push("w-full");
+  }
+
   // Active state
   if (isActive.value) {
     baseClasses.push("bg-primary/10 text-primary font-medium sidebar-item-active");

@@ -1,0 +1,110 @@
+// Sidebar Component Styles - Modern Edition 2025
+// ============================================
+// Main file that imports all modular styles
+// Uses Tailwind theme () function for seamless light/dark mode support
+
+// 1. Design tokens & Variables
+@use './variables' as *;
+
+// 2. Layout Components
+@use './container'; // Main container (desktop & mobile)
+@use './header';    // Logo & brand
+@use './footer';    // Footer items
+
+// 3. Navigation Elements
+@use './item';      // Navigation items
+@use './flyout';    // Submenu flyout
+
+// ════════════════════════════════════════════════════════════════
+// GLOBAL SIDEBAR UTILITIES
+// ════════════════════════════════════════════════════════════════
+
+// Smooth scrolling for sidebar content
+.sidebar-nav {
+  // Custom scrollbar (Firefox)
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+
+  // Custom scrollbar (Webkit)
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+}
+
+// Dark mode scrollbar
+@media (prefers-color-scheme: dark) {
+  .sidebar-nav {
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// MOBILE OVERLAY
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-overlay {
+  backdrop-filter: blur(2px);
+}
+
+// ════════════════════════════════════════════════════════════════
+// ACCESSIBILITY - Focus visible states
+// ════════════════════════════════════════════════════════════════
+
+// Skip to content link (for screen readers)
+.sidebar-skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  padding: 8px;
+  background: theme('colors.primary');
+  color: white;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+
+  &:focus {
+    top: 0;
+    z-index: 100;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// PERFORMANCE OPTIMIZATIONS
+// ════════════════════════════════════════════════════════════════
+
+// Force GPU acceleration for smooth animations
+.sidebar,
+.sidebar-mobile,
+.sidebar-flyout {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Optimize repaints
+.sidebar-item,
+.flyout-menu-item {
+  contain: layout style paint;
+}
+

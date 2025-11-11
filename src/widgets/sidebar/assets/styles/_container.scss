@@ -1,0 +1,96 @@
+// Sidebar Main Container Styles
+// ============================================
+// Modern rounded sidebar with transparency and performance optimization
+
+@use './variables' as *;
+
+// ════════════════════════════════════════════════════════════════
+// DESKTOP SIDEBAR - Main container with rounded corners
+// ════════════════════════════════════════════════════════════════
+
+.sidebar {
+  // Rounded right edge for desktop - modern look
+  border-top-right-radius: $sidebar-border-radius;
+  border-bottom-right-radius: $sidebar-border-radius;
+
+  // Subtle shadow - minimal and elegant like Notion/Linear
+  box-shadow:
+    1px 0 4px rgba(0, 0, 0, 0.04),
+    2px 0 8px rgba(0, 0, 0, 0.02);
+
+  // GPU acceleration for smooth rendering and animations
+  transform: translateZ(0);
+  will-change: width;
+
+  // Smooth width transitions
+  transition: width $sidebar-transition-duration $sidebar-transition-timing;
+}
+
+// Subtle gradient border accent (right edge)
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.05) 10%,
+    rgba(0, 0, 0, 0.05) 90%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .sidebar {
+    box-shadow:
+      1px 0 6px rgba(0, 0, 0, 0.12),
+      2px 0 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .sidebar::before {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(255, 255, 255, 0.08) 10%,
+      rgba(255, 255, 255, 0.08) 90%,
+      transparent 100%
+    );
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// MOBILE SIDEBAR - Full height without rounded corners
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-mobile {
+  // No rounded corners for mobile (full screen slide-in)
+  border-radius: 0;
+
+  // Moderate shadow for mobile overlay (stronger than desktop but still subtle)
+  box-shadow:
+    2px 0 8px rgba(0, 0, 0, 0.08),
+    4px 0 16px rgba(0, 0, 0, 0.04);
+
+  // GPU acceleration
+  transform: translateZ(0);
+  will-change: transform;
+
+  // Smooth slide transitions
+  transition: transform $sidebar-transition-duration $sidebar-transition-timing;
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .sidebar-mobile {
+    box-shadow:
+      2px 0 12px rgba(0, 0, 0, 0.16),
+      4px 0 24px rgba(0, 0, 0, 0.12);
+  }
+}
+

@@ -122,47 +122,7 @@ watch(isMobileOpen, (isOpen) => {
   </div>
 </template>
 
-<style scoped>
-/* Modern rounded sidebar design - Performance optimized */
-.sidebar {
-  /* Rounded right edge for desktop */
-  border-top-right-radius: 16px;
-  border-bottom-right-radius: 16px;
-  /* Soft shadow - GPU accelerated */
-  box-shadow:
-    2px 0 12px rgba(0, 0, 0, 0.08),
-    4px 0 24px rgba(0, 0, 0, 0.04);
-  /* Smooth GPU-accelerated rendering */
-  transform: translateZ(0);
-  will-change: width;
-}
-
-.sidebar-mobile {
-  /* No rounded corners for mobile (full height) */
-  box-shadow:
-    4px 0 16px rgba(0, 0, 0, 0.12),
-    8px 0 32px rgba(0, 0, 0, 0.06);
-  /* Smooth GPU-accelerated rendering */
-  transform: translateZ(0);
-  will-change: transform;
-}
-
-/* Smooth border radius transition */
-.sidebar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 1px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(0, 0, 0, 0.05) 10%,
-    rgba(0, 0, 0, 0.05) 90%,
-    transparent 100%
-  );
-  pointer-events: none;
-}
+<style lang="scss">
+@use './assets/styles/sidebar.scss';
 </style>
 

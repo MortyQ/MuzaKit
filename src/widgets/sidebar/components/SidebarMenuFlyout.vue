@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute, type RouteLocationRaw } from "vue-router";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import { useSidebar } from "@/widgets/sidebar/composables/useSidebar";
@@ -14,7 +14,23 @@ interface Props {
 const props = defineProps<Props>();
 
 const router = useRouter();
+const route = useRoute();
 const { closeMobile } = useSidebar();
+
+// Check if child item is active (current route)
+const isChildActive = (child: SidebarNavItem) => {
+  if (!child.to) return false;
+
+  if (typeof child.to === "string") {
+    return route.path === child.to;
+  }
+
+  if (child.to.name) {
+    return route.name === child.to.name;
+  }
+
+  return false;
+};
 
 const isHovered = ref(false);
 const hoverTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
@@ -112,11 +128,7 @@ onUnmounted(() => {
 
 const handleChildClick = (child: SidebarNavItem) => {
   if (child.to && !child.disabled) {
-    if (typeof child.to === "string") {
-      router.push(child.to);
-    } else {
-      router.push(child.to);
-    }
+    router.push(child.to as RouteLocationRaw);
     closeMobile();
     hideMenu();
   }
@@ -190,8 +202,8 @@ const allChildren = computed(() => {
             class="relative min-w-[200px] max-w-[280px] ml-2"
           >
             <div
-              class="bg-base-100 border border-base-300 rounded-lg shadow-xl py-2
-                max-h-[calc(100vh-100px)] overflow-y-auto"
+              class="sidebar-flyout bg-base-100/95 backdrop-blur-sm border border-base-300/50
+                rounded-lg py-2 max-h-[calc(100vh-100px)] overflow-y-auto"
             >
               <!-- Menu Title -->
               <div class="px-4 py-2 border-b border-base-300 mb-1">
@@ -206,9 +218,12 @@ const allChildren = computed(() => {
                   type="button"
                   :class="[
                     'w-full flex items-center gap-2 px-3 py-2 rounded text-sm transition-colors',
-                    'hover:bg-base-200 text-neutral/80 hover:text-neutral',
                     'focus:outline-none relative flyout-menu-item',
-                    { 'opacity-50 cursor-not-allowed': child.disabled },
+                    {
+                      'bg-primary/10 text-primary font-medium': isChildActive(child),
+                      'hover:bg-base-200 text-neutral/80 hover:text-neutral': !isChildActive(child),
+                      'opacity-50 cursor-not-allowed': child.disabled,
+                    },
                   ]"
                   :style="{ paddingLeft: `${12 + child.level * 16}px` }"
                   :disabled="child.disabled"
@@ -238,42 +253,4 @@ const allChildren = computed(() => {
   </div>
 </template>
 
-<style scoped>
-/* Custom scrollbar for menu */
-.overflow-y-auto {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-}
-
-.overflow-y-auto::-webkit-scrollbar {
-  width: 4px;
-}
-
-.overflow-y-auto::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.overflow-y-auto::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 2px;
-}
-
-/* Focus indicator for flyout menu items */
-.flyout-menu-item:focus-visible {
-  background-color: rgba(0, 0, 0, 0.06) !important;
-  outline: none !important;
-}
-
-/* Left accent bar on focus */
-.flyout-menu-item:focus-visible::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 20%;
-  bottom: 20%;
-  width: 3px;
-  background-color: #3b82f6;
-  border-radius: 0 2px 2px 0;
-}
-</style>
 

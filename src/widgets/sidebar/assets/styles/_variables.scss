@@ -1,0 +1,70 @@
+// Sidebar Design Tokens & Variables - 2025 Modern Edition
+// ============================================
+// Centralized location for all sidebar variables
+// All colors use Tailwind theme () function for seamless light/dark mode support
+
+// ════════════════════════════════════════════════════════════════
+// SPACING & SIZING
+// ════════════════════════════════════════════════════════════════
+
+// Sidebar widths
+$sidebar-width-expanded: 16rem; // 256px
+$sidebar-width-collapsed: 5rem; // 80px
+
+// Item spacing
+$sidebar-item-padding-x: 1rem; // 16px
+$sidebar-item-padding-y: 0.75rem; // 12px
+$sidebar-item-gap: 0.5rem; // 8px
+
+// Icon sizing
+$sidebar-icon-size: 1.25rem; // 20px
+$sidebar-icon-size-collapsed: 1.5rem; // 24px
+
+// Border radius
+$sidebar-border-radius: 1rem; // 16px
+$sidebar-item-border-radius: 0.5rem; // 8px
+
+// ════════════════════════════════════════════════════════════════
+// TYPOGRAPHY
+// ════════════════════════════════════════════════════════════════
+
+$sidebar-font-size: 0.875rem; // 14px
+$sidebar-font-weight-normal: 400;
+$sidebar-font-weight-medium: 500;
+$sidebar-font-weight-semibold: 600;
+
+// ════════════════════════════════════════════════════════════════
+// TRANSITIONS
+// ════════════════════════════════════════════════════════════════
+
+$sidebar-transition-duration: 300ms;
+$sidebar-transition-timing: ease-in-out;
+
+// ════════════════════════════════════════════════════════════════
+// Z-INDEX LAYERS
+// ════════════════════════════════════════════════════════════════
+
+$sidebar-z-index: 40;
+$sidebar-mobile-z-index: 50;
+$sidebar-overlay-z-index: 40;
+$sidebar-flyout-z-index: 45;
+
+// ════════════════════════════════════════════════════════════════
+// TRANSPARENCY & BLUR
+// ════════════════════════════════════════════════════════════════
+
+// Background opacity (using Tailwind's /XX notation in classes)
+// Desktop: bg-base-100/85 (85% opacity)
+// Mobile: bg-base-100/98 (98% opacity)
+// Flyout: bg-base-100/90 (90% opacity)
+
+// Border opacity
+// border-base-300/50 (50% opacity)
+
+// ════════════════════════════════════════════════════════════════
+// SHADOWS - Using theme colors for dark mode support
+// ════════════════════════════════════════════════════════════════
+
+// Defined directly in components for better control
+// See _sidebar.scss and _flyout.scss
+
