@@ -6,8 +6,8 @@ import type { ExportOptions, ToolbarConfig } from "../types/toolbar";
 import VButton from "@/shared/ui/common/VButton.vue";
 import VDropdown from "@/shared/ui/common/VDropdown.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
+import VInput from "@/shared/ui/common/VInput.vue";
 import VLoader from "@/shared/ui/common/VLoader.vue";
-import VSearch from "@/shared/ui/common/VSearch.vue";
 
 
 interface Props {
@@ -106,8 +106,10 @@ const handleSingleExport = () => {
           v-if="searchConfig"
           class="toolbar-search-split"
         >
-          <VSearch
+          <VInput
             v-model="searchModel"
+            type="search"
+            debounce
             :placeholder="searchConfig.placeholder"
           />
         </div>

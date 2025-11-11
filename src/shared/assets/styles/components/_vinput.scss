@@ -51,7 +51,9 @@
   }
 
   .v-input-icon {
-    @apply absolute top-1/2 -translate-y-1/2 flex items-center justify-center;
+    @apply absolute top-1/2 -translate-y-1/2 flex items-center justify-center transition-colors;
+    pointer-events: none;
+    z-index: 1;
 
     &.v-input-icon-left {
       @apply left-3;
@@ -59,8 +61,26 @@
 
     &.v-input-icon-right {
       @apply right-3;
+      pointer-events: auto;
+    }
+
+    &.v-input-icon-textarea {
+      @apply top-4;
+      transform: none;
     }
   }
+
+  .v-input-textarea {
+    @apply resize-y py-3;
+    min-height: 120px;
+    font-family: inherit;
+    line-height: 1.5;
+
+    @media (max-width: 640px) {
+      min-height: 100px;
+    }
+  }
+
 
   .v-input-password-toggle {
     @apply flex items-center justify-center focus:outline-none

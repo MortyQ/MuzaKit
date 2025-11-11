@@ -35,7 +35,7 @@ src/
 - **Vue 3.4+** - Progressive JavaScript framework
 - **TypeScript 5.3+** - Type-safe JavaScript
 - **Vite 5.0+** - Next generation frontend tooling
-- **pnpm 8.0+** - Fast, disk space efficient package manager
+- **pnpm 10.0+** - Fast, disk space efficient package manager
 
 ### Styling
 
@@ -59,7 +59,7 @@ src/
 ### Prerequisites
 
 - Node.js 18+
-- pnpm 8+ (recommended) or npm/yarn
+- pnpm 10+ (recommended) or npm/yarn
 
 ### Installation
 

@@ -67,7 +67,7 @@ const componentStates = reactive({
   inputDisabled: "Cannot edit this",
   inputError: "",
 
-  // VSearch states
+  // VInput Search states
   searchBasic: "",
   searchNoDebounce: "",
   searchTextarea: "",
@@ -104,12 +104,10 @@ const getStateKey = (componentName: string, exampleTitle: string): string | null
       "Different Sizes": "inputSmall",
       "Disabled State": "inputDisabled",
       "Error State with Validation": "inputError",
-    },
-    VSearch: {
-      "Basic Search Input with Debounce": "searchBasic",
+      "Search with Debounce": "searchBasic",
       "Search without Debounce": "searchNoDebounce",
-      "Textarea Mode": "searchTextarea",
-      "With Initial Value": "searchWithValue",
+      "Textarea with Debounce": "searchTextarea",
+      "Search with Initial Value": "searchWithValue",
     },
     VCheckbox: {
       "Basic Usage": "checkboxBasic",
@@ -137,7 +135,7 @@ const getStateKey = (componentName: string, exampleTitle: string): string | null
 
 // Check if component needs v-model
 const needsVModel = (componentName: string): boolean => {
-  return ["VInput", "VSearch", "VCheckbox", "VSwitch", "VMultiSelect"].includes(componentName);
+  return ["VInput", "VCheckbox", "VSwitch", "VMultiSelect"].includes(componentName);
 };
 
 // Scroll to anchor
