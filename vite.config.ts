@@ -9,6 +9,8 @@ export default ({mode}: any) => {
     process.env = {...process.env, ...loadEnv(mode, process.cwd())};
 
     return defineConfig({
+        // GitHub Pages: https://mortyq.github.io/Starter/
+        base: '/Starter/',
         plugins: [vue(),
             Components({
                 resolvers: [

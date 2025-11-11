@@ -10,7 +10,9 @@
     "lint": "eslint ./src --fix",
     "lint:check": "eslint ./src",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "deploy:preview": "pnpm build && pnpm preview",
+    "deploy:check": "bash scripts/check-deploy-ready.sh"
   },
   "dependencies": {
     "@tanstack/vue-virtual": "^3.13.12",

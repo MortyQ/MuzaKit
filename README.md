@@ -181,13 +181,30 @@ Adjust `tsconfig.json` for stricter or looser type checking as needed.
 
 ## 📦 Build and Deployment
 
+### Local Build
+
 ```bash
 # Build for production
 pnpm build
 
-# The built files will be in the `dist/` directory
-# Deploy the contents of `dist/` to your hosting service
+# Preview production build
+pnpm preview
+
+# Build and preview in one command
+pnpm deploy:preview
 ```
+
+### 🚀 Deploy to GitHub Pages
+
+This template is configured for easy deployment to GitHub Pages with GitHub Actions.
+
+**Quick Start:**
+1. Update `base` in `vite.config.ts` if needed (see [DEPLOY_QUICK_START.md](./DEPLOY_QUICK_START.md))
+2. Push your code to GitHub
+3. Enable GitHub Pages with "GitHub Actions" as source
+4. Your site will auto-deploy on every push to `main`
+
+📖 **Full deployment guide:** [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
 
 ### Build Optimizations Included
 
@@ -195,6 +212,7 @@ pnpm build
 - CSS extraction and minification
 - Asset optimization and compression
 - Tree shaking for smaller bundle sizes
+- Automated deployment pipeline with GitHub Actions
 
 ## 🤝 Contributing
 

@@ -172,7 +172,7 @@ const handleSingleExport = () => {
           <template #item-loader="{ item }">
             <VLoader
               v-if="item.loader"
-              variant="circle"
+              variant="primary"
               size="small"
             />
           </template>
