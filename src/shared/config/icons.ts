@@ -72,6 +72,7 @@ export const iconMap: Record<string, Component> = {
   "mdi:package": defineAsyncComponent(() => import("~icons/mdi/package-variant")),
   "mdi:database": defineAsyncComponent(() => import("~icons/mdi/database")),
   "mdi:table": defineAsyncComponent(() => import("~icons/mdi/table")),
+  "mdi:library": defineAsyncComponent(() => import("~icons/mdi/library-shelves")),
 
   // Charts & Analytics
   "mdi:chart-line": defineAsyncComponent(() => import("~icons/mdi/chart-line")),

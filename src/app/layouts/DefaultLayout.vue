@@ -100,9 +100,10 @@ const contentMargin = computed(() => ({
 
       <!-- Main Content -->
       <main
-        class="flex-1 w-full flex flex-col"
-        :style="{
-          maxWidth: isCollapsed ? 'calc(100vw - 5rem)' : 'calc(100vw - 16rem)',
+        class="flex-1 w-full flex flex-col max-w-[calc(100vw-0.5rem)]"
+        :class="{
+          'lg:max-w-[calc(100vw-5rem)]': isCollapsed,
+          'lg:max-w-[calc(100vw-16rem)]': !isCollapsed,
         }"
       >
         <div class="w-full flex-1 py-4 px-2 sm:px-4 lg:px-6 flex flex-col">
