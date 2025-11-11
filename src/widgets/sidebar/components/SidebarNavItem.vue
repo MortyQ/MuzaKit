@@ -79,6 +79,13 @@ const hasActiveChild = computed((): boolean => {
 const handleClick = () => {
   if (props.item.disabled) return;
 
+  // If item has onClick handler, call it
+  if (props.item.onClick) {
+    props.item.onClick();
+    closeMobile();
+    return;
+  }
+
   // If item has children, toggle expansion
   if (hasChildren.value) {
     toggleExpanded(props.item.id);

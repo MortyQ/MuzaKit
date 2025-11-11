@@ -2,96 +2,60 @@
 import { computed } from "vue";
 import { RouterView } from "vue-router";
 
+import { menuItemsToSidebarConfig } from "@/app/router/adapters";
+import { menuItems } from "@/app/router/modules";
+import { useAuth } from "@/shared/composables/useAuth";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import { Sidebar, useSidebar, createSidebarItem } from "@/widgets/sidebar";
+import { Sidebar, useSidebar } from "@/widgets/sidebar";
 import type { SidebarConfig } from "@/widgets/sidebar";
 
 const { isCollapsed, toggleMobile } = useSidebar();
+const { isAuthenticated, logout } = useAuth();
 
-// Advanced Sidebar configuration with nested menus for testing
-const sidebarConfig: SidebarConfig = {
-  brandName: "Vue Starter",
-  items: [
-    // Simple link
-    createSidebarItem("home", "Home", "mdi:home", {
-      to: { name: "Home" },
-    }),
-
-    // Parent with children (level 1)
-    createSidebarItem("components", "Components", "mdi:hammer", {
-      children: [
-        createSidebarItem("components-overview", "Overview", "mdi:view-dashboard", {
-          to: { name: "Components" },
-        }),
-        createSidebarItem("components-gallery", "UI Gallery", "mdi:palette", {
-          to: { name: "UIGallery" },
-        }),
-      ],
-    }),
-
-    // Parent with nested children (level 2)
-    createSidebarItem("data", "Data and Tables", "mdi:package", {
-      children: [
-        createSidebarItem("data-table", "Table Examples", "mdi:table", {
-          to: { name: "Table" },
-        }),
-        // Nested level 2
-        createSidebarItem("data-advanced", "Advanced", "mdi:database", {
-          children: [
-            createSidebarItem("data-import", "Import Data", "mdi:upload", {
-              to: { name: "Home" },
-            }),
-            createSidebarItem("data-export", "Export Data", "mdi:download", {
-              to: { name: "Home" },
-            }),
-          ],
-        }),
-      ],
-    }),
-
-    // Parent with deeply nested children (level 3)
-    createSidebarItem("features", "Features", "mdi:layers", {
-      badge: "New",
-      children: [
-        createSidebarItem("features-forms", "Forms", "mdi:file-document", {
-          to: { name: "Home" },
-        }),
-        createSidebarItem("features-charts", "Charts and Graphs", "mdi:chart-line", {
-          children: [
-            createSidebarItem("charts-line", "Line Charts", "mdi:chart-line", {
-              to: { name: "Home" },
-            }),
-            createSidebarItem("charts-bar", "Bar Charts", "mdi:chart-bar", {
-              to: { name: "Home" },
-            }),
-            // Deeply nested level 3
-            createSidebarItem("charts-advanced", "Advanced Charts", "mdi:chart-box", {
-              children: [
-                createSidebarItem("charts-combo", "Combo Charts", "mdi:chart-timeline", {
-                  to: { name: "Home" },
-                }),
-                createSidebarItem("charts-custom", "Custom Charts", "mdi:chart-bubble", {
-                  to: { name: "Home" },
-                }),
-              ],
-            }),
-          ],
-        }),
-      ],
-    }),
-
-    // With badge
-    createSidebarItem("messages", "Messages", "mdi:mail", {
-      to: { name: "Home" },
-      badge: "12",
-    }),
-  ],
-  footerItems: [
-    createSidebarItem("settings", "Settings", "mdi:settings", {
+// Footer items based on auth state
+const footerItems = computed(() => {
+  const items: Array<{
+    id: string;
+    label: string;
+    icon: string;
+    to?: { name: string };
+    onClick?: () => void;
+  }> = [
+    {
+      id: "about",
+      label: "About",
+      icon: "mdi:information",
       to: { name: "About" },
-    }),
-  ],
-};
+    },
+  ];
+
+  // Add logout button if authenticated
+  if (isAuthenticated.value) {
+    items.push({
+      id: "logout",
+      label: "Logout",
+      icon: "mdi:logout",
+      onClick: logout,
+    });
+  } else {
+    items.push({
+      id: "login",
+      label: "Login",
+      icon: "mdi:login",
+      to: { name: "Login" },
+    });
+  }
+
+  return items;
+});
+
+// Auto-generated sidebar config from router
+const sidebarConfig = computed<SidebarConfig>(() =>
+  menuItemsToSidebarConfig(menuItems, {
+    brandName: "Vue Starter",
+    footerItems: footerItems.value,
+  }),
+);
 
 // Computed content margin based on sidebar state
 const contentMargin = computed(() => ({
@@ -135,7 +99,12 @@ const contentMargin = computed(() => ({
       </header>
 
       <!-- Main Content -->
-      <main class="flex-1 w-full flex flex-col">
+      <main
+        class="flex-1 w-full flex flex-col"
+        :style="{
+          maxWidth: isCollapsed ? 'calc(100vw - 5rem)' : 'calc(100vw - 16rem)',
+        }"
+      >
         <div class="w-full flex-1 py-4 px-2 sm:px-4 lg:px-6 flex flex-col">
           <RouterView v-slot="{ Component }">
             <component

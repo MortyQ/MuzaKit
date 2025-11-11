@@ -10,7 +10,9 @@ export interface SidebarNavItem {
   /** Icon name (e.g., "mdi:home") */
   icon: string;
   /** Route path or name (optional for parent items) */
-  to?: string | { name: string; params?: Record<string, never> };
+  to?: string | { name: string; params?: Record<string, unknown> };
+  /** Click handler (alternative to navigation) */
+  onClick?: () => void;
   /** Child navigation items (creates collapsible menu) */
   children?: SidebarNavItem[];
   /** Disabled state */
@@ -22,7 +24,7 @@ export interface SidebarNavItem {
   /** Hide in navigation */
   hidden?: boolean;
   /** Custom metadata */
-  meta?: Record<string, never>;
+  meta?: Record<string, unknown>;
 }
 
 /**
