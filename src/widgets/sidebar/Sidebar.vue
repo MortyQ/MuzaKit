@@ -16,10 +16,11 @@ defineProps<Props>();
 
 const { isCollapsed, isMobileOpen, closeMobile } = useSidebar();
 
-// Computed classes
+// Computed classes - Modern rounded design (performance optimized)
 const sidebarClasses = computed(() => [
-  "sidebar fixed top-0 left-0 h-screen bg-base-100 border-r border-base-300",
+  "sidebar fixed top-0 left-0 h-screen bg-base-100/95",
   "flex flex-col transition-all duration-300 ease-in-out z-40",
+  "border-r border-base-300/50",
   {
     "w-64": !isCollapsed.value,
     "w-20": isCollapsed.value,
@@ -27,8 +28,9 @@ const sidebarClasses = computed(() => [
 ]);
 
 const mobileSidebarClasses = computed(() => [
-  "sidebar-mobile fixed top-0 left-0 h-screen bg-base-100 border-r border-base-300",
+  "sidebar-mobile fixed top-0 left-0 h-screen bg-base-100/98",
   "flex flex-col transition-transform duration-300 ease-in-out z-50 w-64",
+  "border-r border-base-300/50",
   {
     "translate-x-0": isMobileOpen.value,
     "-translate-x-full": !isMobileOpen.value,
@@ -121,10 +123,46 @@ watch(isMobileOpen, (isOpen) => {
 </template>
 
 <style scoped>
-/* Smooth transitions */
-.sidebar,
+/* Modern rounded sidebar design - Performance optimized */
+.sidebar {
+  /* Rounded right edge for desktop */
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  /* Soft shadow - GPU accelerated */
+  box-shadow:
+    2px 0 12px rgba(0, 0, 0, 0.08),
+    4px 0 24px rgba(0, 0, 0, 0.04);
+  /* Smooth GPU-accelerated rendering */
+  transform: translateZ(0);
+  will-change: width;
+}
+
 .sidebar-mobile {
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  /* No rounded corners for mobile (full height) */
+  box-shadow:
+    4px 0 16px rgba(0, 0, 0, 0.12),
+    8px 0 32px rgba(0, 0, 0, 0.06);
+  /* Smooth GPU-accelerated rendering */
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Smooth border radius transition */
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.05) 10%,
+    rgba(0, 0, 0, 0.05) 90%,
+    transparent 100%
+  );
+  pointer-events: none;
 }
 </style>
 
