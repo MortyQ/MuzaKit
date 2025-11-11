@@ -42,7 +42,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: "/components",
-    name: "ComponentsGallery",
+    name: "Components",
     component: () => import("@/pages/Components/index.vue"),
     meta: {
       title: "Component Library - Vue 3 Starter",
