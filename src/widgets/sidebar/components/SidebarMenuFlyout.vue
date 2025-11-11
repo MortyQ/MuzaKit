@@ -199,7 +199,7 @@ const allChildren = computed(() => {
               </div>
 
               <!-- Children List -->
-              <div class="space-y-0.5 px-1">
+              <div class="space-y-1 px-1">
                 <button
                   v-for="child in allChildren"
                   :key="child.id"
@@ -207,6 +207,7 @@ const allChildren = computed(() => {
                   :class="[
                     'w-full flex items-center gap-2 px-3 py-2 rounded text-sm transition-colors',
                     'hover:bg-base-200 text-neutral/80 hover:text-neutral',
+                    'focus:outline-none relative flyout-menu-item',
                     { 'opacity-50 cursor-not-allowed': child.disabled },
                   ]"
                   :style="{ paddingLeft: `${12 + child.level * 16}px` }"
@@ -255,6 +256,24 @@ const allChildren = computed(() => {
 .overflow-y-auto::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 2px;
+}
+
+/* Focus indicator for flyout menu items */
+.flyout-menu-item:focus-visible {
+  background-color: rgba(0, 0, 0, 0.06) !important;
+  outline: none !important;
+}
+
+/* Left accent bar on focus */
+.flyout-menu-item:focus-visible::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 3px;
+  background-color: #3b82f6;
+  border-radius: 0 2px 2px 0;
 }
 </style>
 

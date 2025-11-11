@@ -93,14 +93,16 @@ const handleClick = () => {
 const itemClasses = computed(() => {
   const baseClasses = [
     "flex items-center gap-3 py-2.5 px-4 rounded-lg transition-all duration-200 cursor-pointer group",
+    "outline-none focus:outline-none focus-visible:outline-none",
+    "relative", // For accent bar positioning
   ];
 
   // Active state
   if (isActive.value) {
-    baseClasses.push("bg-primary/10 text-primary font-medium");
+    baseClasses.push("bg-primary/10 text-primary font-medium sidebar-item-active");
   } else if (hasActiveChild.value && hasChildren.value) {
     // Parent with active child
-    baseClasses.push("text-primary/80");
+    baseClasses.push("text-primary/80 hover:bg-base-200/50");
   } else {
     // Default state
     baseClasses.push("text-neutral/70 hover:bg-base-200 hover:text-neutral");
@@ -250,3 +252,56 @@ const itemClasses = computed(() => {
   </div>
 </template>
 
+<style scoped>
+/* Remove all default focus/active/visited states */
+.sidebar-nav-item button,
+.sidebar-nav-item a {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Focus indicator with background and left accent bar */
+.sidebar-nav-item button:focus-visible,
+.sidebar-nav-item a:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.sidebar-nav-item button:focus-visible:hover,
+.sidebar-nav-item a:focus-visible:hover {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Left accent bar on focus */
+.sidebar-nav-item button:focus-visible::before,
+.sidebar-nav-item a:focus-visible::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 3px;
+  background-color: #3b82f6;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Active state accent bar */
+.sidebar-item-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 3px;
+  background-color: #3b82f6;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Remove router-link active states */
+.sidebar-nav-item a.router-link-active:focus,
+.sidebar-nav-item a.router-link-exact-active:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+</style>
