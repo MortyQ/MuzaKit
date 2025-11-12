@@ -2,6 +2,15 @@ import type { MenuItem } from "@/app/router/types";
 import type { SidebarNavItem } from "@/widgets/sidebar/types";
 
 /**
+ * Options for converting MenuItems to SidebarConfig
+ */
+export interface SidebarConfigOptions {
+  brandName?: string;
+  footerItems?: MenuItem[];
+  showThemeToggle?: boolean;
+}
+
+/**
  * Convert router MenuItem to Sidebar NavItem
  */
 export function menuItemToSidebarItem(menuItem: MenuItem): SidebarNavItem {
@@ -26,15 +35,13 @@ export function menuItemToSidebarItem(menuItem: MenuItem): SidebarNavItem {
  */
 export function menuItemsToSidebarConfig(
   items: MenuItem[],
-  options?: {
-    brandName?: string;
-    footerItems?: MenuItem[];
-  },
+  options?: SidebarConfigOptions,
 ) {
   return {
     brandName: options?.brandName || "App",
     items: items.map(menuItemToSidebarItem),
     footerItems: options?.footerItems?.map(menuItemToSidebarItem) || [],
+    showThemeToggle: options?.showThemeToggle ?? true,
   };
 }
 

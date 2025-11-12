@@ -58,7 +58,10 @@ onUnmounted(() => {
       <SidebarMobileNav :items="config.items" />
 
       <!-- Footer -->
-      <SidebarMobileFooter :items="config.footerItems" />
+      <SidebarMobileFooter
+        :items="config.footerItems"
+        :show-theme-toggle="config.showThemeToggle"
+      />
     </aside>
 
     <!-- Mobile Overlay -->

@@ -39,7 +39,10 @@ const { isCollapsed } = useSidebar();
       <SidebarNav :items="config.items" />
 
       <!-- Footer -->
-      <SidebarFooter :items="config.footerItems" />
+      <SidebarFooter
+        :items="config.footerItems"
+        :show-theme-toggle="config.showThemeToggle"
+      />
     </aside>
 
     <!-- Mobile Sidebar - shown on <lg screens -->

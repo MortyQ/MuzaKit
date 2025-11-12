@@ -39,6 +39,8 @@ export interface SidebarConfig {
   items: SidebarNavItem[];
   /** Footer items (e.g., Settings, Profile) */
   footerItems?: SidebarNavItem[];
+  /** Show theme toggle in footer (default: true) */
+  showThemeToggle?: boolean;
 }
 
 /**
