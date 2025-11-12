@@ -41,6 +41,8 @@ export interface SidebarConfig {
   footerItems?: SidebarNavItem[];
   /** Show theme toggle in footer (default: true) */
   showThemeToggle?: boolean;
+  /** Show user menu in footer (default: true) */
+  showUserMenu?: boolean;
 }
 
 /**

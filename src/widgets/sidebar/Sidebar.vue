@@ -42,6 +42,7 @@ const { isCollapsed } = useSidebar();
       <SidebarFooter
         :items="config.footerItems"
         :show-theme-toggle="config.showThemeToggle"
+        :show-user-menu="config.showUserMenu"
       />
     </aside>
 

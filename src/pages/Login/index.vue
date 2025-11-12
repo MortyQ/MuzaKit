@@ -2,12 +2,14 @@
 import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
+import { useAuthStore } from "@/features/auth";
 import VButton from "@/shared/ui/common/VButton.vue";
 import VCard from "@/shared/ui/common/VCard.vue";
 import VInput from "@/shared/ui/common/VInput.vue";
 
 const router = useRouter();
 const route = useRoute();
+const authStore = useAuthStore();
 
 const email = ref("");
 const password = ref("");
@@ -19,12 +21,8 @@ const handleLogin = async () => {
   isLoading.value = true;
 
   try {
-    // TODO: Replace with actual API call
-    // const authStore = useAuthStore();
-    // await authStore.login(email.value, password.value);
-
-    // For demo: just set a token
-    localStorage.setItem("accessToken", "demo-token-" + Date.now());
+    // Use auth store login (with mock API)
+    await authStore.login(email.value, password.value);
 
     // Redirect to original destination or home
     const redirectTo = (route.query.redirect as string) || "/";

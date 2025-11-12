@@ -10,7 +10,7 @@ const coreRoutes: AppRouteRecordRaw[] = [
     component: () => import("@/pages/About/index.vue"),
     meta: {
       title: "About",
-      showInMenu: false, // Show in footer instead
+      showInMenu: true,
       menuTitle: "About",
       menuIcon: "mdi:information",
     },

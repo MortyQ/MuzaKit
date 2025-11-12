@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SidebarNavItemComponent from "./SidebarNavItem.vue";
 
+import { UserMenu } from "@/features/auth";
 import { ThemeToggle } from "@/features/theme";
 import { useSidebar } from "@/widgets/sidebar/composables/useSidebar";
 import type { SidebarNavItem } from "@/widgets/sidebar/types";
@@ -10,11 +11,14 @@ interface Props {
   items?: SidebarNavItem[];
   /** Show theme toggle */
   showThemeToggle?: boolean;
+  /** Show user menu */
+  showUserMenu?: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
   items: () => [],
   showThemeToggle: true,
+  showUserMenu: true,
 });
 
 const { isCollapsed } = useSidebar();
@@ -25,6 +29,14 @@ const { isCollapsed } = useSidebar();
     class="sidebar-footer border-t border-base-300 mt-auto"
     :class="{ 'px-2 py-3': isCollapsed, 'px-3 py-4': !isCollapsed }"
   >
+    <!-- User Menu -->
+    <div
+      v-if="showUserMenu"
+      class="mb-3"
+    >
+      <UserMenu :compact="isCollapsed" />
+    </div>
+
     <!-- Theme Toggle -->
     <div
       v-if="showThemeToggle"

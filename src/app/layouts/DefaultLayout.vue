@@ -4,15 +4,13 @@ import { RouterView } from "vue-router";
 
 import { menuItemsToSidebarConfig } from "@/app/router/adapters";
 import { menuItems } from "@/app/router/modules";
-import { useAuth } from "@/shared/composables/useAuth";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import { Sidebar, useSidebar } from "@/widgets/sidebar";
 import type { SidebarConfig } from "@/widgets/sidebar";
 
 const { isCollapsed, toggleMobile } = useSidebar();
-const { isAuthenticated, logout } = useAuth();
 
-// Footer items based on auth state
+// Footer items - can add additional items here if needed
 const footerItems = computed(() => {
   const items: Array<{
     id: string;
@@ -20,31 +18,7 @@ const footerItems = computed(() => {
     icon: string;
     to?: { name: string };
     onClick?: () => void;
-  }> = [
-    {
-      id: "about",
-      label: "About",
-      icon: "mdi:information",
-      to: { name: "About" },
-    },
-  ];
-
-  // Add logout button if authenticated
-  if (isAuthenticated.value) {
-    items.push({
-      id: "logout",
-      label: "Logout",
-      icon: "mdi:logout",
-      onClick: logout,
-    });
-  } else {
-    items.push({
-      id: "login",
-      label: "Login",
-      icon: "mdi:login",
-      to: { name: "Login" },
-    });
-  }
+  }> = [];
 
   return items;
 });
@@ -55,6 +29,7 @@ const sidebarConfig = computed<SidebarConfig>(() =>
     brandName: "Vue Starter",
     footerItems: footerItems.value,
     showThemeToggle: true,
+    showUserMenu: true,
   }),
 );
 

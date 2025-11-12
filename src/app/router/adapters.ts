@@ -8,6 +8,7 @@ export interface SidebarConfigOptions {
   brandName?: string;
   footerItems?: MenuItem[];
   showThemeToggle?: boolean;
+  showUserMenu?: boolean;
 }
 
 /**
@@ -42,6 +43,7 @@ export function menuItemsToSidebarConfig(
     items: items.map(menuItemToSidebarItem),
     footerItems: options?.footerItems?.map(menuItemToSidebarItem) || [],
     showThemeToggle: options?.showThemeToggle ?? true,
+    showUserMenu: options?.showUserMenu ?? true,
   };
 }
 

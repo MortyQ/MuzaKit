@@ -10,10 +10,8 @@ const componentRoutes: AppRouteRecordRaw[] = [
     redirect: "/components/library",
     meta: {
       title: "Components",
-      showInMenu: true,
       menuTitle: "Components",
       menuIcon: "mdi:hammer",
-      requiresAuth: false,
       isMenuParent: true,
     },
     children: [
@@ -23,11 +21,9 @@ const componentRoutes: AppRouteRecordRaw[] = [
         component: () => import("@/pages/Components/index.vue"),
         meta: {
           title: "Component Library",
-          showInMenu: true,
           menuTitle: "Components",
           menuIcon: "mdi:layers",
           menuOrder: 2,
-          requiresAuth: false,
         },
       },
       {
@@ -36,11 +32,9 @@ const componentRoutes: AppRouteRecordRaw[] = [
         component: () => import("@/pages/UIGallery/index.vue"),
         meta: {
           title: "UI Gallery",
-          showInMenu: true,
           menuTitle: "UI Gallery",
           menuIcon: "mdi:palette",
           menuOrder: 3,
-          requiresAuth: false,
         },
       },
       {
@@ -49,7 +43,6 @@ const componentRoutes: AppRouteRecordRaw[] = [
         component: () => import("@/pages/Table/index.vue"),
         meta: {
           title: "Table Examples",
-          showInMenu: true,
           menuTitle: "Tables",
           menuIcon: "mdi:table",
           menuOrder: 4,

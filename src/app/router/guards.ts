@@ -2,6 +2,8 @@ import type { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 
 import type { RouteMeta } from "./types";
 
+import { useAuthStore } from "@/features/auth";
+
 /**
  * Check if user is authenticated
  * Currently checks for accessToken in localStorage
@@ -36,8 +38,8 @@ import type { RouteMeta } from "./types";
  * }
  */
 export function isAuthenticated(): boolean {
-  const token = localStorage.getItem("accessToken");
-  return !!token;
+  const authStore = useAuthStore();
+  return authStore.isAuthenticated;
 }
 
 /**
@@ -113,12 +115,18 @@ export function hasPermissions(_required: string[]): boolean {
  *   next();
  * }
  */
-export function authGuard(
+export async function authGuard(
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
   next: NavigationGuardNext,
 ) {
   const meta = to.meta as RouteMeta;
+  const authStore = useAuthStore();
+
+  // Initialize auth store if not initialized yet
+  if (!authStore.isInitialized) {
+    await authStore.initialize();
+  }
 
   // Check if authentication is required (default: true)
   const requiresAuth = meta.requiresAuth !== false;
@@ -130,7 +138,7 @@ export function authGuard(
   }
 
   // Check authentication
-  const authenticated = isAuthenticated();
+  const authenticated = authStore.isAuthenticated;
 
   if (!authenticated) {
     // Not authenticated, redirect to log in

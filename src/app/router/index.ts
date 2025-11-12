@@ -26,12 +26,12 @@ const router = createRouter({
 /**
  * Global navigation guards
  */
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // 1. Set page title
   document.title = (to.meta.title as string) || "Vue 3 Starter";
 
   // 2. Check authentication
-  authGuard(to, from, next);
+  await authGuard(to, from, next);
 });
 
 export default router;

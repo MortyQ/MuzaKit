@@ -14,7 +14,7 @@ const authRoutes: AppRouteRecordRaw[] = [
       layout: "empty", // No sidebar/header
       requiresAuth: false, // Public page
       menuIcon: "mdi:login",
-      // showInMenu: false, // Don't show in sidebar
+      showInMenu: false, // Don't show in sidebar
     },
   },
   // Forbidden page

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SidebarMobileNavItem from "./SidebarMobileNavItem.vue";
 
+import { UserMenu } from "@/features/auth";
 import { ThemeToggle } from "@/features/theme";
 import type { SidebarNavItem } from "@/widgets/sidebar/types";
 
@@ -9,14 +10,25 @@ interface Props {
   items?: SidebarNavItem[];
   /** Show theme toggle */
   showThemeToggle?: boolean;
+  /** Show user menu */
+  showUserMenu?: boolean;
 }
 withDefaults(defineProps<Props>(), {
   items: () => [],
   showThemeToggle: true,
+  showUserMenu: true,
 });
 </script>
 <template>
   <div class="sidebar-mobile-footer border-t border-base-300/50 px-3 py-4">
+    <!-- User Menu -->
+    <div
+      v-if="showUserMenu"
+      class="mb-3"
+    >
+      <UserMenu class="w-full" />
+    </div>
+
     <!-- Theme Toggle -->
     <div
       v-if="showThemeToggle"
