@@ -54,6 +54,7 @@ const sidebarConfig = computed<SidebarConfig>(() =>
   menuItemsToSidebarConfig(menuItems, {
     brandName: "Vue Starter",
     footerItems: footerItems.value,
+    showThemeToggle: true,
   }),
 );
 
