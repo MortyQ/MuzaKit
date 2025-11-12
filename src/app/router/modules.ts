@@ -22,7 +22,6 @@ const modules: Array<AppRouteRecordRaw> = [
       menuTitle: "Home",
       menuIcon: "mdi:home",
       menuOrder: 1,
-      requiresAuth: false, // Public page
     },
   },
   // 404 page with explicit path (public)
