@@ -94,9 +94,14 @@
 
 // Force GPU acceleration for smooth animations
 .sidebar,
-.sidebar-mobile,
 .sidebar-flyout {
   transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+// Mobile sidebar without transform to preserve fixed positioning
+.sidebar-mobile {
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
