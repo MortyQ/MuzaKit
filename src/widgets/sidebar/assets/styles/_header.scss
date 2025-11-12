@@ -1,0 +1,119 @@
+// Sidebar Header
+// ============================================
+// Logo, brand name, and collapse toggle
+
+@use './variables' as *;
+
+// ════════════════════════════════════════════════════════════════
+// HEADER CONTAINER
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-header {
+  padding: 1.5rem $sidebar-item-padding-x;
+  border-bottom: 1px solid theme('colors.base-300 / 50%');
+
+  // Smooth transitions
+  transition: all $sidebar-transition-duration $sidebar-transition-timing;
+}
+
+// ════════════════════════════════════════════════════════════════
+// LOGO
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-logo {
+  width: 2rem; // 32px
+  height: 2rem;
+  flex-shrink: 0;
+
+  transition: transform 200ms ease-in-out;
+}
+
+.sidebar-logo:hover {
+  transform: scale(1.05);
+}
+
+// ════════════════════════════════════════════════════════════════
+// BRAND NAME
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-brand {
+  font-size: 1.125rem; // 18px
+  font-weight: $sidebar-font-weight-semibold;
+  letter-spacing: -0.01em;
+
+  // Smooth fade when collapsing
+  transition:
+    opacity $sidebar-transition-duration $sidebar-transition-timing,
+    transform $sidebar-transition-duration $sidebar-transition-timing;
+}
+
+// Collapsed state
+.sidebar-collapsed .sidebar-brand {
+  opacity: 0;
+  transform: translateX(-8px);
+  pointer-events: none;
+}
+
+// ════════════════════════════════════════════════════════════════
+// TOGGLE BUTTON
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-toggle {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.375rem;
+
+  transition:
+    background-color 150ms ease-in-out,
+    transform 150ms ease-in-out;
+
+  // Remove default focus outline
+  outline: none;
+}
+
+.sidebar-toggle:hover {
+  transform: scale(1.05);
+}
+
+.sidebar-toggle:active {
+  transform: scale(0.95);
+}
+
+.sidebar-toggle:focus-visible {
+  outline: 2px solid theme('colors.primary');
+  outline-offset: 2px;
+}
+
+// Toggle icon rotation
+.sidebar-toggle-icon {
+  transition: transform $sidebar-transition-duration $sidebar-transition-timing;
+}
+
+.sidebar-collapsed .sidebar-toggle-icon {
+  transform: rotate(180deg);
+}
+
+// ════════════════════════════════════════════════════════════════
+// MOBILE CLOSE BUTTON
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-close {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.375rem;
+
+  transition:
+    background-color 150ms ease-in-out,
+    transform 150ms ease-in-out;
+
+  outline: none;
+}
+
+.sidebar-close:hover {
+  transform: rotate(90deg) scale(1.1);
+}
+
+.sidebar-close:active {
+  transform: rotate(90deg) scale(0.9);
+}
+

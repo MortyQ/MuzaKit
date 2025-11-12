@@ -1,0 +1,165 @@
+// Sidebar Navigation Items
+// ============================================
+// Menu items, links, and interactive elements
+
+@use './variables' as *;
+
+// ════════════════════════════════════════════════════════════════
+// NAVIGATION ITEMS - Base styles
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-item {
+  // Smooth transitions for all states
+  transition-property: background-color, color, transform;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+
+  // Remove default focus outline (we have custom styles)
+  outline: none;
+
+  // Smooth border radius
+  border-radius: $sidebar-item-border-radius;
+
+  // Prevent text selection on repeated clicks
+  user-select: none;
+
+  // GPU acceleration for hover/active states
+  will-change: background-color, transform;
+}
+
+// Hover state
+.sidebar-item:hover:not(:disabled):not(.active) {
+  // Subtle background using Tailwind theme colors
+  // Defined in component with: hover:bg-base-200/50
+  transform: translateX(2px);
+}
+
+// Active state
+.sidebar-item.active {
+  // Background and colors defined in component
+  // bg-primary/10 text-primary
+  font-weight: $sidebar-font-weight-semibold;
+
+  // Subtle scale for emphasis
+  transform: scale(1.01);
+}
+
+// Focus visible (keyboard navigation)
+.sidebar-item:focus-visible {
+  // Ring styles defined in component via Tailwind
+  // ring-2 ring-primary ring-offset-2
+  outline: none;
+}
+
+// Disabled state
+.sidebar-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+// ════════════════════════════════════════════════════════════════
+// COLLAPSED STATE ADJUSTMENTS
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-collapsed {
+  .sidebar-item {
+    // Center items when collapsed
+    justify-content: center;
+
+    // Remove horizontal translation on hover
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &.active {
+      transform: scale(1.08);
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// NESTED ITEMS (Submenus)
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-item-nested {
+  padding-left: calc($sidebar-item-padding-x + 1.5rem);
+  font-size: 0.8125rem; // Slightly smaller for hierarchy
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 1.5rem;
+    top: 50%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: currentColor;
+    opacity: 0.4;
+    transform: translateY(-50%);
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// ITEM BADGE (Notifications, counts)
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-item-badge {
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.375rem;
+  font-size: 0.6875rem; // 11px
+  font-weight: $sidebar-font-weight-semibold;
+  border-radius: 0.625rem; // Fully rounded
+
+  // Smooth scale animation
+  animation: badge-pop 0.3s ease-out;
+}
+
+@keyframes badge-pop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// ICON STYLES
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-item-icon {
+  flex-shrink: 0;
+  width: $sidebar-icon-size;
+  height: $sidebar-icon-size;
+  transition: transform 200ms ease-in-out;
+}
+
+.sidebar-collapsed .sidebar-item-icon {
+  width: $sidebar-icon-size-collapsed;
+  height: $sidebar-icon-size-collapsed;
+}
+
+// Icon animation on active
+.sidebar-item.active .sidebar-item-icon {
+  transform: scale(1.1);
+}
+
+// ════════════════════════════════════════════════════════════════
+// EXPANDABLE MENU CHEVRON
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-item-chevron {
+  transition: transform 200ms ease-in-out;
+}
+
+.sidebar-item-expanded .sidebar-item-chevron {
+  transform: rotate(90deg);
+}
+

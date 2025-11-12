@@ -63,6 +63,24 @@ export const iconMap: Record<string, Component> = {
   "mdi:phone": defineAsyncComponent(() => import("~icons/mdi/phone")),
   "mdi:message": defineAsyncComponent(() => import("~icons/mdi/message")),
   "mdi:bell": defineAsyncComponent(() => import("~icons/mdi/bell")),
+  "mdi:mail": defineAsyncComponent(() => import("~icons/mdi/email-outline")),
+
+  // Building & Development
+  "mdi:hammer": defineAsyncComponent(() => import("~icons/mdi/hammer")),
+  "mdi:cloud": defineAsyncComponent(() => import("~icons/mdi/cloud")),
+  "mdi:layers": defineAsyncComponent(() => import("~icons/mdi/layers")),
+  "mdi:package": defineAsyncComponent(() => import("~icons/mdi/package-variant")),
+  "mdi:database": defineAsyncComponent(() => import("~icons/mdi/database")),
+  "mdi:table": defineAsyncComponent(() => import("~icons/mdi/table")),
+  "mdi:library": defineAsyncComponent(() => import("~icons/mdi/library-shelves")),
+
+  // Charts & Analytics
+  "mdi:chart-line": defineAsyncComponent(() => import("~icons/mdi/chart-line")),
+  "mdi:chart-bar": defineAsyncComponent(() => import("~icons/mdi/chart-bar")),
+  "mdi:chart-box": defineAsyncComponent(() => import("~icons/mdi/chart-box")),
+  "mdi:chart-timeline": defineAsyncComponent(() => import("~icons/mdi/chart-timeline-variant")),
+  "mdi:chart-bubble": defineAsyncComponent(() => import("~icons/mdi/chart-bubble")),
+  "mdi:view-dashboard": defineAsyncComponent(() => import("~icons/mdi/view-dashboard")),
 
   // Files & Content
   "mdi:file": defineAsyncComponent(() => import("~icons/mdi/file")),

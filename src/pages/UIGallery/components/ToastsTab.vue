@@ -72,13 +72,13 @@ const showWithAction = () => {
         </p>
       </div>
 
-      <div class="flex gap-4">
+      <div class="flex flex-col lg:flex-row gap-4">
         <!-- Basic Toasts -->
         <VCard class="w-full">
           <h3 class="text-lg font-semibold text-mainText mb-4">
             Basic Toast Types
           </h3>
-          <div class="flex gap-4">
+          <div class="flex flex-col lg:flex-row gap-4">
             <VButton
               variant="positive"
               text="Success Toast"
@@ -143,7 +143,7 @@ const showWithAction = () => {
       </div>
 
       <!-- Usage Example -->
-      <div class="flex gap-4">
+      <div class="flex flex-col lg:flex-row  gap-4">
         <VCard class="w-full">
           <h3 class="text-lg font-semibold text-mainText mb-4">
             Usage Example

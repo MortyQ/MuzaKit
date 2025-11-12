@@ -1,0 +1,28 @@
+// Sidebar Footer
+// ============================================
+// Footer items like settings, profile, help
+
+@use './variables' as *;
+
+// ════════════════════════════════════════════════════════════════
+// FOOTER CONTAINER
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-footer {
+  padding: $sidebar-item-padding-x;
+  border-top: 1px solid theme('colors.base-300 / 50%');
+  margin-top: auto; // Push to bottom
+
+  // Smooth transitions
+  transition: all $sidebar-transition-duration $sidebar-transition-timing;
+}
+
+// ════════════════════════════════════════════════════════════════
+// FOOTER ITEMS
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-footer-item {
+  // Inherits from .sidebar-item styles in _item.scss
+  // Additional footer-specific styles if needed
+}
+
