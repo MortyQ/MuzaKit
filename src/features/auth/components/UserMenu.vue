@@ -86,27 +86,29 @@ const dropdownItems = computed(() => [
           />
 
           <!-- User Info (only in expanded mode) -->
-          <div
-            v-if="!compact && user"
-            class="flex flex-col items-start min-w-0"
-          >
-            <span class="text-sm font-medium text-mainText truncate max-w-[150px]">
-              {{ userDisplayName }}
-            </span>
-            <span class="text-xs text-secondaryText truncate max-w-[150px]">
-              {{ user.email }}
-            </span>
-          </div>
+          <Transition name="user-info-fade">
+            <div
+              v-if="!compact && user && !isOpen"
+              class="flex flex-col items-start min-w-0"
+            >
+              <span class="text-sm font-medium text-mainText truncate max-w-[150px]">
+                {{ userDisplayName }}
+              </span>
+              <span class="text-xs text-secondaryText truncate max-w-[150px]">
+                {{ user.email }}
+              </span>
+            </div>
+          </Transition>
 
           <!-- Chevron Icon (only in expanded mode) -->
-          <VIcon
-            v-if="!compact"
-            icon="mdi:chevron-down"
-            :size="16"
-            :class="isOpen
-              ? 'text-secondaryText transition-transform duration-200 flex-shrink-0 rotate-180'
-              : 'text-secondaryText transition-transform duration-200 flex-shrink-0'"
-          />
+          <Transition name="chevron-fade">
+            <VIcon
+              v-if="!compact && !isOpen"
+              icon="mdi:chevron-down"
+              :size="16"
+              class="text-secondaryText transition-transform duration-200 flex-shrink-0"
+            />
+          </Transition>
 
           <!-- Loading Skeleton -->
           <div
@@ -122,10 +124,10 @@ const dropdownItems = computed(() => [
       <!-- Custom content for dropdown -->
       <template #content>
         <div class="user-menu-dropdown min-w-[250px]">
-          <!-- User Info Header -->
+          <!-- User Info Header with delayed fade-in -->
           <div
             v-if="user"
-            class="px-3 py-2.5 border-b border-base-300"
+            class="user-menu-header px-3 py-2.5 border-b border-base-300"
           >
             <div class="flex items-center gap-2.5">
               <UserAvatar
@@ -150,8 +152,8 @@ const dropdownItems = computed(() => [
             </div>
           </div>
 
-          <!-- Menu Items -->
-          <div class="py-0.5">
+          <!-- Menu Items with delayed fade-in -->
+          <div class="user-menu-items py-0.5">
             <!-- Profile -->
             <button
               type="button"
@@ -216,5 +218,102 @@ const dropdownItems = computed(() => [
     </VDropdown>
   </div>
 </template>
+
+<style scoped>
+/* Убеждаемся что контент не выходит за границы во время анимации */
+.user-menu-dropdown {
+  overflow: hidden;
+}
+
+/* Transition для User Info в триггере - с задержкой появления */
+.user-info-fade-enter-active {
+  /* Появление с задержкой - дожидаемся закрытия dropdown */
+  transition: opacity 0.2s ease 0.15s;
+}
+
+.user-info-fade-leave-active {
+  /* Исчезновение быстрое без задержки */
+  transition: opacity 0.15s ease;
+}
+
+.user-info-fade-enter-from {
+  opacity: 0;
+}
+
+.user-info-fade-leave-to {
+  opacity: 0;
+}
+
+.user-info-fade-enter-to,
+.user-info-fade-leave-from {
+  opacity: 1;
+}
+
+/* Transition для Chevron иконки - такая же логика как у User Info */
+.chevron-fade-enter-active {
+  /* Появление с задержкой - дожидаемся закрытия dropdown */
+  transition: opacity 0.2s ease 0.15s;
+}
+
+.chevron-fade-leave-active {
+  /* Исчезновение быстрое без задержки */
+  transition: opacity 0.15s ease;
+}
+
+.chevron-fade-enter-from {
+  opacity: 0;
+}
+
+.chevron-fade-leave-to {
+  opacity: 0;
+}
+
+.chevron-fade-enter-to,
+.chevron-fade-leave-from {
+  opacity: 1;
+}
+
+/* Delayed fade-in анимация для хедера */
+.user-menu-header {
+  animation: fadeInDelayed 0.2s ease-out 0.1s both;
+}
+
+/* Delayed fade-in анимация для пунктов меню */
+.user-menu-items {
+  animation: fadeInDelayed 0.2s ease-out 0.15s both;
+}
+
+/* Кнопки меню появляются по очереди с небольшой задержкой */
+.user-menu-items > button {
+  animation: fadeInDelayed 0.15s ease-out both;
+}
+
+.user-menu-items > button:nth-child(1) {
+  animation-delay: 0.18s;
+}
+
+.user-menu-items > button:nth-child(2) {
+  animation-delay: 0.21s;
+}
+
+.user-menu-items > button:nth-child(3) {
+  animation-delay: 0.24s; /* divider */
+}
+
+.user-menu-items > button:nth-child(4) {
+  animation-delay: 0.27s; /* logout */
+}
+
+@keyframes fadeInDelayed {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
 
 
