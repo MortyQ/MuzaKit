@@ -123,35 +123,42 @@ export async function authGuard(
   const meta = to.meta as RouteMeta;
   const authStore = useAuthStore();
 
-  // Initialize auth store if not initialized yet
-  if (!authStore.isInitialized) {
-    await authStore.initialize();
-  }
+  // Ensure auth is initialized (will wait if already in progress)
+  // This handles both cases: initialized in App.vue or needs init here
+  await authStore.initialize();
 
   // Check if authentication is required (default: true)
   const requiresAuth = meta.requiresAuth !== false;
 
-  // Allow public routes
+  // Allow public routes immediately
   if (!requiresAuth) {
     next();
     return;
   }
 
-  // Check authentication
+  // For protected routes, check authentication
   const authenticated = authStore.isAuthenticated;
 
   if (!authenticated) {
-    // Not authenticated, redirect to log in
+    // Not authenticated - redirect to login
     const redirectPath = meta.authRedirect || "/login";
+
+    // Don't redirect if already going to login page (prevents redirect loop)
+    if (to.path === redirectPath) {
+      next();
+      return;
+    }
 
     console.warn(`Access denied to ${to.path}, redirecting to ${redirectPath}`);
 
+    // Use next() with redirect path to prevent component rendering
     next({
       path: redirectPath,
       query: {
         // Save original destination for redirect after login
         redirect: to.fullPath,
       },
+      replace: true, // Replace history entry to prevent back button issues
     });
     return;
   }
@@ -164,12 +171,13 @@ export async function authGuard(
       next({
         path: "/403", // Forbidden page
         query: { from: to.fullPath },
+        replace: true,
       });
       return;
     }
   }
 
-  // All checks passed
+  // All checks passed - allow navigation
   next();
 }
 

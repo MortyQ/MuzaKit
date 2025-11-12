@@ -4,14 +4,11 @@ import { RouterView } from "vue-router";
 
 import { menuItemsToSidebarConfig } from "@/app/router/adapters";
 import { menuItems } from "@/app/router/modules";
-import { useAuthStore } from "@/features/auth";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import VLoader from "@/shared/ui/common/VLoader.vue";
 import { Sidebar, useSidebar } from "@/widgets/sidebar";
 import type { SidebarConfig } from "@/widgets/sidebar";
 
 const { isCollapsed, toggleMobile } = useSidebar();
-const authStore = useAuthStore();
 
 // Footer items - can add additional items here if needed
 const footerItems = computed(() => {
@@ -86,22 +83,9 @@ const contentMargin = computed(() => ({
         }"
       >
         <div
-
           class="w-full flex-1 py-4 px-2 sm:px-4 lg:px-6 flex flex-col"
         >
-          <!-- Show loader only during initial auth check -->
-          <div
-            v-if="!authStore.isInitialized"
-            class="h-full flex items-center justify-center"
-          >
-            <VLoader size="large" />
-          </div>
-
-          <!-- Show content after initialization -->
-          <RouterView
-            v-else
-            v-slot="{ Component }"
-          >
+          <RouterView v-slot="{ Component }">
             <component
               :is="Component"
               class="flex-1"

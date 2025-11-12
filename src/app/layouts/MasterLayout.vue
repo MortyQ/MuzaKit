@@ -7,6 +7,10 @@ import AuthLayout from "./AuthLayout.vue";
 import DefaultLayout from "./DefaultLayout.vue";
 import EmptyLayout from "./EmptyLayout.vue";
 
+import { useAuthStore } from "@/features/auth";
+import { useThemeStore } from "@/features/theme";
+import VLoader from "@/shared/ui/common/VLoader.vue";
+
 /**
  * MasterLayout - Dynamic layout switcher based on route meta
  *
@@ -26,15 +30,54 @@ const layouts: Record<string, Component> = {
 };
 
 const route = useRoute();
+const authStore = useAuthStore();
+const themeStore = useThemeStore();
+
+// Initialize theme immediately (synchronously) before any rendering
+// This prevents theme "flash" on page load/refresh
+themeStore.initTheme();
 
 // Dynamically resolve layout from route meta
 const layout = computed(() => {
   const layoutName = (route.meta.layout as string) || "default";
   return layouts[layoutName] || layouts.default;
 });
+
+// Show loader only during initial auth initialization
+// For protected routes (requiresAuth !== false), also wait for authentication
+const shouldShowContent = computed(() => {
+  // Always wait for initialization first
+  if (!authStore.isInitialized) {
+    return false;
+  }
+
+  // Check if current route requires authentication
+  const requiresAuth = route.meta.requiresAuth !== false;
+
+  // For public routes - show immediately after init
+  if (!requiresAuth) {
+    return true;
+  }
+
+  // For protected routes - only show if authenticated
+  // This prevents DefaultLayout from flashing before redirect to login
+  return authStore.isAuthenticated;
+});
 </script>
 
 <template>
-  <component :is="layout" />
+  <!-- Show global loader until we can show content -->
+  <div
+    v-if="!shouldShowContent"
+    class="min-h-screen bg-mainBg flex items-center justify-center"
+  >
+    <VLoader size="large" />
+  </div>
+
+  <!-- Show layout when ready -->
+  <component
+    :is="layout"
+    v-else
+  />
 </template>
 

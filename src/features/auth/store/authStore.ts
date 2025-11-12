@@ -30,6 +30,9 @@ export const useAuthStore = defineStore("auth", () => {
   const isInitialized = ref(false);
   const error = ref<string | null>(null);
 
+  // Promise to track initialization
+  let initializationPromise: Promise<void> | null = null;
+
   // Computed
   const isAuthenticated = computed(() => !!user.value);
 
@@ -76,33 +79,45 @@ export const useAuthStore = defineStore("auth", () => {
    * Initialize auth state
    * Call this on app startup to load user data
    */
-  const initialize = async (): Promise<void> => {
+  const initialize = (): Promise<void> => {
+    // If already initialized, return immediately
     if (isInitialized.value) {
-      return;
+      return Promise.resolve();
     }
 
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      isInitialized.value = true;
-      return;
+    // If initialization is in progress, wait for it
+    if (initializationPromise) {
+      return initializationPromise;
     }
 
-    isLoading.value = true;
-    error.value = null;
+    // Start initialization
+    initializationPromise = (async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        isInitialized.value = true;
+        return;
+      }
 
-    try {
-      // Simulate API call to getMe
-      user.value = await mockGetMe();
-    } catch (err) {
-      console.error("Failed to initialize auth:", err);
-      error.value = err instanceof Error ? err.message : "Failed to load user";
-      // Clear invalid token
-      localStorage.removeItem("accessToken");
-      user.value = null;
-    } finally {
-      isLoading.value = false;
-      isInitialized.value = true;
-    }
+      isLoading.value = true;
+      error.value = null;
+
+      try {
+        // Simulate API call to getMe
+        user.value = await mockGetMe();
+      } catch (err) {
+        console.error("Failed to initialize auth:", err);
+        error.value = err instanceof Error ? err.message : "Failed to load user";
+        // Clear invalid token
+        localStorage.removeItem("accessToken");
+        user.value = null;
+      } finally {
+        isLoading.value = false;
+        isInitialized.value = true;
+        initializationPromise = null;
+      }
+    })();
+
+    return initializationPromise;
   };
 
   /**
