@@ -6,7 +6,7 @@ import { useThemeStore } from "@/features/theme/composables/useTheme";
 
 const themeStore = useThemeStore();
 
-const toasterTheme = computed(() => themeStore.currentTheme);
+const toasterTheme = computed(() => themeStore.resolvedTheme);
 </script>
 
 <template>
