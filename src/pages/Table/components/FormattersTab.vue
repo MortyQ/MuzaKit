@@ -548,7 +548,7 @@ const allFormattersColumns: Column[] = [
 </template>
 
 <style scoped lang="scss">
-@use "./shared-info-card-styles.scss";
+@use "@/shared/assets/styles/shared-info-card-styles.scss";
 
 .formatters-tab {
   @apply flex flex-col gap-6;

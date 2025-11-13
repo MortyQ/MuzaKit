@@ -193,6 +193,17 @@ export const iconMap: Record<string, Component> = {
   "lucide:git-branch": defineAsyncComponent(() => import("~icons/lucide/git-branch")),
   "lucide:split": defineAsyncComponent(() => import("~icons/lucide/split")),
   "lucide:list-checks": defineAsyncComponent(() => import("~icons/lucide/list-checks")),
+  "lucide:layout-panel-top": defineAsyncComponent(() => import("~icons/lucide/layout-panel-top")),
+  "lucide:boxes": defineAsyncComponent(() => import("~icons/lucide/boxes")),
+  "lucide:settings-2": defineAsyncComponent(() => import("~icons/lucide/settings-2")),
+  "lucide:smartphone": defineAsyncComponent(() => import("~icons/lucide/smartphone")),
+  "lucide:message-square": defineAsyncComponent(() => import("~icons/lucide/message-square")),
+  "lucide:palette": defineAsyncComponent(() => import("~icons/lucide/palette")),
+  "lucide:bell": defineAsyncComponent(() => import("~icons/lucide/bell")),
+  "lucide:shapes": defineAsyncComponent(() => import("~icons/lucide/shapes")),
+  "lucide:package": defineAsyncComponent(() => import("~icons/lucide/package")),
+  "lucide:shield-check": defineAsyncComponent(() => import("~icons/lucide/shield-check")),
+  "lucide:tag": defineAsyncComponent(() => import("~icons/lucide/tag")),
 };
 
 /**

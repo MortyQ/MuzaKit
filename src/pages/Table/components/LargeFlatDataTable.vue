@@ -180,7 +180,7 @@ const columnsRegular: Column[] = [
 </template>
 
 <style scoped lang="scss">
-@use "./shared-info-card-styles.scss";
+@use "@/shared/assets/styles/shared-info-card-styles.scss";
 
 /* Component-specific styles */
 .tech-specs {

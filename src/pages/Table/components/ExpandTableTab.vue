@@ -294,5 +294,5 @@ const exportFunc = (format: string) => {
 </template>
 
 <style scoped lang="scss">
-@use "./shared-info-card-styles.scss";
+@use "@/shared/assets/styles/shared-info-card-styles.scss";
 </style>

@@ -342,5 +342,5 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
 </template>
 
 <style scoped lang="scss">
-@use "./shared-info-card-styles.scss";
+@use "@/shared/assets/styles/shared-info-card-styles.scss";
 </style>

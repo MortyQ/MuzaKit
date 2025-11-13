@@ -33,10 +33,8 @@ type CardProps = {
   disabled?: boolean;
   clickable?: boolean;
 
-  // Icons and images
+  // Icons
   icon?: string;
-  image?: string;
-  imageAlt?: string;
 
   // Additional settings
   as?: string;
@@ -59,8 +57,6 @@ type CardSlots = {
   footer?: () => any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   loading?: () => any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  image?: () => any;
 };
 
 
@@ -76,8 +72,6 @@ const props = withDefaults(defineProps<CardProps>(), {
   subtitle: "",
   description: "",
   icon: "",
-  image: "",
-  imageAlt: "",
   href: "",
   padding: "sm",
 });
@@ -86,8 +80,7 @@ const emit = defineEmits<CardEmits>();
 
 // Computed properties
 const hasHeader = computed(() => props.title
-    || props.subtitle || props.icon
-    || props.image || !!slots.header);
+    || props.subtitle || props.icon || !!slots.header);
 
 const hasFooter = computed(() => !!slots.footer);
 
@@ -167,19 +160,6 @@ const handleClick = (event: MouseEvent) => {
 
     <!-- Main content -->
     <template v-else>
-      <!-- Image -->
-      <div
-        v-if="image || slots.image"
-        class="card__image"
-      >
-        <slot name="image">
-          <img
-            :alt="imageAlt || title || 'Card image'"
-            :src="image"
-          >
-        </slot>
-      </div>
-
       <!-- Header -->
       <header
         v-if="hasHeader"
