@@ -3,16 +3,16 @@
 }
 
 .markdown-body {
-  @apply font-sans text-[15px] leading-[1.7] text-gray-900 dark:text-mainText;
+  @apply font-sans text-[15px] leading-[1.7] text-mainText;
 }
 
 /* Headings */
 .markdown-body :deep(h1) {
-  @apply text-3xl font-semibold mt-0 mb-6 pb-2 border-b border-gray-300 dark:border-gray-700;
+  @apply text-3xl font-semibold mt-0 mb-6 pb-2 border-b border-cardBorder;
 }
 
 .markdown-body :deep(h2) {
-  @apply text-2xl font-semibold mt-8 mb-4 pb-1 border-b border-gray-300 dark:border-gray-700;
+  @apply text-2xl font-semibold mt-8 mb-4 pb-1 border-b border-cardBorder;
 }
 
 .markdown-body :deep(h3) {
@@ -44,11 +44,11 @@
 
 /* Code blocks */
 .markdown-body :deep(pre) {
-  @apply bg-gray-100 dark:bg-[#161b22] rounded-lg p-4 overflow-x-auto mb-4 border border-gray-300 dark:border-gray-700;
+  @apply bg-base-200 rounded-lg p-4 overflow-x-auto mb-4 border border-cardBorder shadow-sm;
 }
 
 .markdown-body :deep(code) {
-  @apply bg-gray-100 dark:bg-[#161b22] px-1.5 py-0.5 rounded text-sm;
+  @apply bg-base-200 px-1.5 py-0.5 rounded text-sm border border-cardBorder;
   font-family:
     "SF Mono",
     Monaco,
@@ -58,50 +58,54 @@
 }
 
 .markdown-body :deep(pre code) {
-  @apply text-white bg-transparent p-0 rounded-none text-sm leading-relaxed;
+  @apply text-mainText bg-transparent p-0 rounded-none text-sm leading-relaxed border-0;
 }
 
 /* Tables */
 .markdown-body :deep(table) {
-  @apply w-full mb-4 border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden;
+  @apply w-full mb-4 border border-cardBorder rounded-lg overflow-hidden shadow-sm;
   border-collapse: collapse;
 }
 
 .markdown-body :deep(th),
 .markdown-body :deep(td) {
-  @apply px-4 py-3 border border-gray-300 dark:border-gray-700 text-left;
+  @apply px-4 py-3 border border-cardBorder text-left;
 }
 
 .markdown-body :deep(th) {
-  @apply bg-gray-100 dark:bg-[#161b22] font-semibold;
+  @apply bg-base-200 font-semibold;
 }
 
-.markdown-body :deep(tr:hover) {
-  @apply bg-gray-100 dark:bg-[#161b22];
+.markdown-body :deep(tbody tr) {
+  @apply transition-colors duration-150;
+}
+
+.markdown-body :deep(tbody tr:hover) {
+  @apply bg-base-200;
 }
 
 /* Links */
 .markdown-body :deep(a) {
-  @apply text-blue-600 dark:text-blue-400 no-underline;
+  @apply text-primary no-underline transition-colors duration-200;
 }
 
 .markdown-body :deep(a:hover) {
-  @apply underline;
+  @apply text-primary-dark underline;
 }
 
 /* Horizontal rule */
 .markdown-body :deep(hr) {
-  @apply h-px border-0 bg-gray-300 dark:bg-gray-700 my-8;
+  @apply h-px border-0 bg-cardBorder my-8;
 }
 
 /* Blockquotes */
 .markdown-body :deep(blockquote) {
-  @apply px-4 my-4 text-gray-600 dark:text-gray-400 border-l-4 border-gray-300 dark:border-gray-700;
+  @apply px-4 py-3 my-4 text-secondaryText border-l-4 border-primary bg-base-200 rounded-r;
 }
 
 /* Strong/Bold */
 .markdown-body :deep(strong) {
-  @apply font-semibold;
+  @apply font-semibold text-mainText;
 }
 
 /* Emoji / Icons */
