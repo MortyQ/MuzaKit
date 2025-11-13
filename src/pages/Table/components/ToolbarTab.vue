@@ -240,6 +240,32 @@ const codeExample = `<Table
       </div>
     </VCard>
 
+
+    <!-- Code Example -->
+    <VCard class="code-example-card">
+      <h3 class="code-title">
+        📝 Quick Start
+      </h3>
+      <div class="code-block">
+        <pre><code>&lt;Table
+  v-model:search="searchQuery"
+  :columns="columns"
+  :data="data"
+  :toolbar="{
+    enabled: true,
+    title: 'Users Management',
+    search: true,
+    actions: {
+      refresh: true,
+      resetSort: true,
+      export: 'single'
+    }
+  }"
+  @toolbar:export="handleExport"
+/&gt;</code></pre>
+      </div>
+    </VCard>
+
     <div class="grid grid-cols-2 gap-5">
       <VCard
         class="col-span-full w-full lg:col-span-1"
@@ -358,7 +384,9 @@ const codeExample = `<Table
         class="col-span-full w-full lg:col-span-1"
         title="Code Example"
       >
-        <pre><code>{{ codeExample }}</code></pre>
+        <div class="code-block">
+          <pre><code>{{ codeExample }}</code></pre>
+        </div>
       </VCard>
     </div>
   </div>

@@ -24,6 +24,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           menuTitle: "Showcase",
           menuIcon: "mdi:layers",
           menuOrder: 2,
+          menuBadge: "Old",
         },
       },
       {
@@ -35,6 +36,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           menuTitle: "UI Gallery",
           menuIcon: "mdi:palette",
           menuOrder: 3,
+          menuBadge: "Old",
         },
       },
       {

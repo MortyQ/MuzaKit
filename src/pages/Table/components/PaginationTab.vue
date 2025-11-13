@@ -263,6 +263,27 @@ handleServerRequest3({ page: 1, pageSize: 15, sort: [] });
       </div>
     </VCard>
 
+    <!-- Code Example -->
+    <VCard class="code-example-card">
+      <h3 class="code-title">
+        📝 Quick Start
+      </h3>
+      <div class="code-block">
+        <pre><code>&lt;Table
+  v-model:sort-state="sortState"
+  :columns="columns"
+  :data="data"
+  :loading="loading"
+  :pagination="{
+    page: currentPage,
+    pageSize: currentPageSize,
+    total: totalItems
+  }"
+  @request="handleRequest"
+/&gt;</code></pre>
+      </div>
+    </VCard>
+
     <!-- Default Pagination -->
     <div class="section">
       <h2 class="section-title">
@@ -349,6 +370,6 @@ handleServerRequest3({ page: 1, pageSize: 15, sort: [] });
 </template>
 
 <style scoped lang="scss">
-@import "./shared-info-card-styles.scss";
+@use "./shared-info-card-styles.scss";
 </style>
 

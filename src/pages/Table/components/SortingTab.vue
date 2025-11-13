@@ -231,6 +231,32 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
       </div>
     </VCard>
 
+    <!-- Code Example -->
+    <VCard class="code-example-card">
+      <h3 class="code-title">
+        📝 Quick Start
+      </h3>
+      <div class="code-block">
+        <pre><code>&lt;!-- Server-side sorting --&gt;
+&lt;Table
+  v-model:sort-state="sortState"
+  :columns="columns"
+  :data="data"
+  :loading="loading"
+  @request="handleRequest"
+/&gt;</code></pre>
+      </div>
+      <div class="code-block">
+        <pre><code>&lt;!-- Client-side sorting --&gt;
+&lt;Table
+  v-model:sort-state="sortState"
+  :columns="columns"
+  :data="data"
+  :sort="{ type: 'front', multiple: true }"
+/&gt;</code></pre>
+      </div>
+    </VCard>
+
     <!-- Server-side Multi-Sort -->
     <div class="section">
       <h2 class="section-title">
@@ -316,5 +342,5 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
 </template>
 
 <style scoped lang="scss">
-@import "./shared-info-card-styles.scss";
+@use "./shared-info-card-styles.scss";
 </style>

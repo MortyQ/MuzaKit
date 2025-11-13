@@ -13,6 +13,7 @@ const coreRoutes: AppRouteRecordRaw[] = [
       showInMenu: true,
       menuTitle: "About",
       menuIcon: "mdi:information",
+      menuBadge: "Old",
     },
   },
 ];

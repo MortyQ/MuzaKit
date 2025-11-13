@@ -147,7 +147,7 @@ const columnsRegular: Column[] = [
 </template>
 
 <style scoped lang="scss">
-@import "./shared-info-card-styles.scss";
+@use "./shared-info-card-styles.scss";
 </style>
 
 

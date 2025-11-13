@@ -2,6 +2,7 @@
 import { ref } from "vue";
 
 import VCard from "@/shared/ui/common/VCard.vue";
+import VIcon from "@/shared/ui/common/VIcon.vue";
 import { formatCurrency } from "@/shared/utils";
 import Table from "@/widgets/table/Table.vue";
 import type { Column } from "@/widgets/table/types";
@@ -246,6 +247,165 @@ const allFormattersColumns: Column[] = [
 
 <template>
   <div class="formatters-tab">
+    <!-- Info Card -->
+    <VCard>
+      <div class="info-header">
+        <VIcon
+          icon="lucide:wand-2"
+          :size="24"
+          class="info-icon"
+        />
+        <h2 class="info-title">
+          Data Formatters Overview
+        </h2>
+      </div>
+
+      <div class="info-content">
+        <p class="info-description">
+          The table supports rich built-in value formatting:
+          <strong>currency, percentage, number, date, boolean, file size</strong>
+          plus fully <strong>custom formatters</strong> using a function.
+          All are declarative via the column <code>format</code> option.
+        </p>
+
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-primary">
+              <VIcon
+                icon="lucide:dollar-sign"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Currency
+              </h3>
+              <p class="feature-description">
+                Automatic symbol, negatives, precision
+              </p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-success">
+              <VIcon
+                icon="lucide:percent"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Percentage
+              </h3>
+              <p class="feature-description">
+                Supports multiplier (0.15 → 15%)
+              </p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-warning">
+              <VIcon
+                icon="lucide:hash"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Number
+              </h3>
+              <p class="feature-description">
+                Compact & decimal modes (1.2M, 4.76)
+              </p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-info">
+              <VIcon
+                icon="lucide:calendar"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Date & Boolean
+              </h3>
+              <p class="feature-description">
+                Readable dates & status labels
+              </p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-primary">
+              <VIcon
+                icon="lucide:hard-drive"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                File Size
+              </h3>
+              <p class="feature-description">
+                Bytes → KB / MB / GB auto
+              </p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-success">
+              <VIcon
+                icon="lucide:code-2"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Custom
+              </h3>
+              <p class="feature-description">
+                Function(row) for any logic
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-note">
+          <VIcon
+            icon="lucide:info"
+            :size="16"
+          />
+          <span>
+            Combine multiple formatters in the same table.
+            Each column decides its own representation.
+          </span>
+        </div>
+      </div>
+    </VCard>
+
+    <!-- Code Example -->
+    <VCard class="code-example-card">
+      <h3 class="code-title">
+        📝 Quick Start
+      </h3>
+      <div class="code-block">
+        <pre><code>const columns = [
+  {
+    key: 'salary',
+    label: 'Salary',
+    format: { currency: true }
+  },
+  {
+    key: 'bonus',
+    label: 'Bonus',
+    format: { percentage: { decimals: 1, multiplier: true } }
+  },
+  {
+    key: 'views',
+    label: 'Views',
+    format: { number: 'compact' }
+  }
+]</code></pre>
+      </div>
+    </VCard>
+
     <!-- Header -->
     <div class="formatters-header">
       <h2>Table Formatters</h2>
@@ -383,70 +543,34 @@ const allFormattersColumns: Column[] = [
           row-key="id"
         />
       </VCard>
-
-      <!-- Documentation Link -->
-      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
-        <h3>📚 Full Documentation</h3>
-        <p>
-          For complete documentation including all options and examples, see:
-          <code>src/docs/table/FORMATTERS_USAGE.md</code>
-        </p>
-      </VCard>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+@use "./shared-info-card-styles.scss";
+
 .formatters-tab {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  @apply flex flex-col gap-6;
 }
 
-.formatters-header {
-  h2 {
-    margin: 0 0 8px 0;
-    font-size: 24px;
-    font-weight: 600;
-  }
+.formatters-header h2 {
+  @apply m-0 mb-2 text-2xl font-semibold text-mainText;
+}
 
-  p {
-    margin: 0;
-    color: var(--text-secondary);
-    font-size: 14px;
-  }
+.formatters-header p {
+  @apply m-0 text-sm text-secondaryText;
 }
 
 .demo-section {
-  padding: 24px;
+  @apply p-6 flex flex-col gap-4;
+}
 
-  h3 {
-    margin: 0 0 8px 0;
-    font-size: 18px;
-    font-weight: 600;
-  }
+.demo-section h3 {
+  @apply m-0 text-lg font-semibold text-mainText;
+}
 
-  .section-description {
-    margin: 0 0 16px 0;
-    color: var(--text-secondary);
-    font-size: 14px;
-  }
-
-  .code-example {
-    margin-top: 16px;
-    padding: 12px 16px;
-    background: var(--bg-secondary);
-    border-radius: 8px;
-    border: 1px solid var(--border-primary);
-
-    code {
-      font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono",
-        Consolas, "Courier New", monospace;
-      font-size: 12px;
-      line-height: 1.6;
-      color: var(--text-primary);
-    }
-  }
+.section-description {
+  @apply m-0 text-sm text-secondaryText leading-relaxed;
 }
 </style>
-

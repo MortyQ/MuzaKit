@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 
+import VCard from "@/shared/ui/common/VCard.vue";
+import VIcon from "@/shared/ui/common/VIcon.vue";
 import VMultiSelect from "@/shared/ui/common/VMultiSelect.vue";
 import Table from "@/widgets/table/Table.vue";
 import { Column, type RequestPayload } from "@/widgets/table/types";
@@ -108,7 +110,125 @@ const exportFunc = (format: string) => {
 </script>
 
 <template>
-  <div class="page-container">
+  <div class="page-container gap-5">
+    <!-- Info Card -->
+    <VCard>
+      <div class="info-header">
+        <VIcon
+          icon="lucide:chevrons-down-up"
+          :size="24"
+          class="info-icon"
+        />
+        <h2 class="info-title">
+          Expandable Rows
+        </h2>
+      </div>
+
+      <div class="info-content">
+        <p class="info-description">
+          Display <strong>hierarchical data</strong> with expandable parent-child rows.
+          Supports controlled and auto expansion modes with custom content.
+        </p>
+
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-primary">
+              <VIcon
+                icon="lucide:folder-tree"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Hierarchical Data
+              </h3>
+              <p class="feature-description">
+                Parent-child relationships
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-success">
+              <VIcon
+                icon="lucide:hand"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Controlled Mode
+              </h3>
+              <p class="feature-description">
+                Manual expansion control
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-warning">
+              <VIcon
+                icon="lucide:zap"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Auto Mode
+              </h3>
+              <p class="feature-description">
+                Automatic expansion on click
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-info">
+              <VIcon
+                icon="lucide:code"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Custom Content
+              </h3>
+              <p class="feature-description">
+                Slots for expanded rows
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-note">
+          <VIcon
+            icon="lucide:info"
+            :size="16"
+          />
+          <span>
+            Click on expand icons to reveal child rows and nested data!
+          </span>
+        </div>
+      </div>
+    </VCard>
+
+
+    <!-- Code Example -->
+    <VCard class="code-example-card">
+      <h3 class="code-title">
+        📝 Quick Start
+      </h3>
+      <div class="code-block">
+        <pre><code>&lt;Table
+          :columns="columns"
+          :data="data"
+          expand-mode="controlled"
+          @expand-click="handleExpand"
+        />
+</code></pre>
+      </div>
+    </VCard>
+
     <Table
       v-model:sort-state="sort"
       v-model:search="search"
@@ -172,3 +292,7 @@ const exportFunc = (format: string) => {
     </Table>
   </div>
 </template>
+
+<style scoped lang="scss">
+@use "./shared-info-card-styles.scss";
+</style>

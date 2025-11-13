@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+import VCard from "@/shared/ui/common/VCard.vue";
 import VCheckbox from "@/shared/ui/common/VCheckbox.vue";
+import VIcon from "@/shared/ui/common/VIcon.vue";
 import Table from "@/widgets/table/Table.vue";
 import type { Column, ExpandableRow, MultiSelectConfig } from "@/widgets/table/types";
 import { mockDataExpandable, mockDataExpandableTotalRow } from "@/widgets/table/utils/mockData";
@@ -68,6 +70,137 @@ const toggleHeaderCheckbox = () => {
 
 <template>
   <div class="selection-demo">
+    <!-- Info Card -->
+    <VCard class="mb-6">
+      <div class="info-header">
+        <VIcon
+          icon="lucide:check-square"
+          :size="24"
+          class="info-icon"
+        />
+        <h2 class="info-title">
+          Row Selection
+        </h2>
+      </div>
+      <div class="info-content">
+        <p class="info-description">
+          Two selection strategies: <strong>independent</strong>
+          (rows act alone) and <strong>dependent</strong>
+          (parent ↔ children linkage). Toggle header checkbox visibility
+          and access current selection via <code>v-model:selected-rows</code>.
+        </p>
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-primary">
+              <VIcon
+                icon="lucide:mouse-pointer-click"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Multi-Select
+              </h3>
+              <p class="feature-description">
+                Checkbox selection with binding
+              </p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-success">
+              <VIcon
+                icon="lucide:git-branch"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Dependent Mode
+              </h3>
+              <p class="feature-description">
+                Parent auto selects children
+              </p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-warning">
+              <VIcon
+                icon="lucide:split"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Independent Mode
+              </h3>
+              <p class="feature-description">
+                Full manual control
+              </p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-info">
+              <VIcon
+                icon="lucide:list-checks"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Header Checkbox
+              </h3>
+              <p class="feature-description">
+                Toggle select-all visibility
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="info-note">
+          <VIcon
+            icon="lucide:info"
+            :size="16"
+          />
+          <span>
+            Switch modes to compare behaviors.
+            Clearing selection on mode change prevents inconsistent state.
+          </span>
+        </div>
+      </div>
+    </VCard>
+
+    <!-- Code Example -->
+    <VCard class="code-example-card">
+      <h3 class="code-title">
+        📝 Quick Start
+      </h3>
+      <div class="code-block">
+        <pre><code>&lt;!-- Independent Mode --&gt;
+&lt;Table
+  v-model:selected-rows="selectedRows"
+  :columns="columns"
+  :data="data"
+  :multi-select="{
+    enabled: true,
+    selectionMode: 'independent'
+  }"
+/&gt;</code></pre>
+      </div>
+      <div class="code-block">
+        <pre><code>&lt;!-- Dependent Mode (Parent-Child) --&gt;
+&lt;Table
+  v-model:selected-rows="selectedRows"
+  :columns="columns"
+  :data="data"
+  :multi-select="{
+    enabled: true,
+    selectionMode: 'dependent',
+    selectChildren: true,
+    selectParent: true
+  }"
+/&gt;</code></pre>
+      </div>
+    </VCard>
+
     <div class="demo-header">
       <h2>Multi-Select Demo</h2>
 
@@ -146,104 +279,65 @@ const toggleHeaderCheckbox = () => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "./shared-info-card-styles.scss";
+
+// Component-specific styles
 .selection-demo {
-  padding: 20px;
+  @apply flex flex-col gap-5;
 }
 
 .demo-header {
-  margin-bottom: 20px;
+  @apply mb-5;
 }
 
 .demo-header h2 {
-  margin-bottom: 16px;
-  font-size: 24px;
-  font-weight: 600;
+  @apply mb-4 text-2xl font-semibold;
 }
 
 .mode-switcher {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
+  @apply flex gap-3 mb-4;
 }
 
 .mode-switcher button {
-  padding: 8px 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s;
+  @apply px-4 py-2 border border-cardBorder rounded-lg bg-cardBg cursor-pointer
+  transition-all duration-200;
 }
 
 .mode-switcher button:hover {
-  background: #f3f4f6;
+  @apply bg-base-200;
 }
 
 .mode-switcher button.active {
-  background: #3b82f6;
-  color: white;
-  border-color: #3b82f6;
+  @apply bg-primary text-white border-primary;
 }
 
 .header-checkbox-toggle {
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  margin-bottom: 16px;
+  @apply flex items-center px-3 py-2 bg-base-200 border
+  border-cardBorder rounded-lg mb-4;
 }
 
 .header-checkbox-toggle label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.header-checkbox-toggle input[type="checkbox"] {
-  cursor: pointer;
+  @apply flex items-center gap-2 cursor-pointer text-sm font-medium;
 }
 
 .info-panel {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
+  @apply bg-cardBg border border-cardBorder rounded-lg p-4 mb-4;
 }
 
 .info-panel h3 {
-  margin-bottom: 12px;
-  font-size: 16px;
-  font-weight: 600;
+  @apply mb-3 text-base font-semibold;
 }
 
 .selected-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  @apply flex flex-col gap-2;
 }
 
 .selected-item {
-  padding: 8px 12px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  font-size: 14px;
+  @apply px-3 py-2 bg-base-100 border border-cardBorder rounded text-sm;
 }
 
 .mode-description {
-  padding: 12px;
-  background: #eff6ff;
-  border-left: 4px solid #3b82f6;
-  border-radius: 4px;
-  font-size: 14px;
-  line-height: 1.6;
+  @apply px-3 py-3 bg-info/10 border-l-4 border-info rounded text-sm leading-relaxed;
 }
 </style>
-

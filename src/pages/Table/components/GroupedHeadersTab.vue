@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import VCard from "@/shared/ui/common/VCard.vue";
+import VIcon from "@/shared/ui/common/VIcon.vue";
 import Table from "@/widgets/table/Table.vue";
 import TableToolbar from "@/widgets/table/components/TableToolbar.vue";
 import type { Column } from "@/widgets/table/types";
@@ -59,7 +61,132 @@ const columnsGrouped: Column[] = [
 </script>
 
 <template>
-  <div class="page-container">
+  <div class="page-container flex flex-col gap-6">
+    <!-- Info Card -->
+    <VCard>
+      <div class="info-header">
+        <VIcon
+          icon="lucide:group"
+          :size="24"
+          class="info-icon"
+        />
+        <h2 class="info-title">
+          Grouped Headers
+        </h2>
+      </div>
+      <div class="info-content">
+        <p class="info-description">
+          Use <strong>column groups</strong> to visually organize related columns.
+          Each parent can define label, alignment and contain child column definitions.
+          Supports mixing grouped and single columns and works with fixed (pinned) columns.
+        </p>
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-primary">
+              <VIcon
+                icon="lucide:layout-grid"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Nested Groups
+              </h3>
+              <p class="feature-description">
+                Combine groups and standalone columns
+              </p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-success">
+              <VIcon
+                icon="lucide:align-center"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Alignment
+              </h3>
+              <p class="feature-description">
+                Set group header alignment
+              </p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-warning">
+              <VIcon
+                icon="lucide:pin"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Pinned Support
+              </h3>
+              <p class="feature-description">
+                Works with left/right fixed columns
+              </p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-info">
+              <VIcon
+                icon="lucide:columns"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Mixed Layout
+              </h3>
+              <p class="feature-description">
+                Groups plus normal columns
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="info-note">
+          <VIcon
+            icon="lucide:info"
+            :size="16"
+          />
+          <span>
+            Define a parent column with
+            <code>children: Column[]</code>
+            to create a grouped header row.
+          </span>
+        </div>
+      </div>
+    </VCard>
+
+    <!-- Code Example -->
+    <VCard class="code-example-card">
+      <h3 class="code-title">
+        📝 Quick Start
+      </h3>
+      <div class="code-block">
+        <pre><code>const columns = [
+  {
+    key: 'personal',
+    label: 'Personal Info',
+    children: [
+      { key: 'id', label: 'ID' },
+      { key: 'name', label: 'Name' }
+    ]
+  },
+  {
+    key: 'contact',
+    label: 'Contact',
+    children: [
+      { key: 'email', label: 'Email' },
+      { key: 'phone', label: 'Phone' }
+    ]
+  }
+]</code></pre>
+      </div>
+    </VCard>
+
     <Table
       :columns="columnsGrouped"
       :data="mockDataExpandable"
@@ -102,3 +229,7 @@ const columnsGrouped: Column[] = [
     </Table>
   </div>
 </template>
+
+<style scoped lang="scss">
+@use "./shared-info-card-styles.scss";
+</style>

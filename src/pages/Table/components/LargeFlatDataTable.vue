@@ -148,6 +148,25 @@ const columnsRegular: Column[] = [
       </div>
     </VCard>
 
+    <!-- Code Example -->
+    <VCard class="code-example-card">
+      <h3 class="code-title">
+        📝 Quick Start
+      </h3>
+      <div class="code-block">
+        <pre><code>
+&lt;Table
+      :columns="columnsRegular"
+      :data="mockDataVirtualScroll"
+      :toolbar="{
+        enabled: true,
+        title: 'Large Dataset Table (10,000 Rows)'
+      }"
+/&gt;
+        </code></pre>
+      </div>
+    </VCard>
+
     <!-- Table -->
     <Table
       :columns="columnsRegular"
@@ -156,16 +175,12 @@ const columnsRegular: Column[] = [
         enabled: true,
         title: 'Large Dataset Table (10,000 Rows)'
       }"
-      :virtual-scroll="{
-        enabled: true,
-        estimateSize: 48
-      }"
     />
   </div>
 </template>
 
 <style scoped lang="scss">
-@import "./shared-info-card-styles.scss";
+@use "./shared-info-card-styles.scss";
 
 /* Component-specific styles */
 .tech-specs {

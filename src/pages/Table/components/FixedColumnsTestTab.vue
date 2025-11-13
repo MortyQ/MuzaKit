@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import VCard from "@/shared/ui/common/VCard.vue";
+import VIcon from "@/shared/ui/common/VIcon.vue";
 import Table from "@/widgets/table/Table.vue";
 import TableToolbar from "@/widgets/table/components/TableToolbar.vue";
 import { Column } from "@/widgets/table/types";
@@ -42,6 +44,127 @@ const columnsBad: Column[] = [
 
 <template>
   <div class="page-container flex flex-col gap-8">
+    <!-- Info Card -->
+    <VCard>
+      <div class="info-header">
+        <VIcon
+          icon="lucide:pin"
+          :size="24"
+          class="info-icon"
+        />
+        <h2 class="info-title">
+          Fixed Columns
+        </h2>
+      </div>
+
+      <div class="info-content">
+        <p class="info-description">
+          Pin columns to <strong>left or right side</strong> while scrolling.
+          Perfect for keeping important data always visible.
+        </p>
+
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-primary">
+              <VIcon
+                icon="lucide:align-left"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Left Fixed
+              </h3>
+              <p class="feature-description">
+                Pin columns to left side
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-success">
+              <VIcon
+                icon="lucide:align-right"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Right Fixed
+              </h3>
+              <p class="feature-description">
+                Pin columns to right side
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-warning">
+              <VIcon
+                icon="lucide:move-horizontal"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Smooth Scrolling
+              </h3>
+              <p class="feature-description">
+                Natural horizontal scroll
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-info">
+              <VIcon
+                icon="lucide:layers"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Z-Index Control
+              </h3>
+              <p class="feature-description">
+                Proper layering on scroll
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-note">
+          <VIcon
+            icon="lucide:info"
+            :size="16"
+          />
+          <span>
+            Best practice: group all left-fixed columns together,
+            then scrollable, then right-fixed!
+          </span>
+        </div>
+      </div>
+    </VCard>
+
+    <!-- Code Example -->
+    <VCard class="code-example-card">
+      <h3 class="code-title">
+        📝 Quick Start
+      </h3>
+      <div class="code-block">
+        <pre><code>const columns = [
+  // Left fixed
+  { key: 'id', label: 'ID', fixed: 'left' },
+  { key: 'name', label: 'Name', fixed: 'left' },
+  // Scrollable
+  { key: 'email', label: 'Email' },
+  { key: 'phone', label: 'Phone' },
+  // Right fixed
+  { key: 'actions', label: 'Actions', fixed: 'right' }
+]</code></pre>
+      </div>
+    </VCard>
+
     <!-- Good practice: fixed in a row -->
     <div>
       <h2 class="text-xl font-bold mb-4 text-mainText">
@@ -80,4 +203,8 @@ const columnsBad: Column[] = [
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+@use "./shared-info-card-styles.scss";
+</style>
 
