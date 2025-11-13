@@ -5,13 +5,13 @@ import { mockDataUsers, mockDataUsersTotalRow } from "@/widgets/table/utils/mock
 
 const columnsRegular: Column[] = [
   { key: "id", label: "ID", width: "80px", align: "center" },
-  { key: "name", label: "Name", width: "2fr" },
-  { key: "age", label: "Age", width: "100px", align: "center" },
-  { key: "email", label: "Email", width: "2fr" },
+  { key: "name", label: "Name",width: "100px" },
+  { key: "age", label: "Age",  align: "center" },
+  { key: "email", label: "Email", width: "100px" },
   { key: "phone", label: "Phone", width: "150px" },
   { key: "position", label: "Position", width: "150px" },
   { key: "status", label: "Status", width: "150px" },
-  { key: "performance", label: "Rating", width: "100px" },
+  { key: "performance", label: "Rating" },
   { key: "startDate", label: "Start Date", width: "130px" },
   { key: "projects", label: "Projects", width: "100px" },
   { key: "location", label: "Location", width: "150px" },

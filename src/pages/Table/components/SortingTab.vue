@@ -16,13 +16,16 @@ const pagination = reactive({
   total: mockDataUsers.length,
 });
 
+// Example: Mix of fixed and flexible widths
+// No width = flexible (fills space, NOT resizable)
+// With width = fixed (resizable)
 const serverColumns: Column[] = [
   { key: "id", label: "ID", width: "80px", sortable: true },
-  { key: "name", label: "Name", width: "2fr", sortable: true },
-  { key: "email", label: "Email", width: "2fr", sortable: true },
+  { key: "name", label: "Name", width:"250px",  sortable: true },        // Flexible
+  { key: "email", label: "Email",  width: "250px", sortable: true },      // Flexible
   { key: "age", label: "Age", width: "100px", sortable: true },
-  { key: "position", label: "Position", width: "150px", sortable: true },
-  { key: "status", label: "Status", width: "120px" },
+  { key: "position", label: "Position", sortable: true }, // Flexible
+  { key: "status", label: "Status" },
 ];
 
 // Simulate server request
@@ -62,19 +65,18 @@ const handleServerRequest = async ({ sort, page }: RequestPayload) => {
 const frontData = ref([...mockDataUsers]);
 const frontSortState = ref<SortItem[]>([]);
 
+// Example: All flexible columns - fill container width equally
 const frontColumns: Column[] = [
   { key: "id", label: "ID", width: "80px", sortable: true },
   {
     key: "name",
     label: "Name",
-    width: "2fr",
     sortable: true,
     // Default behavior - no sortValue needed for simple string sorting
   },
   {
     key: "age",
     label: "Age",
-    width: "100px",
     sortable: true,
     // Custom sort rule - treat as number
     sortValue: (row: any) => Number(row.age) || 0,
@@ -82,7 +84,6 @@ const frontColumns: Column[] = [
   {
     key: "position",
     label: "Position",
-    width: "150px",
     sortable: true,
     // Custom sort rule - case-insensitive string comparison
     sortValue: (row: any) => String(row.position || "").toLowerCase(),
@@ -94,10 +95,11 @@ const singleData = ref([...mockDataUsers]);
 const singleSortState = ref<SortItem[]>([]);
 const singleLoading = ref(false);
 
+// Example: All columns flexible - each takes equal space
 const singleColumns: Column[] = [
-  { key: "name", label: "Name", width: "2fr", sortable: true },
-  { key: "email", label: "Email", width: "2fr", sortable: true },
-  { key: "position", label: "Position", width: "150px", sortable: true },
+  { key: "name", label: "Name", sortable: true },
+  { key: "email", label: "Email", sortable: true },
+  { key: "position", label: "Position", sortable: true },
 ];
 
 const handleSingleRequest = async ({ sort }: RequestPayload) => {

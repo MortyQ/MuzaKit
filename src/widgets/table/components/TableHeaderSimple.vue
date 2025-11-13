@@ -14,9 +14,11 @@ interface Props {
     order: "asc" | "desc" | null
     index: number
   }
+  // eslint-disable-next-line no-unused-vars
+  isColumnResizable: (_column: Column) => boolean
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const emit = defineEmits<{
   "resize-start": [columnKey: string, event: MouseEvent]
@@ -49,6 +51,7 @@ const handleSortClick = (column: Column) => {
       :label="column.label"
       :align="column.align"
       :column-key="column.key"
+      :resizable="props.isColumnResizable(column)"
       :is-sorted="getSortState(column.key).isSorted"
       :sort-order="getSortState(column.key).order"
       :sort-index="getSortState(column.key).index"

@@ -134,11 +134,24 @@ const {
   startResize,
   autoFitColumn,
   isResizing,
-  columnWidths: resizeColumnWidths,
+  resizedWidths,
+  isColumnResizable,
 } = useColumnResize(columnsForResize);
 
-// Update columnWidths ref to match resizeColumnWidths
-watch(resizeColumnWidths, (newWidths) => {
+// Update columnWidths ref to match resizedWidths
+// For fixed columns calculation, we need all widths (original + resized)
+watch(resizedWidths, () => {
+  // Rebuild columnWidths map with actual widths for fixed columns
+  const newWidths = new Map<string, number>();
+  columnsForData.value.forEach((col) => {
+    const resizedWidth = resizedWidths.value.get(col.key);
+    if (resizedWidth !== undefined) {
+      newWidths.set(col.key, resizedWidth);
+    } else if (col.width?.endsWith("px")) {
+      newWidths.set(col.key, parseInt(col.width, 10));
+    }
+    // For flex columns, we don't add to the map
+  });
   columnWidths.value = newWidths;
 }, { immediate: true });
 
@@ -559,6 +572,7 @@ onUnmounted(() => {
             :get-group-width="getGroupWidth"
             :get-group-fixed-styles="getGroupFixedStyles"
             :get-sort-state="getSortState"
+            :is-column-resizable="isColumnResizable"
             @resize-start="startResize"
             @resize-dblclick="autoFitColumn"
             @sort-click="handleSortClick"

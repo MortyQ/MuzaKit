@@ -148,6 +148,12 @@ export const iconMap: Record<string, Component> = {
   "lucide:arrow-up-down": defineAsyncComponent(() => import("~icons/lucide/arrow-up-down")),
   "lucide:arrow-down": defineAsyncComponent(() => import("~icons/lucide/arrow-down")),
   "lucide:arrow-up": defineAsyncComponent(() => import("~icons/lucide/arrow-up")),
+  "lucide:zap": defineAsyncComponent(() => import("~icons/lucide/zap")),
+  "lucide:database": defineAsyncComponent(() => import("~icons/lucide/database")),
+  "lucide:gauge": defineAsyncComponent(() => import("~icons/lucide/gauge")),
+  "lucide:rocket": defineAsyncComponent(() => import("~icons/lucide/rocket")),
+  "lucide:info": defineAsyncComponent(() => import("~icons/lucide/info")),
+  "lucide:move-horizontal": defineAsyncComponent(() => import("~icons/lucide/move-horizontal")),
 };
 
 /**

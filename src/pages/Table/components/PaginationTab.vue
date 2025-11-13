@@ -31,11 +31,11 @@ const sortState = ref<SortItem[]>([]);
 
 const columns: Column[] = [
   { key: "id", label: "ID", width: "80px", sortable: true },
-  { key: "name", label: "Name", width: "2fr", sortable: true },
-  { key: "email", label: "Email", width: "2fr", sortable: true },
+  { key: "name", label: "Name", width: "150px", sortable: true },
+  { key: "email", label: "Email", width: "150px", sortable: true },
   { key: "age", label: "Age", width: "100px", sortable: true },
-  { key: "position", label: "Position", width: "150px", sortable: true },
-  { key: "status", label: "Status", width: "120px" },
+  { key: "position", label: "Position", sortable: true },
+  { key: "status", label: "Status" },
 ];
 
 // Simulate server request with pagination and sorting

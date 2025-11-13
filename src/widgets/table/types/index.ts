@@ -33,7 +33,7 @@ export interface ColumnFormatOptions {
 export interface Column {
   key: string           // Key from data object
   label: string         // Header text
-  width?: string        // CSS value (1fr, 150px, auto)
+  width?: string        // Fixed width (e.g., "150px") - makes column resizable. Without width, column is flexible (not resizable)
   align?: "left" | "center" | "right"
   interactive?: boolean // Whether column contains interactive elements (select, dropdown, etc.)
   fixed?: "left" | "right" // Fix column (sticky) to left or right

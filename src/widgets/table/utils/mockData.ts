@@ -764,3 +764,47 @@ export const mockDataExpandableTotalRow = {
   accountStatus: "-",
 };
 
+// Generate a large flat list for virtual scroll demonstration (10,000 items)
+const generateLargeFlatData = (count: number) => {
+  const data = [];
+  // It's better not to reset the global counter if this function
+  // can be called along with other generators.
+  // Let's ensure IDs are unique regardless.
+  const startIndex = globalIdCounter;
+
+  for (let i = 0; i < count; i++) {
+    const firstName = getRandomItem(firstNames);
+    const lastName = getRandomItem(lastNames);
+    const id = startIndex + i;
+    globalIdCounter++;
+
+    data.push({
+      id, // Simple number ID is good for virtual scroll
+      name: `${firstName} ${lastName}`,
+      email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}.${id}@company.com`,
+      phone: `+1-555-${String(id).padStart(4, "0")}`,
+      age: getRandomNumber(20, 65),
+      position: getRandomItem([
+        "Developer",
+        "Designer",
+        "Analyst",
+        "Manager",
+        "Engineer",
+        "QA Tester",
+        "Data Scientist",
+        "Product Owner",
+      ]),
+      status: getRandomItem(statuses),
+      salary: getRandomNumber(50000, 150000),
+      performance: (Math.random() * 2 + 3).toFixed(1), // 3.0 - 5.0
+      startDate: `20${getRandomNumber(10, 23)}-${String(getRandomNumber(1, 12)).padStart(2, "0")}-${String(getRandomNumber(1, 28)).padStart(2, "0")}`,
+      projects: getRandomNumber(0, 15),
+      skills: getRandomItem(skillsList).join(", "),
+      location: getRandomItem(cities),
+      isActive: Math.random() > 0.2,
+    });
+  }
+  return data;
+};
+
+export const mockDataVirtualScroll = generateLargeFlatData(10000);

@@ -24,22 +24,22 @@ const loaders = reactive({
 
 const columnsExpandable: Column[] = [
   // All left fixed columns in a row
-  { key: "name", label: "Name", sortable: true  },
-  { key: "count", label: "Count"  },
-  { key: "salary", label: "Salary", sortable: true },
+  { key: "name", label: "Name", width:"150px", sortable: true  },
+  { key: "count", label: "Count",width:"100px" },
+  { key: "salary", label: "Salary", width:"150px",  sortable: true },
   // Regular scrollable columns
-  { key: "email", label: "Email" },
-  { key: "phone", label: "Phone", sortable: true },
-  { key: "position", label: "Position" },
-  { key: "status", label: "Status" },
-  { key: "performance", label: "Rating", sortable: true },
+  { key: "email", label: "Email", width:"150px"  },
+  { key: "phone", label: "Phone", width:"150px",  sortable: true },
+  { key: "position", label: "Position",width:"150px"  },
+  { key: "status", label: "Status",width:"150px"  },
+  { key: "performance", label: "Rating", width:"150px",  sortable: true },
   { key: "accountStatus", label: "Account Status", width: "200px", interactive: true },
-  { key: "startDate", label: "Start Date" },
-  { key: "projects", label: "Projects" },
-  { key: "location", label: "Location" },
-  { key: "manager", label: "Manager" },
-  { key: "budget", label: "Budget" },
-  { key: "revenue", label: "Revenue"  },
+  { key: "startDate", label: "Start Date",width:"150px"  },
+  { key: "projects", label: "Projects",width:"150px"  },
+  { key: "location", label: "Location",width:"150px"  },
+  { key: "manager", label: "Manager",width:"150px"  },
+  { key: "budget", label: "Budget",width:"150px"  },
+  { key: "revenue", label: "Revenue",width:"150px"   },
   // Right fixed at the end
 ];
 

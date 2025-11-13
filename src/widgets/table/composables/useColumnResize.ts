@@ -3,11 +3,13 @@ import { ref, computed, type Ref } from "vue";
 import type { Column, ResizeState } from "../types";
 
 const MIN_COLUMN_WIDTH = 85; // minimum column width in px
-const DEFAULT_COLUMN_WIDTH = 150; // default width in px
+const DEFAULT_MIN_WIDTH = 100; // default min width for flex columns
+const DEFAULT_COLUMN_WIDTH = 150; // default width for columns without flex or width
 
 export function useColumnResize(columns: Ref<Column[]>) {
-  // Store actual column widths (in px)
-  const columnWidths = ref<Map<string, number>>(new Map());
+  // Store ONLY manually resized column widths (in px)
+  // Only applies to columns with width (not flex)
+  const resizedWidths = ref<Map<string, number>>(new Map());
 
   // Resizing state
   const resizeState = ref<ResizeState>({
@@ -17,37 +19,33 @@ export function useColumnResize(columns: Ref<Column[]>) {
     startWidth: 0,
   });
 
-  // Initialize column widths
-  const initializeWidths = () => {
-    columns.value.forEach((column) => {
-      if (!columnWidths.value.has(column.key)) {
-        // Parse width from Column type
-        const width = parseColumnWidth(column.width);
-        columnWidths.value.set(column.key, width);
-      }
-    });
+  // Check if column is resizable
+  // Simple rule: width = resizable, no width = not resizable
+  const isColumnResizable = (column: Column): boolean => {
+    return !!column.width;
   };
 
-  // Parse width from different formats
-  const parseColumnWidth = (width?: string): number => {
-    if (!width) return DEFAULT_COLUMN_WIDTH;
-
-    // If in px - use as is
-    if (width.endsWith("px")) {
-      return parseInt(width, 10);
+  // Get column style for grid-template-columns
+  const getColumnStyle = (column: Column): string => {
+    // Priority 1: User manually resized this column
+    const resizedWidth = resizedWidths.value.get(column.key);
+    if (resizedWidth !== undefined) {
+      return `${resizedWidth}px`;
     }
 
-    // If fr or auto - default width
-    return DEFAULT_COLUMN_WIDTH;
+    // Priority 2: Column has explicit width - fixed and resizable
+    if (column.width) {
+      return column.width;
+    }
+
+    // Priority 3: Default - flexible column (flex: 1)
+    return `minmax(${DEFAULT_MIN_WIDTH}px, 1fr)`;
   };
 
-  // Grid template columns considering current widths
+  // Grid template columns
   const gridTemplateColumns = computed(() => {
     return columns.value
-      .map((col) => {
-        const width = columnWidths.value.get(col.key) || DEFAULT_COLUMN_WIDTH;
-        return `${width}px`;
-      })
+      .map((col) => getColumnStyle(col))
       .join(" ");
   });
 
@@ -61,7 +59,31 @@ export function useColumnResize(columns: Ref<Column[]>) {
     event.preventDefault();
     event.stopPropagation();
 
-    const currentWidth = columnWidths.value.get(columnKey) || DEFAULT_COLUMN_WIDTH;
+    // Find the column
+    const column = columns.value.find((col) => col.key === columnKey);
+    if (!column || !isColumnResizable(column)) {
+      return; // Don't resize flex or non-resizable columns
+    }
+
+    // Get current width
+    let currentWidth: number;
+
+    const existingResizedWidth = resizedWidths.value.get(columnKey);
+    if (existingResizedWidth !== undefined) {
+      // Column was already resized - use stored value
+      currentWidth = existingResizedWidth;
+    } else {
+      // First time resizing - get from DOM or parse from width
+      if (column.width?.endsWith("px")) {
+        currentWidth = parseInt(column.width, 10);
+      } else {
+        // Get actual width from DOM
+        const headerCell = (event.target as HTMLElement).closest('[role="columnheader"]');
+        currentWidth = headerCell
+          ? (headerCell as HTMLElement).offsetWidth
+          : DEFAULT_COLUMN_WIDTH;
+      }
+    }
 
     resizeState.value = {
       isResizing: true,
@@ -89,7 +111,7 @@ export function useColumnResize(columns: Ref<Column[]>) {
       resizeState.value.startWidth + deltaX,
     );
 
-    columnWidths.value.set(resizeState.value.columnKey, newWidth);
+    resizedWidths.value.set(resizeState.value.columnKey, newWidth);
   };
 
   // End resize (mouseup)
@@ -107,32 +129,36 @@ export function useColumnResize(columns: Ref<Column[]>) {
     document.body.style.userSelect = "";
   };
 
-  // Double-click for auto-fit (can be expanded later)
+  // Double-click to reset column to its original width
   const autoFitColumn = (columnKey: string) => {
-    // TODO: can add logic to calculate optimal width
-    // based on column content
-    columnWidths.value.set(columnKey, DEFAULT_COLUMN_WIDTH);
+    // Remove from resized widths - column returns to original definition
+    resizedWidths.value.delete(columnKey);
   };
 
-  // Reset all widths to defaults
+  // Reset all widths - remove all manual resizes
   const resetWidths = () => {
-    columnWidths.value.clear();
-    initializeWidths();
+    resizedWidths.value.clear();
   };
 
-  // Get current column width
-  const getColumnWidth = (columnKey: string): number => {
-    return columnWidths.value.get(columnKey) || DEFAULT_COLUMN_WIDTH;
-  };
+  // Get current column width (for API/external use)
+  const getColumnWidth = (columnKey: string): number | string => {
+    const resizedWidth = resizedWidths.value.get(columnKey);
+    if (resizedWidth !== undefined) {
+      return resizedWidth;
+    }
 
-  // Initialize on creation
-  initializeWidths();
+    const column = columns.value.find((col) => col.key === columnKey);
+    if (!column) return `minmax(${DEFAULT_MIN_WIDTH}px, 1fr)`;
+
+    return column.width || `minmax(${DEFAULT_MIN_WIDTH}px, 1fr)`;
+  };
 
   return {
     gridTemplateColumns,
     getGridTemplateWithCheckbox,
-    columnWidths,
+    resizedWidths,
     isResizing: computed(() => resizeState.value.isResizing),
+    isColumnResizable,
     startResize,
     autoFitColumn,
     getColumnWidth,

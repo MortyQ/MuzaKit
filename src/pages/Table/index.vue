@@ -4,6 +4,7 @@ import ExpandTableTab from "@/pages/Table/components/ExpandTableTab.vue";
 import FixedColumnsTestTab from "@/pages/Table/components/FixedColumnsTestTab.vue";
 import FormattersTab from "@/pages/Table/components/FormattersTab.vue";
 import GroupedHeadersTab from "@/pages/Table/components/GroupedHeadersTab.vue";
+import LargeFlatDataTable from "@/pages/Table/components/LargeFlatDataTable.vue";
 import PaginationTab from "@/pages/Table/components/PaginationTab.vue";
 import SelectionTab from "@/pages/Table/components/SelectionTab.vue";
 import SortingTab from "@/pages/Table/components/SortingTab.vue";
@@ -12,6 +13,7 @@ import VTabs from "@/shared/ui/common/VTabs.vue";
 
 const tabs = [
   { id: "default", label: "Simple Tables", component: DefaultTablesTab },
+  { id: "large-flat-data", label: "Large Data Table", component: LargeFlatDataTable },
   { id: "toolbar", label: "Toolbar", component: ToolbarTab },
   { id: "sorting", label: "Sorting", component: SortingTab },
   { id: "pagination", label: "Pagination", component: PaginationTab },

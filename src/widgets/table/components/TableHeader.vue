@@ -10,6 +10,7 @@ interface Props {
   label: string
   align?: "left" | "center" | "right"
   columnKey: string
+  resizable?: boolean  // Whether column can be resized
   isSorted?: boolean
   sortOrder?: SortOrder | null
   sortIndex?: number  // For multi-sort indicator (0, 1, 2...)
@@ -17,6 +18,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   align: "left",
+  resizable: true,
   isSorted: false,
   sortOrder: null,
   sortIndex: -1,
@@ -99,8 +101,9 @@ const handleSortKeyDown = (event: KeyboardEvent) => {
       </div>
     </div>
 
-    <!-- Resize Handle -->
+    <!-- Resize Handle (only for resizable columns) -->
     <div
+      v-if="resizable"
       class="table-resize-handle"
       @mousedown.stop="handleResizeStart"
       @dblclick.stop="handleResizeDblClick"
