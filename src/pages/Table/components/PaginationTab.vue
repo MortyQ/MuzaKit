@@ -40,8 +40,6 @@ const columns: Column[] = [
 
 // Simulate server request with pagination and sorting
 const handleServerRequest = async ({ page, pageSize, sort }: RequestPayload) => {
-  console.log("📡 Server request:", { page, pageSize, sort });
-
   serverLoading.value = true;
 
   // Simulate API delay
