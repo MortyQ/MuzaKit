@@ -241,26 +241,21 @@ const itemClasses = computed(() => {
     </component>
 
     <!-- Children (Nested Navigation) -->
-    <Transition
-      enter-active-class="transition-all duration-200 ease-out"
-      enter-from-class="opacity-0 max-h-0"
-      enter-to-class="opacity-100 max-h-screen"
-      leave-active-class="transition-all duration-200 ease-in"
-      leave-from-class="opacity-100 max-h-screen"
-      leave-to-class="opacity-0 max-h-0"
+    <div
+      v-if="hasChildren && !isCollapsed"
+      class="children-wrapper"
+      :class="{ 'is-expanded': isItemExpanded }"
     >
-      <div
-        v-if="hasChildren && isItemExpanded && !isCollapsed"
-        class="mt-1 space-y-1 overflow-hidden"
-      >
+      <div class="children-content">
         <SidebarNavItem
-          v-for="child in item.children"
+          v-for="(child, index) in item.children"
           :key="child.id"
           :item="child"
           :level="level + 1"
+          :style="{ transitionDelay: isItemExpanded ? `${index * 30}ms` : '0ms' }"
         />
       </div>
-    </Transition>
+    </div>
   </div>
 </template>
 
@@ -315,5 +310,38 @@ const itemClasses = computed(() => {
 .sidebar-nav-item a.router-link-exact-active:focus {
   outline: none !important;
   box-shadow: none !important;
+}
+
+/* Grid-based smooth expand/collapse animation for children */
+.children-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows 300ms ease-out;
+  will-change: grid-template-rows;
+}
+
+.children-wrapper.is-expanded {
+  grid-template-rows: 1fr;
+}
+
+.children-content {
+  min-height: 0;
+  margin-top: 0.25rem;
+  /* Force GPU acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.children-content > * {
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
+  will-change: opacity, transform;
+}
+
+.children-wrapper.is-expanded .children-content > * {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>

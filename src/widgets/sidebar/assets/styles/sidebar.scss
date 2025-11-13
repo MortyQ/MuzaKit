@@ -89,6 +89,16 @@
 }
 
 // ════════════════════════════════════════════════════════════════
+// SMOOTH ANIMATIONS FOR EXPANDING/COLLAPSING
+// ════════════════════════════════════════════════════════════════
+
+// All navigation items should smoothly move when siblings expand/collapse
+// Using will-change: auto to avoid performance issues
+.sidebar-nav-item {
+  // Removed: items will move naturally with grid transitions
+}
+
+// ════════════════════════════════════════════════════════════════
 // PERFORMANCE OPTIMIZATIONS
 // ════════════════════════════════════════════════════════════════
 

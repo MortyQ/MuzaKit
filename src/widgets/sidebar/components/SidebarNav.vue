@@ -19,7 +19,7 @@ const { isCollapsed } = useSidebar();
     class="sidebar-nav flex-1 overflow-y-auto overflow-x-hidden px-3 py-4"
     :class="{ 'px-2': isCollapsed }"
   >
-    <div class="space-y-1">
+    <div class="space-y-1 nav-items-container">
       <SidebarNavItemComponent
         v-for="item in items"
         :key="item.id"
@@ -53,5 +53,7 @@ const { isCollapsed } = useSidebar();
 .sidebar-nav::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.3);
 }
+
+/* Navigation items container - smooth layout with grid */
 </style>
 
