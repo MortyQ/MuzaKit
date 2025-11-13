@@ -77,6 +77,22 @@
     z-index: $z-index-header-fixed !important;
   }
 
+  // Shadow for sticky header - soft blur without spread
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -$table-shadow-offset;
+    height: $table-shadow-offset;
+    pointer-events: none;
+    z-index: -1;
+
+    // Soft shadow with blur but no spread for clean appearance
+    box-shadow: 0 $table-shadow-offset $table-shadow-blur 0
+                color-mix(in srgb, theme('colors.mainText') 8%, transparent 92%);
+  }
+
   // No resize handle on groups
   // Groups inherit width from children, not resizable directly
 }
@@ -136,6 +152,22 @@
   // Fixed header has higher z-index (always on top)
   &.table-fixed-column {
     z-index: $z-index-header-fixed !important;
+  }
+
+  // Shadow for sticky header - soft blur without spread
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -$table-shadow-offset;
+    height: $table-shadow-offset;
+    pointer-events: none;
+    z-index: -1;
+
+    // Soft shadow with blur but no spread for clean appearance
+    box-shadow: 0 $table-shadow-offset $table-shadow-blur 0
+                color-mix(in srgb, theme('colors.mainText') 8%, transparent 92%);
   }
 
   // Grouped leaf header (header that is part of a group)

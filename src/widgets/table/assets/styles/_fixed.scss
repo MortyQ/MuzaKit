@@ -33,45 +33,22 @@
   // right: calc(sum of previous fixed right widths)
 }
 
-// Modern shadow for last left fixed column - soft, elegant depth
+// Modern shadow for last left fixed column - soft blur without spread
 .table-fixed-left-last {
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: $table-shadow-offset;
-    transform: translateX(100%);
-    pointer-events: none;
+  // Soft shadow with blur but no spread for clean, smooth appearance
+  box-shadow: $table-shadow-offset 0 $table-shadow-blur 0
+              color-mix(in srgb, theme('colors.mainText') 8%, transparent 92%);
 
-    // Soft shadow using mainText at low opacity for theme compatibility
-    // Creates elegant depth indicator without performance impact
-    box-shadow: inset $table-shadow-offset 0 $table-shadow-blur $table-shadow-spread
-                color-mix(in srgb, theme('colors.mainText') 10%, transparent 90%);
-
-    // PERFORMANCE: No transition - static shadow for 60 FPS
-  }
+  // PERFORMANCE: No transition - static shadow for 60 FPS
 }
 
-// Modern shadow for first right fixed column
+// Modern shadow for first right fixed column - soft blur without spread
 .table-fixed-right-first {
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: $table-shadow-offset;
-    transform: translateX(-100%);
-    pointer-events: none;
+  // Soft shadow with blur but no spread for clean, smooth appearance
+  box-shadow: (-$table-shadow-offset) 0 $table-shadow-blur 0
+              color-mix(in srgb, theme('colors.mainText') 8%, transparent 92%);
 
-    // Soft shadow using mainText at low opacity
-    box-shadow: inset (-$table-shadow-offset) 0 $table-shadow-blur $table-shadow-spread
-                color-mix(in srgb, theme('colors.mainText') 10%, transparent 90%);
-
-    // PERFORMANCE: No transition - static shadow for 60 FPS
-  }
+  // PERFORMANCE: No transition - static shadow for 60 FPS
 }
 
 // Hover effect on fixed columns - maintains solid background

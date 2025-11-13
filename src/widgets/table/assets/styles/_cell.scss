@@ -68,6 +68,22 @@
   }
 }
 
+// Expandable cell (first column with expand functionality)
+.table-cell--expandable {
+  cursor: pointer;
+  user-select: none;
+
+  // Subtle hover effect on the entire cell
+  &:hover {
+    background-color: color-mix(in srgb, theme('colors.cardBg') 94%, theme('colors.mainText') 6%);
+  }
+
+  // Active state
+  &:active {
+    background-color: color-mix(in srgb, theme('colors.cardBg') 92%, theme('colors.mainText') 8%);
+  }
+}
+
 // Expand button - modern, minimal design
 .table-cell-expand-btn {
   display: inline-flex;

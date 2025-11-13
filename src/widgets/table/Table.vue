@@ -650,8 +650,17 @@ onUnmounted(() => {
               :key="`${item.key}-${column.key}`"
               :align="column.align"
               :depth="getRowDepth(item.row)"
-              :class="getColumnClasses(column)"
+              :class="[
+                getColumnClasses(column),
+                {
+                  'table-cell--expandable': colIndex === 0 && isExpandable &&
+                    isRowExpandable(item.row as ExpandableRow)
+                }
+              ]"
               :style="getFixedStyles(column)"
+              @click="colIndex === 0 && isExpandable &&
+                isRowExpandable(item.row as ExpandableRow) ?
+                  handleToggleRow(item.row.id as string | number, item.row, column) : undefined"
             >
               <div class="table-cell-content">
                 <!-- Expand button only for first column -->
