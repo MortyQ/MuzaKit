@@ -68,9 +68,7 @@ const dropdownItems = computed(() => [
         <button
           type="button"
           class="user-menu-trigger flex items-center gap-2 rounded-lg
-                 transition-all duration-200 ease-in-out
-                 hover:bg-base-200/50 focus:outline-none focus:ring-2
-                 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-base-100"
+                 transition-all duration-200 ease-in-out"
           :class="{
             'py-2.5 px-4': !compact,
             'py-2.5 px-2': compact,
@@ -88,7 +86,7 @@ const dropdownItems = computed(() => [
           <!-- User Info (only in expanded mode) -->
           <Transition name="user-info-fade">
             <div
-              v-if="!compact && user && !isOpen"
+              v-if="!compact && user"
               class="flex flex-col items-start min-w-0"
             >
               <span class="text-sm font-medium text-mainText truncate max-w-[150px]">
@@ -103,7 +101,7 @@ const dropdownItems = computed(() => [
           <!-- Chevron Icon (only in expanded mode) -->
           <Transition name="chevron-fade">
             <VIcon
-              v-if="!compact && !isOpen"
+              v-if="!compact"
               icon="mdi:chevron-down"
               :size="16"
               class="text-secondaryText transition-transform duration-200 flex-shrink-0"
@@ -159,7 +157,9 @@ const dropdownItems = computed(() => [
               type="button"
               class="w-full flex items-center gap-2.5 px-3 py-2
                      transition-colors duration-150 text-left
-                     text-mainText hover:bg-base-200 rounded-md"
+                     text-mainText hover:bg-base-200 rounded-md
+                     focus:outline-none focus-visible:outline-none
+                     focus:bg-base-200 focus-visible:bg-base-200"
               @click="handleMenuSelect('profile')"
             >
               <VIcon
@@ -175,7 +175,9 @@ const dropdownItems = computed(() => [
               type="button"
               class="w-full flex items-center gap-2.5 px-3 py-2
                      transition-colors duration-150 text-left
-                     text-mainText hover:bg-base-200 rounded-md"
+                     text-mainText hover:bg-base-200 rounded-md
+                     focus:outline-none focus-visible:outline-none
+                     focus:bg-base-200 focus-visible:bg-base-200"
               @click="handleMenuSelect('settings')"
             >
               <VIcon
@@ -194,7 +196,9 @@ const dropdownItems = computed(() => [
               type="button"
               class="w-full flex items-center gap-2.5 px-3 py-2
                      transition-colors duration-150 text-left
-                     text-error hover:bg-error/10 rounded-md"
+                     text-error hover:bg-error/10 rounded-md
+                     focus:outline-none focus-visible:outline-none
+                     focus:bg-error/10 focus-visible:bg-error/10"
               @click="handleMenuSelect('logout')"
             >
               <VIcon
@@ -220,19 +224,50 @@ const dropdownItems = computed(() => [
 </template>
 
 <style scoped>
-/* Убеждаемся что контент не выходит за границы во время анимации */
+/* Ensure content doesn't overflow during animation */
 .user-menu-dropdown {
   overflow: hidden;
 }
 
-/* Transition для User Info в триггере - с задержкой появления */
+/* Completely remove browser default outline on ALL buttons inside user-menu */
+.user-menu :deep(button),
+.user-menu-items button,
+:deep(.v-dropdown-item) {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.user-menu :deep(button:focus),
+.user-menu :deep(button:active),
+.user-menu-items button:focus,
+.user-menu-items button:active,
+:deep(.v-dropdown-item:focus),
+:deep(.v-dropdown-item:active) {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.user-menu :deep(button:focus-visible),
+.user-menu-items button:focus-visible,
+:deep(.v-dropdown-item:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Transition for User Info in trigger - with delayed appearance */
 .user-info-fade-enter-active {
-  /* Появление с задержкой - дожидаемся закрытия dropdown */
+  /* Appear with delay - wait for dropdown to close */
   transition: opacity 0.2s ease 0.15s;
 }
 
 .user-info-fade-leave-active {
-  /* Исчезновение быстрое без задержки */
+  /* Fast disappearance without delay */
   transition: opacity 0.15s ease;
 }
 
@@ -249,14 +284,14 @@ const dropdownItems = computed(() => [
   opacity: 1;
 }
 
-/* Transition для Chevron иконки - такая же логика как у User Info */
+/* Transition for Chevron icon - same logic as User Info */
 .chevron-fade-enter-active {
-  /* Появление с задержкой - дожидаемся закрытия dropdown */
+  /* Appear with delay - wait for dropdown to close */
   transition: opacity 0.2s ease 0.15s;
 }
 
 .chevron-fade-leave-active {
-  /* Исчезновение быстрое без задержки */
+  /* Fast disappearance without delay */
   transition: opacity 0.15s ease;
 }
 
@@ -273,17 +308,17 @@ const dropdownItems = computed(() => [
   opacity: 1;
 }
 
-/* Delayed fade-in анимация для хедера */
+/* Delayed fade-in animation for header */
 .user-menu-header {
   animation: fadeInDelayed 0.2s ease-out 0.1s both;
 }
 
-/* Delayed fade-in анимация для пунктов меню */
+/* Delayed fade-in animation for menu items */
 .user-menu-items {
   animation: fadeInDelayed 0.2s ease-out 0.15s both;
 }
 
-/* Кнопки меню появляются по очереди с небольшой задержкой */
+/* Menu buttons appear sequentially with small delay */
 .user-menu-items > button {
   animation: fadeInDelayed 0.15s ease-out both;
 }
