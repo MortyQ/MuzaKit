@@ -552,7 +552,7 @@ const actionButtons = [
 </template>
 
 <style scoped lang="scss">
-@import "@/shared/assets/styles/shared-info-card-styles.scss";
+@use "@/shared/assets/styles/shared-info-card-styles.scss";
 
 // Icon-specific styles
 .props-table {

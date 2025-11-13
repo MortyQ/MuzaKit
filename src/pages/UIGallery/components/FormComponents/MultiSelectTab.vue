@@ -373,7 +373,7 @@ const disabledValue = ref(options[0]);
 </template>
 
 <style scoped lang="scss">
-@import "@/shared/assets/styles/shared-info-card-styles.scss";
+@use "@/shared/assets/styles/shared-info-card-styles.scss";
 
 // MultiSelect-specific styles
 .props-table {

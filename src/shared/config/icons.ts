@@ -56,6 +56,8 @@ export const iconMap: Record<string, Component> = {
   "mdi:logout": defineAsyncComponent(() => import("~icons/mdi/logout")),
   "mdi:account": defineAsyncComponent(() => import("~icons/mdi/account")),
   "mdi:cog": defineAsyncComponent(() => import("~icons/mdi/cog")),
+  "mdi:white-balance-sunny": defineAsyncComponent(() => import("~icons/mdi/white-balance-sunny")),
+  "mdi:moon-waning-crescent": defineAsyncComponent(() => import("~icons/mdi/moon-waning-crescent")),
 
   // Communication
   "mdi:email": defineAsyncComponent(() => import("~icons/mdi/email")),
@@ -126,6 +128,9 @@ export const iconMap: Record<string, Component> = {
   "mdi:lock": defineAsyncComponent(() => import("~icons/mdi/lock")),
   "mdi:trash": defineAsyncComponent(() => import("~icons/mdi/trash")),
   "mdi:list": defineAsyncComponent(() => import("~icons/mdi/view-list")),
+  "mdi:content-save": defineAsyncComponent(() => import("~icons/mdi/content-save")),
+  "mdi:pencil": defineAsyncComponent(() => import("~icons/mdi/pencil")),
+  "mdi:puzzle": defineAsyncComponent(() => import("~icons/mdi/puzzle")),
 
   // ==================== Heroicons ====================
 
@@ -209,6 +214,18 @@ export const iconMap: Record<string, Component> = {
   "lucide:clipboard-list": defineAsyncComponent(() => import("~icons/lucide/clipboard-list")),
   "lucide:clock": defineAsyncComponent(() => import("~icons/lucide/clock")),
   "lucide:upload": defineAsyncComponent(() => import("~icons/lucide/upload")),
+  "lucide:folder": defineAsyncComponent(() => import("~icons/lucide/folder")),
+  "lucide:shield": defineAsyncComponent(() => import("~icons/lucide/folder")),
+  "lucide:slash": defineAsyncComponent(() => import("~icons/lucide/slash")),
+  "lucide:edit-3": defineAsyncComponent(() => import("~icons/lucide/edit-3")),
+  "lucide:toggle-left": defineAsyncComponent(() => import("~icons/lucide/toggle-left")),
+  "lucide:type": defineAsyncComponent(() => import("~icons/lucide/type")),
+  "lucide:watch": defineAsyncComponent(() => import("~icons/lucide/watch")),
+  "lucide:check": defineAsyncComponent(() => import("~icons/lucide/check")),
+  "lucide:minus-square": defineAsyncComponent(() => import("~icons/lucide/minus-square")),
+  "lucide:link": defineAsyncComponent(() => import("~icons/lucide/link")),
+  "lucide:sparkles": defineAsyncComponent(() => import("~icons/lucide/sparkles")),
+
 };
 
 /**

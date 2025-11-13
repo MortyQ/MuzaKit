@@ -519,7 +519,7 @@ const advancedExample = `// Different variants
 </template>
 
 <style scoped lang="scss">
-@import "@/shared/assets/styles/shared-info-card-styles.scss";
+@use "@/shared/assets/styles/shared-info-card-styles.scss";
 
 // Card-specific styles
 .props-table {
