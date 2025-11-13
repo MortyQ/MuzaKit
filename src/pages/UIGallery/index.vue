@@ -24,8 +24,8 @@ const categories = [
     icon: "lucide:clipboard-list",
     iconColor: "#10b981",
     path: "/components/ui-gallery/forms",
-    components: ["Multi Select", "File Inputs"],
-    badge: "2 components",
+    components: ["Multi Select", "Input", "Switch", "Checkboxes", "Buttons", "File Inputs"],
+    badge: "6 components",
   },
   {
     id: "display",
@@ -34,8 +34,8 @@ const categories = [
     icon: "lucide:layout",
     iconColor: "#f59e0b",
     path: "/components/ui-gallery/display",
-    components: ["Cards", "Icons"],
-    badge: "2 components",
+    components: ["Cards", "Icons", "Tabs"],
+    badge: "3 components",
   },
   {
     id: "layout",
@@ -148,7 +148,7 @@ const navigateToCategory = (path: string, disabled?: boolean) => {
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
         <div>
           <div class="text-3xl font-bold text-primary mb-1">
-            6
+            11
           </div>
           <div class="text-sm text-secondaryText">
             Components Documented
