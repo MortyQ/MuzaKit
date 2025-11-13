@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 @import "./documentation-styles.scss";
 </style>
 
