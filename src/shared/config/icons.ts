@@ -204,6 +204,11 @@ export const iconMap: Record<string, Component> = {
   "lucide:package": defineAsyncComponent(() => import("~icons/lucide/package")),
   "lucide:shield-check": defineAsyncComponent(() => import("~icons/lucide/shield-check")),
   "lucide:tag": defineAsyncComponent(() => import("~icons/lucide/tag")),
+  "lucide:layout": defineAsyncComponent(() => import("~icons/lucide/layout")),
+  "lucide:square": defineAsyncComponent(() => import("~icons/lucide/square")),
+  "lucide:clipboard-list": defineAsyncComponent(() => import("~icons/lucide/clipboard-list")),
+  "lucide:clock": defineAsyncComponent(() => import("~icons/lucide/clock")),
+  "lucide:upload": defineAsyncComponent(() => import("~icons/lucide/upload")),
 };
 
 /**

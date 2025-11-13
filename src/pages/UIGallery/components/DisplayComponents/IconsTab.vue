@@ -169,81 +169,6 @@ const actionButtons = [
       </div>
     </VCard>
 
-    <!-- Basic Usage -->
-    <VCard class="code-example-card">
-      <h3 class="code-title">
-        📝 Basic Usage
-      </h3>
-      <div class="code-block">
-        <pre><code>{{ basicExample }}</code></pre>
-      </div>
-    </VCard>
-
-    <!-- Advanced Usage -->
-    <VCard class="code-example-card">
-      <h3 class="code-title">
-        🚀 Advanced Examples
-      </h3>
-      <div class="code-block">
-        <pre><code>{{ advancedExample }}</code></pre>
-      </div>
-    </VCard>
-
-    <!-- Props Documentation -->
-    <VCard>
-      <h3 class="section-title">
-        Component Props
-      </h3>
-      <div class="section-description mb-4">
-        Available props for VIcon component:
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="props-table">
-          <thead>
-            <tr>
-              <th>Prop</th>
-              <th>Type</th>
-              <th>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>icon</code></td>
-              <td><code>string</code></td>
-              <td>required</td>
-              <td>Icon name in format "collection:name" (e.g., "mdi:home")</td>
-            </tr>
-            <tr>
-              <td><code>size</code></td>
-              <td><code>string | number</code></td>
-              <td><code>24</code></td>
-              <td>Icon size in pixels</td>
-            </tr>
-            <tr>
-              <td><code>color</code></td>
-              <td><code>string</code></td>
-              <td><code>'currentColor'</code></td>
-              <td>Icon color (CSS color value)</td>
-            </tr>
-            <tr>
-              <td><code>class</code></td>
-              <td><code>string</code></td>
-              <td><code>''</code></td>
-              <td>Additional CSS classes</td>
-            </tr>
-            <tr>
-              <td><code>loading</code></td>
-              <td><code>boolean</code></td>
-              <td><code>false</code></td>
-              <td>Show loading spinner icon</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </VCard>
-
     <!-- Live Examples Section -->
     <VCard>
       <h3 class="section-title mb-6">
@@ -367,6 +292,82 @@ const actionButtons = [
           </VButton>
         </div>
       </section>
+    </VCard>
+
+
+    <!-- Basic Usage -->
+    <VCard class="code-example-card">
+      <h3 class="code-title">
+        📝 Basic Usage
+      </h3>
+      <div class="code-block">
+        <pre><code>{{ basicExample }}</code></pre>
+      </div>
+    </VCard>
+
+    <!-- Advanced Usage -->
+    <VCard class="code-example-card">
+      <h3 class="code-title">
+        🚀 Advanced Examples
+      </h3>
+      <div class="code-block">
+        <pre><code>{{ advancedExample }}</code></pre>
+      </div>
+    </VCard>
+
+    <!-- Props Documentation -->
+    <VCard>
+      <h3 class="section-title">
+        Component Props
+      </h3>
+      <div class="section-description mb-4">
+        Available props for VIcon component:
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>icon</code></td>
+              <td><code>string</code></td>
+              <td>required</td>
+              <td>Icon name in format "collection:name" (e.g., "mdi:home")</td>
+            </tr>
+            <tr>
+              <td><code>size</code></td>
+              <td><code>string | number</code></td>
+              <td><code>24</code></td>
+              <td>Icon size in pixels</td>
+            </tr>
+            <tr>
+              <td><code>color</code></td>
+              <td><code>string</code></td>
+              <td><code>'currentColor'</code></td>
+              <td>Icon color (CSS color value)</td>
+            </tr>
+            <tr>
+              <td><code>class</code></td>
+              <td><code>string</code></td>
+              <td><code>''</code></td>
+              <td>Additional CSS classes</td>
+            </tr>
+            <tr>
+              <td><code>loading</code></td>
+              <td><code>boolean</code></td>
+              <td><code>false</code></td>
+              <td>Show loading spinner icon</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </VCard>
 
     <!-- Icon Collections -->
@@ -617,4 +618,3 @@ const actionButtons = [
   animation: spin 1s linear infinite;
 }
 </style>
-

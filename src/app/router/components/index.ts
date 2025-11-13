@@ -29,15 +29,69 @@ const componentRoutes: AppRouteRecordRaw[] = [
       },
       {
         path: "ui-gallery",
-        name: "UIGallery",
-        component: () => import("@/pages/UIGallery/index.vue"),
+        name: "uiGallery.parent",
+        redirect: "/components/ui-gallery/overview",
         meta: {
           title: "UI Gallery",
           menuTitle: "UI Gallery",
           menuIcon: "mdi:palette",
+          isMenuParent: true,
           menuOrder: 3,
-          menuBadge: "Old",
+          menuBadge: "New",
         },
+        children: [
+          {
+            path: "overview",
+            name: "uiGallery.overview",
+            component: () => import("@/pages/UIGallery/index.vue"),
+            meta: {
+              title: "Overview",
+              menuTitle: "Overview",
+              menuIcon: "lucide:home",
+            },
+          },
+          {
+            path: "feedback",
+            name: "uiGallery.feedback",
+            component: () => import("@/pages/UIGallery/Feedback.vue"),
+            meta: {
+              title: "Feedback",
+              menuTitle: "Feedback",
+              menuIcon: "lucide:message-square",
+            },
+          },
+          {
+            path: "forms",
+            name: "uiGallery.forms",
+            component: () => import("@/pages/UIGallery/Forms.vue"),
+            meta: {
+              title: "Forms",
+              menuTitle: "Forms",
+              menuIcon: "lucide:clipboard-list",
+            },
+          },
+          {
+            path: "display",
+            name: "uiGallery.display",
+            component: () => import("@/pages/UIGallery/Display.vue"),
+            meta: {
+              title: "Display",
+              menuTitle: "Display",
+              menuIcon: "lucide:layout",
+            },
+          },
+          {
+            path: "layout",
+            name: "uiGallery.layout",
+            component: () => import("@/pages/UIGallery/Layout.vue"),
+            meta: {
+              title: "Layout",
+              menuTitle: "Layout",
+              menuIcon: "lucide:layout-grid",
+              menuBadge: "Soon",
+            },
+          },
+        ],
       },
       {
         path: "table",
@@ -48,7 +102,6 @@ const componentRoutes: AppRouteRecordRaw[] = [
           menuTitle: "Table",
           menuIcon: "mdi:table",
           isMenuParent: true,
-          menuBadge: "Improved",
         },
         children: [
           {

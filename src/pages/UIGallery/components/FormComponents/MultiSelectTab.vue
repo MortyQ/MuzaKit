@@ -174,6 +174,85 @@ const disabledValue = ref(options[0]);
       </div>
     </VCard>
 
+    <!-- Live Examples Section -->
+    <VCard>
+      <h3 class="section-title mb-6">
+        🎮 Live Examples
+      </h3>
+
+      <!-- Single Select -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          Single Select
+        </h4>
+        <VMultiSelect
+          v-model="singleValue"
+          :options="options"
+          placeholder="Choose one option"
+        />
+        <p class="example-result">
+          Selected: {{ singleValue }}
+        </p>
+      </section>
+
+      <!-- Multiple Select -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          Multiple Select
+        </h4>
+        <VMultiSelect
+          v-model="multipleValue"
+          :options="options"
+          placeholder="Choose multiple options"
+          multiple
+          :close-on-select="false"
+        />
+        <p class="example-result">
+          Selected: {{ multipleValue }}
+        </p>
+      </section>
+
+      <!-- Disabled -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          Disabled State
+        </h4>
+        <VMultiSelect
+          v-model="disabledValue"
+          :options="options"
+          placeholder="Disabled"
+          disabled
+        />
+      </section>
+
+      <!-- Not Searchable -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          Not Searchable
+        </h4>
+        <VMultiSelect
+          v-model="singleValue"
+          :options="options"
+          placeholder="Select without search"
+          :searchable="false"
+        />
+      </section>
+
+      <!-- Loading State -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          Loading State
+        </h4>
+        <VMultiSelect
+          v-model="singleValue"
+          :options="options"
+          placeholder="Loading..."
+          loading
+        />
+      </section>
+    </VCard>
+
+
     <!-- Basic Usage -->
     <VCard class="code-example-card">
       <h3 class="code-title">
@@ -271,84 +350,6 @@ const disabledValue = ref(options[0]);
           </tbody>
         </table>
       </div>
-    </VCard>
-
-    <!-- Live Examples Section -->
-    <VCard>
-      <h3 class="section-title mb-6">
-        🎮 Live Examples
-      </h3>
-
-      <!-- Single Select -->
-      <section class="examples-section">
-        <h4 class="examples-subtitle">
-          Single Select
-        </h4>
-        <VMultiSelect
-          v-model="singleValue"
-          :options="options"
-          placeholder="Choose one option"
-        />
-        <p class="example-result">
-          Selected: {{ singleValue }}
-        </p>
-      </section>
-
-      <!-- Multiple Select -->
-      <section class="examples-section">
-        <h4 class="examples-subtitle">
-          Multiple Select
-        </h4>
-        <VMultiSelect
-          v-model="multipleValue"
-          :options="options"
-          placeholder="Choose multiple options"
-          multiple
-          :close-on-select="false"
-        />
-        <p class="example-result">
-          Selected: {{ multipleValue }}
-        </p>
-      </section>
-
-      <!-- Disabled -->
-      <section class="examples-section">
-        <h4 class="examples-subtitle">
-          Disabled State
-        </h4>
-        <VMultiSelect
-          v-model="disabledValue"
-          :options="options"
-          placeholder="Disabled"
-          disabled
-        />
-      </section>
-
-      <!-- Not Searchable -->
-      <section class="examples-section">
-        <h4 class="examples-subtitle">
-          Not Searchable
-        </h4>
-        <VMultiSelect
-          v-model="singleValue"
-          :options="options"
-          placeholder="Select without search"
-          :searchable="false"
-        />
-      </section>
-
-      <!-- Loading State -->
-      <section class="examples-section">
-        <h4 class="examples-subtitle">
-          Loading State
-        </h4>
-        <VMultiSelect
-          v-model="singleValue"
-          :options="options"
-          placeholder="Loading..."
-          loading
-        />
-      </section>
     </VCard>
 
     <!-- Features Summary -->
