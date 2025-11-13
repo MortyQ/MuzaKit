@@ -4,12 +4,23 @@
   <meta charset="utf-8">
   <title>Redirecting...</title>
   <script>
-    const path = window.location.pathname.slice(1);
-    const search = window.location.search;
-    const hash = window.location.hash;
+    // Single Page Apps for GitHub Pages
+    // https://github.com/rafgraph/spa-github-pages
 
-    sessionStorage.setItem('redirect', path + search + hash);
-    window.location.replace(window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/') + '/' + search + hash);
+    // This script takes the current url and converts the path and query
+    // string into just a query string, and then redirects the browser
+    // to the new url with only a query string and hash fragment
+
+    var pathSegmentsToKeep = 1; // Change to 1 if using GitHub Pages with project name
+
+    var l = window.location;
+    l.replace(
+      l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+      l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+      l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+      (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+      l.hash
+    );
   </script>
 </head>
 <body>
