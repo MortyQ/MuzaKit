@@ -14,6 +14,6 @@ import VCard from "@/shared/ui/common/VCard.vue";
   </VCard>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 @import "./documentation-styles.scss";
 </style>
