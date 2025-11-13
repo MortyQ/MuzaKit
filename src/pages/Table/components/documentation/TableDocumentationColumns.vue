@@ -1,16 +1,17 @@
 <script setup lang="ts">
-// import VueMarkdown from "vue-markdown-render";
+import VueMarkdown from "vue-markdown-render";
 
-// import COLUMNS from "@/docs/table/ts/columns";
+import COLUMNS from "@/docs/table/ts/columns";
+import VCard from "@/shared/ui/common/VCard.vue";
 </script>
 
 <template>
-  <div class="documentation-page">
-    <!--    <VueMarkdown-->
-    <!--      :source="COLUMNS"-->
-    <!--      class="markdown-body"-->
-    <!--    />-->
-  </div>
+  <VCard class="documentation-page">
+    <VueMarkdown
+      :source="COLUMNS"
+      class="markdown-body"
+    />
+  </VCard>
 </template>
 
 <style scoped lang="scss">
