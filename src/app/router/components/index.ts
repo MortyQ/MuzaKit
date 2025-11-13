@@ -39,14 +39,35 @@ const componentRoutes: AppRouteRecordRaw[] = [
       },
       {
         path: "table",
-        name: "Table",
-        component: () => import("@/pages/Table/index.vue"),
+        name: "table.parent",
         meta: {
-          title: "Table Examples",
-          menuTitle: "Tables",
+          title: "Table",
+          menuTitle: "Table",
           menuIcon: "mdi:table",
-          menuOrder: 4,
+          isMenuParent: true,
         },
+        children: [
+          {
+            path: "examples",
+            name: "Table Examples",
+            component: () => import("@/pages/Table/index.vue"),
+            meta: {
+              title: "Examples",
+              menuTitle: "Examples",
+              menuIcon: "mdi:list",
+            },
+          },
+          {
+            path: "documentation",
+            name: "Table Documentation",
+            component: () => import("@/pages/Table/components/documentation/TableDocumentationWrapper.vue"),
+            meta: {
+              title: "Documentation",
+              menuTitle: "Documentation",
+              menuIcon: "mdi:document",
+            },
+          },
+        ],
       },
     ],
   },

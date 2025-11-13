@@ -109,6 +109,7 @@ export const iconMap: Record<string, Component> = {
   // Theme
   "mdi:moon": defineAsyncComponent(() => import("~icons/mdi/weather-night")),
   "mdi:sun": defineAsyncComponent(() => import("~icons/mdi/white-balance-sunny")),
+  "mdi:document": defineAsyncComponent(() => import("~icons/mdi/document")),
 
   // Other
   "mdi:heart": defineAsyncComponent(() => import("~icons/mdi/heart")),
@@ -124,6 +125,7 @@ export const iconMap: Record<string, Component> = {
   "mdi:alert-circle": defineAsyncComponent(() => import("~icons/mdi/alert-circle")),
   "mdi:lock": defineAsyncComponent(() => import("~icons/mdi/lock")),
   "mdi:trash": defineAsyncComponent(() => import("~icons/mdi/trash")),
+  "mdi:list": defineAsyncComponent(() => import("~icons/mdi/view-list")),
 
   // ==================== Heroicons ====================
 
