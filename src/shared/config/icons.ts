@@ -156,6 +156,21 @@ export const iconMap: Record<string, Component> = {
   "lucide:rocket": defineAsyncComponent(() => import("~icons/lucide/rocket")),
   "lucide:info": defineAsyncComponent(() => import("~icons/lucide/info")),
   "lucide:move-horizontal": defineAsyncComponent(() => import("~icons/lucide/move-horizontal")),
+  "lucide:table-2": defineAsyncComponent(() => import("~icons/lucide/table-2")),
+  "lucide:layout-grid": defineAsyncComponent(() => import("~icons/lucide/layout-grid")),
+  "lucide:calculator": defineAsyncComponent(() => import("~icons/lucide/calculator")),
+  "lucide:text-cursor-input": defineAsyncComponent(() => import("~icons/lucide/text-cursor-input")),
+  "lucide:maximize": defineAsyncComponent(() => import("~icons/lucide/maximize")),
+  "lucide:wrench": defineAsyncComponent(() => import("~icons/lucide/wrench")),
+  "lucide:refresh-cw": defineAsyncComponent(() => import("~icons/lucide/refresh-cw")),
+  "lucide:download": defineAsyncComponent(() => import("~icons/lucide/download")),
+  "lucide:sliders": defineAsyncComponent(() => import("~icons/lucide/sliders")),
+  "lucide:server": defineAsyncComponent(() => import("~icons/lucide/server")),
+  "lucide:monitor": defineAsyncComponent(() => import("~icons/lucide/monitor")),
+  "lucide:layers": defineAsyncComponent(() => import("~icons/lucide/layers")),
+  "lucide:list": defineAsyncComponent(() => import("~icons/lucide/list")),
+  "lucide:loader": defineAsyncComponent(() => import("~icons/lucide/loader")),
+  "lucide:book-open": defineAsyncComponent(() => import("~icons/lucide/book-open")),
 };
 
 /**

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 
+import VCard from "@/shared/ui/common/VCard.vue";
+import VIcon from "@/shared/ui/common/VIcon.vue";
 import Table from "@/widgets/table/Table.vue";
 import type { Column, RequestPayload, SortItem } from "@/widgets/table/types";
 import { mockDataUsers } from "@/widgets/table/utils/mockData";
@@ -124,6 +126,111 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
 
 <template>
   <div class="page-container gap-5">
+    <!-- Info Card -->
+    <VCard>
+      <div class="info-header">
+        <VIcon
+          icon="lucide:arrow-up-down"
+          :size="24"
+          class="info-icon"
+        />
+        <h2 class="info-title">
+          Sorting Features
+        </h2>
+      </div>
+
+      <div class="info-content">
+        <p class="info-description">
+          Demonstrates both
+          <strong>
+            server-side and client-side sorting
+          </strong>
+          with multi-column and single-column modes.
+          Click column headers to sort data in ascending, descending, or remove sorting.
+        </p>
+
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-primary">
+              <VIcon
+                icon="lucide:server"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Server-Side Sorting
+              </h3>
+              <p class="feature-description">
+                API handles sorting logic
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-success">
+              <VIcon
+                icon="lucide:monitor"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Client-Side Sorting
+              </h3>
+              <p class="feature-description">
+                Browser handles all sorting
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-warning">
+              <VIcon
+                icon="lucide:layers"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Multi-Column Sort
+              </h3>
+              <p class="feature-description">
+                Sort by multiple columns
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-info">
+              <VIcon
+                icon="lucide:list"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Single-Column Mode
+              </h3>
+              <p class="feature-description">
+                Only one column at a time
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-note">
+          <VIcon
+            icon="lucide:info"
+            :size="16"
+          />
+          <span>
+            Click column headers to cycle: <strong>None → Asc → Desc → None</strong>
+          </span>
+        </div>
+      </div>
+    </VCard>
+
     <!-- Server-side Multi-Sort -->
     <div class="section">
       <h2 class="section-title">
@@ -209,46 +316,5 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
 </template>
 
 <style scoped lang="scss">
-.section {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.section-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.section-description {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin: 0;
-}
-
-.section-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  background-color: var(--bg-secondary);
-  border-radius: 8px;
-  font-size: 14px;
-
-  code {
-    padding: 4px 8px;
-    background-color: var(--bg-tertiary);
-    border-radius: 4px;
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    color: var(--color-primary);
-  }
-
-  .text-muted {
-    color: var(--text-tertiary);
-    font-style: italic;
-  }
-}
+@import "./shared-info-card-styles.scss";
 </style>

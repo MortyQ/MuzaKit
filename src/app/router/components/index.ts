@@ -20,8 +20,8 @@ const componentRoutes: AppRouteRecordRaw[] = [
         name: "Components",
         component: () => import("@/pages/Components/index.vue"),
         meta: {
-          title: "Component Library",
-          menuTitle: "Components",
+          title: "Showcase",
+          menuTitle: "Showcase",
           menuIcon: "mdi:layers",
           menuOrder: 2,
         },
@@ -40,6 +40,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
       {
         path: "table",
         name: "table.parent",
+        redirect: "/components/table/examples",
         meta: {
           title: "Table",
           menuTitle: "Table",
@@ -50,7 +51,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
         children: [
           {
             path: "examples",
-            name: "Table Examples",
+            name: "table.examples",
             component: () => import("@/pages/Table/index.vue"),
             meta: {
               title: "Examples",
@@ -60,7 +61,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           },
           {
             path: "documentation",
-            name: "Table Documentation",
+            name: "table.documentation",
             component: () => import("@/pages/Table/components/documentation/TableDocumentationWrapper.vue"),
             meta: {
               title: "Documentation",

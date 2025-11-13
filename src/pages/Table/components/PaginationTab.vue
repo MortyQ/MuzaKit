@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+import VCard from "@/shared/ui/common/VCard.vue";
+import VIcon from "@/shared/ui/common/VIcon.vue";
 import Table from "@/widgets/table/Table.vue";
 import type { Column, RequestPayload, SortItem } from "@/widgets/table/types";
 
@@ -157,6 +159,110 @@ handleServerRequest3({ page: 1, pageSize: 15, sort: [] });
 
 <template>
   <div class="page-container gap-5">
+    <!-- Info Card -->
+    <VCard>
+      <div class="info-header">
+        <VIcon
+          icon="lucide:book-open"
+          :size="24"
+          class="info-icon"
+        />
+        <h2 class="info-title">
+          Server-Side Pagination
+        </h2>
+      </div>
+
+      <div class="info-content">
+        <p class="info-description">
+          Demonstrates <strong>server-side pagination</strong> with smart
+          controls and seamless sorting integration.
+          All pagination is controlled by the parent component with
+          automatic loading states.
+        </p>
+
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-primary">
+              <VIcon
+                icon="lucide:list"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Smart Page Display
+              </h3>
+              <p class="feature-description">
+                Ellipsis for large page counts
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-success">
+              <VIcon
+                icon="lucide:loader"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Loading States
+              </h3>
+              <p class="feature-description">
+                Auto-disable during requests
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-warning">
+              <VIcon
+                icon="lucide:settings"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Page Size Options
+              </h3>
+              <p class="feature-description">
+                Customizable sizes [10, 25, 50...]
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-info">
+              <VIcon
+                icon="lucide:arrow-up-down"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Sorting Integration
+              </h3>
+              <p class="feature-description">
+                Unified @request event
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-note">
+          <VIcon
+            icon="lucide:info"
+            :size="16"
+          />
+          <span>
+            Total dataset: <strong>243 items</strong>.
+            Try different page sizes and sorting combinations!
+          </span>
+        </div>
+      </div>
+    </VCard>
+
     <!-- Default Pagination -->
     <div class="section">
       <h2 class="section-title">
@@ -239,88 +345,10 @@ handleServerRequest3({ page: 1, pageSize: 15, sort: [] });
         @request="handleServerRequest3"
       />
     </div>
-
-    <!-- Info Section -->
-    <div class="section">
-      <h2 class="section-title">
-        Features
-      </h2>
-      <ul class="feature-list">
-        <li>✅ Server-side pagination only (controlled by parent)</li>
-        <li>✅ Disabled state during loading (prevents multiple clicks)</li>
-        <li>✅ Smart page number display (shows ellipsis for many pages)</li>
-        <li>✅ Integrates with sorting via @request event</li>
-        <li>✅ Customizable page size options</li>
-        <li>✅ Optional page size selector</li>
-        <li>✅ 1-based page numbers (user-friendly)</li>
-        <li>✅ Auto-reset to page 1 when changing page size</li>
-      </ul>
-    </div>
   </div>
 </template>
 
-<style scoped>
-.page-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.section {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.section-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: theme('colors.mainText');
-  margin: 0;
-}
-
-.section-description {
-  color: theme('colors.secondaryText');
-  margin: 0;
-}
-
-.section-info {
-  padding: 1rem;
-  background: theme('colors.cardBg');
-  border: 1px solid theme('colors.cardBorder');
-  border-radius: 8px;
-  font-size: 0.9rem;
-}
-
-.section-info code {
-  display: block;
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  background: color-mix(in srgb, theme('colors.cardBorder') 20%, transparent 80%);
-  border-radius: 4px;
-  font-family: 'Courier New', monospace;
-  color: theme('colors.mainText');
-}
-
-
-.feature-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.feature-list li {
-  color: theme('colors.mainText');
-  padding: 0.5rem;
-  background: theme('colors.cardBg');
-  border: 1px solid theme('colors.cardBorder');
-  border-radius: 4px;
-}
-
-.gap-5 {
-  gap: 2.5rem;
-}
+<style scoped lang="scss">
+@import "./shared-info-card-styles.scss";
 </style>
 

@@ -25,20 +25,6 @@ const columnsRegular: Column[] = [
 
 <template>
   <div class="page-container gap-5">
-    <!-- Table -->
-    <Table
-      :columns="columnsRegular"
-      :data="mockDataVirtualScroll"
-      :toolbar="{
-        enabled: true,
-        title: 'Large Dataset Table (10,000 Rows)'
-      }"
-      :virtual-scroll="{
-        enabled: true,
-        estimateSize: 48
-      }"
-    />
-
     <!-- Info Card -->
     <VCard>
       <div class="info-header">
@@ -161,78 +147,27 @@ const columnsRegular: Column[] = [
         </div>
       </div>
     </VCard>
+
+    <!-- Table -->
+    <Table
+      :columns="columnsRegular"
+      :data="mockDataVirtualScroll"
+      :toolbar="{
+        enabled: true,
+        title: 'Large Dataset Table (10,000 Rows)'
+      }"
+      :virtual-scroll="{
+        enabled: true,
+        estimateSize: 48
+      }"
+    />
   </div>
 </template>
 
-<style scoped>
-.info-header {
-  @apply flex items-center gap-3 mb-4;
-}
+<style scoped lang="scss">
+@import "./shared-info-card-styles.scss";
 
-.info-icon {
-  @apply text-primary;
-}
-
-.info-title {
-  @apply text-xl font-semibold text-mainText m-0;
-}
-
-.info-content {
-  @apply flex flex-col gap-5;
-}
-
-.info-description {
-  @apply text-[15px] leading-relaxed text-secondaryText m-0;
-}
-
-/* Features Grid */
-.features-grid {
-  @apply grid gap-4;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-}
-
-.feature-item {
-  @apply flex items-start gap-3 p-4 bg-cardBg border
-  border-cardBorder rounded-lg transition-all duration-200;
-}
-
-.feature-item:hover {
-  @apply border-primary shadow-md -translate-y-0.5;
-}
-
-.feature-icon-wrapper {
-  @apply flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg;
-}
-
-.feature-icon-primary {
-  @apply bg-primary/10 text-primary;
-}
-
-.feature-icon-success {
-  @apply bg-success/10 text-success;
-}
-
-.feature-icon-warning {
-  @apply bg-warning/10 text-warning;
-}
-
-.feature-icon-info {
-  @apply bg-info/10 text-info;
-}
-
-.feature-content {
-  @apply flex-1;
-}
-
-.feature-title {
-  @apply text-sm font-semibold text-mainText m-0 mb-1;
-}
-
-.feature-description {
-  @apply text-[13px] text-secondaryText m-0;
-}
-
-/* Tech Specs */
+/* Component-specific styles */
 .tech-specs {
   @apply flex flex-col gap-2 p-4 bg-cardBg border border-cardBorder rounded-lg;
 }
@@ -249,21 +184,8 @@ const columnsRegular: Column[] = [
   @apply text-mainText font-mono text-xs bg-base-200 px-2 py-1 rounded;
 }
 
-/* Info Note */
-.info-note {
-  @apply flex items-start gap-2 p-3 bg-primary/5 border
-  border-primary/20 rounded-lg text-[13px] text-secondaryText;
-}
-
-.info-note :deep(svg) {
-  @apply flex-shrink-0 mt-0.5 text-primary;
-}
-
-/* Responsive */
+/* Responsive overrides */
 @media (max-width: 768px) {
-  .features-grid {
-    @apply grid-cols-1;
-  }
 
   .spec-item {
     @apply flex-col items-start gap-1;

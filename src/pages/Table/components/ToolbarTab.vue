@@ -2,6 +2,7 @@
 import { ref } from "vue";
 
 import VCard from "@/shared/ui/common/VCard.vue";
+import VIcon from "@/shared/ui/common/VIcon.vue";
 import Table from "@/widgets/table/Table.vue";
 import type { Column } from "@/widgets/table/types";
 
@@ -136,153 +137,246 @@ const codeExample = `<Table
 </script>
 
 <template>
-  <div class="grid grid-cols-2 gap-5">
-    <VCard
-      class="col-span-full w-full lg:col-span-1"
-      title="Automatic Refresh & Reset (Recommended)"
-    >
-      <p class="demo-description">
-        Toolbar with automatic behavior: refresh resets sort & pagination,
-        reset sort only clears sort. No event listeners needed!
-      </p>
+  <div class="page-container gap-5">
+    <!-- Info Card -->
+    <VCard>
+      <div class="info-header">
+        <VIcon
+          icon="lucide:wrench"
+          :size="24"
+          class="info-icon"
+        />
+        <h2 class="info-title">
+          Toolbar Features
+        </h2>
+      </div>
 
-      <Table
-        v-model:search="searchQuery"
-        :columns="columns"
-        :data="toolbarData"
-        :toolbar="{
-          enabled: true,
-          title: 'Users Management',
-          subtitle: 'Automatic reset behavior',
-          search: true,
-          actions: {
-            refresh: true,
-            resetSort: true,
-            export: 'single',
-          },
-        }"
-        @toolbar:export="handleExport"
-      />
+      <div class="info-content">
+        <p class="info-description">
+          Add powerful toolbar controls to your tables with
+          <strong>search, refresh, export</strong> and more.
+          Choose between automatic behavior or custom handlers for full control.
+        </p>
+
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-primary">
+              <VIcon
+                icon="lucide:search"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Search Integration
+              </h3>
+              <p class="feature-description">
+                Built-in search with v-model
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-success">
+              <VIcon
+                icon="lucide:refresh-cw"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Refresh & Reset
+              </h3>
+              <p class="feature-description">
+                Auto or custom behavior
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-warning">
+              <VIcon
+                icon="lucide:download"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Export Options
+              </h3>
+              <p class="feature-description">
+                Single or multi-format export
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-info">
+              <VIcon
+                icon="lucide:sliders"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Flexible Config
+              </h3>
+              <p class="feature-description">
+                Title, subtitle, custom actions
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-note">
+          <VIcon
+            icon="lucide:info"
+            :size="16"
+          />
+          <span>
+            Use automatic mode for quick setup or custom handlers for advanced control!
+          </span>
+        </div>
+      </div>
     </VCard>
 
-    <VCard
-      class="col-span-full w-full lg:col-span-1"
-      title="Manual Control (Custom Handlers)"
-    >
-      <p class="demo-description">
-        Toolbar with custom event handlers - you have full control over refresh and reset behavior.
-        Use 'custom' mode to disable built-in behavior.
-      </p>
+    <div class="grid grid-cols-2 gap-5">
+      <VCard
+        class="col-span-full w-full lg:col-span-1"
+        title="Automatic Refresh & Reset (Recommended)"
+      >
+        <p class="demo-description">
+          Toolbar with automatic behavior: refresh resets sort & pagination,
+          reset sort only clears sort. No event listeners needed!
+        </p>
 
-      <Table
-        v-model:search="searchQuery"
-        :columns="columns"
-        :data="toolbarData"
-        :toolbar="{
-          enabled: true,
-          title: 'Custom Handlers',
-          subtitle: 'With manual event listeners',
-          search: true,
-          actions: {
-            refresh: 'custom',
-            resetSort: 'custom',
-            export: 'single',
-          },
-        }"
-        :loading="isRefreshing"
-        @toolbar:refresh="handleRefresh"
-        @toolbar:reset-sort="handleResetSort"
-        @toolbar:export="handleExport"
-      />
-    </VCard>
+        <Table
+          v-model:search="searchQuery"
+          :columns="columns"
+          :data="toolbarData"
+          :toolbar="{
+            enabled: true,
+            title: 'Users Management',
+            subtitle: 'Automatic reset behavior',
+            search: true,
+            actions: {
+              refresh: true,
+              resetSort: true,
+              export: 'single',
+            },
+          }"
+          @toolbar:export="handleExport"
+        />
+      </VCard>
 
-    <VCard
-      class="col-span-full w-full lg:col-span-1"
-      title="Toolbar with Multi Export"
-    >
-      <p class="demo-description">
-        Toolbar with multiple export options and loading states
-      </p>
+      <VCard
+        class="col-span-full w-full lg:col-span-1"
+        title="Manual Control (Custom Handlers)"
+      >
+        <p class="demo-description">
+          Toolbar with custom event handlers -
+          you have full control over refresh and reset behavior.
+          Use 'custom' mode to disable built-in behavior.
+        </p>
 
-      <Table
-        v-model:search="searchQuery"
-        :columns="columns"
-        :data="toolbarData"
-        :toolbar="{
-          enabled: true,
-          title: 'Export Demo',
-          subtitle: 'Choose your export format',
-          search: { placeholder: 'Search users...' },
-          actions: {
-            refresh: true,
-            export: 'multi',
-          },
-        }"
-        :export-options="{
-          formats: exportFormats,
-          selectedOnly: false,
-        }"
-        @toolbar:refresh="handleRefresh"
-        @toolbar:export="handleExport"
-      />
-    </VCard>
+        <Table
+          v-model:search="searchQuery"
+          :columns="columns"
+          :data="toolbarData"
+          :toolbar="{
+            enabled: true,
+            title: 'Custom Handlers',
+            subtitle: 'With manual event listeners',
+            search: true,
+            actions: {
+              refresh: 'custom',
+              resetSort: 'custom',
+              export: 'single',
+            },
+          }"
+          :loading="isRefreshing"
+          @toolbar:refresh="handleRefresh"
+          @toolbar:reset-sort="handleResetSort"
+          @toolbar:export="handleExport"
+        />
+      </VCard>
 
-    <VCard
-      class="col-span-full w-full lg:col-span-1"
-      title="Minimal Toolbar"
-    >
-      <p class="demo-description">
-        Minimal toolbar with just title and refresh
-      </p>
+      <VCard
+        class="col-span-full w-full lg:col-span-1"
+        title="Toolbar with Multi Export"
+      >
+        <p class="demo-description">
+          Toolbar with multiple export options and loading states
+        </p>
 
-      <Table
-        :columns="columns"
-        :data="toolbarData"
-        :toolbar="{
-          enabled: true,
-          title: 'Minimal Example',
-          actions: {
-            refresh: true,
-          },
-        }"
-        @toolbar:refresh="handleRefresh"
-      />
-    </VCard>
+        <Table
+          v-model:search="searchQuery"
+          :columns="columns"
+          :data="toolbarData"
+          :toolbar="{
+            enabled: true,
+            title: 'Export Demo',
+            subtitle: 'Choose your export format',
+            search: { placeholder: 'Search users...' },
+            actions: {
+              refresh: true,
+              export: 'multi',
+            },
+          }"
+          :export-options="{
+            formats: exportFormats,
+            selectedOnly: false,
+          }"
+          @toolbar:refresh="handleRefresh"
+          @toolbar:export="handleExport"
+        />
+      </VCard>
 
-    <VCard
-      class="col-span-full w-full lg:col-span-1"
-      title="Code Example"
-    >
-      <pre><code>{{ codeExample }}</code></pre>
-    </VCard>
+      <VCard
+        class="col-span-full w-full lg:col-span-1"
+        title="Minimal Toolbar"
+      >
+        <p class="demo-description">
+          Minimal toolbar with just title and refresh
+        </p>
+
+        <Table
+          :columns="columns"
+          :data="toolbarData"
+          :toolbar="{
+            enabled: true,
+            title: 'Minimal Example',
+            actions: {
+              refresh: true,
+            },
+          }"
+          @toolbar:refresh="handleRefresh"
+        />
+      </VCard>
+
+      <VCard
+        class="col-span-full w-full lg:col-span-1"
+        title="Code Example"
+      >
+        <pre><code>{{ codeExample }}</code></pre>
+      </VCard>
+    </div>
   </div>
 </template>
 
-<style scoped>
-.toolbar-demo {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
+<style scoped lang="scss">
+@use "./shared-info-card-styles.scss";
 
+// Component-specific styles
 .demo-description {
-  margin-bottom: 1rem;
-  color: var(--text-secondary);
-  font-size: 0.875rem;
+  @apply mb-4 text-secondaryText text-sm;
 }
 
 pre {
-  background: var(--color-base-200);
-  padding: 1rem;
-  border-radius: 0.5rem;
-  overflow-x: auto;
-  font-size: 0.875rem;
-  line-height: 1.6;
+  @apply bg-base-200 p-4 rounded-lg overflow-x-auto text-sm leading-relaxed;
 }
 
 code {
-  color: var(--text-primary);
-  font-family: 'Courier New', monospace;
+  @apply text-mainText font-mono;
 }
 </style>
-

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import VCard from "@/shared/ui/common/VCard.vue";
+import VIcon from "@/shared/ui/common/VIcon.vue";
 import Table from "@/widgets/table/Table.vue";
 import type { Column } from "@/widgets/table/types";
 import { mockDataUsers, mockDataUsersTotalRow } from "@/widgets/table/utils/mockData";
@@ -23,6 +25,107 @@ const columnsRegular: Column[] = [
 
 <template>
   <div class="page-container gap-5">
+    <!-- Info Card -->
+    <VCard>
+      <div class="info-header">
+        <VIcon
+          icon="lucide:table-2"
+          :size="24"
+          class="info-icon"
+        />
+        <h2 class="info-title">
+          Basic Table Usage
+        </h2>
+      </div>
+
+      <div class="info-content">
+        <p class="info-description">
+          This demonstrates the <strong>basic table setup</strong> with essential features.
+          Simple, clean, and ready to use with minimal configuration.
+        </p>
+
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-primary">
+              <VIcon
+                icon="lucide:layout-grid"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Column Configuration
+              </h3>
+              <p class="feature-description">
+                Mix of fixed and flexible widths
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-success">
+              <VIcon
+                icon="lucide:calculator"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Total Row
+              </h3>
+              <p class="feature-description">
+                Sticky summary row at the bottom
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-warning">
+              <VIcon
+                icon="lucide:text-cursor-input"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Toolbar Support
+              </h3>
+              <p class="feature-description">
+                Optional title and actions
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon-wrapper feature-icon-info">
+              <VIcon
+                icon="lucide:maximize"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Custom Height
+              </h3>
+              <p class="feature-description">
+                Set table height as needed
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-note">
+          <VIcon
+            icon="lucide:info"
+            :size="16"
+          />
+          <span>
+            Perfect starting point for most use cases. Just pass columns and data!
+          </span>
+        </div>
+      </div>
+    </VCard>
+
     <Table
       :toolbar="{
         enabled: true,
@@ -42,5 +145,9 @@ const columnsRegular: Column[] = [
     />
   </div>
 </template>
+
+<style scoped lang="scss">
+@import "./shared-info-card-styles.scss";
+</style>
 
 
