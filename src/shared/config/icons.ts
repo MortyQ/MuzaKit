@@ -25,7 +25,10 @@ export const iconMap: Record<string, Component> = {
   "mdi:chevron-down": defineAsyncComponent(() => import("~icons/mdi/chevron-down")),
   "mdi:arrow-left": defineAsyncComponent(() => import("~icons/mdi/arrow-left")),
   "mdi:arrow-right": defineAsyncComponent(() => import("~icons/mdi/arrow-right")),
-
+  "mdi:google": defineAsyncComponent(() => import("~icons/mdi/google")),
+  "mdi:email-outline": defineAsyncComponent(() => import("~icons/mdi/email-outline")),
+  "mdi:lock-outline": defineAsyncComponent(() => import("~icons/mdi/lock-outline")),
+  "mdi:github": defineAsyncComponent(() => import("~icons/mdi/github")),
   // Actions
   "mdi:search": defineAsyncComponent(() => import("~icons/mdi/magnify")),
   "mdi:settings": defineAsyncComponent(() => import("~icons/mdi/cog")),
@@ -37,6 +40,8 @@ export const iconMap: Record<string, Component> = {
   "mdi:close-thick": defineAsyncComponent(() => import("~icons/mdi/close-thick")),
   "mdi:save": defineAsyncComponent(() => import("~icons/mdi/content-save")),
   "mdi:sort-variant-remove": defineAsyncComponent(() => import("~icons/mdi/sort-variant-remove")),
+  "mdi:account-outline": defineAsyncComponent(() => import("~icons/mdi/account-outline")),
+  "mdi:lock-check-outline": defineAsyncComponent(() => import("~icons/mdi/lock-check-outline")),
 
   // Status & Alerts
   "mdi:alert": defineAsyncComponent(() => import("~icons/mdi/alert")),

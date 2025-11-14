@@ -15,9 +15,34 @@
     @apply antialiased;
   }
 
-  /* Focus styles for accessibility */
+  /* Focus styles for accessibility - modern subtle glow */
   *:focus {
-    @apply outline-none ring-2 ring-primary ring-opacity-50;
+    @apply outline-none;
+  }
+
+  *:focus-visible {
+    @apply outline-none;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05), 0 0 0 4px rgba(0, 0, 0, 0.03);
+    transition: box-shadow 0.15s ease;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08), 0 0 12px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Dark mode focus styles */
+  .dark *:focus-visible {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 0 4px rgba(255, 255, 255, 0.05);
+  }
+
+  .dark button:focus-visible,
+  .dark a:focus-visible,
+  .dark input:focus-visible,
+  .dark textarea:focus-visible {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12), 0 0 12px rgba(255, 255, 255, 0.08);
   }
 
   /* Custom scrollbar styles */
@@ -46,15 +71,15 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none;
   }
 
   .btn-primary {
-    @apply bg-primary text-white hover:bg-primary-dark focus:ring-primary;
+    @apply bg-primary text-white hover:bg-primary-dark;
   }
 
   .btn-secondary {
-    @apply bg-secondary text-white hover:bg-opacity-80 focus:ring-secondary;
+    @apply bg-secondary text-white hover:bg-opacity-80;
   }
 
   .card {

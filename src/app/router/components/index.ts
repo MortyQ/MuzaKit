@@ -16,18 +16,6 @@ const componentRoutes: AppRouteRecordRaw[] = [
     },
     children: [
       {
-        path: "library",
-        name: "Components",
-        component: () => import("@/pages/Components/index.vue"),
-        meta: {
-          title: "Showcase",
-          menuTitle: "Showcase",
-          menuIcon: "mdi:layers",
-          menuOrder: 2,
-          menuBadge: "Old",
-        },
-      },
-      {
         path: "ui-gallery",
         name: "uiGallery.parent",
         redirect: "/components/ui-gallery/overview",

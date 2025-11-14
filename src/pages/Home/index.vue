@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-
-import FeatureCard from "@/pages/Components/components/FeatureCard.vue";
 import type { Feature } from "@/shared/types";
 import VButton from "@/shared/ui/common/VButton.vue";
 import VCard from "@/shared/ui/common/VCard.vue";
@@ -75,7 +73,7 @@ function reset() {
 
       <!-- Features Grid -->
       <section class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <FeatureCard
+        <VCard
           v-for="feature in features"
           :key="feature.title"
           :description="feature.description"

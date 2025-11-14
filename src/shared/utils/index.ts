@@ -5,7 +5,6 @@
  * These can be simple helpers, formatters, validators, etc.
  */
 
-export { componentsList } from "./componentsList";
 export * from "./formatters";
 export * from "./guards";
 

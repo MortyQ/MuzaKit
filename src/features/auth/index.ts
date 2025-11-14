@@ -25,7 +25,7 @@
 export { useAuthStore } from "./store/authStore";
 
 // Components
-export { UserMenu } from "./components";
+export { UserMenu, AuthForm, LoginForm, RegisterForm, SocialLogin, AnimatedBackground } from "./components";
 
 // Types
 export type { User, UserPermission, UserRoleType, AuthState } from "./types";
