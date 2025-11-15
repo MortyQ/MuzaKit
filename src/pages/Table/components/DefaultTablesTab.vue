@@ -14,7 +14,7 @@ const columnsRegular: Column[] = [
   { key: "position", label: "Position", width: "150px" },
   { key: "status", label: "Status", width: "150px" },
   { key: "performance", label: "Rating" },
-  { key: "startDate", label: "Start Date", width: "130px" },
+  { key: "startDate", label: "Start Date", format: { date: "long" }, width: "130px" },
   { key: "projects", label: "Projects", width: "100px" },
   { key: "location", label: "Location", width: "150px" },
   { key: "manager", label: "Manager", width: "180px" },

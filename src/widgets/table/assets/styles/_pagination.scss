@@ -13,15 +13,19 @@
   gap: 1.5rem;
   flex-wrap: wrap;
 
-  // Используем cardBg для бесшовной интеграции с таблицей
-  background-color: theme('colors.cardBg');
+  // Modern glass-like gradient background
+  background: linear-gradient(
+    to top,
+    rgb(var(--color-base-200) / 0.3),
+    rgb(var(--color-base-100) / 0.5)
+  );
 
-  // Тонкая верхняя граница для разделения
-  border-top: $table-border-width solid theme('colors.cardBorder');
+  // Subtle gradient border
+  border-top: 1px solid rgb(var(--color-base-300) / 0.4);
 
   // Нижние углы совпадают с таблицей
-  border-bottom-left-radius: $table-border-radius;
-  border-bottom-right-radius: $table-border-radius;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
 
   // Минимальная высота для комфорта
   min-height: 60px;
@@ -69,12 +73,22 @@
   height: 2.25rem;
   padding: 0.375rem 0.75rem;
 
-  // Тонкая граница из cardBorder
-  border: $table-border-width solid theme('colors.cardBorder');
-  border-radius: 6px;
+  // Modern glass-like button
+  border: 1px solid rgb(var(--color-base-300) / 0.3);
+  border-radius: 0.5rem;
 
-  // Фон и текст как у таблицы
-  background-color: theme('colors.cardBg');
+  // Glass gradient background
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--color-base-200) / 0.5),
+    rgb(var(--color-base-100) / 0.8)
+  );
+
+  // Subtle shadow
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.05),
+    0 1px 3px -1px rgba(0, 0, 0, 0.1);
+
   color: theme('colors.mainText');
 
   // Типографика
@@ -83,15 +97,23 @@
   line-height: 1;
 
   cursor: pointer;
-  transition: all $transition-fast;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
   // Убираем outline при фокусе, добавим box-shadow
   outline: none;
 
-  // Hover state - subtle overlay как в таблице
+  // Hover state - gradient enhancement
   &:hover:not(:disabled):not(.table-pagination-btn--active) {
-    background-color: color-mix(in srgb, theme('colors.cardBg') 96%, theme('colors.mainText') 4%);
-    border-color: color-mix(in srgb, theme('colors.cardBorder') 70%, theme('colors.mainText') 30%);
+    background: linear-gradient(
+      to bottom,
+      rgb(var(--color-primary) / 0.08),
+      rgb(var(--color-base-200) / 0.6)
+    );
+    border-color: rgb(var(--color-primary) / 0.3);
+    transform: translateY(-1px);
+    box-shadow:
+      0 2px 4px 0 rgba(0, 0, 0, 0.08),
+      0 2px 6px -2px rgba(0, 0, 0, 0.12);
   }
 
   // Active/pressed state
@@ -106,17 +128,33 @@
     color: theme('colors.secondaryText');
   }
 
-  // Active page - primary color
+  // Active page - beautiful gradient with premium glow
   &--active {
-    background-color: theme('colors.primary');
+    background: linear-gradient(
+      135deg,
+      rgb(var(--color-primary)),
+      rgb(var(--color-primary-600))
+    );
     color: white;
-    border-color: theme('colors.primary');
+    border-color: rgb(var(--color-primary));
     font-weight: $table-font-weight-semibold;
+
+    // Premium multi-layered glow effect
+    box-shadow:
+      0 0 0 1px rgb(var(--color-primary) / 0.1),        // Subtle outline glow
+      0 2px 4px 0 rgb(var(--color-primary) / 0.3),      // Close shadow
+      0 4px 12px -2px rgb(var(--color-primary) / 0.25), // Medium glow
+      0 8px 20px -4px rgb(var(--color-primary) / 0.15); // Ambient glow
+
     cursor: default;
 
     &:hover {
-      background-color: theme('colors.primary');
-      border-color: theme('colors.primary');
+      // Enhanced glow on hover
+      box-shadow:
+        0 0 0 1px rgb(var(--color-primary) / 0.15),
+        0 2px 4px 0 rgb(var(--color-primary) / 0.35),
+        0 6px 16px -2px rgb(var(--color-primary) / 0.3),
+        0 10px 24px -4px rgb(var(--color-primary) / 0.2);
     }
   }
 

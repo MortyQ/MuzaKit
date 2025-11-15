@@ -7,14 +7,43 @@
   display: contents;
   cursor: pointer;
 
-  // Subtle hover effect - cardBg with minimal mainText overlay for readability
+  // Modern glass-like hover effect with gradient + accent border
+  // PERFORMANCE: Automatically disabled during resize via .is-resizing class
   &:hover > .table-cell {
-    background-color: color-mix(in srgb, theme('colors.cardBg') 96%, theme('colors.mainText') 4%);
+    background: linear-gradient(
+      to right,
+      rgb(var(--color-primary) / 0.03),
+      rgb(var(--color-base-200) / 0.5)
+    );
+
+    // Subtle border accent on hover
+    border-bottom-color: rgb(var(--color-primary) / 0.2);
+
+    // Premium left accent border on hover
+    &:first-child {
+      border-left: 2px solid rgb(var(--color-primary) / 0.4);
+      padding-left: calc(#{$table-cell-padding-x} - 2px);
+    }
   }
 
-  // Active/clicked state - slightly more prominent
+  // PERFORMANCE: Disable hover effects during resize
+  .table-grid.is-resizing &:hover > .table-cell {
+    background: none;
+    border-bottom-color: rgb(var(--color-base-300) / 0.3);
+
+    &:first-child {
+      border-left: none;
+      padding-left: $table-cell-padding-x;
+    }
+  }
+
+  // Active/clicked state - more prominent gradient
   &:active > .table-cell {
-    background-color: color-mix(in srgb, theme('colors.cardBg') 94%, theme('colors.mainText') 6%);
+    background: linear-gradient(
+      to right,
+      rgb(var(--color-primary) / 0.05),
+      rgb(var(--color-base-200) / 0.6)
+    );
   }
 
   // Disabled state - clear visual feedback
@@ -27,9 +56,17 @@
     }
   }
 
-  // Selected state - primary color at low opacity for clear indication
+  // Selected state - beautiful gradient with primary accent
   &--selected > .table-cell {
-    background-color: color-mix(in srgb, theme('colors.cardBg') 92%, theme('colors.primary') 8%);
+    background: linear-gradient(
+      to right,
+      rgb(var(--color-primary) / 0.08),
+      rgb(var(--color-primary) / 0.04)
+    );
+
+    // Accent border for selected state
+    border-left: 3px solid rgb(var(--color-primary));
+    padding-left: calc(#{$table-cell-padding-x} - 3px); // Compensate for border
 
     // Slightly bolder text for selected rows
     font-weight: $table-font-weight-medium;
@@ -37,7 +74,11 @@
 
   // Combined selected + hover state
   &--selected:hover > .table-cell {
-    background-color: color-mix(in srgb, theme('colors.cardBg') 88%, theme('colors.primary') 12%);
+    background: linear-gradient(
+      to right,
+      rgb(var(--color-primary) / 0.12),
+      rgb(var(--color-primary) / 0.06)
+    );
   }
 }
 

@@ -25,7 +25,6 @@ const componentRoutes: AppRouteRecordRaw[] = [
           menuIcon: "mdi:palette",
           isMenuParent: true,
           menuOrder: 3,
-          menuBadge: "New",
         },
         children: [
           {

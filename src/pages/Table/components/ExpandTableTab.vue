@@ -36,12 +36,12 @@ const columnsExpandable: Column[] = [
   { key: "status", label: "Status",width:"150px"  },
   { key: "performance", label: "Rating", width:"150px",  sortable: true },
   { key: "accountStatus", label: "Account Status", width: "200px", interactive: true },
-  { key: "startDate", label: "Start Date",width:"150px"  },
+  { key: "startDate", label: "Start Date", format: { date: "long" }, width:"150px"  },
   { key: "projects", label: "Projects",width:"150px"  },
   { key: "location", label: "Location",width:"150px"  },
   { key: "manager", label: "Manager",width:"150px"  },
-  { key: "budget", label: "Budget",width:"150px"  },
-  { key: "revenue", label: "Revenue",width:"150px"   },
+  { key: "budget", label: "Budget", format: { currency: true }, width:"150px"  },
+  { key: "revenue", label: "Revenue", format: { currency: true }, width:"150px"   },
   // Right fixed at the end
 ];
 

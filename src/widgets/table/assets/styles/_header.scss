@@ -116,11 +116,16 @@
   align-items: center;
   box-sizing: border-box; // Include borders in height calculation
 
-  // Subtle background distinction - cardBg with slight darkening for depth
-  background-color: color-mix(in srgb, theme('colors.cardBg') 98%, theme('colors.mainText') 2%);
+  // Modern gradient background (like Home page cards)
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--color-base-200)),
+    rgb(var(--color-base-100))
+  );
 
-  // Minimal bottom border using cardBorder
-  border-bottom: $table-border-width solid theme('colors.cardBorder');
+  // Gradient border (subtle accent)
+  border-bottom: 1px solid rgb(var(--color-primary) / 0.1);
+  border-right: 1px solid rgb(var(--color-base-300) / 0.3);
 
   // Typography - semibold for emphasis
   font-weight: $table-font-weight-semibold;
@@ -211,7 +216,20 @@
   }
 
   &--sorted {
-    background-color: color-mix(in srgb, var(--color-primary, #3b82f6) 8%, transparent);
+    background: linear-gradient(
+      to bottom,
+      rgb(var(--color-primary) / 0.12),
+      rgb(var(--color-primary) / 0.05)
+    );
+
+    // Accent border for sorted column
+    border-bottom: 2px solid rgb(var(--color-primary) / 0.5);
+
+    // Make text slightly bolder
+    .table-header-label {
+      font-weight: $table-font-weight-bold;
+      color: rgb(var(--color-primary));
+    }
   }
 }
 

@@ -9,12 +9,19 @@
   z-index: $z-index-total;
   padding: $table-cell-padding-y $table-cell-padding-x;
 
-  // Stronger background distinction for total row - cardBg with more prominent tint
-  background-color: color-mix(in srgb, theme('colors.cardBg') 96%, theme('colors.mainText') 4%);
+  // Premium gradient background for total row
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--color-base-200)),
+    rgb(var(--color-base-200))
+  );
 
-  // Subtle top border for clear separation using cardBorder
-  border-top: $table-border-width solid theme('colors.cardBorder');
+  // Premium accent border - stronger for total row
+  border-top: 2px solid rgb(var(--color-primary) / 0.2);
   border-bottom: none;
+
+  // Add subtle right border for cell separation
+  border-right: 1px solid rgb(var(--color-base-300) / 0.2);
 
   // Typography - bold for emphasis
   font-weight: $table-font-weight-bold;
@@ -26,6 +33,9 @@
 
   // PERFORMANCE: Solid background (no backdrop-blur) for 60 FPS
   // backdrop-filter is removed to maintain smooth scrolling
+
+  // Premium subtle shadow for depth
+  box-shadow: 0 -2px 8px -2px rgba(0, 0, 0, 0.05);
 
   // Text alignment
   &--left {
