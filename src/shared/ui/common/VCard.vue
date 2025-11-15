@@ -61,7 +61,7 @@ type CardSlots = {
 
 
 const props = withDefaults(defineProps<CardProps>(), {
-  variant: "default",
+  variant: "glass",
   size: "full",
   radius: "md",
   as: "div",

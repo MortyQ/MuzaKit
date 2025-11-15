@@ -26,7 +26,7 @@ const footerItems = computed(() => {
 // Auto-generated sidebar config from router
 const sidebarConfig = computed<SidebarConfig>(() =>
   menuItemsToSidebarConfig(menuItems, {
-    brandName: "Vue Starter",
+    brandName: "MuzaKit",
     footerItems: footerItems.value,
     showThemeToggle: true,
     showUserMenu: true,
@@ -68,7 +68,7 @@ const contentMargin = computed(() => ({
             />
           </button>
           <h1 class="text-lg font-semibold text-primary">
-            Vue Starter
+            MuzaKit
           </h1>
           <div class="w-10" />
         </div>

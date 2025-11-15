@@ -53,7 +53,7 @@ const handleClose = () => {
         </div>
 
         <!-- Brand Name -->
-        <span class="font-semibold text-lg text-neutral truncate">
+        <span class="font-semibold text-lg text-neutral truncate text-gradient-animated ">
           {{ brandName }}
         </span>
       </div>
