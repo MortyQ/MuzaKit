@@ -1,4 +1,6 @@
 @use "../shared/assets/styles/customComponents";
+@use "../shared/assets/styles/utilities"; // new utilities (gradients, glass, etc.)
+//@use "../shared/assets/styles/legacy-aliases"; // optional backward compatibility layer (remove after migration)
 
 /* Import Tailwind directives */
 @tailwind base;
@@ -9,10 +11,13 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    @apply bg-mainBg;
+    /* Ensures background color covers full viewport including overscroll areas */
   }
 
   body {
-    @apply antialiased;
+    @apply antialiased bg-mainBg text-mainText;
+    /* Ensures proper background color on iOS/macOS overscroll (bounce effect) */
   }
 
   /* Focus styles for accessibility - modern subtle glow */

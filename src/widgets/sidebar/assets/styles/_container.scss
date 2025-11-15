@@ -46,7 +46,7 @@
 }
 
 // Dark mode adjustments
-@media (prefers-color-scheme: dark) {
+[data-theme="dark"] {
   .sidebar {
     box-shadow:
       1px 0 6px rgba(0, 0, 0, 0.12),
@@ -86,7 +86,7 @@
 }
 
 // Dark mode adjustments
-@media (prefers-color-scheme: dark) {
+[data-theme="dark"] {
   .sidebar-mobile {
     box-shadow:
       2px 0 12px rgba(0, 0, 0, 0.16),

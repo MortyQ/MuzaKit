@@ -61,7 +61,7 @@ const initials = computed(() => {
 
 // Generate consistent color based on name
 const avatarColor = computed(() => {
-  if (!props.name) return "bg-neutral/20 text-neutral";
+  if (!props.name) return "bg-base-200 text-secondaryText";
 
   // Simple hash function
   let hash = 0;
