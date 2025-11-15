@@ -10,7 +10,7 @@ export default ({mode}: any) => {
 
     return defineConfig({
         // GitHub Pages: https://mortyq.github.io/Starter/
-        base: '/Starter/',
+        base: '/MuzaKit/',
         plugins: [vue(),
             Components({
                 resolvers: [
