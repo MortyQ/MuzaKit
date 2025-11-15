@@ -89,6 +89,14 @@
     &--loading {
       pointer-events: none;
     }
+
+    &--active {
+      @apply text-primary bg-primary/10 font-semibold;
+
+      &:hover:not(:disabled) {
+        @apply bg-primary/15;
+      }
+    }
   }
 
   .v-dropdown-item-icon {

@@ -9,6 +9,7 @@ interface DropdownItem {
   icon?: string;
   disabled?: boolean;
   loader?: boolean;
+  active?: boolean;
 }
 
 interface Props {
@@ -149,7 +150,10 @@ defineExpose({
             v-for="item in items"
             :key="item.value"
             class="v-dropdown-item"
-            :class="{ 'v-dropdown-item--loading': item.loader }"
+            :class="{
+              'v-dropdown-item--loading': item.loader,
+              'v-dropdown-item--active': item.active
+            }"
             :disabled="item.disabled || item.loader"
             @click="handleItemClick(item)"
           >

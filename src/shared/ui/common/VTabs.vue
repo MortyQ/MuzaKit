@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, nextTick, onBeforeUnmount, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import VButton from "@/shared/ui/common/VButton.vue";
+import VDropdown from "@/shared/ui/common/VDropdown.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 
 const router = useRouter();
@@ -139,6 +141,133 @@ const isTabActive = (tabId: number | string): boolean => {
   return currentTabId.value === tabId;
 };
 
+// Overflow tabs logic
+const tabsContainerRef = ref<HTMLElement | null>(null);
+const visibleTabs = ref<ITab[]>([...props.tabs]);
+const overflowTabs = ref<ITab[]>([]);
+const moreButtonWidth = 70; // Width of icon button (48px) + small buffer
+const tabWidthCache = ref<Map<string | number, number>>(new Map());
+
+const calculateVisibleTabs = () => {
+  if (!tabsContainerRef.value || props.tabs.length === 0) return;
+
+  const container = tabsContainerRef.value;
+  const containerWidth = container.offsetWidth;
+
+  // Skip if container has no width (hidden or not rendered)
+  if (containerWidth === 0) return;
+
+  const tabElements = container.querySelectorAll(".tab-button:not(.more-button)");
+
+  // Update tab width cache - match tabs by ID to handle reordering
+  tabElements.forEach((element) => {
+    const tabId = (element as HTMLElement).getAttribute("data-tab-id");
+    if (!tabId) return;
+
+    const tab = props.tabs.find((t) => String(t.id) === tabId);
+    if (tab && element) {
+      tabWidthCache.value.set(tab.id, (element as HTMLElement).offsetWidth);
+    }
+  });
+
+  // Calculate total width needed for all tabs
+  let totalWidth = 0;
+  const tabWidths: number[] = [];
+
+  for (const tab of props.tabs) {
+    const tabWidth = tabWidthCache.value.get(tab.id) || 150;
+    tabWidths.push(tabWidth);
+    totalWidth += tabWidth;
+  }
+
+  // Check if all tabs fit without More button
+  if (totalWidth <= containerWidth) {
+    // All tabs fit, no overflow needed
+    visibleTabs.value = [...props.tabs];
+    overflowTabs.value = [];
+    return;
+  }
+
+  // Need overflow - reserve space for "More" button
+  const availableWidth = containerWidth - moreButtonWidth;
+  let accumulatedWidth = 0;
+  let splitIndex = 0;
+
+  // Find the split point where tabs start overflowing
+  for (let i = 0; i < props.tabs.length; i++) {
+    const tabWidth = tabWidths[i];
+    if (accumulatedWidth + tabWidth <= availableWidth) {
+      accumulatedWidth += tabWidth;
+      splitIndex = i + 1;
+    } else {
+      break;
+    }
+  }
+
+  // Split tabs maintaining original order
+  visibleTabs.value = props.tabs.slice(0, splitIndex);
+  overflowTabs.value = props.tabs.slice(splitIndex);
+};
+
+// Dropdown items for overflow tabs
+const dropdownItems = computed(() => {
+  return overflowTabs.value.map((tab) => ({
+    label: tab.label,
+    value: tab.id,
+    icon: tab.icon,
+    disabled: tab.disabled,
+    active: tab.id === currentTabId.value,
+  }));
+});
+
+// Handle dropdown tab selection
+const handleDropdownSelect = (tabId: string | number) => {
+  selectTab(tabId);
+};
+
+// ResizeObserver to recalculate on container size change
+let resizeObserver: ResizeObserver | null = null;
+let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+
+onMounted(async () => {
+  // Wait for DOM to be fully ready
+  await nextTick();
+  await nextTick();
+
+  if (tabsContainerRef.value) {
+    // Initial calculation
+    calculateVisibleTabs();
+
+    // Setup ResizeObserver with debounce
+    resizeObserver = new ResizeObserver(() => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+      resizeTimeout = setTimeout(() => {
+        calculateVisibleTabs();
+      }, 100);
+    });
+
+    resizeObserver.observe(tabsContainerRef.value);
+  }
+});
+
+onBeforeUnmount(() => {
+  if (resizeTimeout) {
+    clearTimeout(resizeTimeout);
+  }
+  if (resizeObserver && tabsContainerRef.value) {
+    resizeObserver.unobserve(tabsContainerRef.value);
+    resizeObserver.disconnect();
+  }
+});
+
+// Watch tabs changes
+watch(() => props.tabs, async () => {
+  await nextTick();
+  calculateVisibleTabs();
+}, { deep: true });
+
 defineExpose({
   currentTabId,
   selectTab,
@@ -166,58 +295,83 @@ defineExpose({
       </section>
 
       <!-- Tabs List -->
-      <nav
-        v-else
-        role="tablist"
-        class="flex overflow-x-auto scrollbar-hide scroll-smooth border-b border-base-300 w-full"
-        aria-label="Tabs navigation"
+      <div
+        class="flex w-full border-b border-base-300"
       >
-        <button
-          v-for="tab in props.tabs"
-          :key="tab.id"
-          type="button"
-          role="tab"
-          :aria-selected="isTabActive(tab.id)"
-          :aria-disabled="tab.disabled"
-          :tabindex="tab.disabled ? -1 : 0"
-          class="tab-button relative flex items-center
-          justify-center gap-2 px-5 py-3.5 text-sm font-medium
-          whitespace-nowrap transition-all duration-200 ease-in-out border-b-2 -mb-px
-          focus:outline-none focus-visible:bg-primary/10 focus-visible:ring-2
-          focus-visible:ring-primary/20 focus-visible:ring-inset"
-          :class="[
-            {
-              'text-primary border-primary': isTabActive(tab.id),
-              'text-neutral/60 border-transparent hover:text-primary hover:bg-base-200/50':
-                !isTabActive(tab.id) && !tab.disabled,
-              'text-neutral/30 border-transparent cursor-not-allowed': tab.disabled,
-              'cursor-pointer': !tab.disabled,
-            },
-            tab.styles,
-          ]"
-          @click="selectTab(tab.id)"
-          @keydown.enter="selectTab(tab.id)"
-          @keydown.space.prevent="selectTab(tab.id)"
+        <div
+          ref="tabsContainerRef"
+          class="flex overflow-x-auto scrollbar-hide scroll-smooth flex-1"
         >
-          <!-- Icon Slot or Icon -->
-          <slot
-            v-if="!tab.icon"
-            :name="`tab-icon-${tab.id}`"
-          />
-          <VIcon
-            v-else
-            :icon="tab.icon"
-            :class="
-              isTabActive(tab.id)
-                ? 'w-5 h-5 transition-transform duration-200 scale-110'
-                : 'w-5 h-5 transition-transform duration-200'
-            "
-          />
+          <nav
+            role="tablist"
+            class="flex"
+            aria-label="Tabs navigation"
+          >
+            <button
+              v-for="tab in visibleTabs"
+              :key="tab.id"
+              type="button"
+              role="tab"
+              :data-tab-id="tab.id"
+              :aria-selected="isTabActive(tab.id)"
+              :aria-disabled="tab.disabled"
+              :tabindex="tab.disabled ? -1 : 0"
+              class="tab-button relative flex items-center
+              justify-center gap-2 px-5 py-3.5 text-sm font-medium
+              whitespace-nowrap transition-all duration-200 ease-in-out border-b-2 -mb-px
+              focus:outline-none focus-visible:bg-primary/10 focus-visible:ring-2
+              focus-visible:ring-primary/20 focus-visible:ring-inset"
+              :class="[
+                {
+                  'text-primary border-primary': isTabActive(tab.id),
+                  'text-neutral/60 border-transparent hover:text-primary hover:bg-base-200/50':
+                    !isTabActive(tab.id) && !tab.disabled,
+                  'text-neutral/30 border-transparent cursor-not-allowed': tab.disabled,
+                  'cursor-pointer': !tab.disabled,
+                },
+                tab.styles,
+              ]"
+              @click="selectTab(tab.id)"
+              @keydown.enter="selectTab(tab.id)"
+              @keydown.space.prevent="selectTab(tab.id)"
+            >
+              <!-- Icon Slot or Icon -->
+              <slot
+                v-if="!tab.icon"
+                :name="`tab-icon-${tab.id}`"
+              />
+              <VIcon
+                v-else
+                :icon="tab.icon"
+                :class="
+                  isTabActive(tab.id)
+                    ? 'w-5 h-5 transition-transform duration-200 scale-110'
+                    : 'w-5 h-5 transition-transform duration-200'
+                "
+              />
 
-          <!-- Tab Label -->
-          <span>{{ tab.label }}</span>
-        </button>
-      </nav>
+              <!-- Tab Label -->
+              <span>{{ tab.label }}</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- More Button with Dropdown for overflow tabs -->
+        <div
+          v-if="overflowTabs.length > 0"
+          class="relative flex-shrink-0 more-button"
+        >
+          <VDropdown
+            :items="dropdownItems"
+            placement="bottom-right"
+            @select="handleDropdownSelect"
+          >
+            <template #trigger>
+              <VButton icon="mdi:dots-horizontal" />
+            </template>
+          </VDropdown>
+        </div>
+      </div>
 
       <!-- Right Slot (e.g., actions, filters) -->
       <div

@@ -147,6 +147,7 @@ export const iconMap: Record<string, Component> = {
   "mdi:check-decagram": defineAsyncComponent(() => import("~icons/mdi/check-decagram")),
   "mdi:routes": defineAsyncComponent(() => import("~icons/mdi/routes")),
   "mdi:book-open-variant": defineAsyncComponent(() => import("~icons/mdi/book-open-variant")),
+  "mdi:dots-horizontal": defineAsyncComponent(() => import("~icons/mdi/dots-horizontal")),
   // ==================== Heroicons ====================
 
   "heroicons:home-solid": defineAsyncComponent(() => import("~icons/heroicons/home-solid")),
