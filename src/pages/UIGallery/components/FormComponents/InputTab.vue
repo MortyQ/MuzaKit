@@ -63,11 +63,11 @@ const advancedExample = `// Password input
   @input="validateEmail(email)"
 />
 
-// With support text
+// With helper text
 <VInput
   v-model="username"
   placeholder="Username"
-  support-text="Choose a unique username between 3-20 characters"
+  helper-text="Choose a unique username between 3-20 characters"
 />
 
 // With icon
@@ -243,15 +243,15 @@ const advancedExample = `// Password input
         />
       </section>
 
-      <!-- With Support Text -->
+      <!-- With Helper Text -->
       <section class="examples-section">
         <h4 class="examples-subtitle">
-          With Support Text
+          With Helper Text
         </h4>
         <VInput
           v-model="textValue"
           placeholder="Username"
-          support-text="Choose a unique username between 3-20 characters"
+          helper-text="Choose a unique username between 3-20 characters"
         />
       </section>
 
@@ -327,6 +327,115 @@ const advancedExample = `// Password input
       </div>
     </VCard>
 
+    <!-- Props Documentation -->
+    <VCard>
+      <h3 class="section-title">
+        Component Props
+      </h3>
+      <div class="section-description mb-4">
+        Available props for VInput component:
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>modelValue</code></td>
+              <td><code>string | number</code></td>
+              <td><code>""</code></td>
+              <td>Input value (v-model)</td>
+            </tr>
+            <tr>
+              <td><code>name</code></td>
+              <td><code>string</code></td>
+              <td><code>""</code></td>
+              <td>Input label text</td>
+            </tr>
+            <tr>
+              <td><code>type</code></td>
+              <td><code>string</code></td>
+              <td><code>"text"</code></td>
+              <td>Input type (text, email, password, etc.)</td>
+            </tr>
+            <tr>
+              <td><code>placeholder</code></td>
+              <td><code>string</code></td>
+              <td><code>""</code></td>
+              <td>Placeholder text</td>
+            </tr>
+            <tr>
+              <td><code>disabled</code></td>
+              <td><code>boolean</code></td>
+              <td><code>false</code></td>
+              <td>Disable the input</td>
+            </tr>
+            <tr>
+              <td><code>helperText</code></td>
+              <td><code>string</code></td>
+              <td><code>""</code></td>
+              <td>Helper text below input</td>
+            </tr>
+            <tr>
+              <td><code>validation</code></td>
+              <td><code>Validation</code></td>
+              <td><code>undefined</code></td>
+              <td>Validation object (Vuelidate compatible)</td>
+            </tr>
+            <tr>
+              <td><code>icon</code></td>
+              <td><code>string</code></td>
+              <td><code>""</code></td>
+              <td>Left icon name</td>
+            </tr>
+            <tr>
+              <td><code>size</code></td>
+              <td><code>"sm" | "md" | "lg"</code></td>
+              <td><code>"md"</code></td>
+              <td>Input size</td>
+            </tr>
+            <tr>
+              <td><code>id</code></td>
+              <td><code>string</code></td>
+              <td><code>undefined</code></td>
+              <td>Input ID attribute</td>
+            </tr>
+            <tr>
+              <td><code>debounce</code></td>
+              <td><code>boolean | number</code></td>
+              <td><code>false</code></td>
+              <td>Debounce delay (true = 800ms, number = custom)</td>
+            </tr>
+            <tr>
+              <td><code>loading</code></td>
+              <td><code>boolean</code></td>
+              <td><code>false</code></td>
+              <td>Show loading spinner</td>
+            </tr>
+            <tr>
+              <td><code>textarea</code></td>
+              <td><code>boolean</code></td>
+              <td><code>false</code></td>
+              <td>Use textarea mode</td>
+            </tr>
+            <tr>
+              <td><code>rows</code></td>
+              <td><code>number</code></td>
+              <td><code>4</code></td>
+              <td>Textarea rows (when textarea=true)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </VCard>
+
     <!-- Features Summary -->
     <VCard>
       <h3 class="section-title mb-4">
@@ -335,7 +444,7 @@ const advancedExample = `// Password input
       <ul class="features-list">
         <li>✅ Password toggle</li>
         <li>✅ Email validation support</li>
-        <li>✅ Support text & error messages</li>
+        <li>✅ Helper text & error messages</li>
         <li>✅ Textarea mode</li>
         <li>✅ Icon & loading support</li>
         <li>✅ Debounced value emit</li>
@@ -350,6 +459,27 @@ const advancedExample = `// Password input
 @use "@/shared/assets/styles/shared-info-card-styles.scss";
 
 // Input-specific styles
+.props-table {
+  @apply w-full border-collapse;
+}
+
+.props-table th {
+  @apply bg-base-200 text-left p-3 text-sm font-semibold
+  text-mainText border-b border-cardBorder;
+}
+
+.props-table td {
+  @apply p-3 text-sm text-secondaryText border-b border-cardBorder;
+}
+
+.props-table tbody tr:hover {
+  @apply bg-base-100;
+}
+
+.props-table code {
+  @apply px-2 py-1 bg-base-200 rounded text-xs font-mono text-primary;
+}
+
 .examples-section {
   @apply mb-6 last:mb-0;
 }

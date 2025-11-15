@@ -182,7 +182,9 @@ defineExpose({
           :tabindex="tab.disabled ? -1 : 0"
           class="tab-button relative flex items-center
           justify-center gap-2 px-5 py-3.5 text-sm font-medium
-          whitespace-nowrap transition-colors duration-200 ease-in-out border-b-2 -mb-px"
+          whitespace-nowrap transition-all duration-200 ease-in-out border-b-2 -mb-px
+          focus:outline-none focus-visible:bg-primary/10 focus-visible:ring-2
+          focus-visible:ring-primary/20 focus-visible:ring-inset"
           :class="[
             {
               'text-primary border-primary': isTabActive(tab.id),

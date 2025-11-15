@@ -63,9 +63,31 @@
   }
 
   .checkbox-base:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    opacity: 0.6;
     background: var(--colors-base-200, #f3f4f6);
-    border-color: var(--colors-base-200, #f3f4f6);
+    border-color: var(--colors-base-300, #d1d5db);
+  }
+
+  .checkbox-base:disabled:checked {
+    background: var(--colors-primary, #2563eb);
+    border-color: var(--colors-primary, #2563eb);
+    opacity: 0.5;
+  }
+
+  .checkbox-base:disabled:checked::after {
+    border-color: #fff;
+    opacity: 0.9;
+  }
+
+  .checkbox-base:disabled:indeterminate {
+    background: var(--colors-primary, #2563eb);
+    border-color: var(--colors-primary, #2563eb);
+    opacity: 0.5;
+  }
+
+  .checkbox-base:disabled:indeterminate::after {
+    background: #fff;
+    opacity: 0.9;
   }
 }

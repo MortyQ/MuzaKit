@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref, useId, watchEffect } from "vue";
 
 interface Props {
   modelValue?: boolean | string | number | any;
@@ -15,6 +15,10 @@ const emit = defineEmits<{
   // eslint-disable-next-line no-unused-vars
   (event: "update:modelValue", value: boolean | string | number | any): void;
 }>();
+
+// Generate unique ID if not provided
+const generatedId = useId();
+const uniqueId = computed(() => props.id || generatedId);
 
 const modelValue = computed({
   get() {
@@ -37,7 +41,7 @@ watchEffect(() => {
 <template>
   <div class="inline-flex items-center gap-2 select-none">
     <input
-      :id="id"
+      :id="uniqueId"
       ref="inputRef"
       v-model="modelValue"
       :disabled="props.disabled"
@@ -52,7 +56,7 @@ watchEffect(() => {
         'text-[14px] text-secondaryText flex items-center gap-2',
         props.disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',
       ]"
-      :for="!props.disabled ? id : undefined"
+      :for="!props.disabled ? uniqueId : undefined"
     >
       <slot name="label">
         {{ label }}

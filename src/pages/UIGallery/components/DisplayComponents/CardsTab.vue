@@ -458,6 +458,12 @@ const advancedExample = `// Different variants
               <td>Make card clickable</td>
             </tr>
             <tr>
+              <td><code>as</code></td>
+              <td><code>string</code></td>
+              <td><code>'div'</code></td>
+              <td>HTML tag to render (div, article, section, etc.)</td>
+            </tr>
+            <tr>
               <td><code>href</code></td>
               <td><code>string</code></td>
               <td><code>''</code></td>

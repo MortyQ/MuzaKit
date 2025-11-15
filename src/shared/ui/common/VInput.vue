@@ -20,7 +20,7 @@ type Props = {
   modelValue?: string | number;
   type?: string;
   disabled?: boolean;
-  supportText?: string;
+  helperText?: string;
   validation?: Validation;
   icon?: string;
   size?: "sm" | "md" | "lg";
@@ -38,7 +38,7 @@ const props = withDefaults(defineProps<Props>(), {
   name: "",
   placeholder: "",
   disabled: false,
-  supportText: "",
+  helperText: "",
   validation: undefined,
   icon: "",
   modelValue: "",
@@ -240,13 +240,13 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- Support Text -->
-    <slot name="support-text">
+    <!-- Helper Text -->
+    <slot name="helper-text">
       <p
-        v-if="supportText && !validation?.$error"
-        class="v-input-support-text"
+        v-if="helperText && !validation?.$error"
+        class="v-input-helper-text"
       >
-        {{ supportText }}
+        {{ helperText }}
       </p>
     </slot>
 

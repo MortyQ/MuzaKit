@@ -71,7 +71,7 @@
   }
 
   .v-input-textarea {
-    @apply resize-y py-3;
+    @apply resize-y py-3 px-4;
     min-height: 120px;
     font-family: inherit;
     line-height: 1.5;
@@ -92,7 +92,7 @@
     }
   }
 
-  .v-input-support-text {
+  .v-input-helper-text {
     @apply text-xs text-secondaryText mt-0.5 transition-colors;
   }
 
