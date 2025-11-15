@@ -3,6 +3,7 @@ import { ref, computed, watch, onUnmounted, useSlots, type Component } from "vue
 
 import TableCell from "./components/TableCell.vue";
 import TableCheckboxCell from "./components/TableCheckboxCell.vue";
+import TableColumnSetup from "./components/TableColumnSetup.vue";
 import TableHeaderCheckbox from "./components/TableHeaderCheckbox.vue";
 import TableHeaderGrouped from "./components/TableHeaderGrouped.vue";
 import TableHeaderSimple from "./components/TableHeaderSimple.vue";
@@ -18,8 +19,10 @@ import { useTableSort } from "./composables/useTableSort";
 import { useVirtualTable } from "./composables/useVirtualTable";
 import type { Column, ExpandableRow, HeaderCell } from "./types/index";
 
+import VButton from "@/shared/ui/common/VButton.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VLoader from "@/shared/ui/common/VLoader.vue";
+import VPopover from "@/shared/ui/common/VPopover.vue";
 import TablePagination from "@/widgets/table/components/TablePagination.vue";
 import { TableEmits, TableProps } from "@/widgets/table/types/props";
 
@@ -102,11 +105,99 @@ const handleToolbarExport = (format: string, selectedOnly?: boolean) => {
   emit("toolbar:export", format, selectedOnly);
 };
 
+// Column Setup Logic - basic check without hasGroups (will be checked later)
+const columnSetupEnabledBasic = computed(() => {
+  const setup = props.toolbar?.actions?.columnSetup;
+  return setup === true || (typeof setup === "object" && setup.enabled !== false);
+});
+
+const columnSetupConfig = computed(() => {
+  const setup = props.toolbar?.actions?.columnSetup;
+  return typeof setup === "object" ? setup : {};
+});
+
+// Helper: Load saved column state from storage
+const loadColumnsFromStorage = (): Column[] | null => {
+  if (!columnSetupEnabledBasic.value) return null;
+
+  const config = columnSetupConfig.value as any; // object variant
+
+  const hasStorageKey = !!config.key;
+  let loaded: { visible: string[]; order: string[] } | null = null;
+
+  if (hasStorageKey) {
+    const storage = config.type === "sessionStorage" ? sessionStorage : localStorage;
+    try {
+      const raw = storage.getItem(config.key);
+      if (raw) {
+        loaded = JSON.parse(raw);
+      }
+    } catch (e) {
+      console.warn("Failed to parse stored column setup", e);
+    }
+  }
+
+  // If we have a persisted state – build columns from it
+  if (loaded) {
+    const flatten = (cols: Column[]):
+    Column[] => cols.flatMap(c => (c.children && c.children.length ? flatten(c.children) : [c]));
+    const flat = flatten(props.columns);
+    const map = new Map(flat.map(c => [c.key, c]));
+    const result: Column[] = [];
+    loaded.order.forEach(key => {
+      if (loaded!.visible.includes(key)) {
+        const col = map.get(key);
+        if (col) result.push(col);
+      }
+    });
+    // Fallback: if for some reason result empty but visible list not empty, build from visible list
+    if (!result.length && loaded.visible.length) {
+      loaded.visible.forEach(key => { const col = map.get(key); if (col) result.push(col); });
+    }
+    return result.length ? result : null;
+  }
+
+  // No persisted state: apply initialVisible if provided
+  const initial = Array.isArray(config.initialVisible) ? config.initialVisible : null;
+  if (initial) {
+    // Preserve original column order; ignore unknown keys
+    const filtered = props.columns.filter(c => initial.includes(c.key));
+    // If initialVisible is an empty array => return empty to hide all columns explicitly.
+    if (initial.length === 0) return [];
+    return filtered.length ? filtered : null; // null => fall back to all columns if none matched
+  }
+
+  return null; // use all columns by default
+};
+
+// Visible columns - managed by TableColumnSetup component
+// Initialize with saved state from storage if available
+const visibleColumns = ref<Column[] | null>(loadColumnsFromStorage());
+const columnSetupPopoverRef = ref<{ close: () => void } | null>(null);
+
+const handleVisibleColumnsUpdate = (columns: Column[]) => {
+  visibleColumns.value = [...columns]; // Create new array to trigger reactivity
+};
+
+const handleColumnSetupClose = () => {
+  columnSetupPopoverRef.value?.close();
+};
+
+// Use visible columns if column setup is enabled, otherwise use all columns
+const effectiveColumns = computed(() => {
+  if (!columnSetupEnabledBasic.value) {
+    return props.columns;
+  }
+  // If column setup is enabled but not yet initialized, use props.columns temporarily
+  return visibleColumns.value ?? props.columns;
+});
+
+
 // Total row visibility - simply check for presence
 const shouldShowTotal = computed(() => props.totalRow !== undefined);
 
 // Column resizing logic - needs to know about flat columns first
-const columnsRef = computed(() => props.columns);
+const columnsRef = computed(() => effectiveColumns.value);
 
 // Initialize columnWidths for grouped headers detection
 const columnWidths = ref<Map<string, number>>(new Map());
@@ -120,10 +211,25 @@ const {
   isGroupFixed,
 } = useGroupedHeaders(columnsRef, columnWidths);
 
+// Column Setup Enabled - final check with hasGroups
+const columnSetupEnabled = computed(() => {
+  if (!columnSetupEnabledBasic.value) return false;
+
+  // Disable column setup if grouped headers are present
+  // TODO: Implement support for grouped headers in column setup
+  if (hasGroups.value) {
+    console.warn("Column Setup is not supported with grouped headers yet");
+    return false;
+  }
+
+  return true;
+});
+
 // Columns for rendering data rows and fixed logic
 // OPTIMIZATION: Use flatColumns only when groups exist
+// IMPORTANT: Use effectiveColumns (filtered by column setup) instead of props.columns
 const columnsForData = computed(() => {
-  return hasGroups.value ? flatColumns.value : props.columns;
+  return hasGroups.value ? flatColumns.value : effectiveColumns.value;
 });
 
 // Column resize works with leaf columns (flatColumns when groups exist)
@@ -529,6 +635,33 @@ onUnmounted(() => {
           #actions
         >
           <slot name="toolbar-actions" />
+        </template>
+
+        <!-- Column Setup Dropdown -->
+        <template
+          v-if="columnSetupEnabled"
+          #column-setup
+        >
+          <VPopover
+            ref="columnSetupPopoverRef"
+            placement="bottom-right"
+          >
+            <template #trigger>
+              <VButton
+                variant="default"
+                icon="mdi:view-column"
+              />
+            </template>
+
+            <template #content>
+              <TableColumnSetup
+                :columns="columns"
+                :config="columnSetupConfig"
+                @update:visible-columns="handleVisibleColumnsUpdate"
+                @close="handleColumnSetupClose"
+              />
+            </template>
+          </VPopover>
         </template>
       </TableToolbar>
     </div>

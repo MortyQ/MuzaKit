@@ -179,6 +179,12 @@ const handleSingleExport = () => {
             />
           </template>
         </VDropdown>
+
+        <!-- Column Setup slot -->
+        <slot
+          v-if="config?.actions?.columnSetup"
+          name="column-setup"
+        />
       </slot>
     </div>
   </div>

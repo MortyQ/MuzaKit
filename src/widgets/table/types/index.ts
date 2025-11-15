@@ -121,4 +121,3 @@ export interface PaginationConfig {
 
 // Re-export selection types
 export type { MultiSelectConfig, SelectionMode, CheckboxState } from "./selection";
-

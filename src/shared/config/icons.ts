@@ -148,6 +148,9 @@ export const iconMap: Record<string, Component> = {
   "mdi:routes": defineAsyncComponent(() => import("~icons/mdi/routes")),
   "mdi:book-open-variant": defineAsyncComponent(() => import("~icons/mdi/book-open-variant")),
   "mdi:dots-horizontal": defineAsyncComponent(() => import("~icons/mdi/dots-horizontal")),
+  "mdi:view-column": defineAsyncComponent(() => import("~icons/mdi/view-column")),
+  "mdi:drag-vertical": defineAsyncComponent(() => import("~icons/mdi/drag-vertical")),
+  "mdi:information-outline": defineAsyncComponent(() => import("~icons/mdi/information-outline")),
   // ==================== Heroicons ====================
 
   "heroicons:home-solid": defineAsyncComponent(() => import("~icons/heroicons/home-solid")),
@@ -243,6 +246,8 @@ export const iconMap: Record<string, Component> = {
   "lucide:sparkles": defineAsyncComponent(() => import("~icons/lucide/sparkles")),
   "lucide:chevrons-down": defineAsyncComponent(() => import("~icons/lucide/chevrons-down")),
   "lucide:accessibility": defineAsyncComponent(() => import("~icons/lucide/accessibility")),
+  "lucide:trash": defineAsyncComponent(() => import("~icons/lucide/trash")),
+  "lucide:save": defineAsyncComponent(() => import("~icons/lucide/save")),
 };
 
 /**

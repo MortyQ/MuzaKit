@@ -52,6 +52,47 @@ export interface ToolbarConfig {
      * 'multi' - dropdown with multiple export options
      */
     export?: "single" | "multi";
+
+    /**
+     * Column setup button configuration
+     * - false: Button hidden
+     * - true: Show column setup dropdown (no persistence)
+     * - object: Show with configuration
+     * @default false
+     */
+    columnSetup?: boolean | {
+      /**
+       * Enable column setup
+       * @default true
+       */
+      enabled?: boolean;
+
+      /**
+       * Storage key for localStorage/sessionStorage
+       * If provided, column settings will be persisted automatically
+       * Example: 'myTable_columns'
+       */
+      key?: string;
+
+      /**
+       * Storage type
+       * @default 'localStorage'
+       */
+      type?: "localStorage" | "sessionStorage";
+
+      /**
+       * Enable column reordering via drag-and-drop
+       * @default true
+       */
+      allowReorder?: boolean;
+
+      /**
+       * Initially visible columns (by key)
+       * If not provided, all columns are visible
+       * Note: This is overridden by saved state if storage key is provided
+       */
+      initialVisible?: string[];
+    };
   };
 }
 
@@ -94,4 +135,3 @@ export interface ExportOptions {
    */
   loading?: boolean;
 }
-

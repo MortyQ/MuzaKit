@@ -129,7 +129,10 @@ const columnsRegular: Column[] = [
     <Table
       :toolbar="{
         enabled: true,
-        title: 'Default Table'
+        title: 'Default Table',
+        actions: {
+          columnSetup: true,
+        }
       }"
       :columns="columnsRegular"
       :data="mockDataUsers"
