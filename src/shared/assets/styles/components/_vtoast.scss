@@ -36,13 +36,19 @@
   // Custom toast styles using your project's design tokens
   .toast-custom {
     @apply flex items-start gap-3 p-4 rounded-lg shadow-lg border;
-    @apply bg-cardBg border-cardBorder;
+    @apply bg-base-100 border-base-300;
     @apply min-w-[320px] max-w-[450px];
     @apply transition-all duration-300 ease-in-out;
     font-family: 'Inter', system-ui, sans-serif;
 
+    /* Glass effect on desktop only for performance */
+    @media (min-width: 768px) {
+      @apply glass-strong;
+    }
+
     &:hover {
       @apply shadow-xl;
+      transform: translateY(-2px);
     }
   }
 

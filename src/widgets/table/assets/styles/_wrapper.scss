@@ -14,8 +14,8 @@
   border: $table-border-width solid theme('colors.cardBorder');
   border-radius: $table-border-radius;
 
-  // Background for entire component
-  background-color: theme('colors.cardBg');
+  // Background - solid on mobile, glass on desktop
+  background-color: rgb(var(--color-base-100));
 
   // CRITICAL: Prevent content from escaping rounded corners
   overflow: hidden;
@@ -25,6 +25,11 @@
   // CRITICAL: Don't stretch in grid/flex layouts - fit to content height
   align-self: start;
   height: fit-content;
+
+  /* Glass effect on desktop only for performance */
+  @media (min-width: 768px) {
+    @apply glass;
+  }
 
   // When toolbar is present - remove top border-radius from scroll container
   &--with-toolbar {
