@@ -71,10 +71,10 @@ const steps = [
 </script>
 
 <template>
-  <div class="space-y-16 md:space-y-24">
+  <div class="page-container space-y-16">
     <!-- Hero Section -->
     <section
-      class="relative -mx-8 -mt-8 mb-8 min-h-[70vh] flex
+      class="relative mt-8 min-h-[70vh] flex
     items-center justify-center overflow-hidden"
     >
       <!-- Hero content -->
@@ -385,7 +385,7 @@ const steps = [
               MuzaKit is your muse for building beautiful, functional interfaces
               that inspire users and developers alike
             </p>
-            <div class="flex justify-center gap-4 pt-4">
+            <div class="flex justify-center gap-10 pt-4">
               <div class="text-center">
                 <div class="text-3xl font-bold text-primary">
                   50+
