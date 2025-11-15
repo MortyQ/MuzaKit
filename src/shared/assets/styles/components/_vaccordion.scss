@@ -1,0 +1,133 @@
+// Expansion Panels Container
+.v-expansion-panels {
+  @apply w-full;
+}
+
+// Default variant - connected panels
+.v-expansion-panels--default {
+  @apply bg-cardBg rounded-lg overflow-hidden shadow-sm;
+
+  .v-expansion-panel {
+    @apply border-b border-cardBorder last:border-b-0;
+  }
+}
+
+// Outlined variant
+.v-expansion-panels--outlined {
+  .v-expansion-panel {
+    @apply border border-cardBorder mb-2 last:mb-0 rounded-lg overflow-hidden;
+  }
+}
+
+// Inset variant - panels with padding
+.v-expansion-panels--inset {
+  @apply px-2;
+
+  .v-expansion-panel {
+    @apply border border-cardBorder mb-2 last:mb-0 rounded-lg overflow-hidden shadow-sm;
+  }
+}
+
+// Popout variant - panels pop out when active
+.v-expansion-panels--popout {
+  @apply space-y-4;
+
+  .v-expansion-panel {
+    @apply border border-cardBorder rounded-lg overflow-hidden shadow-sm
+      transition-all duration-300;
+
+    &.v-expansion-panel--active {
+      @apply shadow-lg scale-[1.02];
+    }
+  }
+}
+
+// Flat variant - no elevation
+.v-expansion-panels--flat {
+  @apply shadow-none;
+
+  .v-expansion-panel {
+    @apply shadow-none;
+  }
+}
+
+// Individual Panel
+.v-expansion-panel {
+  @apply bg-cardBg transition-all duration-200;
+}
+
+.v-expansion-panel--disabled {
+  @apply opacity-50 pointer-events-none;
+}
+
+// Panel Header
+.v-expansion-panel-header {
+  @apply w-full flex items-center gap-3 min-h-[64px]
+    px-6 py-4 text-left
+    bg-transparent hover:bg-base-100/50
+    transition-all duration-200
+    focus:outline-none focus-visible:bg-primary/5
+    focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-inset
+    cursor-pointer border-0;
+
+  &:disabled {
+    @apply cursor-not-allowed hover:bg-transparent;
+  }
+
+  .v-expansion-panel--active & {
+    @apply min-h-[72px];
+  }
+}
+
+.v-expansion-panel-header__icon {
+  @apply text-primary text-xl flex-shrink-0;
+}
+
+.v-expansion-panel-header__content {
+  @apply flex-1 min-w-0;
+}
+
+.v-expansion-panel-title {
+  @apply text-base font-medium text-mainText mb-0;
+}
+
+.v-expansion-panel-subtitle {
+  @apply text-sm text-secondaryText mt-1;
+}
+
+.v-expansion-panel-header__icon-wrapper {
+  @apply flex items-center justify-center flex-shrink-0;
+}
+
+.v-expansion-panel-header__expand-icon {
+  @apply text-secondaryText text-xl
+    transition-transform duration-300 ease-in-out;
+}
+
+.v-expansion-panel-header__expand-icon--active {
+  @apply rotate-180;
+}
+
+// Panel Content with smooth height animation using CSS Grid
+.v-expansion-panel-content {
+  @apply grid transition-all duration-300 ease-in-out;
+  grid-template-rows: 0fr;
+
+  .v-expansion-panel--active & {
+    grid-template-rows: 1fr;
+  }
+}
+
+.v-expansion-panel-content__wrap {
+  @apply overflow-hidden;
+}
+
+.v-expansion-panel-text {
+  @apply px-6 py-4 text-sm text-secondaryText leading-relaxed;
+}
+
+// Disabled state
+.v-expansion-panels--disabled {
+  @apply pointer-events-none opacity-60;
+}
+

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AccordionTab from "@/pages/UIGallery/components/DisplayComponents/AccordionTab.vue";
 import CardsTab from "@/pages/UIGallery/components/DisplayComponents/CardsTab.vue";
 import IconsTab from "@/pages/UIGallery/components/DisplayComponents/IconsTab.vue";
 import TabsComponentTab from "@/pages/UIGallery/components/DisplayComponents/TabsComponentTab.vue";
@@ -8,12 +9,14 @@ const tabs = [
   { id: "cards", label: "Cards", icon: "lucide:square" },
   { id: "icons", label: "Icons", icon: "lucide:shapes" },
   { id: "tabs", label: "Tabs", icon: "lucide:folder" },
+  { id: "accordion", label: "Accordion", icon: "lucide:list" },
 ];
 
 const componentMap = {
   cards: CardsTab,
   icons: IconsTab,
   tabs: TabsComponentTab,
+  accordion: AccordionTab,
 };
 </script>
 

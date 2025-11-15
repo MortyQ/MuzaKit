@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+import VAccordion from "@/shared/ui/common/VAccordion.vue";
+import type { AccordionItem } from "@/shared/ui/common/VAccordion.vue";
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import { formatCurrency } from "@/shared/utils";
@@ -243,6 +245,54 @@ const allFormattersColumns: Column[] = [
     format: { boolean: {} },
   },
 ];
+
+// Accordion items for formatters
+const formatterItems: AccordionItem[] = [
+  {
+    id: "currency",
+    title: "Currency Formatter",
+    subtitle: "Format numbers as currency with symbols and custom decimal places",
+    icon: "lucide:dollar-sign",
+  },
+  {
+    id: "percentage",
+    title: "Percentage Formatter",
+    subtitle: "Display numbers as percentages with optional multiplication",
+    icon: "lucide:percent",
+  },
+  {
+    id: "number",
+    title: "Number Formatter",
+    subtitle: "Format numbers with compact notation or fixed decimals",
+    icon: "lucide:hash",
+  },
+  {
+    id: "date-boolean",
+    title: "Date & Boolean Formatters",
+    subtitle: "Format dates and booleans with custom labels",
+    icon: "lucide:calendar",
+  },
+  {
+    id: "filesize",
+    title: "File Size Formatter",
+    subtitle: "Convert bytes to human-readable file sizes",
+    icon: "lucide:hard-drive",
+  },
+  {
+    id: "custom",
+    title: "Custom Formatter",
+    subtitle: "Use custom functions with access to full row data",
+    icon: "lucide:code-2",
+  },
+  {
+    id: "combined",
+    title: "All Formatters Combined",
+    subtitle: "Multiple formatters working together in one table",
+    icon: "lucide:layers",
+  },
+];
+
+const openFormatters = ref<(string | number)[]>(["currency"]);
 </script>
 
 <template>
@@ -406,144 +456,131 @@ const allFormattersColumns: Column[] = [
       </div>
     </VCard>
 
-    <!-- Header -->
-    <div class="formatters-header">
-      <h2>Table Formatters</h2>
-      <p>Automatic cell value formatting for common data types</p>
-    </div>
-
-    <!-- Currency Formatter -->
-    <div class="grid grid-cols-2 gap-5">
-      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
-        <h3>Currency Formatter</h3>
-        <p class="section-description">
-          Format numbers as currency with symbols and custom decimal places
-        </p>
-        <Table
-          :data="formatterData"
-          :columns="currencyColumns"
-          row-key="id"
-        />
-        <div class="code-example">
-          <code>
-            format: { currency: true  } // -$75,000.00<br>
-            format: { currency: { code: "EUR", decimals: 0 } } // €150000
-          </code>
+    <!-- Formatters Accordion -->
+    <VAccordion
+      v-model="openFormatters"
+      :items="formatterItems"
+      variant="outlined"
+      multiple
+    >
+      <!-- Currency Formatter -->
+      <template #content-currency>
+        <div class="accordion-content">
+          <Table
+            :data="formatterData"
+            :columns="currencyColumns"
+            row-key="id"
+          />
+          <div class="code-example">
+            <code>
+              format: { currency: true  } // -$75,000.00<br>
+              format: { currency: { code: "EUR", decimals: 0 } } // €150000
+            </code>
+          </div>
         </div>
-      </VCard>
+      </template>
 
       <!-- Percentage Formatter -->
-      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
-        <h3>Percentage Formatter</h3>
-        <p class="section-description">
-          Display numbers as percentages with optional multiplication
-        </p>
-        <Table
-          :data="formatterData"
-          :columns="percentageColumns"
-          row-key="id"
-        />
-        <div class="code-example">
-          <code>
-            format: { percentage: { decimals: 1, multiplier: true } } // 0.15 → 15.0%<br>
-            format: { percentage: { decimals: 0 } } // 25 → 25%
-          </code>
+      <template #content-percentage>
+        <div class="accordion-content">
+          <Table
+            :data="formatterData"
+            :columns="percentageColumns"
+            row-key="id"
+          />
+          <div class="code-example">
+            <code>
+              format: { percentage: { decimals: 1, multiplier: true } } // 0.15 → 15.0%<br>
+              format: { percentage: { decimals: 0 } } // 25 → 25%
+            </code>
+          </div>
         </div>
-      </VCard>
+      </template>
 
       <!-- Number Formatter -->
-      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
-        <h3>Number Formatter</h3>
-        <p class="section-description">
-          Format numbers with compact notation or fixed decimals
-        </p>
-        <Table
-          :data="formatterData"
-          :columns="numberColumns"
-          row-key="id"
-        />
-        <div class="code-example">
-          <code>
-            format: { number: "compact" } // 1234567 → 1.2M<br>
-            format: { number: { type: "decimal", decimals: 2 } } // 4.756 → 4.76
-          </code>
+      <template #content-number>
+        <div class="accordion-content">
+          <Table
+            :data="formatterData"
+            :columns="numberColumns"
+            row-key="id"
+          />
+          <div class="code-example">
+            <code>
+              format: { number: "compact" } // 1234567 → 1.2M<br>
+              format: { number: { type: "decimal", decimals: 2 } } // 4.756 → 4.76
+            </code>
+          </div>
         </div>
-      </VCard>
+      </template>
 
       <!-- Date & Boolean Formatters -->
-      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
-        <h3>Date & Boolean Formatters</h3>
-        <p class="section-description">
-          Format dates and booleans with custom labels
-        </p>
-        <Table
-          :data="formatterData"
-          :columns="mixedColumns"
-          row-key="id"
-        />
-        <div class="code-example">
-          <code>
-            format: { date: "long" } // November 7, 2025<br>
-            format: { boolean: { trueText: "✓ Active", falseText: "✗ Inactive", colored: true } }
-          </code>
+      <template #content-date-boolean>
+        <div class="accordion-content">
+          <Table
+            :data="formatterData"
+            :columns="mixedColumns"
+            row-key="id"
+          />
+          <div class="code-example">
+            <code>
+              format: { date: "long" } // November 15, 2025<br>
+              format: { boolean: { trueText: "✓ Active", falseText: "✗ Inactive" } }
+            </code>
+          </div>
         </div>
-      </VCard>
+      </template>
 
       <!-- File Size Formatter -->
-      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
-        <h3>File Size Formatter</h3>
-        <p class="section-description">
-          Convert bytes to human-readable file sizes
-        </p>
-        <Table
-          :data="formatterData"
-          :columns="fileSizeColumns"
-          row-key="id"
-        />
-        <div class="code-example">
-          <code>
-            format: { fileSize: true } // 1048576 → 1.00 MB
-          </code>
+      <template #content-filesize>
+        <div class="accordion-content">
+          <Table
+            :data="formatterData"
+            :columns="fileSizeColumns"
+            row-key="id"
+          />
+          <div class="code-example">
+            <code>
+              format: { fileSize: true } // 1048576 → 1.00 MB
+            </code>
+          </div>
         </div>
-      </VCard>
+      </template>
 
       <!-- Custom Formatter -->
-      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
-        <h3>Custom Formatter</h3>
-        <p class="section-description">
-          Use custom functions with access to full row data
-        </p>
-        <Table
-          :data="formatterData"
-          :columns="customColumns"
-          row-key="id"
-        />
-        <div class="code-example">
-          <code>
-            format: {<br>
-            &nbsp;&nbsp;formatter: (_value, row) => {<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;const margin =<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((row.revenue - row.cost) / row.revenue) * 100;<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;return `${margin.toFixed(1)}%`;<br>
-            &nbsp;&nbsp;}<br>
-            }
-          </code>
+      <template #content-custom>
+        <div class="accordion-content">
+          <Table
+            :data="formatterData"
+            :columns="customColumns"
+            row-key="id"
+          />
+          <div class="code-example">
+            <code>
+              format: {<br>
+              &nbsp;&nbsp;formatter: (_value, row) => {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;const margin =<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((row.revenue - row.cost)<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ row.revenue) * 100;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;return `${margin.toFixed(1)}%`;<br>
+              &nbsp;&nbsp;}<br>
+              }
+            </code>
+          </div>
         </div>
-      </VCard>
+      </template>
 
       <!-- All Formatters Combined -->
-      <VCard class="col-span-full w-full lg:col-span-1 demo-section">
-        <h3>All Formatters Combined</h3>
-        <p class="section-description">
-          Multiple formatters working together in one table
-        </p>
-        <Table
-          :data="formatterData"
-          :columns="allFormattersColumns"
-          row-key="id"
-        />
-      </VCard>
-    </div>
+      <template #content-combined>
+        <div class="accordion-content">
+          <Table
+            :data="formatterData"
+            :columns="allFormattersColumns"
+            row-key="id"
+          />
+        </div>
+      </template>
+    </VAccordion>
   </div>
 </template>
 
@@ -572,5 +609,17 @@ const allFormattersColumns: Column[] = [
 
 .section-description {
   @apply m-0 text-sm text-secondaryText leading-relaxed;
+}
+
+.accordion-content {
+  @apply flex flex-col gap-4 p-6;
+}
+
+.code-example {
+  @apply mt-4 p-4 bg-base-200 rounded-lg;
+
+  code {
+    @apply text-xs font-mono text-secondaryText;
+  }
 }
 </style>

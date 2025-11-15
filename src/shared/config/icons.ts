@@ -52,6 +52,9 @@ export const iconMap: Record<string, Component> = {
   "mdi:success": defineAsyncComponent(() => import("~icons/mdi/check-circle")),
   "mdi:check-circle": defineAsyncComponent(() => import("~icons/mdi/check-circle")),
   "mdi:loading": defineAsyncComponent(() => import("~icons/mdi/loading")),
+  "mdi:account-circle": defineAsyncComponent(() => import("~icons/mdi/account-circle")),
+  "mdi:shield-lock": defineAsyncComponent(() => import("~icons/mdi/shield-lock")),
+  "mdi:credit-card": defineAsyncComponent(() => import("~icons/mdi/credit-card")),
 
   // User & Account
   "mdi:user": defineAsyncComponent(() => import("~icons/mdi/account")),
@@ -230,7 +233,8 @@ export const iconMap: Record<string, Component> = {
   "lucide:minus-square": defineAsyncComponent(() => import("~icons/lucide/minus-square")),
   "lucide:link": defineAsyncComponent(() => import("~icons/lucide/link")),
   "lucide:sparkles": defineAsyncComponent(() => import("~icons/lucide/sparkles")),
-
+  "lucide:chevrons-down": defineAsyncComponent(() => import("~icons/lucide/chevrons-down")),
+  "lucide:accessibility": defineAsyncComponent(() => import("~icons/lucide/accessibility")),
 };
 
 /**
