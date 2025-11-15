@@ -6,8 +6,9 @@
 .table-cell {
   padding: $table-cell-padding-y $table-cell-padding-x;
 
-  // Ultra-subtle bottom border for row separation
-  border-bottom: $table-border-width solid theme('colors.cardBorder');
+  // Modern subtle gradient border
+  border-bottom: 1px solid rgb(var(--color-base-300) / 0.3);
+  border-right: 1px solid rgb(var(--color-base-300) / 0.15);
 
   // Typography - mainText for primary content
   color: theme('colors.mainText');
@@ -16,6 +17,14 @@
   font-weight: $table-font-weight-regular;
 
   min-width: 0; // Important for truncate to work in grid
+
+  // Smooth transition for hover effects (disabled during resize)
+  transition: background-color 0.15s ease;
+
+  // PERFORMANCE: Override transition during resize
+  .table-grid.is-resizing & {
+    transition: none !important;
+  }
 
   // Performance: no background transition during scroll
   // Only color transitions are allowed on interactive elements

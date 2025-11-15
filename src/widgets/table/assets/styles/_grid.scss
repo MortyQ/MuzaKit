@@ -28,6 +28,20 @@
     * {
       cursor: col-resize !important;
       user-select: none !important;
+      // PERFORMANCE: Disable all transitions during resize
+      transition: none !important;
+    }
+
+    // PERFORMANCE: Disable hover effects during resize
+    .table-row-wrapper:hover > .table-cell {
+      background: none !important;
+      border-left: none !important;
+      border-bottom-color: rgb(var(--color-base-300) / 0.3) !important;
+    }
+
+    // PERFORMANCE: Disable box-shadows during resize (expensive!)
+    .table-total-cell {
+      box-shadow: none !important;
     }
   }
 }

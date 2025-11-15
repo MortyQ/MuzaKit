@@ -60,7 +60,7 @@ const navigateToCategory = (path: string, disabled?: boolean) => {
   <div class="page-container">
     <!-- Header -->
     <div class="mb-10">
-      <h1 class="text-4xl font-bold text-mainText mb-4">
+      <h1 class="text-4xl font-bold text-mainText mb-4 text-gradient-animated">
         UI Components Gallery
       </h1>
       <p class="text-lg text-secondaryText max-w-3xl">
@@ -77,7 +77,7 @@ const navigateToCategory = (path: string, disabled?: boolean) => {
         :key="category.id"
         :clickable="!category.disabled"
         :disabled="category.disabled"
-        class="category-card"
+        class="category-card bg-gradient-animated"
         @click="navigateToCategory(category.path, category.disabled)"
       >
         <!-- Icon Header -->

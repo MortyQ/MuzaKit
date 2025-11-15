@@ -1,232 +1,230 @@
-# Vue 3 TypeScript Starter Template
+# 🎨 MuzaKit
 
-A modern, well-architected Vue 3 starter template with TypeScript, Tailwind CSS, ESLint, and Prettier - designed from a
-senior frontend architect perspective with focus on maintainability, scalability, and best practices.
+<div align="center">
 
-## 🚀 Features
+**Where inspiration meets development**
 
-- **Vue 3** with Composition API and `<script setup>`
-- **TypeScript** with minimal configuration (strict mode off for easier adoption)
-- **Tailwind CSS** with custom theme system using CSS custom properties
-- **Vue Router 4** with lazy loading and navigation guards
-- **Pinia** for state management with TypeScript support
-- **Vite** for lightning-fast development and optimized builds
-- **ESLint + Prettier** with modern best practices and auto-fix on save
-- **pnpm** as package manager for faster installs
-- **Modular architecture** with clear separation of concerns
+A modern, production-ready Vue 3 starter template with glassmorphism design
 
-## 📁 Project Structure
+[![Vue 3](https://img.shields.io/badge/Vue-3.5-42b883?logo=vue.js)](https://vuejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?logo=typescript)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-5.4-646cff?logo=vite)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06b6d4?logo=tailwind-css)](https://tailwindcss.com/)
 
-```
-src/
-├── components/     # Reusable UI components
-├── views/          # Page-level components (route components)
-├── stores/         # Pinia state management stores
-├── router/         # Vue Router configuration
-├── utils/          # Helper functions and utilities
-├── types/          # TypeScript type definitions
-└── assets/         # Static assets and global styles
-```
+[Live Demo](#) • [Documentation](#) • [Examples](#)
 
-## 🛠️ Tech Stack
+</div>
 
-### Core
+---
 
-- **Vue 3.4+** - Progressive JavaScript framework
-- **TypeScript 5.3+** - Type-safe JavaScript
-- **Vite 5.0+** - Next generation frontend tooling
-- **pnpm 10.0+** - Fast, disk space efficient package manager
+## ✨ Features
 
-### Styling
+### 🚀 **Modern Stack**
+- **Vue 3** with Composition API and `<script setup>` syntax
+- **TypeScript** for type-safe development
+- **Vite** for lightning-fast HMR and optimized builds
+- **Pinia** for intuitive state management
+- **Vue Router** with type-safe routing and lazy loading
 
-- **Tailwind CSS 3.3+** - Utility-first CSS framework
-- **PostCSS** - CSS post-processor
-- **Custom theme system** with CSS custom properties
+### 🎨 **Beautiful Design System**
+- **Glassmorphism UI** with multi-layered shadows and backdrop blur
+- **Light/Dark Theme** with seamless switching
+- **CSS Variables** based theming system
+- **Responsive Design** mobile-first approach
+- **50+ Reusable Components** ready to use
 
-### Code Quality
+### 🛠️ **Developer Experience**
+- **ESLint + Prettier** configured for modern development
+- **Husky** git hooks for code quality
+- **Feature-based Architecture** for scalability
+- **Comprehensive Documentation** for all components
+- **Type-safe Everything** with full TypeScript support
 
-- **ESLint 8.56+** - Linting utility for JavaScript and TypeScript
-- **Prettier 3.1+** - Code formatter
-- **Vue ESLint Plugin** - Vue-specific linting rules
+### 📦 **Production Ready**
+- **Optimized Build** with Vite's tree-shaking
+- **Code Splitting** for optimal performance
+- **SEO Friendly** with meta tags support
+- **PWA Ready** (optional)
+- **Deploy Anywhere** Vercel, Netlify, or any static host
 
-### State & Routing
+---
 
-- **Vue Router 4.2+** - Official router for Vue.js
-- **Pinia 2.1+** - Intuitive state management for Vue
-
-## 🚦 Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
-
-- Node.js 18+
-- pnpm 10+ (recommended) or npm/yarn
+- Node.js 18+ and npm/pnpm
 
 ### Installation
 
-1. **Clone or download this template**
-
-2. **Install dependencies**
-   ```bash
-   pnpm install
-   ```
-
-3. **Start development server**
-   ```bash
-   pnpm dev
-   ```
-
-4. **Open your browser**
-   Navigate to `http://localhost:3000`
-
-## 📜 Available Scripts
-
 ```bash
+# Clone the repository
+git clone <your-repo-url>
+cd muzakit
+
+# Install dependencies
+npm install
+# or
+pnpm install
+
 # Start development server
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Preview production build locally
-pnpm preview
-
-# Lint and auto-fix code issues
-pnpm lint
-
-# Check linting without fixing
-pnpm lint:check
-
-# Format code with Prettier
-pnpm format
+npm run dev
 ```
 
-## 🎨 Theme System
+Open [http://localhost:3001](http://localhost:3001) to view your app.
 
-This template includes a custom theme system built on top of Tailwind CSS using CSS custom properties. This allows for
-dynamic theme switching and easy customization.
+---
 
-### Usage
+## 📂 Project Structure
+
+```
+muzakit/
+├── src/
+│   ├── app/              # Application core
+│   │   ├── layouts/      # Layout components
+│   │   └── router/       # Routing configuration
+│   ├── features/         # Feature modules
+│   │   ├── auth/         # Authentication feature
+│   │   └── theme/        # Theme management
+│   ├── pages/            # Page components
+│   ├── widgets/          # Complex UI widgets
+│   │   ├── sidebar/      # Sidebar widget
+│   │   └── table/        # Data table widget
+│   ├── shared/           # Shared resources
+│   │   ├── ui/           # Reusable UI components
+│   │   ├── composables/  # Vue composables
+│   │   └── utils/        # Utility functions
+│   └── main.ts           # Application entry
+├── public/               # Static assets
+└── docs/                 # Documentation
+```
+
+---
+
+## 🎨 Glassmorphism Design
+
+MuzaKit features a modern glassmorphism design system with:
+
+### Available Glass Utilities
 
 ```vue
+<!-- Basic glass effect -->
+<div class="glass">...</div>
 
-<template>
-  <!-- Use theme colors directly -->
-  <div class="bg-primary text-base-100">
-    <h1 class="text-accent">Themed Content</h1>
-  </div>
-</template>
+<!-- Strong glass (more opaque) -->
+<div class="glass-strong">...</div>
+
+<!-- Glass cards -->
+<VCard variant="glass">...</VCard>
+<VCard variant="glass-elevated">...</VCard>
 ```
 
-### Adding New Themes
+### Automatic Light/Dark Theme
+All glass effects automatically adjust for light and dark themes:
+- **Light Theme**: Subtle purple/blue shadows
+- **Dark Theme**: Glowing blue shadows for visibility
 
-Edit `tailwind.config.js` and add your theme to the `createThemes` function:
+### Mobile Optimization
+Glass effects are conditionally applied:
+- **Desktop**: Full glassmorphism with backdrop blur
+- **Mobile**: Simplified for better performance
 
-```javascript
-createThemes({
-    light: { /* existing colors */},
-    dark: { /* existing colors */},
-    custom: {
-        primary: '#your-color',
-        'base-100': '#your-background',
-        // ... other colors
-    }
-})
-```
+---
 
-## 🏗️ Architecture Decisions
+## 🧩 Key Components
 
-### Component Organization
+### UI Components
+- **VButton** - Versatile button component
+- **VCard** - Card with multiple variants (default, elevated, glass)
+- **VModal** - Accessible modal dialogs
+- **VInput** - Form input with validation
+- **VTable** - Feature-rich data table
+- **VIcon** - Icon component with MDI support
+- **VToast** - Toast notifications
 
-- **Views**: Page-level components that correspond to routes
-- **Components**: Reusable UI components with clear props interfaces
-- **Stores**: Pinia stores using Composition API for better TypeScript support
+### Widgets
+- **Sidebar** - Collapsible navigation sidebar
+- **Table** - Advanced data table with sorting, filtering, pagination
+- **Header** - Application header with theme toggle
 
-### TypeScript Configuration
+### Features
+- **Theme System** - Light/Dark mode with CSS variables
+- **Authentication** - Auth guards and state management example
+- **Form Validation** - Built-in validation utilities
 
-- Strict mode disabled for easier adoption
-- Path aliases configured (`@/` points to `src/`)
-- Minimal typing approach while maintaining type safety
+---
 
-### Code Quality
+## 📚 Documentation
 
-- ESLint configured with Vue 3 and TypeScript rules
-- Prettier integration without conflicts
-- Auto-fix on save capabilities
-- Modern JavaScript/TypeScript best practices
+Visit the [UI Gallery](/ui-gallery) page in the app to see all components with interactive examples.
 
-### Performance Optimizations
+### Component Documentation
+- [VCard Usage](./docs/components/VCARD_USAGE.md)
+- [VModal Usage](./docs/components/MODAL_USAGE.md)
+- [VTable Full Documentation](./docs/table/TABLE_FULL_DOCUMENTATION.md)
+- [Theme System](./docs/THEME_SYSTEM.md)
 
-- Lazy-loaded routes for code splitting
-- Vite's optimized build process
-- Tree-shaking enabled
-- CSS purging via Tailwind
+### Design Guidelines
+- [Glassmorphism Strategy](./GLASSMORPHISM_STRATEGY.md)
+- [Glass Utilities Guide](./GLASS_UTILITIES_GUIDE.md)
+- [Design System Migration](./DESIGN_SYSTEM_MIGRATION_REPORT.md)
 
-## 🔧 Customization
+---
 
-### ESLint Rules
-
-Modify `.eslintrc.cjs` to adjust linting rules according to your preferences.
-
-### Prettier Configuration
-
-Update `.prettierrc` to change code formatting rules.
-
-### Tailwind Configuration
-
-Extend `tailwind.config.js` to add custom utilities, components, or modify the design system.
-
-### TypeScript Settings
-
-Adjust `tsconfig.json` for stricter or looser type checking as needed.
-
-## 📦 Build and Deployment
-
-### Local Build
+## 🛠️ Scripts
 
 ```bash
-# Build for production
-pnpm build
+# Development
+npm run dev          # Start dev server
 
-# Preview production build
-pnpm preview
+# Build
+npm run build        # Build for production
+npm run preview      # Preview production build
 
-# Build and preview in one command
-pnpm deploy:preview
+# Code Quality
+npm run lint         # Lint and fix code
+npm run lint:check   # Check linting only
+npm run format       # Format with Prettier
 ```
 
-### 🚀 Deploy to GitHub Pages
+---
 
-This template is configured for easy deployment to GitHub Pages with GitHub Actions.
+## 🎯 Roadmap
 
-**Quick Start:**
-1. Update `base` in `vite.config.ts` if needed (see [DEPLOY_QUICK_START.md](./DEPLOY_QUICK_START.md))
-2. Push your code to GitHub
-3. Enable GitHub Pages with "GitHub Actions" as source
-4. Your site will auto-deploy on every push to `main`
+- [ ] Component Storybook
+- [ ] E2E Testing setup
+- [ ] More UI components
+- [ ] CLI for component generation
+- [ ] Theme builder tool
 
-📖 **Full deployment guide:** [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
-
-### Build Optimizations Included
-
-- Code splitting and lazy loading
-- CSS extraction and minification
-- Asset optimization and compression
-- Tree shaking for smaller bundle sizes
-- Automated deployment pipeline with GitHub Actions
+---
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run `pnpm lint` to ensure code quality
-5. Submit a pull request
-
-## 🙏 Acknowledgments
-
-- [Vue.js](https://vuejs.org/) team for the amazing framework
-- [Vite](https://vitejs.dev/) team for the incredible build tool
-- [Tailwind CSS](https://tailwindcss.com/) for the utility-first approach
-- Community contributors and maintainers
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
+
+## 📝 License
+
+MIT License - feel free to use this template for your projects!
+
+---
+
+## 💬 Support
+
+- 📧 Email: [your-email]
+- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/muzakit/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/yourusername/muzakit/discussions)
+
+---
+
+<div align="center">
+
+**Built with ❤️ and inspired by creativity**
+
+MuzaKit - Your muse for building beautiful interfaces
+
+[⬆ back to top](#-muzakit)
+
+</div>
+

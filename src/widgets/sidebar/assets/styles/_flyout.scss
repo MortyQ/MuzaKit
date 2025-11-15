@@ -154,7 +154,7 @@
 }
 
 // Dark mode scrollbar
-@media (prefers-color-scheme: dark) {
+[data-theme="dark"] {
   .sidebar-flyout {
     scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 

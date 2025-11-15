@@ -51,8 +51,109 @@
   }
 
   .card--ghost:hover {
-    background-color: var(--colors-base-200);
+    background-color: rgb(var(--color-base-200));
     box-shadow: none !important;
+  }
+
+  /* Glass variants - Desktop only for performance */
+  /* Modern 2025 shadow approach - prominent by default, subtle enhancement on hover */
+  .card--glass {
+    /* Solid background on mobile, glass effect on desktop */
+    background-color: rgb(var(--color-base-100));
+    border: 1px solid rgb(var(--color-base-300) / 0.3);
+    border-radius: 1rem;
+
+    /* Modern multi-layered shadow - PROMINENT by default */
+    /* Inspired by Apple Design System & Material Design 3 */
+    box-shadow:
+      0 1px 3px 0 rgba(0, 0, 0, 0.12),       /* Subtle border definition */
+      0 6px 16px -4px rgba(0, 0, 0, 0.08),   /* Primary depth layer */
+      0 9px 28px -8px rgba(0, 0, 0, 0.05);   /* Ambient shadow */
+
+    /* Smooth transition - must be before @media */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    @media (min-width: 768px) {
+      @apply glass;
+      /* Enhanced layered shadow on desktop with glass effect */
+      box-shadow:
+        0 1px 3px 0 rgba(31, 38, 135, 0.12),
+        0 8px 20px -4px rgba(31, 38, 135, 0.10),
+        0 12px 32px -8px rgba(31, 38, 135, 0.08);
+    }
+
+    [data-theme="dark"] & {
+      /* Visible glow-like shadows for dark theme - use lighter colors */
+      box-shadow:
+        0 1px 3px 0 rgba(100, 150, 255, 0.15),      /* Subtle blue glow border */
+        0 8px 20px -4px rgba(100, 150, 255, 0.12),  /* Blue depth glow */
+        0 12px 32px -8px rgba(100, 150, 255, 0.08); /* Ambient blue glow */
+    }
+
+    /* HOVER - subtle enhancement (20-30% stronger, not double) */
+    &:hover {
+      box-shadow:
+        0 1px 3px 0 rgba(31, 38, 135, 0.15),
+        0 10px 24px -4px rgba(31, 38, 135, 0.12),
+        0 16px 40px -8px rgba(31, 38, 135, 0.10);
+
+      [data-theme="dark"] & {
+        box-shadow:
+          0 1px 3px 0 rgba(100, 150, 255, 0.20),      /* Stronger glow */
+          0 10px 24px -4px rgba(100, 150, 255, 0.16), /* Enhanced depth */
+          0 16px 40px -8px rgba(100, 150, 255, 0.12); /* Wider glow */
+      }
+    }
+  }
+
+  .card--glass-elevated {
+    /* Premium glass card with strongest effect & elevation */
+    background-color: rgb(var(--color-base-100));
+    border: 1px solid rgb(var(--color-base-300) / 0.4);
+    border-radius: 1rem;
+
+    /* Premium multi-layered shadow - VERY PROMINENT by default */
+    box-shadow:
+      0 2px 4px 0 rgba(0, 0, 0, 0.15),        /* Strong border */
+      0 10px 24px -4px rgba(0, 0, 0, 0.12),   /* Deep shadow */
+      0 16px 48px -8px rgba(0, 0, 0, 0.08);   /* Wide ambient */
+
+    /* Smooth hover effect - must be before @media */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    @media (min-width: 768px) {
+      @apply glass-strong;
+      /* Premium layered shadow on desktop */
+      box-shadow:
+        0 2px 4px 0 rgba(31, 38, 135, 0.15),
+        0 12px 28px -4px rgba(31, 38, 135, 0.14),
+        0 20px 48px -8px rgba(31, 38, 135, 0.12);
+    }
+
+    [data-theme="dark"] & {
+      /* Strong visible glow for dark theme - premium look */
+      box-shadow:
+        0 2px 4px 0 rgba(120, 160, 255, 0.20),      /* Strong blue border glow */
+        0 12px 28px -4px rgba(120, 160, 255, 0.18), /* Deep blue glow */
+        0 20px 48px -8px rgba(120, 160, 255, 0.14); /* Wide ambient glow */
+    }
+
+
+    /* HOVER - dramatic elevation + shadow enhancement */
+    &:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow:
+        0 2px 4px 0 rgba(31, 38, 135, 0.18),
+        0 16px 36px -4px rgba(31, 38, 135, 0.18),
+        0 28px 64px -8px rgba(31, 38, 135, 0.16);
+
+      [data-theme="dark"] & {
+        box-shadow:
+          0 2px 4px 0 rgba(120, 160, 255, 0.25),      /* Maximum glow */
+          0 16px 36px -4px rgba(120, 160, 255, 0.22), /* Enhanced depth */
+          0 28px 64px -8px rgba(120, 160, 255, 0.18); /* Dramatic wide glow */
+      }
+    }
   }
 
   /* Sizes - ONLY WIDTH, NO PADDING */

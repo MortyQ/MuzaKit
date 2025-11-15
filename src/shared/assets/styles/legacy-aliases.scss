@@ -1,0 +1,30 @@
+@layer utilities {
+  /* Legacy compatibility for old class names - REMOVE AFTER MIGRATION */
+  .bg-primary { @apply bg-primary-500 dark:bg-primary-400; }
+  .text-primary { @apply text-primary-600 dark:text-primary-400; }
+  .border-primary { @apply border-primary-500 dark:border-primary-400; }
+  .hover\:bg-primary-dark:hover { @apply bg-primary-600 dark:bg-primary-500; }
+  .hover\:text-primary-dark:hover { @apply text-primary-700 dark:text-primary-300; }
+
+  /* Status aliases */
+  .bg-positive { @apply bg-success-500; }
+  .text-positive { @apply text-success-600 dark:text-success-400; }
+  .bg-positive-dark { @apply bg-success-600; }
+  .bg-lightPositive { @apply bg-success-100 dark:bg-success-900; }
+
+  .bg-negative { @apply bg-error-500; }
+  .text-negative { @apply text-error-600 dark:text-error-400; }
+  .bg-negative-dark { @apply bg-error-600; }
+  .bg-lightNegative { @apply bg-error-100 dark:bg-error-900; }
+
+  .bg-warning { @apply bg-warning-500; }
+  .text-warning { @apply text-warning-600 dark:text-warning-400; }
+  .bg-warning-dark { @apply bg-warning-600; }
+  .bg-lightWarning { @apply bg-warning-100 dark:bg-warning-900; }
+
+  /* Base surface aliases - REMOVED - These are now defined in tailwind.config.js via createThemes
+   * Using @apply with neutral-* was causing conflicts because it used default Tailwind colors
+   * instead of our theme colors. Now bg-base-100, text-mainText etc. come directly from the theme.
+   */
+}
+

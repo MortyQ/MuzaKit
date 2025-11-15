@@ -8,7 +8,7 @@ import BaseLoader from "@/shared/ui/common/VLoader.vue";
 export type CardSize = "fit" | "sm" | "md" | "lg" | "xl" | "full";
 
 // Define card variants
-export type CardVariant = "default" | "elevated" | "outlined" | "ghost";
+export type CardVariant = "default" | "elevated" | "outlined" | "ghost" | "glass" | "glass-elevated";
 
 // Define border radius options
 export type CardRadius = "none" | "sm" | "md" | "lg" | "xl" | "full";
@@ -61,7 +61,7 @@ type CardSlots = {
 
 
 const props = withDefaults(defineProps<CardProps>(), {
-  variant: "default",
+  variant: "glass",
   size: "full",
   radius: "md",
   as: "div",

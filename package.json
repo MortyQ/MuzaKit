@@ -1,7 +1,7 @@
 {
-  "name": "vue3-typescript-starter",
+  "name": "muzakit",
   "version": "1.0.0",
-  "description": "A modern Vue 3 starter template with TypeScript, Tailwind CSS, ESLint, and Prettier",
+  "description": "MuzaKit - Where inspiration meets development. A modern Vue 3 starter with glassmorphism design, TypeScript, Tailwind CSS, ESLint",
   "type": "module",
   "scripts": {
     "dev": "vite",

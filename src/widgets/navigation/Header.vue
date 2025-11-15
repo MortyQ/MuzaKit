@@ -6,7 +6,10 @@ import TopBar from "@/widgets/navigation/TopBar.vue";
 </script>
 
 <template>
-  <header class="bg-base-200 shadow-sm border-b border-base-300 flex-shrink-0">
+  <header
+    class="bg-base-100 md:glass-strong sticky top-0 z-50
+  shadow-sm border-b border-base-300/50 flex-shrink-0"
+  >
     <nav class="px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <div class="flex items-center space-x-8">

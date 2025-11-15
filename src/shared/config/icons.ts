@@ -66,7 +66,8 @@ export const iconMap: Record<string, Component> = {
   "mdi:cog": defineAsyncComponent(() => import("~icons/mdi/cog")),
   "mdi:white-balance-sunny": defineAsyncComponent(() => import("~icons/mdi/white-balance-sunny")),
   "mdi:moon-waning-crescent": defineAsyncComponent(() => import("~icons/mdi/moon-waning-crescent")),
-
+  "mdi:star-four-points": defineAsyncComponent(() => import("~icons/mdi/star-four-points")),
+  "mdi:rocket-launch": defineAsyncComponent(() => import("~icons/mdi/rocket-launch")),
   // Communication
   "mdi:email": defineAsyncComponent(() => import("~icons/mdi/email")),
   "mdi:message-text": defineAsyncComponent(() => import("~icons/mdi/message-text")),
@@ -139,7 +140,13 @@ export const iconMap: Record<string, Component> = {
   "mdi:content-save": defineAsyncComponent(() => import("~icons/mdi/content-save")),
   "mdi:pencil": defineAsyncComponent(() => import("~icons/mdi/pencil")),
   "mdi:puzzle": defineAsyncComponent(() => import("~icons/mdi/puzzle")),
-
+  "mdi:vuejs": defineAsyncComponent(() => import("~icons/mdi/vuejs")),
+  "mdi:language-typescript": defineAsyncComponent(() => import("~icons/mdi/language-typescript")),
+  "mdi:tailwind": defineAsyncComponent(() => import("~icons/mdi/tailwind")),
+  "mdi:lightning-bolt": defineAsyncComponent(() => import("~icons/mdi/lightning-bolt")),
+  "mdi:check-decagram": defineAsyncComponent(() => import("~icons/mdi/check-decagram")),
+  "mdi:routes": defineAsyncComponent(() => import("~icons/mdi/routes")),
+  "mdi:book-open-variant": defineAsyncComponent(() => import("~icons/mdi/book-open-variant")),
   // ==================== Heroicons ====================
 
   "heroicons:home-solid": defineAsyncComponent(() => import("~icons/heroicons/home-solid")),
