@@ -819,7 +819,12 @@ onUnmounted(() => {
                     isRowExpandable(item.row as ExpandableRow)
                 }
               ]"
-              :style="getFixedStyles(column)"
+              :style="{
+                ...getFixedStyles(column),
+                ...(colIndex === 0 && getRowDepth(item.row) > 0 ? {
+                  paddingLeft: `${getRowDepth(item.row) * 24 + 16}px`
+                } : {})
+              }"
               @click="colIndex === 0 && isExpandable &&
                 isRowExpandable(item.row as ExpandableRow) ?
                   handleToggleRow(item.row.id as string | number, item.row, column) : undefined"
