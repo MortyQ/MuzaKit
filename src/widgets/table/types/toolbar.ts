@@ -56,21 +56,28 @@ export interface ToolbarConfig {
     /**
      * Column setup button configuration
      * - false: Button hidden
-     * - true: Show column setup dropdown (no persistence)
-     * - object: Show with configuration
+     * - string: Storage key (enables persistence with default settings)
+     * - object: Full configuration with custom settings
+     *
+     * @example
+     * // Quick setup with persistence
+     * columnSetup: 'myTable_columns'
+     *
+     * @example
+     * // Full configuration
+     * columnSetup: {
+     *   key: 'myTable_columns',
+     *   type: 'sessionStorage',
+     *   allowReorder: false
+     * }
+     *
      * @default false
      */
-    columnSetup?: boolean | {
-      /**
-       * Enable column setup
-       * @default true
-       */
-      enabled?: boolean;
-
+    columnSetup?: false | string | {
       /**
        * Storage key for localStorage/sessionStorage
        * If provided, column settings will be persisted automatically
-       * Example: 'myTable_columns'
+       * @example 'myTable_columns'
        */
       key?: string;
 

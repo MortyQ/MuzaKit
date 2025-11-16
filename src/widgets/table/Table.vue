@@ -108,11 +108,23 @@ const handleToolbarExport = (format: string, selectedOnly?: boolean) => {
 // Column Setup Logic - basic check without hasGroups (will be checked later)
 const columnSetupEnabledBasic = computed(() => {
   const setup = props.toolbar?.actions?.columnSetup;
-  return setup === true || (typeof setup === "object" && setup.enabled !== false);
+  // Enabled if string or object (not false, not undefined)
+  return typeof setup === "string" || typeof setup === "object";
 });
 
 const columnSetupConfig = computed(() => {
   const setup = props.toolbar?.actions?.columnSetup;
+
+  // String shorthand: use as storage key with defaults
+  if (typeof setup === "string") {
+    return {
+      key: setup,
+      type: "localStorage" as const,
+      allowReorder: true,
+    };
+  }
+
+  // Object: use as-is
   return typeof setup === "object" ? setup : {};
 });
 
@@ -666,7 +678,7 @@ onUnmounted(() => {
             <template #trigger>
               <VButton
                 variant="default"
-                icon="mdi:view-column"
+                icon="lucide:table-2"
               />
             </template>
 

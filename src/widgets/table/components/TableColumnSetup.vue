@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, watch } from "vue";
 
 import type { Column } from "../types";
 
@@ -194,15 +194,6 @@ const emitVisibleColumns = () => {
 
   emit("update:visible-columns", visibleCols);
 };
-
-// Initialize on mount - DON'T emit, let Table.vue load from storage
-// Only emit when user explicitly clicks "Apply Changes"
-onMounted(() => {
-  const savedState = loadFromStorage();
-  if (savedState) {
-    console.log("🔄 Column setup initialized from storage:", savedState);
-  }
-});
 
 // Watch for changes to track modifications (but don't emit)
 watch(
@@ -418,7 +409,7 @@ const handleReset = () => {
     <div class="column-setup-header">
       <div class="column-setup-title">
         <VIcon
-          icon="mdi:view-column"
+          icon="lucide:table-2"
           size="small"
         />
         <span>Column Settings</span>

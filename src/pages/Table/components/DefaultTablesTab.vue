@@ -131,7 +131,7 @@ const columnsRegular: Column[] = [
         enabled: true,
         title: 'Default Table',
         actions: {
-          columnSetup: true,
+          columnSetup: 'default_table_columns',
         }
       }"
       :columns="columnsRegular"

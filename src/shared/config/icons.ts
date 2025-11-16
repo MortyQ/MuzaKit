@@ -249,6 +249,9 @@ export const iconMap: Record<string, Component> = {
   "lucide:chevrons-down": defineAsyncComponent(() => import("~icons/lucide/chevrons-down")),
   "lucide:accessibility": defineAsyncComponent(() => import("~icons/lucide/accessibility")),
   "lucide:trash": defineAsyncComponent(() => import("~icons/lucide/trash")),
+  "lucide:columns-3": defineAsyncComponent(() => import("~icons/lucide/columns-3")),
+  "lucide:panel-left": defineAsyncComponent(() => import("~icons/lucide/panel-left")),
+  "lucide:sliders-horizontal": defineAsyncComponent(() => import("~icons/lucide/sliders-horizontal")),
   "lucide:save": defineAsyncComponent(() => import("~icons/lucide/save")),
 };
 

@@ -29,7 +29,6 @@ export type TableProps = {
   toolbar?: ToolbarConfig
   exportOptions?: ExportOptions
 
-
   // Search model (v-model:search)
   search?: string
 };

@@ -246,11 +246,7 @@ const exportFunc = (format: string) => {
           refresh: true,
           resetSort: true,
           export: 'multi',
-          columnSetup: {
-            key: 'expandable-table-column-setup',
-            type: 'localStorage',
-            allowReorder: true,
-          },
+          columnSetup: 'expandable-table-column-setup',
         }
       }"
       :export-options="{
