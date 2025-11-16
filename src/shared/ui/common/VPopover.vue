@@ -156,43 +156,7 @@ defineExpose({
   </div>
 </template>
 
-<style lang="scss" scoped>
-.v-popover {
-  display: inline-block;
-}
-
-.v-popover-trigger {
-  cursor: pointer;
-}
-
-.v-popover-content {
-  z-index: 9999;
-  min-width: 200px;
-
-  // Teleported version uses fixed positioning
-  &--teleported {
-    position: fixed;
-  }
-}
-
-/* Transition animations */
-.popover-fade-enter-active,
-.popover-fade-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.popover-fade-enter-from,
-.popover-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-8px);
-}
-
-.v-popover-content--top-left,
-.v-popover-content--top-right {
-  &.popover-fade-enter-from,
-  &.popover-fade-leave-to {
-    transform: translateY(8px);
-  }
-}
+<style lang="scss">
+@use "@/shared/assets/styles/components/vpopover";
 </style>
 

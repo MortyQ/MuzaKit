@@ -34,8 +34,8 @@ const categories = [
     icon: "lucide:layout",
     iconColor: "#f59e0b",
     path: "/components/ui-gallery/display",
-    components: ["Cards", "Icons", "Tabs", "Accordion"],
-    badge: "4 components",
+    components: ["Cards", "Icons", "Tabs", "Accordion", "Popover", "Dropdown"],
+    badge: "6 components",
   },
   {
     id: "layout",
@@ -148,7 +148,7 @@ const navigateToCategory = (path: string, disabled?: boolean) => {
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
         <div>
           <div class="text-3xl font-bold text-primary mb-1">
-            12
+            14
           </div>
           <div class="text-sm text-secondaryText">
             Components Documented

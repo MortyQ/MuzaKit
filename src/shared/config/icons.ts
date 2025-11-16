@@ -254,6 +254,18 @@ export const iconMap: Record<string, Component> = {
   "lucide:sliders-horizontal": defineAsyncComponent(() => import("~icons/lucide/sliders-horizontal")),
   "lucide:save": defineAsyncComponent(() => import("~icons/lucide/save")),
   "lucide:minimize-2": defineAsyncComponent(() => import("~icons/lucide/minimize-2")),
+  "lucide:message-circle": defineAsyncComponent(() => import("~icons/lucide/message-circle")),
+  "lucide:chevron-down": defineAsyncComponent(() => import("~icons/lucide/chevron-down")),
+  "lucide:move": defineAsyncComponent(() => import("~icons/lucide/move")),
+  "lucide:layout-template": defineAsyncComponent(() => import("~icons/lucide/layout-template")),
+  "lucide:more-vertical": defineAsyncComponent(() => import("~icons/lucide/more-vertical")),
+  "lucide:check-circle": defineAsyncComponent(() => import("~icons/lucide/check-circle")),
+  "lucide:edit": defineAsyncComponent(() => import("~icons/lucide/edit")),
+  "lucide:copy": defineAsyncComponent(() => import("~icons/lucide/copy")),
+  "lucide:archive": defineAsyncComponent(() => import("~icons/lucide/archive")),
+  "lucide:trash-2": defineAsyncComponent(() => import("~icons/lucide/trash-2")),
+  "lucide:share-2": defineAsyncComponent(() => import("~icons/lucide/share")),
+  "lucide:log-out": defineAsyncComponent(() => import("~icons/lucide/log-out")),
 };
 
 /**
