@@ -7,22 +7,19 @@
   display: contents;
   cursor: pointer;
 
-  // Modern glass-like hover effect with gradient + accent border
+  // Modern subtle hover effect - clean, professional (like Linear, Notion)
   // PERFORMANCE: Automatically disabled during resize via .is-resizing class
   &:hover > .table-cell {
-    background: linear-gradient(
-      to right,
-      color-mix(in srgb, theme('colors.primary') 8%, theme('colors.cardBg') 92%),
-      color-mix(in srgb, theme('colors.primary') 3%, theme('colors.cardBg') 97%)
-    );
+    // Subtle, uniform background tint - no gradients
+    background-color: color-mix(in srgb, theme('colors.primary') 4%, theme('colors.cardBg') 96%);
 
-    // Enhanced border accent on hover - more visible on dark theme
-    border-bottom-color: color-mix(in srgb, theme('colors.primary') 30%, theme('colors.cardBorder') 70%);
+    // Slightly more visible border on hover
+    border-bottom-color: color-mix(in srgb, theme('colors.primary') 20%, theme('colors.cardBorder') 80%);
 
-    // Premium left accent border on hover
+    // Premium left accent bar on hover - clean, modern
     &:first-child {
-      border-left: 2px solid color-mix(in srgb, theme('colors.primary') 60%, transparent 40%);
-      padding-left: calc(#{$table-cell-padding-x} - 2px);
+      border-left: 3px solid color-mix(in srgb, theme('colors.primary') 80%, transparent 20%);
+      padding-left: calc(#{$table-cell-padding-x} - 3px);
     }
   }
 
@@ -37,13 +34,10 @@
     }
   }
 
-  // Active/clicked state - more prominent gradient
+  // Active/clicked state - subtle press effect
   &:active > .table-cell {
-    background: linear-gradient(
-      to right,
-      rgb(var(--color-primary) / 0.05),
-      rgb(var(--color-base-200) / 0.6)
-    );
+    background-color: color-mix(in srgb, theme('colors.primary') 6%, theme('colors.cardBg') 94%);
+    transform: scale(0.998); // Subtle press down effect
   }
 
   // Disabled state - clear visual feedback
@@ -56,29 +50,24 @@
     }
   }
 
-  // Selected state - beautiful gradient with primary accent
+  // Selected state - clean, modern with primary accent
   &--selected > .table-cell {
-    background: linear-gradient(
-      to right,
-      color-mix(in srgb, theme('colors.primary') 12%, theme('colors.cardBg') 88%),
-      color-mix(in srgb, theme('colors.primary') 6%, theme('colors.cardBg') 94%)
-    );
+    // Subtle, uniform background for selected state
+    background-color: color-mix(in srgb, theme('colors.primary') 8%, theme('colors.cardBg') 92%);
 
-    // Accent border for selected state - more visible
-    border-left: 3px solid theme('colors.primary');
-    padding-left: calc(#{$table-cell-padding-x} - 3px); // Compensate for border
+    // Strong accent border for selected state
+    &:first-child {
+      border-left: 3px solid theme('colors.primary');
+      padding-left: calc(#{$table-cell-padding-x} - 3px); // Compensate for border
+    }
 
     // Slightly bolder text for selected rows
     font-weight: $table-font-weight-medium;
   }
 
-  // Combined selected + hover state
+  // Combined selected + hover state - slightly more prominent
   &--selected:hover > .table-cell {
-    background: linear-gradient(
-      to right,
-      color-mix(in srgb, theme('colors.primary') 16%, theme('colors.cardBg') 84%),
-      color-mix(in srgb, theme('colors.primary') 8%, theme('colors.cardBg') 92%)
-    );
+    background-color: color-mix(in srgb, theme('colors.primary') 10%, theme('colors.cardBg') 90%);
   }
 }
 

@@ -257,9 +257,6 @@ const exportFunc = (format: string) => {
       @expand-click="expandAction"
       @request="handleServerRequest"
     >
-      <template #cell-status="{depth, value}">
-        TEXT  TEXT  TEXT  TEXT {{ value }}: {{ depth }}
-      </template>
       <template #cell-accountStatus>
         <VMultiSelect
           :options="accountStatusList"

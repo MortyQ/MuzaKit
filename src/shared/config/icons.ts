@@ -253,6 +253,7 @@ export const iconMap: Record<string, Component> = {
   "lucide:panel-left": defineAsyncComponent(() => import("~icons/lucide/panel-left")),
   "lucide:sliders-horizontal": defineAsyncComponent(() => import("~icons/lucide/sliders-horizontal")),
   "lucide:save": defineAsyncComponent(() => import("~icons/lucide/save")),
+  "lucide:minimize-2": defineAsyncComponent(() => import("~icons/lucide/minimize-2")),
 };
 
 /**
