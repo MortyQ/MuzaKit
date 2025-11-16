@@ -116,16 +116,16 @@
   align-items: center;
   box-sizing: border-box; // Include borders in height calculation
 
-  // Modern gradient background (like Home page cards)
+  // Modern gradient background - more contrast for dark theme
   background: linear-gradient(
     to bottom,
-    rgb(var(--color-base-200)),
-    rgb(var(--color-base-100))
+    color-mix(in srgb, theme('colors.cardBg') 100%, theme('colors.primary') 3%),
+    color-mix(in srgb, theme('colors.cardBg') 100%, theme('colors.mainText') 2%)
   );
 
-  // Gradient border (subtle accent)
-  border-bottom: 1px solid rgb(var(--color-primary) / 0.1);
-  border-right: 1px solid rgb(var(--color-base-300) / 0.3);
+  // Enhanced borders for better visibility on dark theme
+  border-bottom: 1px solid color-mix(in srgb, theme('colors.primary') 25%, theme('colors.cardBorder') 75%);
+  border-right: 1px solid color-mix(in srgb, theme('colors.cardBorder') 100%, transparent 0%);
 
   // Typography - semibold for emphasis
   font-weight: $table-font-weight-semibold;

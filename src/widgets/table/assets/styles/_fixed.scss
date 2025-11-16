@@ -43,14 +43,14 @@
 
 // 🎯 BORDER: Only on LAST left-fixed column (separator between fixed and scrollable)
 .table-fixed-left-last {
-  border-right: 1px solid
-    color-mix(in srgb, theme('colors.primary') 50%, transparent 50%);
+  border-right: 2px solid
+    color-mix(in srgb, theme('colors.primary') 70%, transparent 30%);
 }
 
 // 🎯 BORDER: Only on FIRST right-fixed column (separator between scrollable and fixed)
 .table-fixed-right-first {
-  border-left: 1px solid
-    color-mix(in srgb, theme('colors.primary') 50%, transparent 50%);
+  border-left: 2px solid
+    color-mix(in srgb, theme('colors.primary') 70%, transparent 30%);
 }
 
 // Hover effect on fixed columns - smooth emphasis
@@ -68,16 +68,16 @@
   .table-fixed-left-last {
     border-right-color: color-mix(
       in srgb,
-      theme('colors.primary') 70%,
-      transparent 30%
+      theme('colors.primary') 90%,
+      transparent 10%
     );
   }
 
   .table-fixed-right-first {
     border-left-color: color-mix(
       in srgb,
-      theme('colors.primary') 70%,
-      transparent 30%
+      theme('colors.primary') 90%,
+      transparent 10%
     );
   }
 }

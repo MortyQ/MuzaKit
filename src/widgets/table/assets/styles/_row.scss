@@ -12,16 +12,16 @@
   &:hover > .table-cell {
     background: linear-gradient(
       to right,
-      rgb(var(--color-primary) / 0.03),
-      rgb(var(--color-base-200) / 0.5)
+      color-mix(in srgb, theme('colors.primary') 8%, theme('colors.cardBg') 92%),
+      color-mix(in srgb, theme('colors.primary') 3%, theme('colors.cardBg') 97%)
     );
 
-    // Subtle border accent on hover
-    border-bottom-color: rgb(var(--color-primary) / 0.2);
+    // Enhanced border accent on hover - more visible on dark theme
+    border-bottom-color: color-mix(in srgb, theme('colors.primary') 30%, theme('colors.cardBorder') 70%);
 
     // Premium left accent border on hover
     &:first-child {
-      border-left: 2px solid rgb(var(--color-primary) / 0.4);
+      border-left: 2px solid color-mix(in srgb, theme('colors.primary') 60%, transparent 40%);
       padding-left: calc(#{$table-cell-padding-x} - 2px);
     }
   }
@@ -60,12 +60,12 @@
   &--selected > .table-cell {
     background: linear-gradient(
       to right,
-      rgb(var(--color-primary) / 0.08),
-      rgb(var(--color-primary) / 0.04)
+      color-mix(in srgb, theme('colors.primary') 12%, theme('colors.cardBg') 88%),
+      color-mix(in srgb, theme('colors.primary') 6%, theme('colors.cardBg') 94%)
     );
 
-    // Accent border for selected state
-    border-left: 3px solid rgb(var(--color-primary));
+    // Accent border for selected state - more visible
+    border-left: 3px solid theme('colors.primary');
     padding-left: calc(#{$table-cell-padding-x} - 3px); // Compensate for border
 
     // Slightly bolder text for selected rows
@@ -76,8 +76,8 @@
   &--selected:hover > .table-cell {
     background: linear-gradient(
       to right,
-      rgb(var(--color-primary) / 0.12),
-      rgb(var(--color-primary) / 0.06)
+      color-mix(in srgb, theme('colors.primary') 16%, theme('colors.cardBg') 84%),
+      color-mix(in srgb, theme('colors.primary') 8%, theme('colors.cardBg') 92%)
     );
   }
 }
