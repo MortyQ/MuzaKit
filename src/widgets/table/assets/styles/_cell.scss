@@ -50,6 +50,11 @@
   gap: 0.5rem;
   min-width: 0;
   height: 100%;
+
+  // Indented content for nested rows (uses CSS variable for performance)
+  &--indented {
+    padding-left: var(--indent, 0);
+  }
 }
 
 // Text content with elegant truncation

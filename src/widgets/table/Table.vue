@@ -490,25 +490,103 @@ const handleToggleRow = (id: string | number, row: ExpandableRow, column: Column
   }
 };
 
-// Check if row is expandable
-const isRowExpandable = (row: ExpandableRow): boolean => {
-  if (!expandableLogic) return false;
-  return expandableLogic.isExpandable(row);
-};
+// ============================================
+// PERFORMANCE: Ultra-light accessors for expandable tables
+// ============================================
+// No computed Map, no caching - just direct property access
+// This is the fastest possible approach for maximum resize performance
 
-// Get row depth (for indent)
+// Direct property access - no overhead
 const getRowDepth = (row: Record<string, unknown>): number => {
   return (row.depth as number) || 0;
 };
 
-// Check if row is expanded
 const isRowExpanded = (row: Record<string, unknown>): boolean => {
   return (row.isExpanded as boolean) || false;
 };
 
-// Check if row has children
 const hasRowChildren = (row: Record<string, unknown>): boolean => {
   return (row.hasChildren as boolean) || false;
+};
+
+// ============================================
+// PERFORMANCE OPTIMIZATION: Unified Cell Metadata
+// ============================================
+// All cell-related calculations in ONE function to minimize overhead
+// Uses WeakMap for aggressive caching - calculated once per row
+
+interface CellMetadata {
+  formattedValue: unknown;
+  cssClass: string | undefined;
+  titleText: string | undefined;
+  indentStyle: { paddingLeft: string } | null;
+  isExpandable: boolean;
+}
+
+const cellMetadataCache = new WeakMap<Record<string, unknown>, Map<string, CellMetadata>>();
+
+// UNIFIED cell data calculator - replaces 5 separate function calls
+const getCellMetadata = (
+  row: Record<string, unknown>,
+  column: Column,
+  colIndex: number,
+): CellMetadata => {
+  // Get or create row cache
+  let rowCache = cellMetadataCache.get(row);
+  if (!rowCache) {
+    rowCache = new Map();
+    cellMetadataCache.set(row, rowCache);
+  }
+
+  // Check cache
+  const cached = rowCache.get(column.key);
+  if (cached) return cached;
+
+  // Calculate all metadata ONCE
+  const formatted = column.format
+    ? formatCellValue(row[column.key], column, row)
+    : row[column.key];
+
+  // Extract value and class from formatted result
+  let formattedValue = formatted;
+  let cssClass: string | undefined;
+
+  if (
+    formatted &&
+    typeof formatted === "object" &&
+    !Array.isArray(formatted) &&
+    "text" in formatted
+  ) {
+    formattedValue = (formatted as any).text;
+    cssClass = (formatted as any).class;
+  }
+
+  // Title for non-interactive cells
+  const titleText = !column.interactive ? String(formattedValue) : undefined;
+
+  // Indent style for first column with depth
+  const depth = (row.depth as number) || 0;
+  const indentStyle = colIndex === 0 && depth
+    ? { paddingLeft: `${depth * 24 + 16}px` }
+    : null;
+
+  // Check if row is expandable (only for first column)
+  const isExpandable = colIndex === 0 && expandableLogic
+    ? expandableLogic.isExpandable(row as ExpandableRow)
+    : false;
+
+  const metadata: CellMetadata = {
+    formattedValue,
+    cssClass,
+    titleText,
+    indentStyle,
+    isExpandable,
+  };
+
+  // Cache it
+  rowCache.set(column.key, metadata);
+
+  return metadata;
 };
 
 // Computed for final rows (considering virtualization)
@@ -811,36 +889,22 @@ onUnmounted(() => {
               v-for="(column, colIndex) in columnsForData"
               :key="`${item.key}-${column.key}`"
               :align="column.align"
-              :depth="getRowDepth(item.row)"
-              :class="[
-                getColumnClasses(column),
-                {
-                  'table-cell--expandable': colIndex === 0 && isExpandable &&
-                    isRowExpandable(item.row as ExpandableRow)
-                }
-              ]"
-              :style="{
-                ...getFixedStyles(column),
-                ...(colIndex === 0 && getRowDepth(item.row) > 0 ? {
-                  paddingLeft: `${getRowDepth(item.row) * 24 + 16}px`
-                } : {})
-              }"
-              @click="colIndex === 0 && isExpandable &&
-                isRowExpandable(item.row as ExpandableRow) ?
-                  handleToggleRow(item.row.id as string | number, item.row, column) : undefined"
+              :depth="(item.row.depth as number) || 0"
+              :class="getColumnClasses(column)"
+              :style="getFixedStyles(column)"
             >
-              <div class="table-cell-content">
+              <div
+                class="table-cell-content"
+                :style="getCellMetadata(item.row, column, colIndex).indentStyle"
+              >
                 <!-- Expand button only for first column -->
                 <button
-                  v-if="colIndex === 0 && isExpandable &&
-                    isRowExpandable(item.row as ExpandableRow)"
+                  v-if="isExpandable && getCellMetadata(item.row, column, colIndex).isExpandable"
                   class="table-cell-expand-btn"
                   @click.stop="handleToggleRow(item.row.id as string | number, item.row, column)"
                 >
                   <VIcon
-                    :icon="isRowExpanded(item.row)
-                      ? 'mdi:chevron-down'
-                      : 'mdi:chevron-right'"
+                    :icon="item.row.isExpanded ? 'mdi:chevron-down' : 'mdi:chevron-right'"
                     :size="18"
                   />
                 </button>
@@ -856,16 +920,14 @@ onUnmounted(() => {
                     :row="item.row"
                     :column="column"
                     :index="item.index"
-                    :depth="getRowDepth(item.row)"
+                    :depth="item.row.depth || 0"
                   >
-                    <!-- Default rendering with formatter -->
+                    <!-- Default rendering with formatter - ONE function call! -->
                     <span
-                      :class="getCellClass(item.row[column.key], column, item.row)"
-                      :title="!column.interactive
-                        ? String(getCellValue(item.row[column.key], column, item.row))
-                        : undefined"
+                      :class="getCellMetadata(item.row, column, colIndex).cssClass"
+                      :title="getCellMetadata(item.row, column, colIndex).titleText"
                     >
-                      {{ getCellValue(item.row[column.key], column, item.row) }}
+                      {{ getCellMetadata(item.row, column, colIndex).formattedValue }}
                     </span>
                   </slot>
                 </div>
