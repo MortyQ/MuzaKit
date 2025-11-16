@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ColumnSetupTab from "@/pages/Table/components/ColumnSetupTab.vue";
 import DefaultTablesTab from "@/pages/Table/components/DefaultTablesTab.vue";
 import ExpandTableTab from "@/pages/Table/components/ExpandTableTab.vue";
 import FixedColumnsTestTab from "@/pages/Table/components/FixedColumnsTestTab.vue";
@@ -15,6 +16,7 @@ const tabs = [
   { id: "default", label: "Simple Tables", component: DefaultTablesTab },
   { id: "large-flat-data", label: "Large Data Table", component: LargeFlatDataTable },
   { id: "toolbar", label: "Toolbar", component: ToolbarTab },
+  { id: "column-setup", label: "Column Setup", component: ColumnSetupTab },
   { id: "sorting", label: "Sorting", component: SortingTab },
   { id: "pagination", label: "Pagination", component: PaginationTab },
   { id: "formatters", label: "Formatters", component: FormattersTab },

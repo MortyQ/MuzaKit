@@ -17,6 +17,7 @@ interface Props {
   placement?: "bottom-left" | "bottom-right" | "top-left" | "top-right";
   disabled?: boolean;
   closeOnSelect?: boolean;
+  teleport?: boolean;
 }
 
 interface Emits {
@@ -28,11 +29,15 @@ const props = withDefaults(defineProps<Props>(), {
   placement: "bottom-right",
   disabled: false,
   closeOnSelect: true,
+  teleport: true,
 });
 
 const emit = defineEmits<Emits>();
 
 const isOpen = ref(false);
+const isPositioned = ref(false);
+const triggerRef = ref<HTMLElement | null>(null);
+const dropdownRef = ref<HTMLElement | null>(null);
 
 
 // Computed classes for dropdown position
@@ -53,6 +58,48 @@ const isDisabled = computed(() => {
   return props.disabled || hasLoadingItem.value;
 });
 
+// Update dropdown position when teleported
+const updatePosition = () => {
+  if (!props.teleport || !isOpen.value || !triggerRef.value || !dropdownRef.value) return;
+
+  const triggerRect = triggerRef.value.getBoundingClientRect();
+  const dropdown = dropdownRef.value;
+  const offset = 8; // Gap between trigger and dropdown
+
+  // Reset styles
+  dropdown.style.position = "fixed";
+  dropdown.style.zIndex = "9999";
+
+  // Calculate position based on placement
+  switch (props.placement) {
+    case "bottom-left":
+      dropdown.style.top = `${triggerRect.bottom + offset}px`;
+      dropdown.style.left = `${triggerRect.left}px`;
+      dropdown.style.right = "auto";
+      break;
+    case "bottom-right":
+      dropdown.style.top = `${triggerRect.bottom + offset}px`;
+      dropdown.style.right = `${window.innerWidth - triggerRect.right}px`;
+      dropdown.style.left = "auto";
+      break;
+    case "top-left":
+      dropdown.style.bottom = `${window.innerHeight - triggerRect.top + offset}px`;
+      dropdown.style.left = `${triggerRect.left}px`;
+      dropdown.style.right = "auto";
+      dropdown.style.top = "auto";
+      break;
+    case "top-right":
+      dropdown.style.bottom = `${window.innerHeight - triggerRect.top + offset}px`;
+      dropdown.style.right = `${window.innerWidth - triggerRect.right}px`;
+      dropdown.style.left = "auto";
+      dropdown.style.top = "auto";
+      break;
+  }
+
+  // Mark as positioned to show the dropdown
+  isPositioned.value = true;
+};
+
 // Toggle dropdown
 const toggle = () => {
   if (!isDisabled.value) {
@@ -63,6 +110,7 @@ const toggle = () => {
 // Close dropdown
 const close = () => {
   isOpen.value = false;
+  isPositioned.value = false;
 };
 
 // Handle item click
@@ -110,6 +158,31 @@ watch(
   },
 );
 
+// Watch isOpen to update position and setup/cleanup event listeners
+watch(isOpen, async (newVal) => {
+  if (newVal && props.teleport) {
+    // Reset positioned state
+    isPositioned.value = false;
+
+    // Wait for DOM update
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    // Update position
+    updatePosition();
+
+    // Add event listeners for repositioning
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+  } else {
+    if (props.teleport) {
+      // Cleanup event listeners
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    }
+    isPositioned.value = false;
+  }
+});
+
 
 // Expose methods for parent component
 defineExpose({
@@ -126,6 +199,7 @@ defineExpose({
   >
     <!-- Trigger slot -->
     <div
+      ref="triggerRef"
       class="v-dropdown-trigger"
       :class="{ 'v-dropdown-trigger--disabled': isDisabled }"
       @click="toggle"
@@ -138,61 +212,68 @@ defineExpose({
     </div>
 
     <!-- Dropdown menu -->
-    <Transition name="dropdown">
-      <div
-        v-if="isOpen"
-        class="v-dropdown-menu"
-        :class="dropdownClasses"
-      >
-        <slot name="content">
-          <!-- Default items rendering -->
-          <button
-            v-for="item in items"
-            :key="item.value"
-            class="v-dropdown-item"
-            :class="{
-              'v-dropdown-item--loading': item.loader,
-              'v-dropdown-item--active': item.active
-            }"
-            :disabled="item.disabled || item.loader"
-            @click="handleItemClick(item)"
-          >
-            <!-- Icon slot -->
-            <slot
-              name="item-icon"
-              :item="item"
+    <Teleport
+      to="body"
+      :disabled="!teleport"
+    >
+      <Transition name="dropdown">
+        <div
+          v-if="isOpen"
+          ref="dropdownRef"
+          class="v-dropdown-menu"
+          :class="[dropdownClasses, { 'v-dropdown-menu--teleported': teleport }]"
+          :style="{ opacity: teleport && !isPositioned ? '0' : '' }"
+        >
+          <slot name="content">
+            <!-- Default items rendering -->
+            <button
+              v-for="item in items"
+              :key="item.value"
+              class="v-dropdown-item"
+              :class="{
+                'v-dropdown-item--loading': item.loader,
+                'v-dropdown-item--active': item.active
+              }"
+              :disabled="item.disabled || item.loader"
+              @click="handleItemClick(item)"
             >
-              <span
-                v-if="item.icon"
-                class="v-dropdown-item-icon"
+              <!-- Icon slot -->
+              <slot
+                name="item-icon"
+                :item="item"
               >
-                <slot
-                  name="icon"
-                  :icon="item.icon"
-                />
+                <span
+                  v-if="item.icon"
+                  class="v-dropdown-item-icon"
+                >
+                  <slot
+                    name="icon"
+                    :icon="item.icon"
+                  />
+                </span>
+              </slot>
+
+              <!-- Label -->
+              <span class="v-dropdown-item-label">
+                {{ item.label }}
               </span>
-            </slot>
 
-            <!-- Label -->
-            <span class="v-dropdown-item-label">
-              {{ item.label }}
-            </span>
-
-            <!-- Loading indicator slot -->
-            <slot
-              name="item-loader"
-              :item="item"
-            >
-              <span
-                v-if="item.loader"
-                class="v-dropdown-item-loading"
+              <!-- Loading indicator slot -->
+              <slot
+                name="item-loader"
+                :item="item"
               >
-                <VLoader size="small" />
-              </span>
-            </slot>
-          </button>
-        </slot>
-      </div>
-    </Transition>
+                <span
+                  v-if="item.loader"
+                  class="v-dropdown-item-loading"
+                >
+                  <VLoader size="small" />
+                </span>
+              </slot>
+            </button>
+          </slot>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>

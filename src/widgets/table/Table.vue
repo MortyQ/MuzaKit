@@ -3,6 +3,7 @@ import { ref, computed, watch, onUnmounted, useSlots, type Component } from "vue
 
 import TableCell from "./components/TableCell.vue";
 import TableCheckboxCell from "./components/TableCheckboxCell.vue";
+import TableColumnSetup from "./components/TableColumnSetup.vue";
 import TableHeaderCheckbox from "./components/TableHeaderCheckbox.vue";
 import TableHeaderGrouped from "./components/TableHeaderGrouped.vue";
 import TableHeaderSimple from "./components/TableHeaderSimple.vue";
@@ -18,8 +19,10 @@ import { useTableSort } from "./composables/useTableSort";
 import { useVirtualTable } from "./composables/useVirtualTable";
 import type { Column, ExpandableRow, HeaderCell } from "./types/index";
 
+import VButton from "@/shared/ui/common/VButton.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VLoader from "@/shared/ui/common/VLoader.vue";
+import VPopover from "@/shared/ui/common/VPopover.vue";
 import TablePagination from "@/widgets/table/components/TablePagination.vue";
 import { TableEmits, TableProps } from "@/widgets/table/types/props";
 
@@ -102,11 +105,128 @@ const handleToolbarExport = (format: string, selectedOnly?: boolean) => {
   emit("toolbar:export", format, selectedOnly);
 };
 
+// Column Setup Logic - basic check without hasGroups (will be checked later)
+const columnSetupEnabledBasic = computed(() => {
+  const setup = props.toolbar?.actions?.columnSetup;
+  // Enabled if string or object (not false, not undefined)
+  return typeof setup === "string" || typeof setup === "object";
+});
+
+const columnSetupConfig = computed(() => {
+  const setup = props.toolbar?.actions?.columnSetup;
+
+  // String shorthand: use as storage key with defaults
+  if (typeof setup === "string") {
+    return {
+      key: setup,
+      type: "localStorage" as const,
+      allowReorder: true,
+    };
+  }
+
+  // Object: use as-is
+  return typeof setup === "object" ? setup : {};
+});
+
+// Helper: Load saved column state from storage
+const loadColumnsFromStorage = (): Column[] | null => {
+  if (!columnSetupEnabledBasic.value) return null;
+
+  const config = columnSetupConfig.value as any; // object variant
+
+  const hasStorageKey = !!config.key;
+  let loaded: { visible: string[]; order: string[] } | null = null;
+
+  if (hasStorageKey) {
+    const storage = config.type === "sessionStorage" ? sessionStorage : localStorage;
+    try {
+      const raw = storage.getItem(config.key);
+      if (raw) {
+        loaded = JSON.parse(raw);
+      }
+    } catch (e) {
+      console.warn("Failed to parse stored column setup", e);
+    }
+  }
+
+  // If we have a persisted state – build columns from it
+  // If we have a persisted state – build columns from it
+  if (loaded) {
+    const flatten = (cols: Column[]): Column[] =>
+      cols.flatMap(c => (c.children && c.children.length ? flatten(c.children) : [c]));
+    const flat = flatten(props.columns);
+    const map = new Map(flat.map(c => [c.key, c]));
+    const result: Column[] = [];
+    const savedFixed = (loaded as any).fixed as Record<string, "left" | "right"> | undefined;
+
+    loaded.order.forEach(key => {
+      if (loaded!.visible.includes(key)) {
+        const col = map.get(key);
+        if (col) {
+          // Apply saved fixed state if exists
+          result.push({
+            ...col,
+            fixed: savedFixed?.[key] || col.fixed,
+          });
+        }
+      }
+    });
+    // Fallback: if for some reason result empty but visible list not empty, build from visible list
+    if (!result.length && loaded.visible.length) {
+      loaded.visible.forEach(key => {
+        const col = map.get(key);
+        if (col) {
+          result.push({
+            ...col,
+            fixed: savedFixed?.[key] || col.fixed,
+          });
+        }
+      });
+    }
+    return result.length ? result : null;
+  }
+
+  // No persisted state: apply initialVisible if provided
+  const initial = Array.isArray(config.initialVisible) ? config.initialVisible : null;
+  if (initial) {
+    // Preserve original column order; ignore unknown keys
+    const filtered = props.columns.filter(c => initial.includes(c.key));
+    // If initialVisible is an empty array => return empty to hide all columns explicitly.
+    if (initial.length === 0) return [];
+    return filtered.length ? filtered : null; // null => fall back to all columns if none matched
+  }
+
+  return null; // use all columns by default
+};
+
+// Visible columns - managed by TableColumnSetup component
+// Initialize with saved state from storage if available
+const visibleColumns = ref<Column[] | null>(loadColumnsFromStorage());
+const columnSetupPopoverRef = ref<{ close: () => void } | null>(null);
+
+const handleVisibleColumnsUpdate = (columns: Column[]) => {
+  visibleColumns.value = [...columns]; // Create new array to trigger reactivity
+};
+
+const handleColumnSetupClose = () => {
+  columnSetupPopoverRef.value?.close();
+};
+
+// Use visible columns if column setup is enabled, otherwise use all columns
+const effectiveColumns = computed(() => {
+  if (!columnSetupEnabledBasic.value) {
+    return props.columns;
+  }
+  // If column setup is enabled but not yet initialized, use props.columns temporarily
+  return visibleColumns.value ?? props.columns;
+});
+
+
 // Total row visibility - simply check for presence
 const shouldShowTotal = computed(() => props.totalRow !== undefined);
 
 // Column resizing logic - needs to know about flat columns first
-const columnsRef = computed(() => props.columns);
+const columnsRef = computed(() => effectiveColumns.value);
 
 // Initialize columnWidths for grouped headers detection
 const columnWidths = ref<Map<string, number>>(new Map());
@@ -120,10 +240,25 @@ const {
   isGroupFixed,
 } = useGroupedHeaders(columnsRef, columnWidths);
 
+// Column Setup Enabled - final check with hasGroups
+const columnSetupEnabled = computed(() => {
+  if (!columnSetupEnabledBasic.value) return false;
+
+  // Disable column setup if grouped headers are present
+  // TODO: Implement support for grouped headers in column setup
+  if (hasGroups.value) {
+    console.warn("Column Setup is not supported with grouped headers yet");
+    return false;
+  }
+
+  return true;
+});
+
 // Columns for rendering data rows and fixed logic
 // OPTIMIZATION: Use flatColumns only when groups exist
+// IMPORTANT: Use effectiveColumns (filtered by column setup) instead of props.columns
 const columnsForData = computed(() => {
-  return hasGroups.value ? flatColumns.value : props.columns;
+  return hasGroups.value ? flatColumns.value : effectiveColumns.value;
 });
 
 // Column resize works with leaf columns (flatColumns when groups exist)
@@ -355,25 +490,120 @@ const handleToggleRow = (id: string | number, row: ExpandableRow, column: Column
   }
 };
 
-// Check if row is expandable
-const isRowExpandable = (row: ExpandableRow): boolean => {
-  if (!expandableLogic) return false;
-  return expandableLogic.isExpandable(row);
-};
+// ============================================
+// PERFORMANCE: Ultra-light accessors for expandable tables
+// ============================================
+// No computed Map, no caching - just direct property access
+// This is the fastest possible approach for maximum resize performance
 
-// Get row depth (for indent)
+// Direct property access - no overhead
 const getRowDepth = (row: Record<string, unknown>): number => {
   return (row.depth as number) || 0;
 };
 
-// Check if row is expanded
 const isRowExpanded = (row: Record<string, unknown>): boolean => {
   return (row.isExpanded as boolean) || false;
 };
 
-// Check if row has children
 const hasRowChildren = (row: Record<string, unknown>): boolean => {
   return (row.hasChildren as boolean) || false;
+};
+
+// ============================================
+// PERFORMANCE OPTIMIZATION: Unified Cell Metadata
+// ============================================
+// All cell-related calculations in ONE function to minimize overhead
+// Uses WeakMap for aggressive caching - calculated once per row
+
+interface CellMetadata {
+  formattedValue: unknown;
+  cssClass: string | undefined;
+  titleText: string | undefined;
+  indentStyle: { paddingLeft: string } | null;
+  customStyle: Record<string, string> | undefined;
+  isExpandable: boolean;
+}
+
+const cellMetadataCache = new WeakMap<Record<string, unknown>, Map<string, CellMetadata>>();
+
+// UNIFIED cell data calculator - replaces 5 separate function calls
+const getCellMetadata = (
+  row: Record<string, unknown>,
+  column: Column,
+  colIndex: number,
+  rowIndex: number,
+): CellMetadata => {
+  // Get or create row cache
+  let rowCache = cellMetadataCache.get(row);
+  if (!rowCache) {
+    rowCache = new Map();
+    cellMetadataCache.set(row, rowCache);
+  }
+
+  // Check cache - include cellClass/cellStyle in cache key for proper invalidation
+  const cacheKey = `${column.key}-${!!column.cellClass}-${!!column.cellStyle}`;
+  const cached = rowCache.get(cacheKey);
+  if (cached) return cached;
+
+  // Calculate all metadata ONCE
+  const formatted = column.format
+    ? formatCellValue(row[column.key], column, row)
+    : row[column.key];
+
+  // Extract value and class from formatted result
+  let formattedValue = formatted;
+  let cssClass: string | undefined;
+
+  if (
+    formatted &&
+    typeof formatted === "object" &&
+    !Array.isArray(formatted) &&
+    "text" in formatted
+  ) {
+    formattedValue = (formatted as any).text;
+    cssClass = (formatted as any).class;
+  }
+
+  // Custom cellClass from column definition (best practice)
+  if (column.cellClass) {
+    const customClass = column.cellClass(row[column.key], row, rowIndex);
+    if (customClass) {
+      cssClass = cssClass ? `${cssClass} ${customClass}` : customClass;
+    }
+  }
+
+  // Custom cellStyle from column definition (best practice)
+  const customStyle = column.cellStyle
+    ? column.cellStyle(row[column.key], row, rowIndex)
+    : undefined;
+
+  // Title for non-interactive cells
+  const titleText = !column.interactive ? String(formattedValue) : undefined;
+
+  // Indent style for first column with depth
+  const depth = (row.depth as number) || 0;
+  const indentStyle = colIndex === 0 && depth
+    ? { paddingLeft: `${depth * 24 + 16}px` }
+    : null;
+
+  // Check if row is expandable (only for first column)
+  const isExpandable = colIndex === 0 && expandableLogic
+    ? expandableLogic.isExpandable(row as ExpandableRow)
+    : false;
+
+  const metadata: CellMetadata = {
+    formattedValue,
+    cssClass,
+    titleText,
+    indentStyle,
+    customStyle,
+    isExpandable,
+  };
+
+  // Cache it with the same key
+  rowCache.set(cacheKey, metadata);
+
+  return metadata;
 };
 
 // Computed for final rows (considering virtualization)
@@ -530,6 +760,33 @@ onUnmounted(() => {
         >
           <slot name="toolbar-actions" />
         </template>
+
+        <!-- Column Setup Dropdown -->
+        <template
+          v-if="columnSetupEnabled"
+          #column-setup
+        >
+          <VPopover
+            ref="columnSetupPopoverRef"
+            placement="bottom-right"
+          >
+            <template #trigger>
+              <VButton
+                variant="default"
+                icon="lucide:table-2"
+              />
+            </template>
+
+            <template #content>
+              <TableColumnSetup
+                :columns="columns"
+                :config="columnSetupConfig"
+                @update:visible-columns="handleVisibleColumnsUpdate"
+                @close="handleColumnSetupClose"
+              />
+            </template>
+          </VPopover>
+        </template>
       </TableToolbar>
     </div>
 
@@ -649,31 +906,29 @@ onUnmounted(() => {
               v-for="(column, colIndex) in columnsForData"
               :key="`${item.key}-${column.key}`"
               :align="column.align"
-              :depth="getRowDepth(item.row)"
+              :depth="(item.row.depth as number) || 0"
               :class="[
                 getColumnClasses(column),
-                {
-                  'table-cell--expandable': colIndex === 0 && isExpandable &&
-                    isRowExpandable(item.row as ExpandableRow)
-                }
+                getCellMetadata(item.row, column, colIndex, item.index).cssClass
               ]"
-              :style="getFixedStyles(column)"
-              @click="colIndex === 0 && isExpandable &&
-                isRowExpandable(item.row as ExpandableRow) ?
-                  handleToggleRow(item.row.id as string | number, item.row, column) : undefined"
+              :style="{
+                ...getFixedStyles(column),
+                ...getCellMetadata(item.row, column, colIndex, item.index).customStyle
+              }"
             >
-              <div class="table-cell-content">
+              <div
+                class="table-cell-content"
+                :style="getCellMetadata(item.row, column, colIndex, item.index).indentStyle"
+              >
                 <!-- Expand button only for first column -->
                 <button
-                  v-if="colIndex === 0 && isExpandable &&
-                    isRowExpandable(item.row as ExpandableRow)"
+                  v-if="isExpandable &&
+                    getCellMetadata(item.row, column, colIndex, item.index).isExpandable"
                   class="table-cell-expand-btn"
                   @click.stop="handleToggleRow(item.row.id as string | number, item.row, column)"
                 >
                   <VIcon
-                    :icon="isRowExpanded(item.row)
-                      ? 'mdi:chevron-down'
-                      : 'mdi:chevron-right'"
+                    :icon="item.row.isExpanded ? 'mdi:chevron-down' : 'mdi:chevron-right'"
                     :size="18"
                   />
                 </button>
@@ -689,16 +944,13 @@ onUnmounted(() => {
                     :row="item.row"
                     :column="column"
                     :index="item.index"
-                    :depth="getRowDepth(item.row)"
+                    :depth="item.row.depth || 0"
                   >
                     <!-- Default rendering with formatter -->
                     <span
-                      :class="getCellClass(item.row[column.key], column, item.row)"
-                      :title="!column.interactive
-                        ? String(getCellValue(item.row[column.key], column, item.row))
-                        : undefined"
+                      :title="getCellMetadata(item.row, column, colIndex, item.index).titleText"
                     >
-                      {{ getCellValue(item.row[column.key], column, item.row) }}
+                      {{ getCellMetadata(item.row, column, colIndex, item.index).formattedValue }}
                     </span>
                   </slot>
                 </div>

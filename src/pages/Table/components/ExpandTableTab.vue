@@ -28,7 +28,7 @@ const columnsExpandable: Column[] = [
   // All left fixed columns in a row
   { key: "name", label: "Name", width:"150px", sortable: true  },
   { key: "count", label: "Count",width:"100px" },
-  { key: "salary", label: "Salary", width:"150px",  sortable: true },
+  { key: "salary", label: "Salary", format: { currency: true }, width:"150px",  sortable: true },
   // Regular scrollable columns
   { key: "email", label: "Email", width:"150px"  },
   { key: "phone", label: "Phone", width:"150px",  sortable: true },
@@ -246,6 +246,7 @@ const exportFunc = (format: string) => {
           refresh: true,
           resetSort: true,
           export: 'multi',
+          columnSetup: 'expandable-table-column-setup',
         }
       }"
       :export-options="{
@@ -256,9 +257,6 @@ const exportFunc = (format: string) => {
       @expand-click="expandAction"
       @request="handleServerRequest"
     >
-      <template #cell-status="{depth, value}">
-        TEXT  TEXT  TEXT  TEXT {{ value }}: {{ depth }}
-      </template>
       <template #cell-accountStatus>
         <VMultiSelect
           :options="accountStatusList"

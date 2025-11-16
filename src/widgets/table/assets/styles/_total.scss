@@ -9,19 +9,19 @@
   z-index: $z-index-total;
   padding: $table-cell-padding-y $table-cell-padding-x;
 
-  // Premium gradient background for total row
+  // Premium gradient background for total row - enhanced for dark theme
   background: linear-gradient(
     to bottom,
-    rgb(var(--color-base-200)),
-    rgb(var(--color-base-200))
+    color-mix(in srgb, theme('colors.cardBg') 100%, theme('colors.primary') 4%),
+    color-mix(in srgb, theme('colors.cardBg') 100%, theme('colors.mainText') 3%)
   );
 
-  // Premium accent border - stronger for total row
-  border-top: 2px solid rgb(var(--color-primary) / 0.2);
-  border-bottom: none;
+  // Premium accent border - more visible on dark theme
+  border-top: 2px solid color-mix(in srgb, theme('colors.primary') 40%, theme('colors.cardBorder') 60%);
+  border-bottom: 1px solid color-mix(in srgb, theme('colors.primary') 20%, theme('colors.cardBorder') 80%);
 
-  // Add subtle right border for cell separation
-  border-right: 1px solid rgb(var(--color-base-300) / 0.2);
+  // Enhanced right border for cell separation
+  border-right: 1px solid color-mix(in srgb, theme('colors.cardBorder') 80%, transparent 20%);
 
   // Typography - bold for emphasis
   font-weight: $table-font-weight-bold;

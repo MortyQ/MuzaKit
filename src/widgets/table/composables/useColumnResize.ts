@@ -111,7 +111,11 @@ export function useColumnResize(columns: Ref<Column[]>) {
       resizeState.value.startWidth + deltaX,
     );
 
-    resizedWidths.value.set(resizeState.value.columnKey, newWidth);
+    // ⚡ IMPORTANT: Create a NEW Map instead of mutating the existing one
+    // Otherwise Vue won't detect changes (Map mutations are not tracked)
+    const newMap = new Map(resizedWidths.value);
+    newMap.set(resizeState.value.columnKey, newWidth);
+    resizedWidths.value = newMap;
   };
 
   // End resize (mouseup)
@@ -132,12 +136,16 @@ export function useColumnResize(columns: Ref<Column[]>) {
   // Double-click to reset column to its original width
   const autoFitColumn = (columnKey: string) => {
     // Remove from resized widths - column returns to original definition
-    resizedWidths.value.delete(columnKey);
+    // ⚡ IMPORTANT: Create a NEW Map instead of mutation
+    const newMap = new Map(resizedWidths.value);
+    newMap.delete(columnKey);
+    resizedWidths.value = newMap;
   };
 
   // Reset all widths - remove all manual resizes
   const resetWidths = () => {
-    resizedWidths.value.clear();
+    // ⚡ IMPORTANT: Create a NEW empty Map instead of mutation
+    resizedWidths.value = new Map();
   };
 
   // Get current column width (for API/external use)

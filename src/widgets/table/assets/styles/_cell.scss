@@ -6,9 +6,9 @@
 .table-cell {
   padding: $table-cell-padding-y $table-cell-padding-x;
 
-  // Modern subtle gradient border
-  border-bottom: 1px solid rgb(var(--color-base-300) / 0.3);
-  border-right: 1px solid rgb(var(--color-base-300) / 0.15);
+  // Enhanced borders for better visibility on dark theme
+  border-bottom: 1px solid color-mix(in srgb, theme('colors.cardBorder') 100%, transparent 0%);
+  border-right: 1px solid color-mix(in srgb, theme('colors.cardBorder') 70%, transparent 30%);
 
   // Typography - mainText for primary content
   color: theme('colors.mainText');
@@ -50,6 +50,11 @@
   gap: 0.5rem;
   min-width: 0;
   height: 100%;
+
+  // Indented content for nested rows (uses CSS variable for performance)
+  &--indented {
+    padding-left: var(--indent, 0);
+  }
 }
 
 // Text content with elegant truncation
@@ -134,9 +139,17 @@
   flex-shrink: 0;
 }
 
-// Indent for nested rows - creates clear hierarchy
+// ============================================
+// Hierarchical Row Visualization - Performance Optimized
+// ============================================
+// Using ONLY indentation for maximum performance
+// No pseudo-elements, no gradients, no attribute selectors
+// Perfect for large datasets and smooth resize/scroll
+
+// Indent for nested rows - simple and fast
 .table-cell--indented {
-  // Dynamic padding added through inline styles
-  // padding-left: calc(depth * $table-indent-size + base-padding)
+  // Dynamic padding added through inline styles in Table.vue
+  // padding-left: calc(depth * 24px + base-padding)
+  // This is the most performant approach - just padding, no extra layers
 }
 

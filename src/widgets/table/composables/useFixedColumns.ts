@@ -28,20 +28,6 @@ export function useFixedColumns(
     });
   }
 
-  // Helper: get column width (from dynamic or static)
-  const getColumnWidth = (columnKey: string, fallbackWidth?: string): number => {
-    // Try to get from dynamic widths (columnWidths from useColumnResize)
-    if (columnWidths?.value) {
-      const dynamicWidth = columnWidths.value.get(columnKey);
-      if (dynamicWidth !== undefined) {
-        return dynamicWidth;
-      }
-    }
-
-    // Fallback to static width from column.width
-    return parseColumnWidth(fallbackWidth) || 150; // 150px default
-  };
-
   // Divide columns into groups
   const leftFixedColumns = computed(() =>
     columns.value.filter((col) => col.fixed === "left"),
@@ -55,43 +41,72 @@ export function useFixedColumns(
     columns.value.filter((col) => !col.fixed),
   );
 
-  // Calculate offset for left fixed columns
-  const getLeftOffset = (columnKey: string): number => {
+  // 🔥 REACTIVE: Computed offsets for left fixed columns
+  // Automatically recalculates when columnWidths changes
+  const leftOffsetsMap = computed(() => {
+    // ⚡ IMPORTANT: Explicit read of columnWidths.value to create reactive dependency
+    const widths = columnWidths?.value;
+
+    const map = new Map<string, number>();
     let offset = 0;
+
     // Go through original columns array (preserving order)
     for (const col of columns.value) {
-      if (col.key === columnKey) break;
-      // Count only left fixed columns
       if (col.fixed === "left") {
-        const width = getColumnWidth(col.key, col.width);
+        map.set(col.key, offset);
+
+        // Get width (dynamic or static)
+        let width = 150; // default
+        if (widths) {
+          const dynamicWidth = widths.get(col.key);
+          if (dynamicWidth !== undefined) {
+            width = dynamicWidth;
+          } else {
+            width = parseColumnWidth(col.width) || 150;
+          }
+        } else {
+          width = parseColumnWidth(col.width) || 150;
+        }
+
         offset += width;
       }
     }
-    return offset;
-  };
 
-  // Calculate offset for right fixed columns
-  const getRightOffset = (columnKey: string): number => {
+    return map;
+  });
+
+  // 🔥 REACTIVE: Computed offsets for right fixed columns
+  const rightOffsetsMap = computed(() => {
+    // ⚡ IMPORTANT: Explicit read of columnWidths.value to create reactive dependency
+    const widths = columnWidths?.value;
+
+    const map = new Map<string, number>();
+    const rightFixed = columns.value.filter((col) => col.fixed === "right");
+
+    // Calculate from right to left
     let offset = 0;
-    let foundColumn = false;
+    for (let i = rightFixed.length - 1; i >= 0; i--) {
+      const col = rightFixed[i];
+      map.set(col.key, offset);
 
-    // Go through original columns array in reverse order
-    for (let i = columns.value.length - 1; i >= 0; i--) {
-      const col = columns.value[i];
-
-      if (col.key === columnKey) {
-        foundColumn = true;
-        continue;
+      // Get width (dynamic or static)
+      let width = 150; // default
+      if (widths) {
+        const dynamicWidth = widths.get(col.key);
+        if (dynamicWidth !== undefined) {
+          width = dynamicWidth;
+        } else {
+          width = parseColumnWidth(col.width) || 150;
+        }
+      } else {
+        width = parseColumnWidth(col.width) || 150;
       }
 
-      // Count only right fixed columns that come after current one
-      if (foundColumn && col.fixed === "right") {
-        const width = getColumnWidth(col.key, col.width);
-        offset += width;
-      }
+      offset += width;
     }
-    return offset;
-  };
+
+    return map;
+  });
 
   // z-index for stacking (leftmost columns have higher z-index)
   const getZIndex = (columnKey: string, column: Column): number => {
@@ -124,25 +139,40 @@ export function useFixedColumns(
     return 1; // Regular columns
   };
 
-  // Get styles for fixed column
+  // 🔥 REACTIVE: Map with styles for each column
+  // Automatically recalculates when columnWidths or columns change
+  const fixedStylesMap = computed(() => {
+    const map = new Map<string, Record<string, string>>();
+
+    columns.value.forEach((column) => {
+      if (!column.fixed) {
+        map.set(column.key, {});
+        return;
+      }
+
+      const styles: Record<string, string> = {
+        // position: sticky added through CSS classes!
+        // zIndex also controlled through CSS for proper hierarchy
+      };
+
+      if (column.fixed === "left") {
+        const offset = leftOffsetsMap.value.get(column.key) || 0;
+        styles.left = `${offset}px`;
+      }
+      else if (column.fixed === "right") {
+        const offset = rightOffsetsMap.value.get(column.key) || 0;
+        styles.right = `${offset}px`;
+      }
+
+      map.set(column.key, styles);
+    });
+
+    return map;
+  });
+
+  // Get styles for fixed column - now reads from reactive Map
   const getFixedStyles = (column: Column) => {
-    if (!column.fixed) return {};
-
-    const styles: Record<string, string> = {
-      // position: sticky added through CSS classes!
-      // zIndex also controlled through CSS for proper hierarchy
-    };
-
-    if (column.fixed === "left") {
-      const offset = getLeftOffset(column.key);
-      styles.left = `${offset}px`;
-    }
-    else if (column.fixed === "right") {
-      const offset = getRightOffset(column.key);
-      styles.right = `${offset}px`;
-    }
-
-    return styles;
+    return fixedStylesMap.value.get(column.key) || {};
   };
 
   // Check if column is fixed

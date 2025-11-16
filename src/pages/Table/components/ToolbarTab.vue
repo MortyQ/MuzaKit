@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+import VAccordion from "@/shared/ui/common/VAccordion.vue";
+import type { AccordionItem } from "@/shared/ui/common/VAccordion.vue";
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import Table from "@/widgets/table/Table.vue";
@@ -99,6 +101,42 @@ const handleExport = (format: string, selectedOnly?: boolean) => {
     }, 2000);
   }
 };
+
+// Accordion items for toolbar features
+const toolbarItems: AccordionItem[] = [
+  {
+    id: "auto-refresh",
+    title: "Automatic Refresh & Reset",
+    subtitle: "Built-in behavior for refresh and sort reset - no event listeners needed",
+    icon: "lucide:refresh-cw",
+  },
+  {
+    id: "custom-handlers",
+    title: "Custom Event Handlers",
+    subtitle: "Full control with manual event listeners using 'custom' mode",
+    icon: "lucide:settings",
+  },
+  {
+    id: "multi-export",
+    title: "Multi-Format Export",
+    subtitle: "Multiple export options with loading states",
+    icon: "lucide:download",
+  },
+  {
+    id: "minimal",
+    title: "Minimal Toolbar",
+    subtitle: "Simple toolbar with just title and refresh button",
+    icon: "lucide:minimize-2",
+  },
+  {
+    id: "code-example",
+    title: "Code Example",
+    subtitle: "Complete implementation example with all features",
+    icon: "lucide:code-2",
+  },
+];
+
+const openToolbarSections = ref<(string | number)[]>(["auto-refresh"]);
 
 // Code example
 const codeExample = `<Table
@@ -266,129 +304,131 @@ const codeExample = `<Table
       </div>
     </VCard>
 
-    <div class="grid grid-cols-2 gap-5">
-      <VCard
-        class="col-span-full w-full lg:col-span-1"
-        title="Automatic Refresh & Reset (Recommended)"
-      >
-        <p class="demo-description">
-          Toolbar with automatic behavior: refresh resets sort & pagination,
-          reset sort only clears sort. No event listeners needed!
-        </p>
-
-        <Table
-          v-model:search="searchQuery"
-          :columns="columns"
-          :data="toolbarData"
-          :toolbar="{
-            enabled: true,
-            title: 'Users Management',
-            subtitle: 'Automatic reset behavior',
-            search: true,
-            actions: {
-              refresh: true,
-              resetSort: true,
-              export: 'single',
-            },
-          }"
-          @toolbar:export="handleExport"
-        />
-      </VCard>
-
-      <VCard
-        class="col-span-full w-full lg:col-span-1"
-        title="Manual Control (Custom Handlers)"
-      >
-        <p class="demo-description">
-          Toolbar with custom event handlers -
-          you have full control over refresh and reset behavior.
-          Use 'custom' mode to disable built-in behavior.
-        </p>
-
-        <Table
-          v-model:search="searchQuery"
-          :columns="columns"
-          :data="toolbarData"
-          :toolbar="{
-            enabled: true,
-            title: 'Custom Handlers',
-            subtitle: 'With manual event listeners',
-            search: true,
-            actions: {
-              refresh: 'custom',
-              resetSort: 'custom',
-              export: 'single',
-            },
-          }"
-          :loading="isRefreshing"
-          @toolbar:refresh="handleRefresh"
-          @toolbar:reset-sort="handleResetSort"
-          @toolbar:export="handleExport"
-        />
-      </VCard>
-
-      <VCard
-        class="col-span-full w-full lg:col-span-1"
-        title="Toolbar with Multi Export"
-      >
-        <p class="demo-description">
-          Toolbar with multiple export options and loading states
-        </p>
-
-        <Table
-          v-model:search="searchQuery"
-          :columns="columns"
-          :data="toolbarData"
-          :toolbar="{
-            enabled: true,
-            title: 'Export Demo',
-            subtitle: 'Choose your export format',
-            search: { placeholder: 'Search users...' },
-            actions: {
-              refresh: true,
-              export: 'multi',
-            },
-          }"
-          :export-options="{
-            formats: exportFormats,
-            selectedOnly: false,
-          }"
-          @toolbar:refresh="handleRefresh"
-          @toolbar:export="handleExport"
-        />
-      </VCard>
-
-      <VCard
-        class="col-span-full w-full lg:col-span-1"
-        title="Minimal Toolbar"
-      >
-        <p class="demo-description">
-          Minimal toolbar with just title and refresh
-        </p>
-
-        <Table
-          :columns="columns"
-          :data="toolbarData"
-          :toolbar="{
-            enabled: true,
-            title: 'Minimal Example',
-            actions: {
-              refresh: true,
-            },
-          }"
-          @toolbar:refresh="handleRefresh"
-        />
-      </VCard>
-
-      <VCard
-        class="col-span-full w-full lg:col-span-1"
-        title="Code Example"
-      >
-        <div class="code-block">
-          <pre><code>{{ codeExample }}</code></pre>
+    <!-- Toolbar Features Accordion -->
+    <VAccordion
+      v-model="openToolbarSections"
+      :items="toolbarItems"
+      variant="outlined"
+      multiple
+    >
+      <!-- Automatic Refresh & Reset -->
+      <template #content-auto-refresh>
+        <div class="accordion-content">
+          <p class="section-description">
+            Toolbar with automatic behavior: refresh resets sort & pagination,
+            reset sort only clears sort. No event listeners needed!
+          </p>
+          <Table
+            v-model:search="searchQuery"
+            :columns="columns"
+            :data="toolbarData"
+            :toolbar="{
+              enabled: true,
+              title: 'Users Management',
+              subtitle: 'Automatic reset behavior',
+              search: true,
+              actions: {
+                refresh: true,
+                resetSort: true,
+                export: 'single',
+              },
+            }"
+            @toolbar:export="handleExport"
+          />
         </div>
-      </VCard>
-    </div>
+      </template>
+
+      <!-- Custom Event Handlers -->
+      <template #content-custom-handlers>
+        <div class="accordion-content">
+          <p class="section-description">
+            Toolbar with custom event handlers -
+            you have full control over refresh and reset behavior.
+            Use 'custom' mode to disable built-in behavior.
+          </p>
+          <Table
+            v-model:search="searchQuery"
+            :columns="columns"
+            :data="toolbarData"
+            :toolbar="{
+              enabled: true,
+              title: 'Custom Handlers',
+              subtitle: 'With manual event listeners',
+              search: true,
+              actions: {
+                refresh: 'custom',
+                resetSort: 'custom',
+                export: 'single',
+              },
+            }"
+            :loading="isRefreshing"
+            @toolbar:refresh="handleRefresh"
+            @toolbar:reset-sort="handleResetSort"
+            @toolbar:export="handleExport"
+          />
+        </div>
+      </template>
+
+      <!-- Multi-Format Export -->
+      <template #content-multi-export>
+        <div class="accordion-content">
+          <p class="section-description">
+            Toolbar with multiple export options and loading states
+          </p>
+          <Table
+            v-model:search="searchQuery"
+            :columns="columns"
+            :data="toolbarData"
+            :toolbar="{
+              enabled: true,
+              title: 'Export Demo',
+              subtitle: 'Choose your export format',
+              search: { placeholder: 'Search users...' },
+              actions: {
+                refresh: true,
+                export: 'multi',
+              },
+            }"
+            :export-options="{
+              formats: exportFormats,
+              selectedOnly: false,
+            }"
+            @toolbar:refresh="handleRefresh"
+            @toolbar:export="handleExport"
+          />
+        </div>
+      </template>
+
+      <!-- Minimal Toolbar -->
+      <template #content-minimal>
+        <div class="accordion-content">
+          <p class="section-description">
+            Minimal toolbar with just title and refresh
+          </p>
+          <Table
+            :columns="columns"
+            :data="toolbarData"
+            :toolbar="{
+              enabled: true,
+              title: 'Minimal Example',
+              actions: {
+                refresh: true,
+              },
+            }"
+            @toolbar:refresh="handleRefresh"
+          />
+        </div>
+      </template>
+
+      <!-- Code Example -->
+      <template #content-code-example>
+        <div class="accordion-content">
+          <div class="code-block">
+            <pre><code>{{ codeExample }}</code></pre>
+          </div>
+        </div>
+      </template>
+    </VAccordion>
   </div>
 </template>
 
@@ -396,15 +436,27 @@ const codeExample = `<Table
 @use "@/shared/assets/styles/shared-info-card-styles.scss";
 
 // Component-specific styles
-.demo-description {
-  @apply mb-4 text-secondaryText text-sm;
+.page-container {
+  @apply flex flex-col;
 }
 
-pre {
-  @apply bg-base-200 p-4 rounded-lg overflow-x-auto text-sm leading-relaxed;
+.section-description {
+  @apply m-0 mb-4 text-sm text-secondaryText leading-relaxed;
 }
 
-code {
-  @apply text-mainText font-mono;
+.accordion-content {
+  @apply flex flex-col gap-4 p-6;
+}
+
+.code-block {
+  @apply mt-4 p-4 bg-base-200 rounded-lg;
+
+  pre {
+    @apply overflow-x-auto text-sm leading-relaxed;
+  }
+
+  code {
+    @apply text-mainText font-mono text-xs;
+  }
 }
 </style>

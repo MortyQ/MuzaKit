@@ -148,6 +148,11 @@ export const iconMap: Record<string, Component> = {
   "mdi:routes": defineAsyncComponent(() => import("~icons/mdi/routes")),
   "mdi:book-open-variant": defineAsyncComponent(() => import("~icons/mdi/book-open-variant")),
   "mdi:dots-horizontal": defineAsyncComponent(() => import("~icons/mdi/dots-horizontal")),
+  "mdi:view-column": defineAsyncComponent(() => import("~icons/mdi/view-column")),
+  "mdi:drag-vertical": defineAsyncComponent(() => import("~icons/mdi/drag-vertical")),
+  "mdi:information-outline": defineAsyncComponent(() => import("~icons/mdi/information-outline")),
+  "mdi:pin-outline": defineAsyncComponent(() => import("~icons/mdi/pin-outline")),
+  "mdi:pin": defineAsyncComponent(() => import("~icons/mdi/pin")),
   // ==================== Heroicons ====================
 
   "heroicons:home-solid": defineAsyncComponent(() => import("~icons/heroicons/home-solid")),
@@ -243,6 +248,24 @@ export const iconMap: Record<string, Component> = {
   "lucide:sparkles": defineAsyncComponent(() => import("~icons/lucide/sparkles")),
   "lucide:chevrons-down": defineAsyncComponent(() => import("~icons/lucide/chevrons-down")),
   "lucide:accessibility": defineAsyncComponent(() => import("~icons/lucide/accessibility")),
+  "lucide:trash": defineAsyncComponent(() => import("~icons/lucide/trash")),
+  "lucide:columns-3": defineAsyncComponent(() => import("~icons/lucide/columns-3")),
+  "lucide:panel-left": defineAsyncComponent(() => import("~icons/lucide/panel-left")),
+  "lucide:sliders-horizontal": defineAsyncComponent(() => import("~icons/lucide/sliders-horizontal")),
+  "lucide:save": defineAsyncComponent(() => import("~icons/lucide/save")),
+  "lucide:minimize-2": defineAsyncComponent(() => import("~icons/lucide/minimize-2")),
+  "lucide:message-circle": defineAsyncComponent(() => import("~icons/lucide/message-circle")),
+  "lucide:chevron-down": defineAsyncComponent(() => import("~icons/lucide/chevron-down")),
+  "lucide:move": defineAsyncComponent(() => import("~icons/lucide/move")),
+  "lucide:layout-template": defineAsyncComponent(() => import("~icons/lucide/layout-template")),
+  "lucide:more-vertical": defineAsyncComponent(() => import("~icons/lucide/more-vertical")),
+  "lucide:check-circle": defineAsyncComponent(() => import("~icons/lucide/check-circle")),
+  "lucide:edit": defineAsyncComponent(() => import("~icons/lucide/edit")),
+  "lucide:copy": defineAsyncComponent(() => import("~icons/lucide/copy")),
+  "lucide:archive": defineAsyncComponent(() => import("~icons/lucide/archive")),
+  "lucide:trash-2": defineAsyncComponent(() => import("~icons/lucide/trash-2")),
+  "lucide:share-2": defineAsyncComponent(() => import("~icons/lucide/share")),
+  "lucide:log-out": defineAsyncComponent(() => import("~icons/lucide/log-out")),
 };
 
 /**
