@@ -520,6 +520,7 @@ interface CellMetadata {
   cssClass: string | undefined;
   titleText: string | undefined;
   indentStyle: { paddingLeft: string } | null;
+  customStyle: Record<string, string> | undefined;
   isExpandable: boolean;
 }
 
@@ -530,6 +531,7 @@ const getCellMetadata = (
   row: Record<string, unknown>,
   column: Column,
   colIndex: number,
+  rowIndex: number,
 ): CellMetadata => {
   // Get or create row cache
   let rowCache = cellMetadataCache.get(row);
@@ -538,8 +540,9 @@ const getCellMetadata = (
     cellMetadataCache.set(row, rowCache);
   }
 
-  // Check cache
-  const cached = rowCache.get(column.key);
+  // Check cache - include cellClass/cellStyle in cache key for proper invalidation
+  const cacheKey = `${column.key}-${!!column.cellClass}-${!!column.cellStyle}`;
+  const cached = rowCache.get(cacheKey);
   if (cached) return cached;
 
   // Calculate all metadata ONCE
@@ -561,6 +564,19 @@ const getCellMetadata = (
     cssClass = (formatted as any).class;
   }
 
+  // Custom cellClass from column definition (best practice)
+  if (column.cellClass) {
+    const customClass = column.cellClass(row[column.key], row, rowIndex);
+    if (customClass) {
+      cssClass = cssClass ? `${cssClass} ${customClass}` : customClass;
+    }
+  }
+
+  // Custom cellStyle from column definition (best practice)
+  const customStyle = column.cellStyle
+    ? column.cellStyle(row[column.key], row, rowIndex)
+    : undefined;
+
   // Title for non-interactive cells
   const titleText = !column.interactive ? String(formattedValue) : undefined;
 
@@ -580,11 +596,12 @@ const getCellMetadata = (
     cssClass,
     titleText,
     indentStyle,
+    customStyle,
     isExpandable,
   };
 
-  // Cache it
-  rowCache.set(column.key, metadata);
+  // Cache it with the same key
+  rowCache.set(cacheKey, metadata);
 
   return metadata;
 };
@@ -890,16 +907,23 @@ onUnmounted(() => {
               :key="`${item.key}-${column.key}`"
               :align="column.align"
               :depth="(item.row.depth as number) || 0"
-              :class="getColumnClasses(column)"
-              :style="getFixedStyles(column)"
+              :class="[
+                getColumnClasses(column),
+                getCellMetadata(item.row, column, colIndex, item.index).cssClass
+              ]"
+              :style="{
+                ...getFixedStyles(column),
+                ...getCellMetadata(item.row, column, colIndex, item.index).customStyle
+              }"
             >
               <div
                 class="table-cell-content"
-                :style="getCellMetadata(item.row, column, colIndex).indentStyle"
+                :style="getCellMetadata(item.row, column, colIndex, item.index).indentStyle"
               >
                 <!-- Expand button only for first column -->
                 <button
-                  v-if="isExpandable && getCellMetadata(item.row, column, colIndex).isExpandable"
+                  v-if="isExpandable &&
+                    getCellMetadata(item.row, column, colIndex, item.index).isExpandable"
                   class="table-cell-expand-btn"
                   @click.stop="handleToggleRow(item.row.id as string | number, item.row, column)"
                 >
@@ -922,12 +946,11 @@ onUnmounted(() => {
                     :index="item.index"
                     :depth="item.row.depth || 0"
                   >
-                    <!-- Default rendering with formatter - ONE function call! -->
+                    <!-- Default rendering with formatter -->
                     <span
-                      :class="getCellMetadata(item.row, column, colIndex).cssClass"
-                      :title="getCellMetadata(item.row, column, colIndex).titleText"
+                      :title="getCellMetadata(item.row, column, colIndex, item.index).titleText"
                     >
-                      {{ getCellMetadata(item.row, column, colIndex).formattedValue }}
+                      {{ getCellMetadata(item.row, column, colIndex, item.index).formattedValue }}
                     </span>
                   </slot>
                 </div>

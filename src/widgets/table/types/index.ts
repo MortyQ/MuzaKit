@@ -46,6 +46,26 @@ export interface Column {
 
   // Formatting options (mutually exclusive - only one should be used)
   format?: ColumnFormatOptions
+
+  // Custom cell styling (best practice from TanStack Table, AG-Grid)
+  // Function receives: value, row, rowIndex
+  // Returns: class string or style object
+  cellClass?: <T = Record<string, unknown>>(
+  // eslint-disable-next-line no-unused-vars
+    value: unknown,
+  // eslint-disable-next-line no-unused-vars
+    row: T,
+  // eslint-disable-next-line no-unused-vars
+    rowIndex: number,
+  ) => string | undefined
+  cellStyle?: <T = Record<string, unknown>>(
+  // eslint-disable-next-line no-unused-vars
+    value: unknown,
+  // eslint-disable-next-line no-unused-vars
+    row: T,
+  // eslint-disable-next-line no-unused-vars
+    rowIndex: number,
+  ) => Record<string, string> | undefined
 }
 
 export interface HeaderCell {

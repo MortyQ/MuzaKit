@@ -7,16 +7,67 @@ import { mockDataUsers, mockDataUsersTotalRow } from "@/widgets/table/utils/mock
 
 const columnsRegular: Column[] = [
   { key: "id", label: "ID", width: "80px", align: "center" },
-  { key: "name", label: "Name",width: "100px" },
-  { key: "age", label: "Age",  align: "center" },
+  { key: "name", label: "Name", width: "100px" },
+  {
+    key: "age",
+    label: "Age",
+    align: "center",
+    // Heatmap with background color
+    cellStyle: (value) => {
+      const num = Number(value);
+      if (isNaN(num)) return {};
+
+      // Discrete color buckets
+      let backgroundColor;
+      const color = "#ffffff";
+
+      if (num < 25) {
+        backgroundColor = "#22c55e"; // green-500
+      } else if (num < 35) {
+        backgroundColor = "#84cc16"; // lime-500
+      } else if (num < 45) {
+        backgroundColor = "#eab308"; // yellow-500
+      } else if (num < 55) {
+
+        backgroundColor = "#dc2626"; // red-600
+      } else {
+        backgroundColor = "#f59e0b"; // amber-500
+      }
+
+      return {
+        backgroundColor,
+        color,
+        fontWeight: "600",
+        textAlign: "center",
+      };
+    },
+  },
   { key: "email", label: "Email", width: "100px" },
   { key: "phone", label: "Phone", width: "150px" },
-  { key: "position", label: "Position", width: "150px" },
-  { key: "status", label: "Status", width: "150px" },
+  {
+    key: "position",
+    label: "Position",
+    width: "150px",
+  },
+  {
+    key: "status",
+    label: "Status",
+    width: "150px",
+  },
   { key: "performance", label: "Rating" },
   { key: "startDate", label: "Start Date", format: { date: "long" }, width: "130px" },
   { key: "projects", label: "Projects", width: "100px" },
-  { key: "location", label: "Location", width: "150px" },
+  {
+    key: "location",
+    label: "Location",
+    width: "150px",
+    // Example: Custom class based on row data
+    cellClass: (value, row, index) => {
+      // Alternate row colors
+      if (index % 2 === 0) return "bg-blue-50 dark:bg-blue-950/20";
+      return "";
+    },
+  },
   { key: "manager", label: "Manager", width: "180px" },
   { key: "budget", label: "Budget", width: "130px" },
   { key: "revenue", label: "Revenue", width: "130px" },
@@ -152,5 +203,3 @@ const columnsRegular: Column[] = [
 <style scoped lang="scss">
 @use "@/shared/assets/styles/shared-info-card-styles.scss";
 </style>
-
-
