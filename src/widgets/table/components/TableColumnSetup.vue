@@ -48,7 +48,7 @@ const getStorage = () => {
 };
 
 // Load saved state from storage
-const loadFromStorage = (): { visible: string[]; order: string[] } | null => {
+const loadFromStorage = (): { visible: string[]; order: string[]; fixed?: Record<string, "left" | "right"> } | null => {
   if (!props.config?.key) return null;
 
   const storage = getStorage();
@@ -73,9 +73,18 @@ const saveToStorage = (setupItems: ColumnSetupItem[]) => {
   if (!storage) return;
 
   try {
+    // Build fixed map (only save columns that are fixed)
+    const fixed: Record<string, "left" | "right"> = {};
+    setupItems.forEach((item) => {
+      if (item.fixed) {
+        fixed[item.key] = item.fixed;
+      }
+    });
+
     const state = {
       visible: setupItems.filter((item) => item.visible).map((item) => item.key),
       order: setupItems.map((item) => item.key),
+      fixed: Object.keys(fixed).length > 0 ? fixed : undefined, // Only save if there are fixed columns
     };
     storage.setItem(props.config.key, JSON.stringify(state));
   } catch (error) {
@@ -100,7 +109,7 @@ const createSetupItems = (): ColumnSetupItem[] => {
 
   // If we have saved state, use it
   if (savedState) {
-    const { visible, order } = savedState;
+    const { visible, order, fixed: savedFixed } = savedState;
 
     // Create a map for quick lookup
     const colMap = new Map(flatCols.map((col) => [col.key, col]));
@@ -117,7 +126,7 @@ const createSetupItems = (): ColumnSetupItem[] => {
           label: col.label,
           visible: visible.includes(key),
           order: index,
-          fixed: col.fixed,
+          fixed: savedFixed?.[key] || col.fixed, // Use saved fixed state, fallback to column's fixed
         });
         colMap.delete(key);
       }
@@ -171,7 +180,16 @@ const emitVisibleColumns = () => {
   const visibleItems = items.value.filter((item) => item.visible).sort((a, b) => a.order - b.order);
 
   const visibleCols = visibleItems
-    .map((item) => flatCols.find((col) => col.key === item.key))
+    .map((item) => {
+      const col = flatCols.find((c) => c.key === item.key);
+      if (!col) return null;
+
+      // Apply fixed state from item to column
+      return {
+        ...col,
+        fixed: item.fixed,
+      };
+    })
     .filter(Boolean) as Column[];
 
   emit("update:visible-columns", visibleCols);
@@ -311,6 +329,10 @@ const handleDrop = (toIndex: number, event: DragEvent) => {
   });
 
   items.value = newItems;
+
+  // Validate fixed columns after reorder
+  validateFixedColumns();
+
   draggedIndex.value = null;
   dragOverIndex.value = null;
 };
@@ -333,6 +355,40 @@ const handleToggleAll = () => {
   const newValue = !allVisible.value;
   items.value.forEach((item) => {
     item.visible = newValue;
+  });
+};
+
+// Fixed column handlers
+const canBeFixed = (index: number): boolean => {
+  // Only first 2 positions can be fixed
+  return index === 0 || index === 1;
+};
+
+const isFixedLeft = (item: ColumnSetupItem): boolean => {
+  return item.fixed === "left";
+};
+
+const toggleFixed = (index: number) => {
+  if (!canBeFixed(index)) return;
+
+  const item = items.value[index];
+  if (!item) return;
+
+  // Toggle fixed state
+  if (item.fixed === "left") {
+    item.fixed = undefined;
+  } else {
+    item.fixed = "left";
+  }
+};
+
+// Validate fixed columns after reorder
+const validateFixedColumns = () => {
+  items.value.forEach((item, index) => {
+    // If column is fixed but not in first 2 positions, remove fixed
+    if (item.fixed === "left" && !canBeFixed(index)) {
+      item.fixed = undefined;
+    }
   });
 };
 
@@ -431,13 +487,28 @@ const handleReset = () => {
           {{ item.label }}
         </div>
 
-        <!-- Fixed indicator -->
-        <div
-          v-if="item.fixed"
-          class="column-setup-item-badge"
+        <!-- Fixed toggle button (only for first 2 positions) -->
+        <button
+          v-if="canBeFixed(index)"
+          class="column-setup-item-fixed-btn"
+          :class="{ 'column-setup-item-fixed-btn--active': isFixedLeft(item) }"
+          :title="isFixedLeft(item) ? 'Unpin column' : 'Pin column to left'"
+          @click.stop="toggleFixed(index)"
         >
           <VIcon
-            :icon="item.fixed === 'left' ? 'mdi:pin' : 'mdi:pin-outline'"
+            :icon="isFixedLeft(item) ? 'mdi:pin' : 'mdi:pin-outline'"
+            :size="16"
+          />
+        </button>
+
+        <!-- Fixed indicator badge (when fixed but position > 1) -->
+        <div
+          v-if="item.fixed && !canBeFixed(index)"
+          class="column-setup-item-badge column-setup-item-badge--warning"
+          title="Fixed will be removed - move to top 2 positions"
+        >
+          <VIcon
+            icon="mdi:alert"
             size="small"
           />
         </div>
@@ -454,7 +525,7 @@ const handleReset = () => {
           icon="mdi:information-outline"
           size="small"
         />
-        Drag to reorder columns
+        Drag to reorder • Pin first 2 columns
       </span>
 
       <VButton
@@ -626,6 +697,37 @@ const handleReset = () => {
   letter-spacing: -0.01em;
 }
 
+.column-setup-item-fixed-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background: var(--color-base-100);
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--color-neutral-50);
+    border-color: var(--color-neutral-300);
+    color: var(--color-primary-500);
+  }
+
+  &--active {
+    background: var(--color-primary-50);
+    border-color: var(--color-primary-500);
+    color: var(--color-primary-600);
+
+    &:hover {
+      background: var(--color-primary-100);
+    }
+  }
+}
+
 .column-setup-item-badge {
   display: flex;
   align-items: center;
@@ -637,6 +739,11 @@ const handleReset = () => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+
+  &--warning {
+    background: var(--color-warning-100);
+    color: var(--color-warning-700);
+  }
 }
 
 .column-setup-footer {

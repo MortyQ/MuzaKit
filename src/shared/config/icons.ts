@@ -151,6 +151,8 @@ export const iconMap: Record<string, Component> = {
   "mdi:view-column": defineAsyncComponent(() => import("~icons/mdi/view-column")),
   "mdi:drag-vertical": defineAsyncComponent(() => import("~icons/mdi/drag-vertical")),
   "mdi:information-outline": defineAsyncComponent(() => import("~icons/mdi/information-outline")),
+  "mdi:pin-outline": defineAsyncComponent(() => import("~icons/mdi/pin-outline")),
+  "mdi:pin": defineAsyncComponent(() => import("~icons/mdi/pin")),
   // ==================== Heroicons ====================
 
   "heroicons:home-solid": defineAsyncComponent(() => import("~icons/heroicons/home-solid")),

@@ -138,21 +138,38 @@ const loadColumnsFromStorage = (): Column[] | null => {
   }
 
   // If we have a persisted state – build columns from it
+  // If we have a persisted state – build columns from it
   if (loaded) {
-    const flatten = (cols: Column[]):
-    Column[] => cols.flatMap(c => (c.children && c.children.length ? flatten(c.children) : [c]));
+    const flatten = (cols: Column[]): Column[] =>
+      cols.flatMap(c => (c.children && c.children.length ? flatten(c.children) : [c]));
     const flat = flatten(props.columns);
     const map = new Map(flat.map(c => [c.key, c]));
     const result: Column[] = [];
+    const savedFixed = (loaded as any).fixed as Record<string, "left" | "right"> | undefined;
+
     loaded.order.forEach(key => {
       if (loaded!.visible.includes(key)) {
         const col = map.get(key);
-        if (col) result.push(col);
+        if (col) {
+          // Apply saved fixed state if exists
+          result.push({
+            ...col,
+            fixed: savedFixed?.[key] || col.fixed,
+          });
+        }
       }
     });
     // Fallback: if for some reason result empty but visible list not empty, build from visible list
     if (!result.length && loaded.visible.length) {
-      loaded.visible.forEach(key => { const col = map.get(key); if (col) result.push(col); });
+      loaded.visible.forEach(key => {
+        const col = map.get(key);
+        if (col) {
+          result.push({
+            ...col,
+            fixed: savedFixed?.[key] || col.fixed,
+          });
+        }
+      });
     }
     return result.length ? result : null;
   }
