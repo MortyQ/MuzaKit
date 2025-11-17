@@ -178,10 +178,17 @@ const sizeClasses = computed(() => {
 
           <!-- Main Value -->
           <div class="mt-1">
-            <p class="text-2xl font-semibold text-mainText truncate">
-              {{ formattedValue }}
-              <span v-if="formatOptions.unit === 'percentage'">%</span>
-            </p>
+            <VTooltip
+              :text="`${formattedValue}${formatOptions.unit === 'percentage' ? '%' : ''}`"
+              placement="top"
+              wrapper-class="block w-full"
+              :delay="150"
+            >
+              <p class="text-2xl font-semibold text-mainText truncate">
+                {{ formattedValue }}
+                <span v-if="formatOptions.unit === 'percentage'">%</span>
+              </p>
+            </VTooltip>
           </div>
         </div>
       </div>
@@ -200,10 +207,9 @@ const sizeClasses = computed(() => {
 
       <!-- Additional Comparisons -->
       <div
-        :class="[
-          'additional-comparisons',
-          props.showAllComparisons && additionalComparisons.length > 0 ? 'is-expanded' : ''
-        ]"
+        v-if="additionalComparisons.length > 0"
+        class="additional-comparisons"
+        :class="{ 'is-expanded': props.showAllComparisons }"
       >
         <div class="additional-comparisons__inner">
           <VKpiComparison
@@ -271,6 +277,7 @@ const sizeClasses = computed(() => {
   overflow: hidden;
 }
 
+/* stylelint-disable-next-line */
 .additional-comparisons.is-expanded {
   grid-template-rows: 1fr;
 }

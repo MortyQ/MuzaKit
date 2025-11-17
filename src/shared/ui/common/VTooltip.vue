@@ -12,6 +12,8 @@ interface Props {
   disabled?: boolean;
   /** Custom class for tooltip content */
   tooltipClass?: string;
+  /** Custom class for wrapper element */
+  wrapperClass?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -19,6 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
   delay: 300,
   disabled: false,
   tooltipClass: "",
+  wrapperClass: "",
 });
 
 const isVisible = ref(false);
@@ -96,7 +99,7 @@ const tooltipTransform = computed(() => {
 <template>
   <div
     ref="triggerRef"
-    class="relative inline-flex"
+    :class="['relative inline-block cursor-pointer', wrapperClass]"
     @mouseenter="showTooltip"
     @mouseleave="hideTooltip"
     @focus="showTooltip"
