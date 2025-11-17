@@ -24,6 +24,19 @@ const modules: Array<AppRouteRecordRaw> = [
       menuOrder: 1,
     },
   },
+  // Dashboard route
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: () => import("@/pages/Dashboard/index.vue"),
+    meta: {
+      title: "Dashboard",
+      showInMenu: true,
+      menuTitle: "Dashboard",
+      menuIcon: "mdi:view-dashboard",
+      menuOrder: 2,
+    },
+  },
   // 404 page with explicit path (public)
   {
     path: "/not-found",
