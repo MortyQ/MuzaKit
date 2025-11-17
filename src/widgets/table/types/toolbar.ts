@@ -75,7 +75,7 @@ export interface ToolbarConfig {
      */
     columnSetup?: false | string | {
       /**
-       * Storage key for localStorage/sessionStorage
+       * Storage key for persistent storage
        * If provided, column settings will be persisted automatically
        * @example 'myTable_columns'
        */
@@ -83,9 +83,9 @@ export interface ToolbarConfig {
 
       /**
        * Storage type
-       * @default 'localStorage'
+       * @default 'indexedDB'
        */
-      type?: "localStorage" | "sessionStorage";
+      type?: "indexedDB" | "localStorage" | "sessionStorage";
 
       /**
        * Enable column reordering via drag-and-drop

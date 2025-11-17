@@ -1,6 +1,7 @@
 import { computed, ref, watch } from "vue";
 
 import type { Column } from "../types";
+import tableStorage, { type StorageType } from "../utils/storage";
 
 export interface ColumnSetupItem {
   key: string;
@@ -18,52 +19,47 @@ export interface ColumnSetupConfig {
   onUpdate?: (visibleColumns: Column[]) => void; // eslint-disable-line no-unused-vars
   storage?: {
     key: string;
-    type?: "localStorage" | "sessionStorage";
+    type?: StorageType; // Now supports: 'indexedDB' | 'localStorage' | 'sessionStorage'
   };
 }
 
 /**
  * Composable for managing column visibility and order
  * Supports drag-and-drop reordering and toggling visibility
+ * Uses IndexedDB by default for better scalability with 100+ tables
  */
 export function useColumnSetup(config: ColumnSetupConfig) {
-  // Get storage instance
-  const getStorage = () => {
-    if (!config.storage) return null;
-    return config.storage.type === "sessionStorage" ? sessionStorage : localStorage;
-  };
+  // Configure storage type if specified
+  if (config.storage?.type) {
+    tableStorage.setStorageType(config.storage.type);
+  }
 
-  // Load saved state from storage
-  const loadFromStorage = (): { visible: string[]; order: string[] } | null => {
+  // Load saved state from storage (async)
+  const loadFromStorage = async (): Promise<{ visible: string[]; order: string[] } | null> => {
     if (!config.storage) return null;
-
-    const storage = getStorage();
-    if (!storage) return null;
 
     try {
-      const saved = storage.getItem(config.storage.key);
-      if (saved) {
-        return JSON.parse(saved);
-      }
+      const saved = await tableStorage.getTableConfig<{
+        visible: string[];
+        order: string[];
+      }>(config.storage.key);
+      return saved;
     } catch (error) {
       console.error("Failed to load column setup from storage:", error);
+      return null;
     }
-    return null;
   };
 
-  // Save state to storage
-  const saveToStorage = (items: ColumnSetupItem[]) => {
+  // Save state to storage (async)
+  const saveToStorage = async (items: ColumnSetupItem[]) => {
     if (!config.storage) return;
-
-    const storage = getStorage();
-    if (!storage) return;
 
     try {
       const state = {
         visible: items.filter((item) => item.visible).map((item) => item.key),
         order: items.map((item) => item.key),
       };
-      storage.setItem(config.storage.key, JSON.stringify(state));
+      await tableStorage.setTableConfig(config.storage.key, state);
     } catch (error) {
       console.error("Failed to save column setup to storage:", error);
     }
@@ -80,9 +76,11 @@ export function useColumnSetup(config: ColumnSetupConfig) {
   };
 
   // Create setup items from columns
-  const createSetupItems = (columns: Column[]): ColumnSetupItem[] => {
+  const createSetupItems = (
+    columns: Column[],
+    savedState?: { visible: string[]; order: string[] } | null,
+  ): ColumnSetupItem[] => {
     const flatCols = flattenColumns(columns);
-    const savedState = loadFromStorage();
 
     // If we have saved state, use it
     if (savedState) {
@@ -138,6 +136,13 @@ export function useColumnSetup(config: ColumnSetupConfig) {
   // Internal state for setup items
   const setupItems = ref<ColumnSetupItem[]>(createSetupItems(config.columns));
 
+  // Initialize from storage asynchronously
+  loadFromStorage().then((savedState) => {
+    if (savedState) {
+      setupItems.value = createSetupItems(config.columns, savedState);
+    }
+  });
+
   // Computed visible columns based on setup
   const visibleColumns = computed(() => {
     const visibleItems = setupItems.value
@@ -190,12 +195,13 @@ export function useColumnSetup(config: ColumnSetupConfig) {
   };
 
   // Reset to default state
-  const reset = () => {
+  const reset = async () => {
     // Clear storage on reset
     if (config.storage) {
-      const storage = getStorage();
-      if (storage) {
-        storage.removeItem(config.storage.key);
+      try {
+        await tableStorage.deleteTableConfig(config.storage.key);
+      } catch (error) {
+        console.error("Failed to clear storage:", error);
       }
     }
     setupItems.value = createSetupItems(config.columns);

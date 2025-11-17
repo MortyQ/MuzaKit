@@ -135,13 +135,6 @@ const tableData = ref([
   },
 ]);
 
-
-// Clear saved preferences
-const clearPreferences = () => {
-  localStorage.removeItem(STORAGE_KEY);
-  window.location.reload();
-};
-
 // Code example
 const codeExample = `<Table
   :columns="columns"
@@ -152,7 +145,7 @@ const codeExample = `<Table
     actions: {
       columnSetup: {
         key: 'myTable_columns',
-        type: 'localStorage',
+        // type: 'indexedDB' (default)
         allowReorder: true,
         initialVisible: ['id', 'name', 'email']
       }
@@ -180,7 +173,7 @@ const codeExample = `<Table
         <p class="info-description">
           Give users full control over table columns with
           <strong>drag-and-drop reordering, visibility toggles</strong> and
-          <strong>automatic persistence</strong>.
+          <strong>automatic persistence via IndexedDB</strong>.
           Settings are saved automatically and restored on page reload.
         </p>
 
@@ -231,7 +224,7 @@ const codeExample = `<Table
                 Auto Persistence
               </h3>
               <p class="feature-description">
-                localStorage/sessionStorage support
+                IndexedDB (default) / localStorage / sessionStorage
               </p>
             </div>
           </div>
@@ -279,8 +272,8 @@ const codeExample = `<Table
     enabled: true,
     actions: {
       columnSetup: {
-        key: 'myTable_columns',
-        type: 'localStorage'
+        key: 'myTable_columns'
+        // type: 'indexedDB' (default)
       }
     }
   }"
@@ -293,27 +286,6 @@ const codeExample = `<Table
       title="Interactive Demo"
       class="col-span-full"
     >
-      <div class="demo-header">
-        <p class="demo-description">
-          Click the column setup button (<VIcon
-            icon="mdi:view-column"
-            :size="16"
-            class="inline"
-          />) in the toolbar to customize visible columns and their order.
-          Your preferences are automatically saved to localStorage.
-        </p>
-        <button
-          class="clear-btn"
-          @click="clearPreferences"
-        >
-          <VIcon
-            icon="lucide:trash"
-            :size="16"
-          />
-          Clear Saved Preferences
-        </button>
-      </div>
-
       <Table
         :columns="allColumns"
         :data="mockDataVirtualScroll"
@@ -325,11 +297,7 @@ const codeExample = `<Table
           actions: {
             refresh: true,
             resetSort: true,
-            columnSetup: {
-              key: STORAGE_KEY,
-              type: 'localStorage',
-              allowReorder: true,
-            },
+            columnSetup: STORAGE_KEY
           }
         }"
         height="600px"
@@ -356,7 +324,6 @@ const codeExample = `<Table
             actions: {
               columnSetup: {
                 key: 'demo_initial_visible',
-                type: 'localStorage',
                 initialVisible: ['id', 'name', 'email']
               }
             }
@@ -383,7 +350,6 @@ const codeExample = `<Table
             actions: {
               columnSetup: {
                 key: 'demo_no_reorder',
-                type: 'localStorage',
                 allowReorder: false
               }
             }
@@ -515,8 +481,8 @@ const codeExample = `<Table
               Automatic Persistence
             </h4>
             <p class="tip-description">
-              Settings are saved to localStorage and restored on page reload.
-              Use sessionStorage for temporary persistence.
+              Settings are saved to IndexedDB by default and restored on page reload.
+              Use localStorage or sessionStorage for alternative storage options.
             </p>
           </div>
         </div>

@@ -20,6 +20,9 @@ importers:
       dompurify:
         specifier: ^3.3.0
         version: 3.3.0
+      keyv-browser:
+        specifier: ^0.1.1
+        version: 0.1.1
       lodash.debounce:
         specifier: ^4.0.8
         version: 4.0.8
@@ -1646,6 +1649,9 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  idb-keyval@6.2.2:
+    resolution: {integrity: sha512-yjD9nARJ/jb1g+CvD0tlhUHOrJ9Sy0P8T9MF3YaLlHnSRpwPfpTX0XIvpmw3gAJUmEu3FiICLBDPXVwyEvrleg==}
+
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
@@ -1817,6 +1823,9 @@ packages:
   json5@1.0.2:
     resolution: {integrity: sha512-g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA==}
     hasBin: true
+
+  keyv-browser@0.1.1:
+    resolution: {integrity: sha512-Th2fI30SQhQW48CA8E9T8KMHPTmi/vjjKZA1l9PFG9OaKXekhKkBKfxm8zXkxS2zl+ITPfocHDKHKHXOPQocIw==}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -4327,6 +4336,8 @@ snapshots:
 
   husky@9.1.7: {}
 
+  idb-keyval@6.2.2: {}
+
   ignore@5.3.2: {}
 
   ignore@7.0.5: {}
@@ -4493,6 +4504,11 @@ snapshots:
   json5@1.0.2:
     dependencies:
       minimist: 1.2.8
+
+  keyv-browser@0.1.1:
+    dependencies:
+      idb-keyval: 6.2.2
+      tslib: 2.8.1
 
   keyv@4.5.4:
     dependencies:

@@ -2,6 +2,7 @@
 import { ref, computed, watch } from "vue";
 
 import type { Column } from "../types";
+import tableStorage from "../utils/storage";
 
 import VButton from "@/shared/ui/common/VButton.vue";
 import VCheckbox from "@/shared/ui/common/VCheckbox.vue";
@@ -18,7 +19,7 @@ interface ColumnSetupItem {
 interface ColumnSetupConfig {
   enabled?: boolean;
   key?: string;
-  type?: "localStorage" | "sessionStorage";
+  type?: "indexedDB" | "localStorage" | "sessionStorage";
   allowReorder?: boolean;
   initialVisible?: string[];
 }
@@ -41,36 +42,32 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>();
 
-// Get storage instance
-const getStorage = () => {
+// Load saved state from storage (async)
+const loadFromStorage = async (): Promise<{ visible: string[]; order: string[]; fixed?: Record<string, "left" | "right"> } | null> => {
   if (!props.config?.key) return null;
-  return props.config.type === "sessionStorage" ? sessionStorage : localStorage;
-};
-
-// Load saved state from storage
-const loadFromStorage = (): { visible: string[]; order: string[]; fixed?: Record<string, "left" | "right"> } | null => {
-  if (!props.config?.key) return null;
-
-  const storage = getStorage();
-  if (!storage) return null;
 
   try {
-    const saved = storage.getItem(props.config.key);
-    if (saved) {
-      return JSON.parse(saved);
+    // Set storage type if specified, otherwise use default (indexedDB)
+    if (props.config.type) {
+      tableStorage.setStorageType(props.config.type);
     }
+
+    const saved = await tableStorage.getTableConfig<{
+      visible: string[];
+      order: string[];
+      fixed?: Record<string, "left" | "right">;
+    }>(props.config.key);
+
+    return saved;
   } catch (error) {
     console.error("Failed to load column setup from storage:", error);
+    return null;
   }
-  return null;
 };
 
-// Save state to storage
-const saveToStorage = (setupItems: ColumnSetupItem[]) => {
+// Save state to storage (async)
+const saveToStorage = async (setupItems: ColumnSetupItem[]) => {
   if (!props.config?.key) return;
-
-  const storage = getStorage();
-  if (!storage) return;
 
   try {
     // Build fixed map (only save columns that are fixed)
@@ -86,7 +83,8 @@ const saveToStorage = (setupItems: ColumnSetupItem[]) => {
       order: setupItems.map((item) => item.key),
       fixed: Object.keys(fixed).length > 0 ? fixed : undefined, // Only save if there are fixed columns
     };
-    storage.setItem(props.config.key, JSON.stringify(state));
+
+    await tableStorage.setTableConfig(props.config.key, state);
   } catch (error) {
     console.error("Failed to save column setup to storage:", error);
   }
@@ -103,9 +101,8 @@ const flattenColumns = (columns: Column[]): Column[] => {
 };
 
 // Create setup items from columns
-const createSetupItems = (): ColumnSetupItem[] => {
+const createSetupItems = (savedState?: { visible: string[]; order: string[]; fixed?: Record<string, "left" | "right"> } | null): ColumnSetupItem[] => {
   const flatCols = flattenColumns(props.columns);
-  const savedState = loadFromStorage();
 
   // If we have saved state, use it
   if (savedState) {
@@ -168,6 +165,15 @@ const hasChanges = ref(false);
 
 // Original state for comparison
 const originalItems = ref<ColumnSetupItem[]>(JSON.parse(JSON.stringify(createSetupItems())));
+
+// Load from storage asynchronously
+loadFromStorage().then((savedState) => {
+  if (savedState) {
+    const loaded = createSetupItems(savedState);
+    items.value = loaded;
+    originalItems.value = JSON.parse(JSON.stringify(loaded));
+  }
+});
 
 // Check if there are unsaved changes
 const hasUnsavedChanges = computed(() => {
@@ -383,12 +389,13 @@ const validateFixedColumns = () => {
   });
 };
 
-const handleReset = () => {
+const handleReset = async () => {
   // Clear storage on reset
   if (props.config?.key) {
-    const storage = getStorage();
-    if (storage) {
-      storage.removeItem(props.config.key);
+    try {
+      await tableStorage.deleteTableConfig(props.config.key);
+    } catch (error) {
+      console.error("Failed to clear storage:", error);
     }
   }
   items.value = createSetupItems();

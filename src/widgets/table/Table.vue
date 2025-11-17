@@ -18,6 +18,7 @@ import { useTableSelection } from "./composables/useTableSelection";
 import { useTableSort } from "./composables/useTableSort";
 import { useVirtualTable } from "./composables/useVirtualTable";
 import type { Column, ExpandableRow, HeaderCell } from "./types/index";
+import tableStorage from "./utils/storage";
 
 import VButton from "@/shared/ui/common/VButton.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
@@ -112,24 +113,36 @@ const columnSetupEnabledBasic = computed(() => {
   return typeof setup === "string" || typeof setup === "object";
 });
 
-const columnSetupConfig = computed(() => {
+const columnSetupConfig = computed<{
+  key?: string;
+  type?: "indexedDB" | "localStorage" | "sessionStorage";
+  allowReorder?: boolean;
+  initialVisible?: string[];
+}>(() => {
   const setup = props.toolbar?.actions?.columnSetup;
 
   // String shorthand: use as storage key with defaults
   if (typeof setup === "string") {
     return {
       key: setup,
-      type: "localStorage" as const,
+      type: "indexedDB" as const,
       allowReorder: true,
     };
   }
 
-  // Object: use as-is
-  return typeof setup === "object" ? setup : {};
+  // Object: use as-is, with type defaults
+  if (typeof setup === "object") {
+    return {
+      ...setup,
+      type: setup.type || "indexedDB", // Default to indexedDB
+    };
+  }
+
+  return {};
 });
 
-// Helper: Load saved column state from storage
-const loadColumnsFromStorage = (): Column[] | null => {
+// Helper: Load saved column state from storage (async)
+const loadColumnsFromStorage = async (): Promise<Column[] | null> => {
   if (!columnSetupEnabledBasic.value) return null;
 
   const config = columnSetupConfig.value as any; // object variant
@@ -138,14 +151,17 @@ const loadColumnsFromStorage = (): Column[] | null => {
   let loaded: { visible: string[]; order: string[] } | null = null;
 
   if (hasStorageKey) {
-    const storage = config.type === "sessionStorage" ? sessionStorage : localStorage;
     try {
-      const raw = storage.getItem(config.key);
-      if (raw) {
-        loaded = JSON.parse(raw);
+      // Set storage type if specified
+      if (config.type) {
+        tableStorage.setStorageType(config.type);
       }
+      // Load from storage (IndexedDB by default)
+      loaded = await tableStorage.getTableConfig<
+        { visible: string[]; order: string[] }
+      >(config.key);
     } catch (e) {
-      console.warn("Failed to parse stored column setup", e);
+      console.warn("Failed to load stored column setup", e);
     }
   }
 
@@ -201,8 +217,15 @@ const loadColumnsFromStorage = (): Column[] | null => {
 
 // Visible columns - managed by TableColumnSetup component
 // Initialize with saved state from storage if available
-const visibleColumns = ref<Column[] | null>(loadColumnsFromStorage());
+const visibleColumns = ref<Column[] | null>(null);
 const columnSetupPopoverRef = ref<{ close: () => void } | null>(null);
+
+// Load columns from storage asynchronously
+loadColumnsFromStorage().then(columns => {
+  if (columns !== null) {
+    visibleColumns.value = columns;
+  }
+});
 
 const handleVisibleColumnsUpdate = (columns: Column[]) => {
   visibleColumns.value = [...columns]; // Create new array to trigger reactivity
