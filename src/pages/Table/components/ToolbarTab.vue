@@ -50,10 +50,10 @@ const toolbarData = ref([
 // Columns configuration
 const columns: Column[] = [
   { key: "id", label: "ID", width: "80px" },
-  { key: "name", label: "Name", width: "200px" },
-  { key: "email", label: "Email", width: "250px" },
-  { key: "role", label: "Role", width: "150px" },
-  { key: "status", label: "Status", width: "120px" },
+  { key: "name", label: "Name" },
+  { key: "email", label: "Email" },
+  { key: "role", label: "Role" },
+  { key: "status", label: "Status" },
 ];
 
 // Search state
