@@ -10,7 +10,9 @@
   .v-popover-content {
     z-index: 9999;
     min-width: 200px;
-
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    @apply bg-base-100;
     // Teleported version uses fixed positioning
     &--teleported {
       position: fixed;

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
 
 import { useAuthStore } from "@/features/auth/store/authStore";
 import UserAvatar from "@/shared/ui/common/UserAvatar.vue";
-import VDropdown from "@/shared/ui/common/VDropdown.vue";
+import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
+import VPopover from "@/shared/ui/common/VPopover.vue";
 
 interface Props {
   /** Compact mode (smaller size) */
@@ -40,31 +40,15 @@ const handleMenuSelect = (value: string | number) => {
       break;
   }
 };
-
-// Dropdown items for VDropdown
-const dropdownItems = computed(() => [
-  {
-    label: "Profile",
-    value: "profile",
-    icon: "mdi:account",
-  },
-  {
-    label: "Settings",
-    value: "settings",
-    icon: "mdi:cog",
-  },
-]);
 </script>
 
 <template>
   <div class="user-menu">
-    <VDropdown
-      :items="dropdownItems"
+    <VPopover
       placement="top-left"
-      @select="handleMenuSelect"
     >
       <!-- Trigger slot -->
-      <template #trigger="{ isOpen }">
+      <template #trigger>
         <button
           type="button"
           class="user-menu-trigger flex items-center gap-2 rounded-lg
@@ -72,7 +56,6 @@ const dropdownItems = computed(() => [
           :class="{
             'py-2.5 px-4': !compact,
             'py-2.5 px-2': compact,
-            'bg-base-200/50': isOpen,
           }"
         >
           <!-- Avatar -->
@@ -121,7 +104,7 @@ const dropdownItems = computed(() => [
 
       <!-- Custom content for dropdown -->
       <template #content>
-        <div class="user-menu-dropdown min-w-[250px]">
+        <VCard>
           <!-- User Info Header with delayed fade-in -->
           <div
             v-if="user"
@@ -209,7 +192,7 @@ const dropdownItems = computed(() => [
               <span class="text-sm font-medium">Logout</span>
             </button>
           </div>
-        </div>
+        </VCard>
       </template>
 
       <!-- Custom icon rendering -->
@@ -219,7 +202,7 @@ const dropdownItems = computed(() => [
           :size="18"
         />
       </template>
-    </VDropdown>
+    </VPopover>
   </div>
 </template>
 
@@ -231,8 +214,7 @@ const dropdownItems = computed(() => [
 
 /* Completely remove browser default outline on ALL buttons inside user-menu */
 .user-menu :deep(button),
-.user-menu-items button,
-:deep(.v-dropdown-item) {
+.user-menu-items button {
   outline: none !important;
   box-shadow: none !important;
   border: none !important;
@@ -242,9 +224,7 @@ const dropdownItems = computed(() => [
 .user-menu :deep(button:focus),
 .user-menu :deep(button:active),
 .user-menu-items button:focus,
-.user-menu-items button:active,
-:deep(.v-dropdown-item:focus),
-:deep(.v-dropdown-item:active) {
+.user-menu-items button:active {
   outline: none !important;
   box-shadow: none !important;
   border: none !important;
@@ -252,8 +232,7 @@ const dropdownItems = computed(() => [
 }
 
 .user-menu :deep(button:focus-visible),
-.user-menu-items button:focus-visible,
-:deep(.v-dropdown-item:focus-visible) {
+.user-menu-items button:focus-visible {
   outline: none !important;
   box-shadow: none !important;
   border: none !important;
@@ -306,37 +285,6 @@ const dropdownItems = computed(() => [
 .chevron-fade-enter-to,
 .chevron-fade-leave-from {
   opacity: 1;
-}
-
-/* Delayed fade-in animation for header */
-.user-menu-header {
-  animation: fadeInDelayed 0.2s ease-out 0.1s both;
-}
-
-/* Delayed fade-in animation for menu items */
-.user-menu-items {
-  animation: fadeInDelayed 0.2s ease-out 0.15s both;
-}
-
-/* Menu buttons appear sequentially with small delay */
-.user-menu-items > button {
-  animation: fadeInDelayed 0.15s ease-out both;
-}
-
-.user-menu-items > button:nth-child(1) {
-  animation-delay: 0.18s;
-}
-
-.user-menu-items > button:nth-child(2) {
-  animation-delay: 0.21s;
-}
-
-.user-menu-items > button:nth-child(3) {
-  animation-delay: 0.24s; /* divider */
-}
-
-.user-menu-items > button:nth-child(4) {
-  animation-delay: 0.27s; /* logout */
 }
 
 @keyframes fadeInDelayed {
