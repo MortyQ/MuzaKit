@@ -93,6 +93,23 @@ export const iconMap: Record<string, Component> = {
   "mdi:chart-bubble": defineAsyncComponent(() => import("~icons/mdi/chart-bubble")),
   "mdi:view-dashboard": defineAsyncComponent(() => import("~icons/mdi/view-dashboard")),
 
+  // KPI & Finance Icons
+  "mdi:currency-usd": defineAsyncComponent(() => import("~icons/mdi/currency-usd")),
+  "mdi:cash": defineAsyncComponent(() => import("~icons/mdi/cash")),
+  "mdi:trending-up": defineAsyncComponent(() => import("~icons/mdi/trending-up")),
+  "mdi:trending-down": defineAsyncComponent(() => import("~icons/mdi/trending-down")),
+  "mdi:arrow-up": defineAsyncComponent(() => import("~icons/mdi/arrow-up")),
+  "mdi:arrow-down": defineAsyncComponent(() => import("~icons/mdi/arrow-down")),
+  "mdi:cart": defineAsyncComponent(() => import("~icons/mdi/cart")),
+  "mdi:shopping": defineAsyncComponent(() => import("~icons/mdi/shopping")),
+  "mdi:percent": defineAsyncComponent(() => import("~icons/mdi/percent")),
+  "mdi:finance": defineAsyncComponent(() => import("~icons/mdi/finance")),
+  "mdi:chart-areaspline": defineAsyncComponent(() => import("~icons/mdi/chart-areaspline")),
+  "mdi:thumb-up": defineAsyncComponent(() => import("~icons/mdi/thumb-up")),
+  "mdi:thumb-down": defineAsyncComponent(() => import("~icons/mdi/thumb-down")),
+  "mdi:poll": defineAsyncComponent(() => import("~icons/mdi/poll")),
+  "mdi:wallet": defineAsyncComponent(() => import("~icons/mdi/wallet")),
+
   // Files & Content
   "mdi:file": defineAsyncComponent(() => import("~icons/mdi/file")),
   "mdi:folder": defineAsyncComponent(() => import("~icons/mdi/folder")),
@@ -162,6 +179,38 @@ export const iconMap: Record<string, Component> = {
   "heroicons:bell-solid": defineAsyncComponent(() => import("~icons/heroicons/bell-solid")),
   "heroicons:envelope-solid": defineAsyncComponent(() => import("~icons/heroicons/envelope-solid")),
 
+  // ==================== Lucide Icons ====================
+
+  // KPI & Finance - Lucide
+  "lucide:dollar-sign": defineAsyncComponent(() => import("~icons/lucide/dollar-sign")),
+  "lucide:trending-down": defineAsyncComponent(() => import("~icons/lucide/trending-down")),
+  "lucide:shopping-cart": defineAsyncComponent(() => import("~icons/lucide/shopping-cart")),
+  "lucide:activity": defineAsyncComponent(() => import("~icons/lucide/activity")),
+  "lucide:percent": defineAsyncComponent(() => import("~icons/lucide/percent")),
+  "lucide:megaphone": defineAsyncComponent(() => import("~icons/lucide/megaphone")),
+  "lucide:wallet": defineAsyncComponent(() => import("~icons/lucide/wallet")),
+  "lucide:trending-up": defineAsyncComponent(() => import("~icons/lucide/trending-up")),
+  "lucide:arrow-up": defineAsyncComponent(() => import("~icons/lucide/arrow-up")),
+  "lucide:arrow-down": defineAsyncComponent(() => import("~icons/lucide/arrow-down")),
+  "lucide:thumbs-up": defineAsyncComponent(() => import("~icons/lucide/thumbs-up")),
+  "lucide:thumbs-down": defineAsyncComponent(() => import("~icons/lucide/thumbs-down")),
+
+  // Info & Status - Lucide
+  "lucide:info": defineAsyncComponent(() => import("~icons/lucide/info")),
+  "lucide:circle-help": defineAsyncComponent(() => import("~icons/lucide/circle-help")),
+  "lucide:alert-triangle": defineAsyncComponent(() => import("~icons/lucide/alert-triangle")),
+  "lucide:x-circle": defineAsyncComponent(() => import("~icons/lucide/x-circle")),
+  "lucide:check": defineAsyncComponent(() => import("~icons/lucide/check")),
+  "lucide:loader": defineAsyncComponent(() => import("~icons/lucide/loader-2")),
+
+  // Charts & Data - Lucide
+  "lucide:bar-chart-3": defineAsyncComponent(() => import("~icons/lucide/bar-chart-3")),
+
+  // Design & UI - Lucide
+  "lucide:palette": defineAsyncComponent(() => import("~icons/lucide/palette")),
+  "lucide:star": defineAsyncComponent(() => import("~icons/lucide/star")),
+  "lucide:arrow-up-down": defineAsyncComponent(() => import("~icons/lucide/arrow-up-down")),
+
   // ==================== Lucide ====================
 
   "lucide:home": defineAsyncComponent(() => import("~icons/lucide/home")),
@@ -170,17 +219,12 @@ export const iconMap: Record<string, Component> = {
   "lucide:menu": defineAsyncComponent(() => import("~icons/lucide/menu")),
   "lucide:search": defineAsyncComponent(() => import("~icons/lucide/search")),
   "lucide:heart": defineAsyncComponent(() => import("~icons/lucide/heart")),
-  "lucide:star": defineAsyncComponent(() => import("~icons/lucide/star")),
   "lucide:moon": defineAsyncComponent(() => import("~icons/lucide/moon")),
   "lucide:sun": defineAsyncComponent(() => import("~icons/lucide/sun")),
-  "lucide:arrow-up-down": defineAsyncComponent(() => import("~icons/lucide/arrow-up-down")),
-  "lucide:arrow-down": defineAsyncComponent(() => import("~icons/lucide/arrow-down")),
-  "lucide:arrow-up": defineAsyncComponent(() => import("~icons/lucide/arrow-up")),
   "lucide:zap": defineAsyncComponent(() => import("~icons/lucide/zap")),
   "lucide:database": defineAsyncComponent(() => import("~icons/lucide/database")),
   "lucide:gauge": defineAsyncComponent(() => import("~icons/lucide/gauge")),
   "lucide:rocket": defineAsyncComponent(() => import("~icons/lucide/rocket")),
-  "lucide:info": defineAsyncComponent(() => import("~icons/lucide/info")),
   "lucide:move-horizontal": defineAsyncComponent(() => import("~icons/lucide/move-horizontal")),
   "lucide:table-2": defineAsyncComponent(() => import("~icons/lucide/table-2")),
   "lucide:layout-grid": defineAsyncComponent(() => import("~icons/lucide/layout-grid")),
@@ -195,11 +239,8 @@ export const iconMap: Record<string, Component> = {
   "lucide:monitor": defineAsyncComponent(() => import("~icons/lucide/monitor")),
   "lucide:layers": defineAsyncComponent(() => import("~icons/lucide/layers")),
   "lucide:list": defineAsyncComponent(() => import("~icons/lucide/list")),
-  "lucide:loader": defineAsyncComponent(() => import("~icons/lucide/loader")),
   "lucide:book-open": defineAsyncComponent(() => import("~icons/lucide/book-open")),
   "lucide:wand-2": defineAsyncComponent(() => import("~icons/lucide/wand-2")),
-  "lucide:dollar-sign": defineAsyncComponent(() => import("~icons/lucide/dollar-sign")),
-  "lucide:percent": defineAsyncComponent(() => import("~icons/lucide/percent")),
   "lucide:hash": defineAsyncComponent(() => import("~icons/lucide/hash")),
   "lucide:calendar": defineAsyncComponent(() => import("~icons/lucide/calendar")),
   "lucide:hard-drive": defineAsyncComponent(() => import("~icons/lucide/hard-drive")),
@@ -224,7 +265,6 @@ export const iconMap: Record<string, Component> = {
   "lucide:settings-2": defineAsyncComponent(() => import("~icons/lucide/settings-2")),
   "lucide:smartphone": defineAsyncComponent(() => import("~icons/lucide/smartphone")),
   "lucide:message-square": defineAsyncComponent(() => import("~icons/lucide/message-square")),
-  "lucide:palette": defineAsyncComponent(() => import("~icons/lucide/palette")),
   "lucide:bell": defineAsyncComponent(() => import("~icons/lucide/bell")),
   "lucide:shapes": defineAsyncComponent(() => import("~icons/lucide/shapes")),
   "lucide:package": defineAsyncComponent(() => import("~icons/lucide/package")),
@@ -242,7 +282,6 @@ export const iconMap: Record<string, Component> = {
   "lucide:toggle-left": defineAsyncComponent(() => import("~icons/lucide/toggle-left")),
   "lucide:type": defineAsyncComponent(() => import("~icons/lucide/type")),
   "lucide:watch": defineAsyncComponent(() => import("~icons/lucide/watch")),
-  "lucide:check": defineAsyncComponent(() => import("~icons/lucide/check")),
   "lucide:minus-square": defineAsyncComponent(() => import("~icons/lucide/minus-square")),
   "lucide:link": defineAsyncComponent(() => import("~icons/lucide/link")),
   "lucide:sparkles": defineAsyncComponent(() => import("~icons/lucide/sparkles")),
