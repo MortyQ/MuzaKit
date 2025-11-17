@@ -10,12 +10,12 @@ const categories = [
   {
     id: "feedback",
     title: "Feedback Components",
-    description: "User feedback, notifications, and dialogs. Communicate with users through modals, toasts, and alerts.",
+    description: "User feedback, notifications, and dialogs. Communicate with users through modals, drawers, toasts, and alerts.",
     icon: "lucide:message-square",
     iconColor: "#3b82f6",
     path: "/components/ui-gallery/feedback",
-    components: ["Modals", "Toasts"],
-    badge: "2 components",
+    components: ["Modals", "Drawers", "Toasts"],
+    badge: "3 components",
   },
   {
     id: "forms",

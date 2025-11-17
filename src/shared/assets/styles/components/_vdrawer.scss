@@ -1,0 +1,148 @@
+@layer components {
+  .drawer-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    overflow: hidden;
+    // backdrop-blur is controlled by prop
+
+    [data-theme="dark"] & {
+      background: rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .drawer-container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    @apply bg-base-100 shadow-2xl;
+
+    /* Glass effect on desktop */
+    @media (min-width: 768px) {
+      @apply card-glass-elevated;
+    }
+
+    /* Position variants */
+    &.drawer-left {
+      left: 0;
+      border-right: 1px solid;
+      @apply border-cardBorder;
+    }
+
+    &.drawer-right {
+      right: 0;
+      border-left: 1px solid;
+      @apply border-cardBorder;
+    }
+  }
+
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem;
+    flex-shrink: 0;
+    @apply border-b-[1px] border-cardBorder;
+  }
+
+  .drawer-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    @apply text-mainText;
+  }
+
+  .drawer-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    @apply text-secondaryText;
+
+    &:hover {
+      @apply text-mainText bg-base-200;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+  }
+
+  .drawer-content {
+    padding: 1.25rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+    @apply text-mainText;
+  }
+
+  .drawer-footer {
+    padding: 1rem 1.25rem;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    @apply border-t-[1px] border-cardBorder;
+  }
+
+  /* Transitions for backdrop */
+  .drawer-enter-active,
+  .drawer-leave-active {
+    transition: opacity 0.3s ease;
+  }
+
+  .drawer-enter-from,
+  .drawer-leave-to {
+    opacity: 0;
+  }
+
+  /* Transitions for drawer container - slide from side */
+  .drawer-enter-active .drawer-container,
+  .drawer-leave-active .drawer-container {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Slide from right */
+  .drawer-enter-from .drawer-right,
+  .drawer-leave-to .drawer-right {
+    transform: translateX(100%);
+  }
+
+  /* Slide from left */
+  .drawer-enter-from .drawer-left,
+  .drawer-leave-to .drawer-left {
+    transform: translateX(-100%);
+  }
+
+  /* Responsive - Full width on mobile */
+  @media (max-width: 640px) {
+    .drawer-container {
+      max-width: 100% !important;
+      width: 100%;
+    }
+
+    .drawer-header,
+    .drawer-content,
+    .drawer-footer {
+      padding: 1rem;
+    }
+  }
+}
+

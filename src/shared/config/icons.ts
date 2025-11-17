@@ -266,6 +266,12 @@ export const iconMap: Record<string, Component> = {
   "lucide:trash-2": defineAsyncComponent(() => import("~icons/lucide/trash-2")),
   "lucide:share-2": defineAsyncComponent(() => import("~icons/lucide/share")),
   "lucide:log-out": defineAsyncComponent(() => import("~icons/lucide/log-out")),
+  "lucide:panel-right": defineAsyncComponent(() => import("~icons/lucide/panel-right")),
+  "lucide:filter": defineAsyncComponent(() => import("~icons/lucide/filter")),
+  "lucide:bookmark": defineAsyncComponent(() => import("~icons/lucide/bookmark")),
+  "mdi:view-list": defineAsyncComponent(() => import("~icons/mdi/view-list")),
+  "mdi:compass": defineAsyncComponent(() => import("~icons/mdi/compass")),
+  "lucide:maximize-2": defineAsyncComponent(() => import("~icons/lucide/maximize-2")),
 };
 
 /**

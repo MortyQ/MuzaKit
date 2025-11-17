@@ -1,15 +1,18 @@
 <script setup lang="ts">
+import DrawersTab from "@/pages/UIGallery/components/FeedbackComponents/DrawersTab.vue";
 import ModalsTab from "@/pages/UIGallery/components/FeedbackComponents/ModalsTab.vue";
 import ToastsTab from "@/pages/UIGallery/components/FeedbackComponents/ToastsTab.vue";
 import VTabs from "@/shared/ui/common/VTabs.vue";
 
 const tabs = [
   { id: "modals", label: "Modals", icon: "lucide:layout-panel-top" },
+  { id: "drawers", label: "Drawers", icon: "lucide:panel-right" },
   { id: "toasts", label: "Toasts", icon: "lucide:message-square" },
 ];
 
 const componentMap = {
   modals: ModalsTab,
+  drawers: DrawersTab,
   toasts: ToastsTab,
 };
 </script>

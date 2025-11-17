@@ -1,7 +1,13 @@
 <script lang="ts" setup>
+import { useModal } from "@/shared/composables/useModal";
 import VButton from "@/shared/ui/common/VButton.vue";
 import VCard from "@/shared/ui/common/VCard.vue";
+import VDrawer from "@/shared/ui/common/VDrawer.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
+
+// Drawer controls
+const { open: openFeaturesDrawer } = useModal("features-drawer");
+const { open: openQuickStartDrawer } = useModal("quick-start-drawer");
 
 // Features
 const features = [
@@ -112,24 +118,26 @@ const steps = [
             <VButton
               variant="primary"
               class="px-8 py-4 text-lg font-semibold"
+              @click="openQuickStartDrawer"
             >
               <VIcon
                 icon="mdi:rocket-launch"
                 :size="20"
                 class="mr-2"
               />
-              Get Started
+              Quick Start Guide
             </VButton>
             <VButton
               variant="default"
               class="px-8 py-4 text-lg font-medium"
+              @click="openFeaturesDrawer"
             >
               <VIcon
-                icon="mdi:github"
+                icon="mdi:view-list"
                 :size="20"
                 class="mr-2"
               />
-              View on GitHub
+              View All Features
             </VButton>
           </div>
 
@@ -456,6 +464,163 @@ const steps = [
         </div>
       </VCard>
     </section>
+
+    <!-- Quick Start Drawer -->
+    <VDrawer
+      id="quick-start-drawer"
+      title="🚀 Quick Start Guide"
+      position="right"
+      width="lg"
+    >
+      <div class="space-y-6">
+        <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+          <p class="text-mainText font-medium mb-2">
+            Welcome to MuzaKit!
+          </p>
+          <p class="text-secondaryText text-sm">
+            Follow these steps to get your project up and running.
+          </p>
+        </div>
+
+        <div
+          v-for="(step, index) in steps"
+          :key="step.number"
+          class="relative"
+        >
+          <div class="flex gap-4">
+            <div
+              class="flex-shrink-0 w-10 h-10 rounded-lg
+                bg-gradient-to-br from-primary-500 to-primary-600
+                flex items-center justify-center text-white
+                font-bold shadow-lg"
+            >
+              {{ index + 1 }}
+            </div>
+
+            <div class="flex-1">
+              <h3 class="text-lg font-bold text-mainText mb-2">
+                {{ step.title }}
+              </h3>
+              <p class="text-sm text-secondaryText mb-3">
+                {{ step.description }}
+              </p>
+
+              <div
+                class="bg-neutral-900 dark:bg-neutral-900
+                  rounded-lg p-4 font-mono text-sm overflow-x-auto"
+              >
+                <pre class="text-neutral-100">{{ step.code }}</pre>
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="index < steps.length - 1"
+            class="absolute left-5 top-12 bottom-0 w-0.5 bg-base-300"
+          />
+        </div>
+      </div>
+
+      <template #footer>
+        <VButton
+          variant="default"
+          text="Close"
+        />
+        <VButton
+          variant="primary"
+          text="Start Building"
+          icon="mdi:rocket-launch"
+        />
+      </template>
+    </VDrawer>
+
+    <!-- Features Drawer -->
+    <VDrawer
+      id="features-drawer"
+      title="✨ All Features"
+      position="right"
+      width="xl"
+    >
+      <div class="space-y-6">
+        <div
+          class="bg-gradient-to-r from-primary-50 to-primary-100
+            dark:from-primary-900/20 dark:to-primary-800/20
+            p-4 rounded-lg"
+        >
+          <p class="text-mainText font-semibold mb-1">
+            Complete Feature Set
+          </p>
+          <p class="text-secondaryText text-sm">
+            Everything you need to build modern applications
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div
+            v-for="feature in features"
+            :key="feature.title"
+            class="p-4 bg-base-200 rounded-lg hover:bg-base-300
+              transition-colors cursor-pointer group"
+          >
+            <div class="flex items-start gap-3">
+              <div
+                class="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10
+                  flex items-center justify-center
+                  group-hover:scale-110 transition-transform"
+              >
+                <VIcon
+                  :icon="feature.icon"
+                  :size="20"
+                  class="text-primary"
+                />
+              </div>
+              <div>
+                <h3 class="font-semibold text-mainText mb-1">
+                  {{ feature.title }}
+                </h3>
+                <p class="text-xs text-secondaryText">
+                  {{ feature.description }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-cardBorder">
+          <h4 class="font-semibold text-mainText mb-4">
+            🛠️ Tech Stack
+          </h4>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div
+              v-for="tech in techStack"
+              :key="tech.name"
+              class="flex items-center gap-3 p-3 bg-base-200 rounded-lg"
+            >
+              <VIcon
+                :icon="tech.icon"
+                :size="24"
+                :class="tech.color"
+              />
+              <span class="text-sm font-medium text-mainText">
+                {{ tech.name }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <template #footer>
+        <VButton
+          variant="default"
+          text="Close"
+        />
+        <VButton
+          variant="primary"
+          text="Explore Components"
+          icon="mdi:compass"
+        />
+      </template>
+    </VDrawer>
   </div>
 </template>
 
