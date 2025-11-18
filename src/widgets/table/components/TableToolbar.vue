@@ -4,7 +4,7 @@ import { computed } from "vue";
 import type { ExportOptions, ToolbarConfig } from "../types/toolbar";
 
 import VButton from "@/shared/ui/common/VButton.vue";
-import VDropdown from "@/shared/ui/common/VDropdown.vue";
+import VFloating from "@/shared/ui/common/VFloating.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VInput from "@/shared/ui/common/VInput.vue";
 import VLoader from "@/shared/ui/common/VLoader.vue";
@@ -148,7 +148,7 @@ const handleSingleExport = () => {
         />
 
         <!-- Multi Export dropdown -->
-        <VDropdown
+        <VFloating
           v-if="config?.actions?.export === 'multi'"
           :items="exportFormats"
           placement="bottom-right"
@@ -163,10 +163,9 @@ const handleSingleExport = () => {
             />
           </template>
 
-          <template #item-icon="{ item }">
+          <template #icon="{ icon }">
             <VIcon
-              v-if="item.icon"
-              :icon="item.icon"
+              :icon="icon"
               size="small"
             />
           </template>
@@ -178,7 +177,7 @@ const handleSingleExport = () => {
               size="small"
             />
           </template>
-        </VDropdown>
+        </VFloating>
 
         <!-- Column Setup slot -->
         <slot

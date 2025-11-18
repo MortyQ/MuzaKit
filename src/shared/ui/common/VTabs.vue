@@ -3,7 +3,7 @@ import { onMounted, ref, watch, nextTick, onBeforeUnmount, computed } from "vue"
 import { useRoute, useRouter } from "vue-router";
 
 import VButton from "@/shared/ui/common/VButton.vue";
-import VDropdown from "@/shared/ui/common/VDropdown.vue";
+import VFloating from "@/shared/ui/common/VFloating.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 
 const router = useRouter();
@@ -361,7 +361,7 @@ defineExpose({
           v-if="overflowTabs.length > 0"
           class="relative flex-shrink-0 more-button"
         >
-          <VDropdown
+          <VFloating
             :items="dropdownItems"
             placement="bottom-right"
             @select="handleDropdownSelect"
@@ -369,7 +369,7 @@ defineExpose({
             <template #trigger>
               <VButton icon="mdi:dots-horizontal" />
             </template>
-          </VDropdown>
+          </VFloating>
         </div>
       </div>
 

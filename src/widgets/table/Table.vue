@@ -21,9 +21,9 @@ import type { Column, ExpandableRow, HeaderCell } from "./types/index";
 import tableStorage from "./utils/storage";
 
 import VButton from "@/shared/ui/common/VButton.vue";
+import VFloating from "@/shared/ui/common/VFloating.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VLoader from "@/shared/ui/common/VLoader.vue";
-import VPopover from "@/shared/ui/common/VPopover.vue";
 import TablePagination from "@/widgets/table/components/TablePagination.vue";
 import { TableEmits, TableProps } from "@/widgets/table/types/props";
 
@@ -789,9 +789,10 @@ onUnmounted(() => {
           v-if="columnSetupEnabled"
           #column-setup
         >
-          <VPopover
+          <VFloating
             ref="columnSetupPopoverRef"
             placement="bottom-right"
+            unstyled
           >
             <template #trigger>
               <VButton
@@ -808,7 +809,7 @@ onUnmounted(() => {
                 @close="handleColumnSetupClose"
               />
             </template>
-          </VPopover>
+          </VFloating>
         </template>
       </TableToolbar>
     </div>
