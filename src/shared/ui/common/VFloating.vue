@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, nextTick, onMounted, onBeforeUnmount } from "vue";
 
 import VLoader from "@/shared/ui/common/VLoader.vue";
 
@@ -20,6 +20,10 @@ interface Props {
   placement?: Placement;
   teleport?: boolean;
   closeOnClickOutside?: boolean;
+  adaptive?: boolean; // NEW: enable smart repositioning
+  offset?: number; // gap between trigger & floating (default 8)
+  autoUpdate?: boolean; // re-position on scroll/resize (default true)
+  viewportPadding?: number; // clamp inside viewport (default 4)
 
   // Dropdown-specific props
   items?: FloatingItem[];
@@ -27,7 +31,6 @@ interface Props {
   closeOnSelect?: boolean;
 
   // Styling
-  class?: string;
   unstyled?: boolean; // Remove default styles for custom content
   contentClass?: string; // Additional classes for content wrapper
 }
@@ -41,10 +44,13 @@ const props = withDefaults(defineProps<Props>(), {
   placement: "bottom-right",
   teleport: true,
   closeOnClickOutside: true,
+  adaptive: true,
+  offset: 8,
+  autoUpdate: true,
+  viewportPadding: 4,
   items: () => [],
   disabled: false,
   closeOnSelect: true,
-  class: "",
   unstyled: false,
   contentClass: "",
 });
@@ -58,24 +64,36 @@ const floatingRef = ref<HTMLElement | null>(null);
 const floatingPosition = ref({ top: 0, left: 0, right: 0 });
 const isPositioned = ref(false);
 
+// Performance helpers NEW
+let pendingFrame = false;
+let resizeObserver: ResizeObserver | null = null;
+
+function scheduleUpdate() {
+  if (!isOpen.value || !floatingRef.value) return;
+  if (pendingFrame) return;
+  pendingFrame = true;
+  requestAnimationFrame(() => {
+    pendingFrame = false;
+    updatePosition();
+  });
+}
+
 // Computed
 const isDropdownMode = computed(() => props.items.length > 0);
 
-const hasLoadingItem = computed(() => {
-  return props.items.some((item) => item.loader);
-});
-
 const isDisabled = computed(() => {
-  return props.disabled || hasLoadingItem.value;
+  return props.disabled;
 });
 
 const floatingClasses = computed(() => {
+  const current = props.placement;
+
   // Base classes (always applied for internal logic)
   const baseClasses = {
-    "v-floating--bottom-left": props.placement === "bottom-left",
-    "v-floating--bottom-right": props.placement === "bottom-right",
-    "v-floating--top-left": props.placement === "top-left",
-    "v-floating--top-right": props.placement === "top-right",
+    "v-floating--bottom-left": current === "bottom-left",
+    "v-floating--bottom-right": current === "bottom-right",
+    "v-floating--top-left": current === "top-left",
+    "v-floating--top-right": current === "top-right",
     "v-floating--teleported": props.teleport,
   };
 
@@ -98,12 +116,13 @@ const floatingClasses = computed(() => {
   };
 });
 
-// Computed styles - точно как в VPopover
-const floatingStyles = computed(() => {
-  if (!props.teleport) return {};
-
+// Adjust floatingStyles type
+const floatingStyles = computed<Record<string, string | undefined>>(() => {
+  if (!props.teleport) {
+    return {};
+  }
   return {
-    position: "fixed" as const,
+    position: "fixed",
     zIndex: "9999",
     top: `${floatingPosition.value.top}px`,
     left: floatingPosition.value.left !== undefined ? `${floatingPosition.value.left}px` : undefined,
@@ -114,69 +133,83 @@ const floatingStyles = computed(() => {
 // Calculate position
 const updatePosition = () => {
   if (!triggerRef.value || !floatingRef.value) return;
+  const triggerRect = triggerRef.value.getBoundingClientRect();
+  const el = floatingRef.value;
+  const height = el.offsetHeight;
+  const width = el.offsetWidth;
+  const vpW = window.innerWidth;
+  const vpH = window.innerHeight;
+  let [vert, horiz] = props.placement.split("-") as ["top"|"bottom", "left"|"right"];
 
-  const rect = triggerRef.value.getBoundingClientRect();
-  const gap = 8; // margin between trigger and floating element
-  const height = floatingRef.value.offsetHeight;
-
-  if (props.placement === "bottom-left") {
-    floatingPosition.value = {
-      top: rect.bottom + gap,
-      left: rect.left,
-      right: undefined as any,
-    };
-  } else if (props.placement === "bottom-right") {
-    floatingPosition.value = {
-      top: rect.bottom + gap,
-      left: undefined as any,
-      right: window.innerWidth - rect.right,
-    };
-  } else if (props.placement === "top-left") {
-    floatingPosition.value = {
-      top: rect.top - height - gap,
-      left: rect.left,
-      right: undefined as any,
-    };
-  } else if (props.placement === "top-right") {
-    floatingPosition.value = {
-      top: rect.top - height - gap,
-      left: undefined as any,
-      right: window.innerWidth - rect.right,
-    };
+  if (props.adaptive) {
+    const gap = props.offset;
+    const spaceBelow = vpH - triggerRect.bottom;
+    const spaceAbove = triggerRect.top;
+    const needV = height + gap;
+    if (vert === "bottom" && spaceBelow < needV && spaceAbove >= spaceBelow) vert = "top"; else if (vert === "top" && spaceAbove < needV && spaceBelow >= spaceAbove) vert = "bottom";
+    const spaceRight = vpW - triggerRect.right;
+    const spaceLeft = triggerRect.left;
+    const needH = width + gap;
+    if (horiz === "right" && spaceRight < needH && spaceLeft >= spaceRight) horiz = "left"; else if (horiz === "left" && spaceLeft < needH && spaceRight >= spaceLeft) horiz = "right";
   }
 
-  // Mark as positioned to show the element
+  const gap = props.offset;
+  let top: number;
+  if (vert === "bottom") top = triggerRect.bottom + gap; else top = triggerRect.top - height - gap;
+  // Clamp vertically inside viewport with padding
+  top = Math.max(props.viewportPadding, Math.min(top, vpH - height - props.viewportPadding));
+
+  // Horizontal placement
+  let left: number | undefined = undefined;
+  let right: number | undefined = undefined;
+  if (horiz === "left") {
+    left = triggerRect.left;
+    left = Math.max(props.viewportPadding, Math.min(left, vpW - width - props.viewportPadding));
+  } else {
+    // align right edges
+    right = vpW - triggerRect.right;
+    right = Math.max(props.viewportPadding, Math.min(right, vpW - width - props.viewportPadding));
+  }
+
+  floatingPosition.value.top = top;
+  if (left !== undefined) {
+    floatingPosition.value.left = left;
+    floatingPosition.value.right = undefined as any;
+  }
+  if (right !== undefined) {
+    floatingPosition.value.right = right;
+    floatingPosition.value.left = undefined as any;
+  }
   isPositioned.value = true;
 };
 
 // Toggle
 const toggle = () => {
-  if (!isDisabled.value) {
-    isOpen.value = !isOpen.value;
-    if (isOpen.value) {
-      isPositioned.value = false;
-      nextTick(() => {
-        updatePosition();
-      });
-    }
-  }
+  if (isDisabled.value) return;
+  isOpen.value = !isOpen.value;
+  if (isOpen.value) {
+    isPositioned.value = false;
+    nextTick(() => { updatePosition(); });
+    initAutoUpdate();
+  } else { teardownAutoUpdate(); }
 };
 
 // Close
 const close = () => {
+  if (!isOpen.value) return;
   isOpen.value = false;
   isPositioned.value = false;
+  teardownAutoUpdate();
 };
 
 // Open
 const open = () => {
   if (isDisabled.value) return;
-
+  if (isOpen.value) return;
   isOpen.value = true;
   isPositioned.value = false;
-  nextTick(() => {
-    updatePosition();
-  });
+  nextTick(() => { updatePosition(); });
+  initAutoUpdate();
 };
 
 const handleItemClick = (item: FloatingItem) => {
@@ -189,56 +222,63 @@ const handleItemClick = (item: FloatingItem) => {
   }
 };
 
-// Click outside handling
-const handleClickOutside = (event: MouseEvent) => {
-  if (!props.closeOnClickOutside) return;
+// Escape key handling NEW
+const handleKeyDown = (e: KeyboardEvent) => {
+  if (e.key === "Escape" && isOpen.value) close();
+};
 
+// Click outside handling (ensure mounted listener)
+const handleClickOutside = (event: MouseEvent) => {
+  if (!props.closeOnClickOutside || !isOpen.value) return;
   const target = event.target as Node;
-  if (
-    triggerRef.value &&
-    floatingRef.value &&
-    !triggerRef.value.contains(target) &&
-    !floatingRef.value.contains(target)
-  ) {
+  if (triggerRef.value && floatingRef.value &&
+      !triggerRef.value.contains(target) &&
+      !floatingRef.value.contains(target)) {
     close();
   }
 };
 
-// Watch for loader changes
-watch(
-  () => hasLoadingItem.value,
-  (newVal, oldVal) => {
-    if (oldVal && !newVal && isOpen.value && props.closeOnSelect) {
-      close();
-    }
-  },
-);
+onMounted(() => {
+  document.addEventListener("click", handleClickOutside);
+});
+onBeforeUnmount(() => {
+  document.removeEventListener("click", handleClickOutside);
+  teardownAutoUpdate();
+});
 
 // Update position on scroll and resize (only if open and teleported)
 const handleScroll = () => {
-  if (isOpen.value && props.teleport) {
-    updatePosition();
+  if (props.autoUpdate && isOpen.value && props.teleport) {
+    scheduleUpdate();
   }
 };
-
 const handleResize = () => {
-  if (isOpen.value && props.teleport) {
-    updatePosition();
+  if (props.autoUpdate && isOpen.value && props.teleport) {
+    scheduleUpdate();
   }
 };
 
-// Setup event listeners once on mount
-onMounted(() => {
-  document.addEventListener("click", handleClickOutside);
-  window.addEventListener("scroll", handleScroll, true); // true = capture phase for all scrolls
-  window.addEventListener("resize", handleResize);
-});
+function initAutoUpdate() {
+  if (!props.autoUpdate) return;
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  window.addEventListener("resize", handleResize, { passive: true });
+  document.addEventListener("keydown", handleKeyDown);
+  // ResizeObserver to track trigger size changes
+  if (!resizeObserver && triggerRef.value) {
+    resizeObserver = new ResizeObserver(() => scheduleUpdate());
+    resizeObserver.observe(triggerRef.value);
+  }
+}
 
-onBeforeUnmount(() => {
-  document.removeEventListener("click", handleClickOutside);
-  window.removeEventListener("scroll", handleScroll, true);
+function teardownAutoUpdate() {
+  window.removeEventListener("scroll", handleScroll);
   window.removeEventListener("resize", handleResize);
-});
+  document.removeEventListener("keydown", handleKeyDown);
+  if (resizeObserver && triggerRef.value) {
+    resizeObserver.disconnect();
+    resizeObserver = null;
+  }
+}
 
 // Expose
 defineExpose({
@@ -250,11 +290,7 @@ defineExpose({
 </script>
 
 <template>
-  <div
-    class="v-floating"
-    :class="props.class"
-  >
-    <!-- Trigger -->
+  <div class="v-floating">
     <div
       ref="triggerRef"
       class="v-floating-trigger"
@@ -267,8 +303,6 @@ defineExpose({
         :is-disabled="isDisabled"
       />
     </div>
-
-    <!-- Floating Content -->
     <Teleport
       to="body"
       :disabled="!teleport"
@@ -280,9 +314,7 @@ defineExpose({
         :class="[floatingClasses, { 'v-floating--positioning': !isPositioned }]"
         :style="floatingStyles"
       >
-        <!-- Slot for custom content (Popover mode) -->
         <slot name="content">
-          <!-- Default Dropdown items rendering -->
           <template v-if="isDropdownMode">
             <button
               v-for="item in items"
@@ -296,7 +328,6 @@ defineExpose({
               :disabled="item.disabled || item.loader"
               @click="handleItemClick(item)"
             >
-              <!-- Icon -->
               <slot
                 name="item-icon"
                 :item="item"
@@ -311,13 +342,7 @@ defineExpose({
                   />
                 </span>
               </slot>
-
-              <!-- Label -->
-              <span class="v-floating-item-label">
-                {{ item.label }}
-              </span>
-
-              <!-- Loader -->
+              <span class="v-floating-item-label">{{ item.label }}</span>
               <slot
                 name="item-loader"
                 :item="item"
@@ -433,4 +458,3 @@ defineExpose({
   @apply ml-auto flex-shrink-0;
 }
 </style>
-
