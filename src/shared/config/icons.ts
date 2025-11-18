@@ -314,6 +314,7 @@ export const iconMap: Record<string, Component> = {
   "lucide:help-circle": defineAsyncComponent(() => import("~icons/lucide/help-circle")),
   "lucide:lightbulb": defineAsyncComponent(() => import("~icons/lucide/lightbulb")),
   "lucide:loader-2": defineAsyncComponent(() => import("~icons/lucide/loader-2")),
+  "lucide:scroll": defineAsyncComponent(() => import("~icons/lucide/scroll")),
 };
 
 /**
