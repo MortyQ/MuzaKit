@@ -99,6 +99,50 @@
   @apply text-secondaryText italic;
 }
 
+// Code block styles
+.code-block {
+  @apply bg-base-200 rounded-lg p-4 overflow-x-auto;
+}
+
+.code-block pre {
+  @apply text-sm text-mainText font-mono m-0;
+}
+
+.code-block code {
+  @apply whitespace-pre;
+}
+
+// Feature cards grid (compact style for Key Features)
+.features-grid-compact {
+  @apply grid gap-3;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.feature-card {
+  @apply flex items-start gap-3 p-3 bg-base-100 border border-cardBorder rounded-lg
+    transition-all duration-200;
+}
+
+.feature-card:hover {
+  @apply bg-base-200 border-primary/30;
+}
+
+.feature-card-icon {
+  @apply flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-lg;
+}
+
+.feature-card-content {
+  @apply flex-1 min-w-0;
+}
+
+.feature-card-title {
+  @apply text-sm font-semibold text-mainText mb-0.5;
+}
+
+.feature-card-description {
+  @apply text-xs text-secondaryText leading-relaxed;
+}
+
 // Code Example Card
 .code-example-card {
   @apply p-5;
@@ -127,6 +171,86 @@
 
 .code-example code {
   @apply text-sm font-mono text-mainText leading-relaxed;
+}
+
+// Examples section styles (for Live Examples sections)
+.examples-section {
+  @apply mb-8;
+
+  &:not(:last-child) {
+    @apply pb-8 border-b border-cardBorder;
+  }
+}
+
+.examples-subtitle {
+  @apply text-lg font-bold text-mainText mb-2;
+}
+
+// Props table styles
+.props-table {
+  @apply w-full border-collapse;
+}
+
+.props-table th {
+  @apply bg-base-200 text-left p-3 text-sm font-semibold
+  text-mainText border-b border-cardBorder;
+}
+
+.props-table td {
+  @apply p-3 text-sm text-secondaryText border-b border-cardBorder;
+}
+
+.props-table tbody tr:hover {
+  @apply bg-base-100;
+}
+
+.props-table code {
+  @apply px-2 py-1 bg-base-200 rounded text-xs font-mono text-primary;
+}
+
+// Composable/Slots list styles
+.composable-section {
+  @apply mt-4;
+}
+
+.composable-list {
+  @apply list-none pl-0 space-y-2;
+}
+
+.composable-list li {
+  @apply text-sm text-secondaryText pl-5 relative;
+}
+
+.composable-list li::before {
+  content: '→';
+  @apply absolute left-0 text-primary;
+}
+
+.composable-list code {
+  @apply px-2 py-0.5 bg-base-200 rounded text-xs font-mono text-primary;
+}
+
+// Features list styles
+.features-list {
+  @apply list-none pl-0 space-y-2;
+}
+
+.features-list li {
+  @apply text-sm text-secondaryText;
+}
+
+// Usage tips list styles
+.usage-tips-list {
+  @apply list-none pl-0 space-y-1.5 mt-2;
+}
+
+.usage-tips-list li {
+  @apply text-[13px] text-secondaryText pl-4 relative;
+}
+
+.usage-tips-list li::before {
+  content: '✓';
+  @apply absolute left-0 text-success font-bold;
 }
 
 // Responsive

@@ -9,7 +9,7 @@ import VKpiCard from "@/shared/ui/kpis/VKpiCard.vue";
 // Toggle for showing all comparisons
 const showAllComparisons = ref(false);
 
-// Mock KPI Data
+// Unified KPI Data with optional comparisons
 const kpiData = [
   {
     title: "Revenue",
@@ -222,10 +222,7 @@ const kpiData = [
       },
     ] as KpiComparison[],
   },
-];
-
-// Short KPI Data (without comparisons)
-const shortKpiData = [
+  // KPIs without comparisons - simply omit the comparisons property
   {
     title: "Positive Ratings",
     value: 12599372,
@@ -265,8 +262,8 @@ const shortKpiData = [
       </div>
     </div>
 
-    <!-- KPI Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+    <!-- Unified KPI Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       <VKpiCard
         v-for="(kpi, index) in kpiData"
         :key="index"
@@ -278,19 +275,6 @@ const shortKpiData = [
         :show-all-comparisons="showAllComparisons"
         :format="kpi.format"
         :reverse="kpi.reverse"
-      />
-    </div>
-
-    <!-- Short KPI Cards (using VKpiCard without comparisons) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      <VKpiCard
-        v-for="(kpi, index) in shortKpiData"
-        :key="index"
-        :title="kpi.title"
-        :value="kpi.value"
-        :icon="kpi.icon"
-        :icon-color="kpi.iconColor"
-        :format="kpi.format"
       />
     </div>
   </div>

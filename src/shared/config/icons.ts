@@ -311,6 +311,9 @@ export const iconMap: Record<string, Component> = {
   "mdi:view-list": defineAsyncComponent(() => import("~icons/mdi/view-list")),
   "mdi:compass": defineAsyncComponent(() => import("~icons/mdi/compass")),
   "lucide:maximize-2": defineAsyncComponent(() => import("~icons/lucide/maximize-2")),
+  "lucide:help-circle": defineAsyncComponent(() => import("~icons/lucide/help-circle")),
+  "lucide:lightbulb": defineAsyncComponent(() => import("~icons/lucide/lightbulb")),
+  "lucide:loader-2": defineAsyncComponent(() => import("~icons/lucide/loader-2")),
 };
 
 /**

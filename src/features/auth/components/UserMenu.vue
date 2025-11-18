@@ -4,8 +4,8 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/features/auth/store/authStore";
 import UserAvatar from "@/shared/ui/common/UserAvatar.vue";
 import VCard from "@/shared/ui/common/VCard.vue";
+import VFloating from "@/shared/ui/common/VFloating.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import VPopover from "@/shared/ui/common/VPopover.vue";
 
 interface Props {
   /** Compact mode (smaller size) */
@@ -44,8 +44,9 @@ const handleMenuSelect = (value: string | number) => {
 
 <template>
   <div class="user-menu">
-    <VPopover
+    <VFloating
       placement="top-left"
+      unstyled
     >
       <!-- Trigger slot -->
       <template #trigger>
@@ -202,7 +203,7 @@ const handleMenuSelect = (value: string | number) => {
           :size="18"
         />
       </template>
-    </VPopover>
+    </VFloating>
   </div>
 </template>
 

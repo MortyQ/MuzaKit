@@ -1,70 +1,6 @@
 <script setup lang="ts">
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-
-// Code examples
-const basicExample = `<script setup>
-import VCard from '@/shared/ui/common/VCard.vue';
-</` + `script>
-
-<template>
-  <!-- Simple card -->
-  <VCard>
-    <p>Card content goes here</p>
-  </VCard>
-
-  <!-- Card with title -->
-  <VCard title="Card Title">
-    <p>Card with header</p>
-  </VCard>
-
-  <!-- Full featured card -->
-  <VCard
-    title="Card Title"
-    subtitle="Card subtitle"
-    description="Optional description text"
-    icon="lucide:star"
-  >
-    <p>Main content area</p>
-
-    <template #footer>
-      <button>Action</button>
-    </template>
-  </VCard>
-</template>`;
-
-const advancedExample = `// Different variants
-<VCard variant="default">Default style</VCard>
-<VCard variant="elevated">With shadow</VCard>
-<VCard variant="outlined">With border</VCard>
-<VCard variant="ghost">Minimal style</VCard>
-
-// Different sizes (width control)
-<VCard size="sm">Small card</VCard>
-<VCard size="md">Medium card</VCard>
-<VCard size="lg">Large card</VCard>
-<VCard size="full">Full width</VCard>
-
-// Clickable card
-<VCard clickable @click="handleClick">
-  Click me!
-</VCard>
-
-// Card as link
-<VCard href="/path" target="_blank">
-  This is a link card
-</VCard>
-
-// Loading state
-<VCard loading>
-  <template #loading>
-    <CustomLoader />
-  </template>
-</VCard>
-
-// With custom padding
-<VCard padding="none">No padding</VCard>
-<VCard padding="lg">Large padding</VCard>`;
 </script>
 
 <template>
@@ -220,6 +156,24 @@ const advancedExample = `// Different variants
             </p>
           </VCard>
         </div>
+
+        <div class="code-block mt-4">
+          <pre><code>&lt;VCard variant="default" title="Default"&gt;
+  Standard card with background
+&lt;/VCard&gt;
+
+&lt;VCard variant="elevated" title="Elevated"&gt;
+  Card with shadow for depth
+&lt;/VCard&gt;
+
+&lt;VCard variant="outlined" title="Outlined"&gt;
+  Card with border, no shadow
+&lt;/VCard&gt;
+
+&lt;VCard variant="ghost" title="Ghost"&gt;
+  Minimal card, no background
+&lt;/VCard&gt;</code></pre>
+        </div>
       </section>
 
       <!-- Sizes -->
@@ -264,6 +218,24 @@ const advancedExample = `// Different variants
             </p>
           </VCard>
         </div>
+
+        <div class="code-block mt-4">
+          <pre><code>&lt;VCard size="sm" title="Small"&gt;
+  Max width: 320px
+&lt;/VCard&gt;
+
+&lt;VCard size="md" title="Medium"&gt;
+  Max width: 448px
+&lt;/VCard&gt;
+
+&lt;VCard size="lg" title="Large"&gt;
+  Max width: 672px
+&lt;/VCard&gt;
+
+&lt;VCard size="full" title="Full Width"&gt;
+  Takes full available width
+&lt;/VCard&gt;</code></pre>
+        </div>
       </section>
 
       <!-- With Header -->
@@ -291,6 +263,21 @@ const advancedExample = `// Different variants
               Card content with icon
             </p>
           </VCard>
+        </div>
+
+        <div class="code-block mt-4">
+          <pre><code>&lt;VCard title="Simple Title" subtitle="With subtitle"&gt;
+  Card content here
+&lt;/VCard&gt;
+
+&lt;VCard
+  title="With Icon"
+  subtitle="And description"
+  description="This is a longer description text"
+  icon="lucide:star"
+&gt;
+  Card content with icon
+&lt;/VCard&gt;</code></pre>
         </div>
       </section>
 
@@ -320,6 +307,26 @@ const advancedExample = `// Different variants
             </p>
           </VCard>
         </div>
+
+        <div class="code-block mt-4">
+          <pre><code>&lt;!-- Clickable card --&gt;
+&lt;VCard
+  clickable
+  title="Clickable Card"
+  @click="handleClick"
+&gt;
+  Click me to trigger an action
+&lt;/VCard&gt;
+
+&lt;!-- Link card --&gt;
+&lt;VCard
+  href="https://github.com"
+  target="_blank"
+  title="Link Card"
+&gt;
+  This card is a link to GitHub
+&lt;/VCard&gt;</code></pre>
+        </div>
       </section>
 
       <!-- With Footer -->
@@ -347,27 +354,192 @@ const advancedExample = `// Different variants
             </div>
           </template>
         </VCard>
+
+        <div class="code-block mt-4">
+          <pre><code>&lt;VCard
+  title="Card with Actions"
+  subtitle="Footer slot for action buttons"
+  size="md"
+&gt;
+  &lt;p&gt;Main content area with some text.&lt;/p&gt;
+
+  &lt;template #footer&gt;
+    &lt;div class="flex gap-2"&gt;
+      &lt;button class="btn-primary"&gt;Confirm&lt;/button&gt;
+      &lt;button class="btn-default"&gt;Cancel&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+&lt;/VCard&gt;</code></pre>
+        </div>
       </section>
     </VCard>
 
-
-    <!-- Basic Usage -->
-    <VCard class="code-example-card">
-      <h3 class="code-title">
-        📝 Basic Usage
-      </h3>
-      <div class="code-block">
-        <pre><code>{{ basicExample }}</code></pre>
+    <!-- Key Features -->
+    <VCard>
+      <div class="info-header">
+        <VIcon
+          icon="lucide:sparkles"
+          :size="24"
+          class="info-icon"
+        />
+        <h2 class="info-title">
+          Key Features
+        </h2>
       </div>
-    </VCard>
 
-    <!-- Advanced Usage -->
-    <VCard class="code-example-card">
-      <h3 class="code-title">
-        🚀 Advanced Examples
-      </h3>
-      <div class="code-block">
-        <pre><code>{{ advancedExample }}</code></pre>
+      <div class="features-grid-compact">
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-primary">
+            <VIcon
+              icon="lucide:palette"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Multiple Variants
+            </h4>
+            <p class="feature-card-description">
+              Default, elevated, outlined, ghost styles
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-success">
+            <VIcon
+              icon="lucide:maximize-2"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Flexible Sizing
+            </h4>
+            <p class="feature-card-description">
+              Sizing options for different use cases
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-warning">
+            <VIcon
+              icon="lucide:layout-template"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Rich Headers
+            </h4>
+            <p class="feature-card-description">
+              Icon, title, subtitle, and description
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-info">
+            <VIcon
+              icon="lucide:mouse-pointer-click"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Interactive
+            </h4>
+            <p class="feature-card-description">
+              Clickable element or link support
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-primary">
+            <VIcon
+              icon="lucide:layers"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Footer Slot
+            </h4>
+            <p class="feature-card-description">
+              Actions and buttons support
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-success">
+            <VIcon
+              icon="lucide:loader-2"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              States
+            </h4>
+            <p class="feature-card-description">
+              Loading and disabled states
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-warning">
+            <VIcon
+              icon="lucide:settings-2"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Customizable
+            </h4>
+            <p class="feature-card-description">
+              Padding, border radius control
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-info">
+            <VIcon
+              icon="lucide:palette"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Theme-Aware
+            </h4>
+            <p class="feature-card-description">
+              Automatic theme styling support
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-primary">
+            <VIcon
+              icon="lucide:accessibility"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Accessible
+            </h4>
+            <p class="feature-card-description">
+              Proper semantic HTML structure
+            </p>
+          </div>
+        </div>
       </div>
     </VCard>
 
@@ -503,87 +675,10 @@ const advancedExample = `// Different variants
         </ul>
       </div>
     </VCard>
-
-    <!-- Features Summary -->
-    <VCard>
-      <h3 class="section-title mb-4">
-        ✨ Key Features
-      </h3>
-      <ul class="features-list">
-        <li>✅ Multiple visual variants (default, elevated, outlined, ghost)</li>
-        <li>✅ Flexible sizing options for different use cases</li>
-        <li>✅ Header with icon, title, subtitle, and description</li>
-        <li>✅ Footer slot for actions and buttons</li>
-        <li>✅ Can be clickable element or link</li>
-        <li>✅ Loading and disabled states</li>
-        <li>✅ Customizable padding and border radius</li>
-        <li>✅ Theme-aware styling</li>
-        <li>✅ Fully accessible with proper semantic HTML</li>
-      </ul>
-    </VCard>
   </div>
 </template>
 
 <style scoped lang="scss">
 @use "@/shared/assets/styles/shared-info-card-styles.scss";
-
-// Card-specific styles
-.props-table {
-  @apply w-full border-collapse;
-}
-
-.props-table th {
-  @apply bg-base-200 text-left p-3 text-sm font-semibold
-  text-mainText border-b border-cardBorder;
-}
-
-.props-table td {
-  @apply p-3 text-sm text-secondaryText border-b border-cardBorder;
-}
-
-.props-table tbody tr:hover {
-  @apply bg-base-100;
-}
-
-.props-table code {
-  @apply px-2 py-1 bg-base-200 rounded text-xs font-mono text-primary;
-}
-
-.examples-section {
-  @apply mb-8 last:mb-0;
-}
-
-.examples-subtitle {
-  @apply text-base font-semibold text-mainText mb-4;
-}
-
-.composable-section {
-  @apply mt-4;
-}
-
-.composable-list {
-  @apply list-none pl-0 space-y-2;
-}
-
-.composable-list li {
-  @apply text-sm text-secondaryText pl-5 relative;
-}
-
-.composable-list li::before {
-  content: '→';
-  @apply absolute left-0 text-primary;
-}
-
-.composable-list code {
-  @apply px-2 py-0.5 bg-base-200 rounded text-xs font-mono text-primary;
-}
-
-.features-list {
-  @apply list-none pl-0 space-y-2;
-}
-
-.features-list li {
-  @apply text-sm text-secondaryText;
-}
 </style>
 
