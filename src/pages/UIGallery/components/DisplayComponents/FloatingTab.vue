@@ -133,44 +133,89 @@ const unstyledCode = `<VFloating
 
       <div class="info-content">
         <p class="info-description">
-          <strong>VFloating</strong> is a unified component for creating floating elements
-          (dropdowns, popovers, tooltips). It automatically detects the mode based on props:
+          Unified component for creating floating elements (dropdowns, popovers, tooltips).
+          Automatically detects mode based on props: <strong>items</strong> for dropdown,
+          <strong>content</strong> slot for popover, <strong>unstyled</strong> for full control.
         </p>
-        <ul class="feature-list">
-          <li><strong>Dropdown Mode:</strong> when <code>items</code> prop is provided</li>
-          <li><strong>Popover Mode:</strong> when <code>content</code> slot is used</li>
-          <li><strong>Unstyled Mode:</strong> full control with <code>unstyled</code> prop</li>
-        </ul>
 
         <div class="features-grid">
           <div class="feature-item">
-            <VIcon
-              icon="lucide:zap"
-              class="feature-icon"
-            />
-            <span>Auto positioning</span>
+            <div class="feature-icon-wrapper feature-icon-primary">
+              <VIcon
+                icon="lucide:menu"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Dropdown Mode
+              </h3>
+              <p class="feature-description">
+                Pass items prop for menus
+              </p>
+            </div>
           </div>
+
           <div class="feature-item">
-            <VIcon
-              icon="lucide:loader"
-              class="feature-icon"
-            />
-            <span>Loading states</span>
+            <div class="feature-icon-wrapper feature-icon-success">
+              <VIcon
+                icon="lucide:message-circle"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Popover Mode
+              </h3>
+              <p class="feature-description">
+                Use content slot for rich HTML
+              </p>
+            </div>
           </div>
+
           <div class="feature-item">
-            <VIcon
-              icon="lucide:check-circle"
-              class="feature-icon"
-            />
-            <span>Active/Disabled items</span>
+            <div class="feature-icon-wrapper feature-icon-warning">
+              <VIcon
+                icon="lucide:palette"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Unstyled Mode
+              </h3>
+              <p class="feature-description">
+                Full control over styles
+              </p>
+            </div>
           </div>
+
           <div class="feature-item">
-            <VIcon
-              icon="lucide:palette"
-              class="feature-icon"
-            />
-            <span>Fully customizable</span>
+            <div class="feature-icon-wrapper feature-icon-info">
+              <VIcon
+                icon="lucide:zap"
+                :size="20"
+              />
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">
+                Auto Positioning
+              </h3>
+              <p class="feature-description">
+                Smart placement with 4 variants
+              </p>
+            </div>
           </div>
+        </div>
+
+        <div class="info-note">
+          <VIcon
+            icon="lucide:info"
+            :size="16"
+          />
+          <span>
+            VFloating automatically handles positioning, scroll updates, and click-outside behavior!
+          </span>
         </div>
       </div>
     </VCard>
@@ -498,61 +543,15 @@ const unstyledCode = `<VFloating
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "@/shared/assets/styles/shared-info-card-styles.scss";
+
 .page-container {
   @apply flex flex-col p-6;
 }
 
-.info-header {
-  @apply flex items-center gap-3 mb-4;
-}
-
-.info-icon {
-  @apply text-primary;
-}
-
-.info-title {
-  @apply text-2xl font-bold text-mainText;
-}
-
-.info-content {
-  @apply space-y-4;
-}
-
-.info-description {
-  @apply text-secondaryText leading-relaxed;
-}
-
-.feature-list {
-  @apply list-disc list-inside space-y-2 text-secondaryText ml-2;
-}
-
-.features-grid {
-  @apply grid grid-cols-2 md:grid-cols-4 gap-4 mt-4;
-}
-
-.feature-item {
-  @apply flex items-center gap-2 text-sm text-secondaryText;
-}
-
-.feature-icon {
-  @apply text-primary flex-shrink-0;
-}
-
 .demo-description {
   @apply text-secondaryText text-sm;
-}
-
-.code-block {
-  @apply bg-base-200 rounded-lg p-4 overflow-x-auto;
-}
-
-.code-block pre {
-  @apply text-sm text-mainText font-mono;
-}
-
-.code-block code {
-  @apply whitespace-pre;
 }
 </style>
 
