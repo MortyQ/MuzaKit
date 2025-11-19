@@ -792,6 +792,7 @@ onUnmounted(() => {
           <VFloating
             ref="columnSetupPopoverRef"
             placement="bottom-right"
+            :offset="8"
             unstyled
           >
             <template #trigger>

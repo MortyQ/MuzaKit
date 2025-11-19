@@ -123,7 +123,7 @@ const steps = [
               <VIcon
                 icon="mdi:rocket-launch"
                 :size="20"
-                class="mr-2"
+                class="md:mr-2"
               />
               Quick Start Guide
             </VButton>
@@ -135,7 +135,7 @@ const steps = [
               <VIcon
                 icon="mdi:view-list"
                 :size="20"
-                class="mr-2"
+                class="md:mr-2"
               />
               View All Features
             </VButton>

@@ -13,6 +13,7 @@ import ToolbarTab from "@/pages/Table/components/ToolbarTab.vue";
 import VTabs from "@/shared/ui/common/VTabs.vue";
 
 const tabs = [
+  { id: "expand", label: "Expand Table", component: ExpandTableTab },
   { id: "default", label: "Simple Tables", component: DefaultTablesTab },
   { id: "large-flat-data", label: "Large Data Table", component: LargeFlatDataTable },
   { id: "toolbar", label: "Toolbar", component: ToolbarTab },
@@ -20,7 +21,6 @@ const tabs = [
   { id: "sorting", label: "Sorting", component: SortingTab },
   { id: "pagination", label: "Pagination", component: PaginationTab },
   { id: "formatters", label: "Formatters", component: FormattersTab },
-  { id: "expand", label: "Expand Table", component: ExpandTableTab },
   { id: "fixed", label: "Fixed Columns", component: FixedColumnsTestTab },
   { id: "grouped", label: "Grouped Headers", component: GroupedHeadersTab },
   { id: "selection", label: "Multi-Select", component: SelectionTab },

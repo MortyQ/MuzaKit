@@ -315,6 +315,10 @@ export const iconMap: Record<string, Component> = {
   "lucide:lightbulb": defineAsyncComponent(() => import("~icons/lucide/lightbulb")),
   "lucide:loader-2": defineAsyncComponent(() => import("~icons/lucide/loader-2")),
   "lucide:scroll": defineAsyncComponent(() => import("~icons/lucide/scroll")),
+  "lucide:monitor-play": defineAsyncComponent(() => import("~icons/lucide/monitor-play")),
+  "lucide:download-cloud": defineAsyncComponent(() => import("~icons/lucide/download-cloud")),
+  "lucide:indent": defineAsyncComponent(() => import("~icons/lucide/indent")),
+  "lucide:move-vertical": defineAsyncComponent(() => import("~icons/lucide/move-vertical")),
 };
 
 /**

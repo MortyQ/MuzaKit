@@ -61,12 +61,6 @@ const columnsRegular: Column[] = [
     key: "location",
     label: "Location",
     width: "150px",
-    // Example: Custom class based on row data
-    cellClass: (value, row, index) => {
-      // Alternate row colors
-      if (index % 2 === 0) return "bg-blue-50 dark:bg-blue-950/20";
-      return "";
-    },
   },
   { key: "manager", label: "Manager", width: "180px" },
   { key: "budget", label: "Budget", width: "130px" },

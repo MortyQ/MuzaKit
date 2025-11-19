@@ -20,10 +20,7 @@ interface Props {
   placement?: Placement;
   teleport?: boolean;
   closeOnClickOutside?: boolean;
-  adaptive?: boolean; // NEW: enable smart repositioning
   offset?: number; // gap between trigger & floating (default 8)
-  autoUpdate?: boolean; // re-position on scroll/resize (default true)
-  viewportPadding?: number; // clamp inside viewport (default 4)
 
   // Dropdown-specific props
   items?: FloatingItem[];
@@ -42,12 +39,9 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
   placement: "bottom-right",
-  teleport: true,
+  teleport: true, // Always teleport to body - avoids z-index issues
   closeOnClickOutside: true,
-  adaptive: true,
   offset: 8,
-  autoUpdate: true,
-  viewportPadding: 4,
   items: () => [],
   disabled: false,
   closeOnSelect: true,
@@ -64,7 +58,7 @@ const floatingRef = ref<HTMLElement | null>(null);
 const floatingPosition = ref({ top: 0, left: 0, right: 0 });
 const isPositioned = ref(false);
 
-// Performance helpers NEW
+// Performance helpers
 let pendingFrame = false;
 let resizeObserver: ResizeObserver | null = null;
 
@@ -118,68 +112,67 @@ const floatingClasses = computed(() => {
 
 // Adjust floatingStyles type
 const floatingStyles = computed<Record<string, string | undefined>>(() => {
+  // Non-teleport mode - relative positioning
   if (!props.teleport) {
     return {};
   }
+
+  // Only apply position styles when positioned
+  if (!isPositioned.value) {
+    return {};
+  }
+
+  // Use fixed positioning with viewport coordinates
   return {
     position: "fixed",
     zIndex: "9999",
     top: `${floatingPosition.value.top}px`,
     left: floatingPosition.value.left !== undefined ? `${floatingPosition.value.left}px` : undefined,
     right: floatingPosition.value.right !== undefined ? `${floatingPosition.value.right}px` : undefined,
+    // Prevent following scroll by using fixed positioning as-is
+    // The dropdown will stay in place relative to viewport, not following the trigger
   };
 });
 
-// Calculate position
+// Calculate position - SIMPLIFIED
 const updatePosition = () => {
   if (!triggerRef.value || !floatingRef.value) return;
-  const triggerRect = triggerRef.value.getBoundingClientRect();
-  const el = floatingRef.value;
-  const height = el.offsetHeight;
-  const width = el.offsetWidth;
-  const vpW = window.innerWidth;
-  const vpH = window.innerHeight;
-  let [vert, horiz] = props.placement.split("-") as ["top"|"bottom", "left"|"right"];
 
-  if (props.adaptive) {
+  if (props.teleport) {
+    // Teleport mode: use viewport coordinates (fixed positioning)
+    const triggerRect = triggerRef.value.getBoundingClientRect();
+    const width = floatingRef.value.offsetWidth;
+    const height = floatingRef.value.offsetHeight;
+
+    const [vert, horiz] = props.placement.split("-") as ["top"|"bottom", "left"|"right"];
     const gap = props.offset;
-    const spaceBelow = vpH - triggerRect.bottom;
-    const spaceAbove = triggerRect.top;
-    const needV = height + gap;
-    if (vert === "bottom" && spaceBelow < needV && spaceAbove >= spaceBelow) vert = "top"; else if (vert === "top" && spaceAbove < needV && spaceBelow >= spaceAbove) vert = "bottom";
-    const spaceRight = vpW - triggerRect.right;
-    const spaceLeft = triggerRect.left;
-    const needH = width + gap;
-    if (horiz === "right" && spaceRight < needH && spaceLeft >= spaceRight) horiz = "left"; else if (horiz === "left" && spaceLeft < needH && spaceRight >= spaceLeft) horiz = "right";
-  }
 
-  const gap = props.offset;
-  let top: number;
-  if (vert === "bottom") top = triggerRect.bottom + gap; else top = triggerRect.top - height - gap;
-  // Clamp vertically inside viewport with padding
-  top = Math.max(props.viewportPadding, Math.min(top, vpH - height - props.viewportPadding));
+    // Calculate vertical position
+    let top: number;
+    if (vert === "bottom") {
+      top = triggerRect.bottom + gap;
+    } else {
+      top = triggerRect.top - height - gap;
+    }
 
-  // Horizontal placement
-  let left: number | undefined = undefined;
-  let right: number | undefined = undefined;
-  if (horiz === "left") {
-    left = triggerRect.left;
-    left = Math.max(props.viewportPadding, Math.min(left, vpW - width - props.viewportPadding));
-  } else {
-    // align right edges
-    right = vpW - triggerRect.right;
-    right = Math.max(props.viewportPadding, Math.min(right, vpW - width - props.viewportPadding));
-  }
+    // Calculate horizontal position
+    let left: number;
+    if (horiz === "left") {
+      left = triggerRect.left;
+    } else {
+      left = triggerRect.right - width;
+    }
 
-  floatingPosition.value.top = top;
-  if (left !== undefined) {
+    floatingPosition.value.top = top;
     floatingPosition.value.left = left;
     floatingPosition.value.right = undefined as any;
+  } else {
+    // Non-teleport mode: use relative positioning (simpler, no calculations needed)
+    // Position is handled by CSS - just mark as positioned
+    floatingPosition.value.top = 0;
+    floatingPosition.value.left = 0;
   }
-  if (right !== undefined) {
-    floatingPosition.value.right = right;
-    floatingPosition.value.left = undefined as any;
-  }
+
   isPositioned.value = true;
 };
 
@@ -189,9 +182,16 @@ const toggle = () => {
   isOpen.value = !isOpen.value;
   if (isOpen.value) {
     isPositioned.value = false;
-    nextTick(() => { updatePosition(); });
-    initAutoUpdate();
-  } else { teardownAutoUpdate(); }
+    // Strategy: render → measure → position → show (Headless UI approach)
+    nextTick(() => {
+      if (floatingRef.value && triggerRef.value) {
+        updatePosition();
+        initAutoUpdate();
+      }
+    });
+  } else {
+    teardownAutoUpdate();
+  }
 };
 
 // Close
@@ -208,8 +208,13 @@ const open = () => {
   if (isOpen.value) return;
   isOpen.value = true;
   isPositioned.value = false;
-  nextTick(() => { updatePosition(); });
-  initAutoUpdate();
+  // Strategy: render → measure → position → show (Headless UI approach)
+  nextTick(() => {
+    if (floatingRef.value && triggerRef.value) {
+      updatePosition();
+      initAutoUpdate();
+    }
+  });
 };
 
 const handleItemClick = (item: FloatingItem) => {
@@ -246,35 +251,40 @@ onBeforeUnmount(() => {
   teardownAutoUpdate();
 });
 
-// Update position on scroll and resize (only if open and teleported)
+// Smooth position update on scroll/resize (Floating UI approach)
 const handleScroll = () => {
-  if (props.autoUpdate && isOpen.value && props.teleport) {
-    scheduleUpdate();
-  }
+  if (!isOpen.value || !props.teleport) return;
+  scheduleUpdate();
 };
+
 const handleResize = () => {
-  if (props.autoUpdate && isOpen.value && props.teleport) {
-    scheduleUpdate();
-  }
+  if (!isOpen.value || !props.teleport) return;
+  scheduleUpdate();
 };
 
 function initAutoUpdate() {
-  if (!props.autoUpdate) return;
-  window.addEventListener("scroll", handleScroll, { passive: true });
+  if (!props.teleport) return;
+
+  // Listen for scroll events (capture phase catches all scrollable elements)
+  window.addEventListener("scroll", handleScroll, { passive: true, capture: true });
   window.addEventListener("resize", handleResize, { passive: true });
-  document.addEventListener("keydown", handleKeyDown);
-  // ResizeObserver to track trigger size changes
-  if (!resizeObserver && triggerRef.value) {
+
+  // Track trigger element size/position changes
+  if (triggerRef.value) {
     resizeObserver = new ResizeObserver(() => scheduleUpdate());
     resizeObserver.observe(triggerRef.value);
   }
+
+  // Always listen for Escape key
+  document.addEventListener("keydown", handleKeyDown);
 }
 
 function teardownAutoUpdate() {
-  window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("scroll", handleScroll, { capture: true });
   window.removeEventListener("resize", handleResize);
   document.removeEventListener("keydown", handleKeyDown);
-  if (resizeObserver && triggerRef.value) {
+
+  if (resizeObserver) {
     resizeObserver.disconnect();
     resizeObserver = null;
   }
@@ -377,21 +387,53 @@ defineExpose({
 }
 
 .v-floating-content {
-  // Base positioning (always applied)
-  @apply relative;
-
-  // Hide element while positioning (maintains layout for offsetHeight)
+  // Hide element while positioning - don't apply position yet
   &.v-floating--positioning {
+    position: absolute !important;
     visibility: hidden !important;
     pointer-events: none !important;
     transition: none !important;
     animation: none !important;
-    transform: none !important;
     opacity: 0 !important;
+    top: -9999px !important;
+    left: -9999px !important;
   }
 
   &:not(.v-floating--positioning) {
     animation: floatingFadeIn 0.15s ease-out;
+  }
+
+  // Disable all transitions/animations during position updates (smooth scroll following)
+  &.v-floating--updating {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  // Non-teleport mode: absolute positioning relative to wrapper
+  &:not(.v-floating--teleported) {
+    position: absolute;
+    z-index: 9999;
+
+    // Placement-based positioning (Headless UI approach)
+    .v-floating--bottom-left & {
+      top: calc(100% + 8px);
+      left: 0;
+    }
+
+    .v-floating--bottom-right & {
+      top: calc(100% + 8px);
+      right: 0;
+    }
+
+    .v-floating--top-left & {
+      bottom: calc(100% + 8px);
+      left: 0;
+    }
+
+    .v-floating--top-right & {
+      bottom: calc(100% + 8px);
+      right: 0;
+    }
   }
 
   // Styled mode (default)
