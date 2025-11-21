@@ -2,6 +2,7 @@
 import TableDocumentationColumns from "@/pages/Table/components/documentation/TableDocumentationColumns.vue";
 import TableDocumentationDefault from "@/pages/Table/components/documentation/TableDocumentationDefault.vue";
 import TableDocumentationPagination from "@/pages/Table/components/documentation/TableDocumentationPagination.vue";
+import TableDocumentationRowStyling from "@/pages/Table/components/documentation/TableDocumentationRowStyling.vue";
 import TableDocumentationToolbar from "@/pages/Table/components/documentation/TableDocumentationToolbar.vue";
 import VTabs from "@/shared/ui/common/VTabs.vue";
 
@@ -25,6 +26,11 @@ const tabs = [
     id: "toolbar",
     label: "Toolbar",
     component: TableDocumentationToolbar,
+  },
+  {
+    id: "styled",
+    label: "Styled Rows & Cells",
+    component: TableDocumentationRowStyling,
   },
 ];
 </script>

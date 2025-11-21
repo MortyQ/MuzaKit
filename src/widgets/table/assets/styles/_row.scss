@@ -2,7 +2,7 @@
 // ============================================
 @use './variables' as *;
 
-// ...existing code...
+// Base styles for table rows - modern, clean, professional
 .table-row-wrapper {
   display: contents;
   cursor: pointer;
@@ -20,6 +20,18 @@
     &:first-child {
       border-left: 3px solid color-mix(in srgb, theme('colors.primary') 80%, transparent 20%);
       padding-left: calc(#{$table-cell-padding-x} - 3px);
+    }
+
+    // Disable default hover when custom row styling is applied
+    &[data-custom-row="true"] {
+      background-color: inherit;
+      border-bottom-color: color-mix(in srgb, theme('colors.cardBorder') 100%, transparent 0%);
+
+      // Keep accent bar for first cell even with custom row color
+      &:first-child {
+        border-left: 3px solid theme('colors.primary');
+        padding-left: calc(#{$table-cell-padding-x} - 3px);
+      }
     }
   }
 
@@ -118,4 +130,3 @@
     transform: translateY(-4px);
   }
 }
-

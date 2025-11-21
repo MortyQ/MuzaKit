@@ -319,6 +319,8 @@ export const iconMap: Record<string, Component> = {
   "lucide:download-cloud": defineAsyncComponent(() => import("~icons/lucide/download-cloud")),
   "lucide:indent": defineAsyncComponent(() => import("~icons/lucide/indent")),
   "lucide:move-vertical": defineAsyncComponent(() => import("~icons/lucide/move-vertical")),
+  "lucide:rows": defineAsyncComponent(() => import("~icons/lucide/rows")),
+  "lucide:paintbrush": defineAsyncComponent(() => import("~icons/lucide/paintbrush")),
 };
 
 /**

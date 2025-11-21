@@ -1033,6 +1033,7 @@ v-model:selected-rows="selectedRows"
 - [Flexible Columns Guide](./FLEX_COLUMNS.md)
 - [Pagination Usage](./PAGINATION_USAGE.md)
 - [Toolbar Usage](./TOOLBAR_USAGE.md)
+- [Row Styling Guide](./ROW_STYLING.md)
 
 ---
 

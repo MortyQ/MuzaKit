@@ -520,10 +520,6 @@ const handleToggleRow = (id: string | number, row: ExpandableRow, column: Column
 // This is the fastest possible approach for maximum resize performance
 
 // Direct property access - no overhead
-const getRowDepth = (row: Record<string, unknown>): number => {
-  return (row.depth as number) || 0;
-};
-
 const isRowExpanded = (row: Record<string, unknown>): boolean => {
   return (row.isExpanded as boolean) || false;
 };
@@ -674,6 +670,21 @@ const getRowStyles = (item: { isVirtual: boolean }) => {
     height: `${props.rowHeight}px`,
     minHeight: `${props.rowHeight}px`,
   };
+};
+
+// Classes for table rows (custom styling based on row data)
+const getRowClasses = (row: ExpandableRow, index: number): string => {
+  if (!props.rowClassName) return "";
+
+  if (typeof props.rowClassName === "string") {
+    return props.rowClassName;
+  }
+
+  if (typeof props.rowClassName === "function") {
+    return props.rowClassName(row, index);
+  }
+
+  return "";
 };
 
 // Classes for column (fixed with shadow effects)
@@ -907,11 +918,6 @@ onUnmounted(() => {
           <TableRow
             v-for="item in rowsToRender"
             :key="item.key"
-            :data="item.row"
-            :columns="columnsForData"
-            :depth="getRowDepth(item.row)"
-            :is-expanded="isRowExpanded(item.row)"
-            :has-children="hasRowChildren(item.row)"
             :style="getRowStyles(item)"
             @click="onRowClick(item.row)"
           >
@@ -923,6 +929,8 @@ onUnmounted(() => {
               :indeterminate="selection.isDependentMode.value &&
                 hasRowChildren(item.row) &&
                 selection.getParentCheckboxState(item.row as any) === 'indeterminate'"
+              :class="getRowClasses(item.row, item.index)"
+              :data-custom-row="getRowClasses(item.row, item.index) ? 'true' : undefined"
               @toggle="selection.toggleRow(item.row as any)"
             />
 
@@ -934,12 +942,14 @@ onUnmounted(() => {
               :depth="(item.row.depth as number) || 0"
               :class="[
                 getColumnClasses(column),
-                getCellMetadata(item.row, column, colIndex, item.index).cssClass
+                getCellMetadata(item.row, column, colIndex, item.index).cssClass,
+                getRowClasses(item.row, item.index)
               ]"
               :style="{
                 ...getFixedStyles(column),
                 ...getCellMetadata(item.row, column, colIndex, item.index).customStyle
               }"
+              :data-custom-row="getRowClasses(item.row, item.index) ? 'true' : undefined"
             >
               <div
                 class="table-cell-content"

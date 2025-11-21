@@ -1,5 +1,8 @@
 import type { Column, ExpandableRow, MultiSelectConfig, SortConfig, SortItem, RequestPayload, FrontSortPayload, PaginationConfig, ToolbarConfig, ExportOptions } from "@/widgets/table/types/index";
 
+// eslint-disable-next-line no-unused-vars
+export type RowClassNameFunction = (row: ExpandableRow, index: number) => string;
+
 export type TableProps = {
   columns: Column[]
   data: ExpandableRow[]
@@ -31,6 +34,18 @@ export type TableProps = {
 
   // Search model (v-model:search)
   search?: string
+
+  /**
+   * Custom class name for table rows
+   * Can be a string (applied to all rows) or a function that returns class name based on row data
+   * @example
+   * // String
+   * rowClassName="custom-row"
+   *
+   * // Function
+   * :rowClassName="(row, index) => row.isModified ? 'bg-blue-100 dark:bg-blue-900' : ''"
+   */
+  rowClassName?: string | RowClassNameFunction
 };
 
 export type UseTableProps = {
