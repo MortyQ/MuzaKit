@@ -32,9 +32,9 @@ export type KpiIconColor =
   | "cyan";
 
 /**
- * Size variant for KPI cards
+ * Size variant for KPI cards (same as CardSize from VCard)
  */
-export type KpiSize = "sm" | "md" | "lg";
+export type KpiSize = "fit" | "sm" | "md" | "lg" | "xl" | "full";
 
 /**
  * KPI Value Formatting Options

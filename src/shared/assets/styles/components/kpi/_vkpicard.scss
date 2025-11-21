@@ -1,0 +1,149 @@
+// VKpiCard Component Styles
+.kpi-card {
+  /* Card structure */
+  position: relative;
+  border-radius: 0.75rem;
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 0.5rem;
+
+  /* Solid background - default white card appearance */
+  background-color: var(--colors-cardBg);
+
+  /* Border */
+  border: 1px solid transparent;
+
+  /* Default elevated shadow - like VCard default variant */
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  /* Smooth transition */
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow:
+      0 20px 25px -5px rgb(0 0 0 / 0.1),
+      0 8px 10px -6px rgb(0 0 0 / 0.1);
+    transform: translateY(-2px);
+  }
+
+  /* Size variants - control width like VCard */
+  &--fit {
+    width: fit-content;
+  }
+
+  &--sm {
+    width: 100%;
+    max-width: 20rem; // 320px
+  }
+
+  &--md {
+    width: 100%;
+    max-width: 24rem; // 384px
+  }
+
+  &--lg {
+    width: 100%;
+    max-width: 28rem; // 448px
+  }
+
+  &--xl {
+    width: 100%;
+    max-width: 32rem; // 512px
+  }
+
+  &--full {
+    width: 100%;
+  }
+
+  &__loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(var(--card-bg) / 0.8);
+    backdrop-filter: blur(12px);
+    border-radius: 0.75rem;
+  }
+}
+
+// Dark mode enhancements
+[data-theme="dark"] .kpi-card,
+.dark .kpi-card {
+  /* Standard elevated shadow for dark theme */
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 0.3),
+    0 8px 10px -6px rgb(0 0 0 / 0.3);
+
+  &:hover {
+    box-shadow:
+      0 25px 30px -5px rgb(0 0 0 / 0.4),
+      0 10px 12px -6px rgb(0 0 0 / 0.4);
+  }
+}
+
+// Icon wrapper - subtle shadows for depth
+.kpi-icon-wrapper {
+  /* Light theme: subtle shadow */
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+
+  transition: all 0.2s ease;
+
+  .dark &,
+  [data-theme="dark"] & {
+    /* Dark theme: stronger shadow for visibility */
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.5),
+      0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+}
+
+// Icon rotation animation on card hover
+.kpi-card:hover .kpi-icon-wrapper {
+  transform: scale(1.1) rotate(6deg);
+}
+
+// Value scale animation on card hover
+.kpi-card p.text-2xl {
+  transition: all 0.2s ease;
+}
+
+.kpi-card:hover p.text-2xl {
+  transform: scale(1.05);
+}
+
+// Professional Grid-based expand animation
+.additional-comparisons {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+
+  &.is-expanded {
+    grid-template-rows: 1fr;
+  }
+
+  &__inner {
+    min-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.25s ease-out 0.05s, transform 0.25s ease-out 0.05s;
+    padding-top: 0.375rem; // 6px spacing from primary comparison
+
+    .additional-comparisons.is-expanded & {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    // Compact spacing between comparison items
+    > * + * {
+      margin-top: 0.375rem; // 6px between each comparison - more compact
+    }
+  }
+}

@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<VKpiCardProps>(), {
   showAllComparisons: false,
   loading: false,
   reverse: false,
-  size: "md",
+  size: "full",
   animate: true, // Default to true for smooth animations
   class: "",
 });
@@ -104,14 +104,9 @@ const additionalComparisons = computed(() => {
   return props.comparisons.filter((c) => c !== primary);
 });
 
-// Card size classes
+// Card size classes - control width like VCard
 const sizeClasses = computed(() => {
-  const classes = {
-    sm: "min-h-[80px]",
-    md: "min-h-[120px]",
-    lg: "min-h-[140px]",
-  };
-  return classes[props.size];
+  return `kpi-card--${props.size}`;
 });
 </script>
 
@@ -250,8 +245,8 @@ const sizeClasses = computed(() => {
 .kpi-icon-wrapper {
   /* Light theme: very subtle shadow */
   box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.06),
-    0 1px 2px rgba(0, 0, 0, 0.04);
+      0 2px 4px rgba(0, 0, 0, 0.06),
+      0 1px 2px rgba(0, 0, 0, 0.04);
 
   /* Border for definition */
   @apply ring-1 ring-white/20;
@@ -260,10 +255,10 @@ const sizeClasses = computed(() => {
 .dark .kpi-icon-wrapper {
   /* Dark theme: much stronger shadow with very large offset + strong border for visibility */
   box-shadow:
-    0 12px 32px rgba(0, 0, 0, 0.95),
-    0 24px 64px rgba(0, 0, 0, 0.85),
-    inset 0 1px 1px rgba(255, 255, 255, 0.06),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+      0 12px 32px rgba(0, 0, 0, 0.95),
+      0 24px 64px rgba(0, 0, 0, 0.85),
+      inset 0 1px 1px rgba(255, 255, 255, 0.06),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.5);
 
   /* Strong border for depth on dark theme */
   @apply ring-2 ring-black/70;

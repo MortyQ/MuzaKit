@@ -1,0 +1,28 @@
+// VKpiMultiMetricHeader Component Styles
+.kpi-multi-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgb(var(--card-border));
+
+  /* Background applied via Tailwind classes in template (bg-cardBg or bg-cardBg/60 backdrop-blur-sm) */
+}
+
+.kpi-multi-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--main-text));
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &-icon {
+    font-size: 1.125rem;
+    transition: transform 0.3s ease;
+
+    .kpi-multi-header:hover &,
+    .kpi-multi-metric-card:hover & {
+      transform: scale(1.1) rotate(3deg);
+    }
+  }
+}
+

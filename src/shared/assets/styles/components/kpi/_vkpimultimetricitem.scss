@@ -1,0 +1,87 @@
+// VKpiMultiMetricItem Component Styles
+.kpi-multi-metric {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0;
+  border-radius: 0.5rem;
+  /* Background applied via Tailwind classes in template (bg-cardBg or bg-cardBg/50 backdrop-blur-sm) */
+
+  /* No border - clean look inside card */
+  border: none;
+
+  /* Transitions */
+  transition: all 0.2s ease;
+
+  &:hover {
+    .kpi-multi-icon {
+      transform: scale(1.1);
+    }
+
+    .kpi-multi-value {
+      transform: scale(1.05);
+    }
+  }
+
+  @media (max-width: 640px) {
+    gap: 0.75rem;
+  }
+}
+
+.kpi-multi-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.75rem;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+
+  /* Subtle shadow for icon depth */
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+
+  @media (max-width: 640px) {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+.kpi-multi-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.kpi-multi-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--secondary-text));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kpi-multi-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(var(--main-text));
+  transition: all 0.2s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+
+  .kpi-multi-metric:hover & {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 640px) {
+    font-size: 1.25rem;
+  }
+}
+
