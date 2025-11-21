@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onUnmounted, useSlots, type Component } from "vue";
+import { ref, computed, watch, onUnmounted, useSlots, provide, type Component } from "vue";
 
 import TableCell from "./components/TableCell.vue";
 import TableCheckboxCell from "./components/TableCheckboxCell.vue";
@@ -41,6 +41,12 @@ const props = withDefaults(defineProps<TableProps>(), {
 const emit = defineEmits<TableEmits>();
 
 const $slots = useSlots();
+
+// Provide slots to deeply nested components (avoid prop drilling)
+// This is the recommended Vue approach used by Element Plus, Ant Design Vue, etc.
+provide("tableSlots", {
+  headerCellCustomAction: $slots["header-cell-custom-action"],
+});
 
 // Toolbar search model (v-model:search)
 const searchModel = computed({

@@ -27,6 +27,7 @@ const columnsRegular: Column[] = [
     key: "age",
     label: "Age",
     align: "center",
+    width:"100px",
     // Heatmap with background color
     cellStyle: (value) => {
       const num = Number(value);
@@ -69,7 +70,7 @@ const columnsRegular: Column[] = [
     label: "Status",
     width: "150px",
   },
-  { key: "performance", label: "Rating" },
+  { key: "performance", label: "Rating", width:"100px" },
   { key: "startDate", label: "Start Date", format: { date: "long" }, width: "130px" },
   { key: "projects", label: "Projects", width: "100px" },
   {
@@ -319,7 +320,19 @@ const columnsRegular: Column[] = [
       :total-row="mockDataUsersTotalRow"
       :row-class-name="rowClassName"
       height="60vh"
-    />
+    >
+      <!-- Example: Custom action in header cell -->
+      <template #header-cell-custom-action="{ column }">
+        <!-- Add info icon only for specific columns -->
+        <VIcon
+          v-if="column.key === 'performance' || column.key === 'age'"
+          icon="lucide:info"
+          :size="14"
+          class="ml-1 text-secondaryText hover:text-primaryText cursor-help transition-colors"
+          :title="`Additional info about ${column.label}`"
+        />
+      </template>
+    </Table>
 
     <Table
       :columns="columnsRegular"
@@ -489,6 +502,51 @@ const handleCellEdit = (rowId: string) => {
 };</code></pre>
         </div>
       </section>
+
+      <!-- Header Cell Custom Action Slot -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          Custom Header Actions with Slots
+        </h4>
+        <p class="text-secondaryText mb-4">
+          Add custom actions or elements to table header cells using the
+          <code>header-cell-custom-action</code> slot. The slot provides access to the
+          <code>column</code> object, allowing you to conditionally render content.
+        </p>
+        <div class="code-block">
+          <pre><code v-pre>&lt;template&gt;
+  &lt;Table :columns="columns" :data="data"&gt;
+    &lt;!-- Add custom actions to header cells --&gt;
+    &lt;template #header-cell-custom-action="{ column }"&gt;
+      &lt;!-- Add info icon for specific columns --&gt;
+      &lt;VIcon
+        v-if="column.key === 'performance'"
+        icon="lucide:info"
+        :size="14"
+        class="ml-1 text-secondaryText hover:text-primaryText cursor-help"
+        :title="`Info about ${column.label}`"
+      /&gt;
+
+      &lt;!-- Add filter button for filterable columns --&gt;
+      &lt;button
+        v-if="column.filterable"
+        @click="openFilter(column.key)"
+        class="ml-2 p-1 hover:bg-neutral-200 rounded"
+      &gt;
+        &lt;VIcon icon="lucide:filter" :size="14" /&gt;
+      &lt;/button&gt;
+    &lt;/template&gt;
+  &lt;/Table&gt;
+&lt;/template&gt;</code></pre>
+        </div>
+        <div class="mt-3 p-3 bg-info-50 dark:bg-info-950 rounded-lg">
+          <p class="text-sm text-info-700 dark:text-info-300">
+            💡 <strong>Tip:</strong> This slot is rendered after the sort icon (if present),
+            allowing you to add additional controls like filters, tooltips, or custom actions
+            to any header cell.
+          </p>
+        </div>
+      </section>
     </VCard>
 
     <!-- Props Documentation -->
@@ -552,6 +610,32 @@ const handleCellEdit = (rowId: string) => {
               >
                 Function signature: <code>(value: unknown, row: Record) => string</code>
               </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="section-title mt-8">
+        Slots
+      </h3>
+      <div class="section-description mb-4">
+        Available slots for customization:
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Slot Name</th>
+              <th>Props</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>header-cell-custom-action</code></td>
+              <td><code>{ column: Column }</code></td>
+              <td>Add custom actions or elements to header cells. Rendered after sort icon.</td>
             </tr>
           </tbody>
         </table>

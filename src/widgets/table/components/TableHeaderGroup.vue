@@ -21,7 +21,3 @@ defineProps<Props>();
     <span class="table-header-group-label">{{ cell.label }}</span>
   </div>
 </template>
-
-<style scoped>
-/* Styles defined in assets/styles/_header.scss */
-</style>

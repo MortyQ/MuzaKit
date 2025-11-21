@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, inject, type Slot } from "vue";
 
 import type { Column, SortOrder } from "../types";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
+
+// Inject slots from Table.vue (avoid prop drilling)
+const tableSlots = inject<{ headerCellCustomAction?: Slot }>("tableSlots", {});
 
 interface Props {
   column: Column
@@ -99,6 +102,13 @@ const handleSortKeyDown = (event: KeyboardEvent) => {
           :size="16"
         />
       </div>
+
+      <!-- Custom action slot via inject (no prop drilling) -->
+      <component
+        :is="tableSlots.headerCellCustomAction"
+        v-if="tableSlots.headerCellCustomAction"
+        :column="column"
+      />
     </div>
 
     <!-- Resize Handle (only for resizable columns) -->

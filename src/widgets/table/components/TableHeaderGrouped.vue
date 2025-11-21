@@ -96,14 +96,7 @@ const handleSortClick = (column: Column) => {
         @sort-click="handleSortClick(cell.column)"
         @resize-start="handleResizeStart"
         @resize-dblclick="handleResizeDblClick"
-      >
-        <!--        <template #default="slotProps">-->
-        <!--          <slot-->
-        <!--            :name="`header-${cell.column.key}`"-->
-        <!--            v-bind="slotProps"-->
-        <!--          />-->
-        <!--        </template>-->
-      </TableHeader>
+      />
     </template>
   </div>
 </template>

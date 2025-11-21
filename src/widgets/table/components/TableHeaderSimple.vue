@@ -61,13 +61,5 @@ const handleSortClick = (column: Column) => {
       @resize-start="handleResizeStart"
       @resize-dblclick="handleResizeDblClick"
     />
-    <!-- Forward slot for custom header content -->
-    <!--      <template #default="slotProps">-->
-    <!--        <slot-->
-    <!--          :name="`header-${column.key}`"-->
-    <!--          v-bind="slotProps"-->
-    <!--        />-->
-    <!--      </template>-->
-    <!--    </TableHeader>-->
   </div>
 </template>
