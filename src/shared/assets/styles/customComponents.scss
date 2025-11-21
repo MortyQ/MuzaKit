@@ -11,6 +11,7 @@
 @use "./components/_vtabs";
 @use "./components/_vtoast";
 @use './components/_vaccordion';
+@use './components/_vfloating.scss';
 
 @layer components {
   .page-title {

@@ -1,0 +1,127 @@
+  // Base styles
+  .v-floating {
+    @apply relative inline-block;
+  }
+
+  .v-floating-trigger {
+    @apply cursor-pointer;
+
+    &--disabled {
+      @apply cursor-not-allowed opacity-50;
+    }
+  }
+
+  .v-floating-content {
+    // Hide element while positioning - don't apply position yet
+    &.v-floating--positioning {
+      position: absolute;
+      visibility: hidden;
+      pointer-events: none;
+      transition: none;
+      animation: none;
+      opacity: 0;
+      top: -9999px;
+      left: -9999px;
+    }
+
+    &:not(.v-floating--positioning) {
+      animation: floatingFadeIn 0.15s ease-out;
+    }
+
+    // Disable all transitions/animations during position updates (smooth scroll following)
+    &.v-floating--updating {
+      transition: none;
+      animation: none;
+    }
+
+    // Non-teleport mode: absolute positioning relative to wrapper
+    &:not(.v-floating--teleported) {
+      position: absolute;
+      z-index: 9999;
+
+      // Placement-based positioning (Headless UI approach)
+      .v-floating--bottom-left & {
+        top: calc(100% + 8px);
+        left: 0;
+      }
+
+      .v-floating--bottom-right & {
+        top: calc(100% + 8px);
+        right: 0;
+      }
+
+      .v-floating--top-left & {
+        bottom: calc(100% + 8px);
+        left: 0;
+      }
+
+      .v-floating--top-right & {
+        bottom: calc(100% + 8px);
+        right: 0;
+      }
+    }
+
+    // Styled mode (default)
+    &.v-floating--styled {
+      @apply bg-cardBg border border-cardBorder rounded-lg shadow-lg backdrop-blur-md;
+      @apply min-w-[160px] max-w-[320px];
+    }
+
+    // Dropdown-specific styles
+    &.v-floating--dropdown {
+      @apply py-1;
+    }
+
+    // Popover-specific styles
+    &.v-floating--popover {
+      @apply p-4;
+    }
+
+    // Unstyled mode - no default styles, full control to user
+    &.v-floating--unstyled {
+      // Only critical styles for functionality
+      @apply block;
+    }
+  }
+
+  @keyframes floatingFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .v-floating-item {
+    @apply w-full px-4 py-2.5 text-left flex items-center gap-3;
+    @apply text-mainText hover:bg-base-200 transition-colors;
+    @apply border-none bg-transparent cursor-pointer;
+
+    &--active {
+      @apply bg-primary/10 text-primary;
+    }
+
+    &--disabled {
+      @apply opacity-50 cursor-not-allowed;
+    }
+
+    &--loading {
+      @apply cursor-wait;
+    }
+  }
+
+  .v-floating-item-icon {
+    @apply flex-shrink-0;
+  }
+
+  .v-floating-item-label {
+    @apply flex-1 truncate;
+  }
+
+  .v-floating-item-loading {
+    @apply ml-auto flex-shrink-0;
+  }
+

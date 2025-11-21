@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { useRouter, useRoute, type RouteLocationRaw } from "vue-router";
 
-import VIcon from "@/shared/ui/common/VIcon.vue";
+import {
+  flyoutContainerClasses,
+  transitionClasses,
+} from "./SidebarMenuFlyout.styles";
+import SidebarMenuFlyoutItem from "./SidebarMenuFlyoutItem.vue";
+import SidebarMenuFlyoutParent from "./SidebarMenuFlyoutParent.vue";
+
 import { useSidebar } from "@/widgets/sidebar/composables/useSidebar";
 import type { SidebarNavItem } from "@/widgets/sidebar/types";
 
@@ -13,24 +18,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const router = useRouter();
-const route = useRoute();
 const { closeMobile } = useSidebar();
-
-// Check if child item is active (current route)
-const isChildActive = (child: SidebarNavItem) => {
-  if (!child.to) return false;
-
-  if (typeof child.to === "string") {
-    return route.path === child.to;
-  }
-
-  if (child.to.name) {
-    return route.name === child.to.name;
-  }
-
-  return false;
-};
 
 const isHovered = ref(false);
 const hoverTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
@@ -126,14 +114,6 @@ onUnmounted(() => {
   window.removeEventListener("resize", handleResize);
 });
 
-const handleChildClick = (child: SidebarNavItem) => {
-  if (child.to && !child.disabled) {
-    router.push(child.to as RouteLocationRaw);
-    closeMobile();
-    hideMenu();
-  }
-};
-
 // Flatten all nested children for display
 const flattenChildren = (
   items: SidebarNavItem[],
@@ -155,6 +135,13 @@ const flattenChildren = (
 const allChildren = computed(() => {
   return props.item.children ? flattenChildren(props.item.children) : [];
 });
+
+const handleLinkClick = (child: SidebarNavItem) => {
+  if (!child.disabled) {
+    closeMobile();
+    hideMenu();
+  }
+};
 </script>
 
 <template>
@@ -169,81 +156,58 @@ const allChildren = computed(() => {
     <!-- Flyout Menu (Teleported to body to escape fixed parent) -->
     <Teleport to="body">
       <Transition
-        enter-active-class="transition-all duration-200 ease-out"
-        enter-from-class="opacity-0 scale-95"
-        enter-to-class="opacity-100 scale-100"
-        leave-active-class="transition-all duration-150 ease-in"
-        leave-from-class="opacity-100 scale-100"
-        leave-to-class="opacity-0 scale-95"
+        :enter-active-class="transitionClasses.enterActive"
+        :enter-from-class="transitionClasses.enterFrom"
+        :enter-to-class="transitionClasses.enterTo"
+        :leave-active-class="transitionClasses.leaveActive"
+        :leave-from-class="transitionClasses.leaveFrom"
+        :leave-to-class="transitionClasses.leaveTo"
       >
         <div
           v-if="isHovered && item.children && item.children.length > 0"
-          class="fixed z-[100]"
+          :class="flyoutContainerClasses.wrapper"
           :style="{
             top: `${menuPosition.top}px`,
             ...(showOnLeft
               ? { right: `${menuPosition.right - 8}px` }
-              : { left: `${menuPosition.left - 8}px` }),
+              : { left: `${menuPosition.left - 8}px` })
           }"
           @mouseenter="showMenu"
           @mouseleave="hideMenu"
         >
           <!-- Invisible bridge to prevent flickering -->
-          <div
-            :class="[
-              'absolute top-0 h-full w-[24px]',
-              showOnLeft ? 'left-full ml-[-16px]' : 'right-full mr-[-16px]',
-            ]"
-          />
+          <div :class="flyoutContainerClasses.bridge(showOnLeft)" />
 
           <!-- Menu Content -->
           <div
             ref="flyoutRef"
-            class="relative min-w-[200px] max-w-[280px] ml-2"
+            :class="flyoutContainerClasses.content"
           >
-            <div
-              class="sidebar-flyout bg-base-100/95 backdrop-blur-sm border border-base-300/50
-                rounded-lg py-2 max-h-[calc(100vh-100px)] overflow-y-auto"
-            >
+            <div :class="flyoutContainerClasses.menu">
               <!-- Menu Title -->
-              <div class="px-4 py-2 border-b border-base-300 mb-1">
-                <span class="text-sm font-semibold text-neutral">{{ item.label }}</span>
+              <div :class="flyoutContainerClasses.title">
+                <span :class="flyoutContainerClasses.titleText">{{ item.label }}</span>
               </div>
 
               <!-- Children List -->
-              <div class="space-y-1 px-1">
-                <button
+              <div :class="flyoutContainerClasses.list">
+                <template
                   v-for="child in allChildren"
                   :key="child.id"
-                  type="button"
-                  :class="[
-                    'w-full flex items-center gap-2 px-3 py-2 rounded text-sm transition-colors',
-                    'focus:outline-none relative flyout-menu-item',
-                    {
-                      'bg-primary/10 text-primary font-medium': isChildActive(child),
-                      'hover:bg-base-200 text-neutral/80 hover:text-neutral': !isChildActive(child),
-                      'opacity-50 cursor-not-allowed': child.disabled,
-                    },
-                  ]"
-                  :style="{ paddingLeft: `${12 + child.level * 16}px` }"
-                  :disabled="child.disabled"
-                  @click="handleChildClick(child)"
                 >
-                  <VIcon
-                    v-if="child.icon"
-                    :icon="child.icon"
-                    :size="16"
-                    class="flex-shrink-0"
+                  <!-- Clickable item with route -->
+                  <SidebarMenuFlyoutItem
+                    v-if="child.to"
+                    :item="child"
+                    @click="handleLinkClick"
                   />
-                  <span class="flex-1 text-left truncate">{{ child.label }}</span>
-                  <span
-                    v-if="child.badge"
-                    class="flex-shrink-0 px-1.5 py-0.5 text-xs font-semibold
-                      rounded-full bg-primary/20 text-primary"
-                  >
-                    {{ child.badge }}
-                  </span>
-                </button>
+
+                  <!-- Non-clickable parent item (has children but no route) -->
+                  <SidebarMenuFlyoutParent
+                    v-else
+                    :item="child"
+                  />
+                </template>
               </div>
             </div>
           </div>
