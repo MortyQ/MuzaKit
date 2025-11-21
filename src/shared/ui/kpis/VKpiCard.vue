@@ -221,6 +221,31 @@ const sizeClasses = computed(() => {
 </template>
 
 <style scoped>
+/* Size variants - ONLY WIDTH, matching VCard with Tailwind utilities */
+.kpi-card--fit {
+  @apply w-fit;
+}
+
+.kpi-card--sm {
+  @apply w-full max-w-xs; /* max-width: 320px */
+}
+
+.kpi-card--md {
+  @apply w-full max-w-sm; /* max-width: 384px */
+}
+
+.kpi-card--lg {
+  @apply w-full max-w-md; /* max-width: 448px */
+}
+
+.kpi-card--xl {
+  @apply w-full max-w-lg; /* max-width: 512px */
+}
+
+.kpi-card--full {
+  @apply w-full;
+}
+
 .kpi-card {
   /* Card structure */
   @apply relative rounded-xl pt-4 px-4 pb-2 w-full;
