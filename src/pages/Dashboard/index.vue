@@ -4,10 +4,45 @@ import { ref } from "vue";
 import type { KpiComparison } from "@/shared/types/kpi";
 import VSwitch from "@/shared/ui/common/VSwitch.vue";
 import VKpiCard from "@/shared/ui/kpis/VKpiCard.vue";
-
+import VKpiMultiMetric from "@/shared/ui/kpis/VKpiMultiMetric.vue";
 
 // Toggle for showing all comparisons
 const showAllComparisons = ref(false);
+
+// Simple Comparison (2 metrics per card)
+const simpleComparisonData = [
+  {
+    title: "Premium Products",
+    metrics: [
+      { label: "Avg Price", value: 149.99, icon: "lucide:dollar-sign", iconColor: "primary" as const, format: { unit: "dollar" as const } },
+      { label: "Sales", value: 2456, icon: "lucide:shopping-cart", iconColor: "success" as const },
+    ],
+  },
+  {
+    title: "Standard Products",
+    metrics: [
+      { label: "Avg Price", value: 49.99, icon: "lucide:dollar-sign", iconColor: "primary" as const, format: { unit: "dollar" as const } },
+      { label: "Sales", value: 15234, icon: "lucide:shopping-cart", iconColor: "success" as const },
+    ],
+  },
+];
+
+// Comprehensive Dashboard (8 metrics per card)
+const comprehensiveDashboardData = [
+  {
+    title: "Q4 2024 Performance Overview",
+    metrics: [
+      { label: "Revenue", value: 5865995, icon: "lucide:dollar-sign", iconColor: "success" as const, format: { unit: "dollar" as const } },
+      { label: "Orders", value: 45678, icon: "lucide:shopping-bag", iconColor: "primary" as const },
+      { label: "Avg Order", value: 128.45, icon: "lucide:receipt", iconColor: "info" as const, format: { unit: "dollar" as const } },
+      { label: "Customers", value: 23456, icon: "lucide:users", iconColor: "primary" as const },
+      { label: "Conversion", value: 3.42, icon: "lucide:percent", iconColor: "success" as const, format: { unit: "percentage" as const, decimals: 2 } },
+      { label: "Sessions", value: 687234, icon: "lucide:activity", iconColor: "info" as const },
+      { label: "Rating", value: 4.5, icon: "lucide:star", iconColor: "warning" as const, format: { decimals: 1 } },
+      { label: "Reviews", value: 12345, icon: "lucide:message-square", iconColor: "neutral" as const },
+    ],
+  },
+];
 
 // Unified KPI Data with optional comparisons
 const kpiData = [
@@ -133,97 +168,6 @@ const kpiData = [
     ] as KpiComparison[],
   },
   {
-    title: "Conversion",
-    value: 10.69,
-    icon: "lucide:percent",
-    iconColor: "green" as const,
-    format: { unit: "percentage" as const, decimals: true },
-    comparisons: [
-      {
-        name: "PoP" as const,
-        difference: 0.01,
-        percentage: 7,
-        tooltip: "Period over Period comparison",
-      },
-      {
-        name: "MoM" as const,
-        difference: -0.11,
-        percentage: -100,
-        tooltip: "Month over Month comparison",
-      },
-      {
-        name: "YoY" as const,
-        difference: -0.01,
-        percentage: -12,
-        tooltip: "Year over Year comparison",
-      },
-    ] as KpiComparison[],
-  },
-  {
-    title: "Ad Revenue",
-    value: 2247941,
-    icon: "lucide:megaphone",
-    iconColor: "purple" as const,
-    format: { unit: "dollar" as const },
-    comparisons: [
-      {
-        name: "PoP" as const,
-        difference: -1071745,
-        percentage: -32,
-        tooltip: "Period over Period comparison",
-      },
-      {
-        name: "YoY" as const,
-        difference: -4554816,
-        percentage: -28,
-        tooltip: "Year over Year comparison",
-      },
-    ] as KpiComparison[],
-  },
-  {
-    title: "Ad Spend",
-    value: 797836,
-    icon: "lucide:wallet",
-    iconColor: "orange" as const,
-    format: { unit: "dollar" as const },
-    comparisons: [
-      {
-        name: "PoP" as const,
-        difference: -332667,
-        percentage: -29,
-        tooltip: "Period over Period comparison",
-      },
-      {
-        name: "YoY" as const,
-        difference: -1991393,
-        percentage: -37,
-        tooltip: "Year over Year comparison",
-      },
-    ] as KpiComparison[],
-  },
-  {
-    title: "ROAS",
-    value: 2.82,
-    icon: "lucide:trending-up",
-    iconColor: "cyan" as const,
-    format: { unit: "number" as const, decimals: 2 },
-    comparisons: [
-      {
-        name: "PoP" as const,
-        difference: -0.12,
-        percentage: -4,
-        tooltip: "Period over Period comparison",
-      },
-      {
-        name: "YoY" as const,
-        difference: 0.39,
-        percentage: 13,
-        tooltip: "Year over Year comparison",
-      },
-    ] as KpiComparison[],
-  },
-  // KPIs without comparisons - simply omit the comparisons property
-  {
     title: "Positive Ratings",
     value: 12599372,
     icon: "lucide:thumbs-up",
@@ -241,9 +185,9 @@ const kpiData = [
 </script>
 
 <template>
-  <div class="dashboard-page">
+  <div class="dashboard-page flex flex-col gap-5">
     <!-- Header -->
-    <div class="mb-6">
+    <div>
       <h1 class="text-3xl font-bold text-mainText mb-2 text-gradient-animated">
         Dashboard
       </h1>
@@ -252,15 +196,19 @@ const kpiData = [
       </p>
     </div>
 
-    <!-- Filters Section (Mock UI for context) -->
-    <div class="mb-6 p-4 bg-cardBg border border-cardBorder rounded-lg">
-      <div class="flex items-center gap-2">
-        <VSwitch
-          v-model="showAllComparisons"
-          label="Show additional comparisons"
-        />
-      </div>
+    <!-- Simple Comparison (2 metrics) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <VKpiMultiMetric
+        v-for="(comparison, index) in simpleComparisonData"
+        :key="index"
+        :title="comparison.title"
+        :metrics="comparison.metrics"
+        :columns="2"
+        icon="lucide:tags"
+      />
     </div>
+
+
 
     <!-- Unified KPI Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -275,6 +223,27 @@ const kpiData = [
         :show-all-comparisons="showAllComparisons"
         :format="kpi.format"
         :reverse="kpi.reverse"
+      />
+    </div>
+
+    <!-- Filters Section (Mock UI for context) -->
+    <div class="p-4 bg-cardBg border border-cardBorder rounded-lg">
+      <div class="flex items-center gap-2">
+        <VSwitch
+          v-model="showAllComparisons"
+          label="Show additional comparisons"
+        />
+      </div>
+    </div>
+
+    <!-- Comprehensive Dashboard (8 metrics) -->
+    <div class="grid grid-cols-1 gap-4">
+      <VKpiMultiMetric
+        v-for="(dashboard, index) in comprehensiveDashboardData"
+        :key="index"
+        :title="dashboard.title"
+        :metrics="dashboard.metrics"
+        icon="lucide:layout-dashboard"
       />
     </div>
   </div>

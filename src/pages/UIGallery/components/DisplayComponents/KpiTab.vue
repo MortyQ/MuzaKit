@@ -6,6 +6,7 @@ import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VKpiCard from "@/shared/ui/kpis/VKpiCard.vue";
 import VKpiComparison from "@/shared/ui/kpis/VKpiComparison.vue";
+import VKpiMultiMetric from "@/shared/ui/kpis/VKpiMultiMetric.vue";
 
 // Example data
 const showAllComparisons = ref(false);
@@ -85,6 +86,82 @@ const lostRevenueData = {
     },
   ] as KpiComparison[],
   reverse: true,
+};
+
+// Multi-Metric KPI Data
+const categoryElectronics = {
+  title: "Electronics",
+  icon: "lucide:laptop",
+  metrics: [
+    { label: "Products", value: 342, icon: "lucide:package", iconColor: "info" as const },
+    { label: "Revenue", value: 1245678, icon: "lucide:trending-up", iconColor: "success" as const, format: { unit: "dollar" as const } },
+    { label: "Rating", value: 4.6, icon: "lucide:star", iconColor: "warning" as const, format: { decimals: 1 } },
+  ],
+};
+
+const categoryHomeGarden = {
+  title: "Home & Garden",
+  icon: "lucide:home",
+  metrics: [
+    { label: "Products", value: 567, icon: "lucide:package", iconColor: "info" as const },
+    { label: "Revenue", value: 892456, icon: "lucide:trending-up", iconColor: "success" as const, format: { unit: "dollar" as const } },
+    { label: "Rating", value: 4.4, icon: "lucide:star", iconColor: "warning" as const, format: { decimals: 1 } },
+  ],
+};
+
+const categoryFashion = {
+  title: "Fashion",
+  icon: "lucide:shirt",
+  metrics: [
+    { label: "Products", value: 891, icon: "lucide:package", iconColor: "info" as const },
+    { label: "Revenue", value: 2134567, icon: "lucide:trending-up", iconColor: "success" as const, format: { unit: "dollar" as const } },
+    { label: "Rating", value: 4.3, icon: "lucide:star", iconColor: "warning" as const, format: { decimals: 1 } },
+  ],
+};
+
+const performanceDistribution = [
+  {
+    title: "Below Average",
+    icon: "lucide:trending-down",
+    metrics: [
+      { label: "Unit Price", value: 49.21, icon: "lucide:dollar-sign", iconColor: "primary" as const, format: { unit: "dollar" as const, decimals: 2 } },
+      { label: "Units Sold", value: 1, icon: "lucide:shopping-cart", iconColor: "info" as const },
+      { label: "Reviews", value: 23, icon: "lucide:star", iconColor: "warning" as const },
+      { label: "Est. Revenue", value: 49, icon: "lucide:trending-up", iconColor: "success" as const, format: { unit: "dollar" as const } },
+    ],
+  },
+  {
+    title: "Average",
+    icon: "lucide:minus",
+    metrics: [
+      { label: "Unit Price", value: 78.99, icon: "lucide:dollar-sign", iconColor: "primary" as const, format: { unit: "dollar" as const, decimals: 2 } },
+      { label: "Units Sold", value: 12, icon: "lucide:shopping-cart", iconColor: "info" as const },
+      { label: "Reviews", value: 87, icon: "lucide:star", iconColor: "warning" as const },
+      { label: "Est. Revenue", value: 948, icon: "lucide:trending-up", iconColor: "success" as const, format: { unit: "dollar" as const } },
+    ],
+  },
+  {
+    title: "Above Average",
+    icon: "lucide:trending-up",
+    metrics: [
+      { label: "Unit Price", value: 92.15, icon: "lucide:dollar-sign", iconColor: "primary" as const, format: { unit: "dollar" as const, decimals: 2 } },
+      { label: "Units Sold", value: 45, icon: "lucide:shopping-cart", iconColor: "info" as const },
+      { label: "Reviews", value: 156, icon: "lucide:star", iconColor: "warning" as const },
+      { label: "Est. Revenue", value: 4147, icon: "lucide:trending-up", iconColor: "success" as const, format: { unit: "dollar" as const } },
+    ],
+  },
+];
+
+const campaignMetrics = {
+  title: "Black Friday Campaign",
+  icon: "lucide:megaphone",
+  metrics: [
+    { label: "Impressions", value: 1245678, icon: "lucide:eye", iconColor: "info" as const },
+    { label: "Clicks", value: 45678, icon: "lucide:mouse-pointer", iconColor: "primary" as const },
+    { label: "CTR", value: 3.67, icon: "lucide:percent", iconColor: "success" as const, format: { unit: "percentage" as const, decimals: 2 } },
+    { label: "Revenue", value: 234567, icon: "lucide:dollar-sign", iconColor: "success" as const, format: { unit: "dollar" as const } },
+    { label: "ROAS", value: 4.2, icon: "lucide:trending-up", iconColor: "success" as const, format: { decimals: 1 } },
+  ],
 };
 
 // Code examples
@@ -171,6 +248,62 @@ const comparisonExample = `// Standalone comparison component
   :comparison="comparison"
   :reverse="true"
 />`;
+
+const multiMetricExample = `<script setup>
+import VKpiMultiMetric from '@/shared/ui/kpis/VKpiMultiMetric.vue';
+</` + `script>
+
+<template>
+  <!-- Basic usage with 3 metrics -->
+  <VKpiMultiMetric
+    title="Category Performance"
+    icon="lucide:shopping-bag"
+    :columns="3"
+    :metrics="[
+      { label: 'Products', value: 342, icon: 'lucide:package', iconColor: 'info' },
+      { label: 'Revenue', value: 1245678, icon: 'lucide:trending-up', iconColor: 'success', format: { unit: 'dollar' } },
+      { label: 'Rating', value: 4.6, icon: 'lucide:star', iconColor: 'warning', format: { decimals: 1 } }
+    ]"
+  />
+
+  <!-- With 4 metrics in 4 columns -->
+  <VKpiMultiMetric
+    title="Product Performance"
+    icon="lucide:chart-line"
+    :columns="4"
+    :metrics="[
+      { label: 'Unit Price', value: 78.99, icon: 'lucide:dollar-sign', iconColor: 'primary', format: { unit: 'dollar', decimals: 2 } },
+      { label: 'Units Sold', value: 12, icon: 'lucide:shopping-cart', iconColor: 'info' },
+      { label: 'Reviews', value: 87, icon: 'lucide:star', iconColor: 'warning' },
+      { label: 'Est. Revenue', value: 948, icon: 'lucide:trending-up', iconColor: 'success', format: { unit: 'dollar' } }
+    ]"
+  />
+
+  <!-- With 5 metrics and custom icon slot -->
+  <VKpiMultiMetric
+    title="Campaign Metrics"
+    :columns="5"
+    :metrics="campaignMetrics"
+  >
+    <template #icon>
+      <VIcon icon="lucide:megaphone" :size="20" class="text-error-500" />
+    </template>
+  </VKpiMultiMetric>
+
+  <!-- With glassmorphism effect -->
+  <VKpiMultiMetric
+    title="Premium View"
+    icon="lucide:sparkles"
+    :glassmorphism="true"
+    :metrics="metrics"
+  />
+
+  <!-- Auto columns (based on metrics count) -->
+  <VKpiMultiMetric
+    title="Auto Layout"
+    :metrics="metrics"
+  />
+</template>`;
 </script>
 
 <template>
@@ -448,6 +581,150 @@ const comparisonExample = `// Standalone comparison component
       </section>
     </VCard>
 
+    <!-- VKpiMultiMetric Examples -->
+    <VCard>
+      <h3 class="section-title mb-6">
+        📊 VKpiMultiMetric - Multiple Metrics in One Card
+      </h3>
+
+      <!-- Category Performance (3 metrics) -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          Category Performance - 2 Metrics per Card
+        </h4>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <VKpiMultiMetric
+            v-bind="categoryElectronics"
+            :columns="2"
+          />
+          <VKpiMultiMetric
+            v-bind="categoryHomeGarden"
+            :columns="2"
+          />
+          <VKpiMultiMetric
+            v-bind="categoryFashion"
+            :columns="2"
+          />
+        </div>
+      </section>
+
+      <!-- Performance Distribution (4 metrics) -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          Performance Distribution - 1 Metric per Card
+        </h4>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <VKpiMultiMetric
+            v-for="(perf, index) in performanceDistribution"
+            :key="index"
+            :title="perf.title"
+            :icon="perf.icon"
+            :metrics="perf.metrics"
+            :columns="1"
+          />
+        </div>
+      </section>
+
+      <!-- Campaign Metrics (5 metrics) -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          Campaign Metrics - 5 Metrics with Custom Icon
+        </h4>
+        <div class="grid grid-cols-1 gap-4">
+          <VKpiMultiMetric
+            v-bind="campaignMetrics"
+            :columns="5"
+          />
+          <VKpiMultiMetric
+            title="Holiday Sale Campaign"
+            icon="lucide:gift"
+            :columns="5"
+            :metrics="[
+              { label: 'Impressions', value: 987654, icon: 'lucide:eye', iconColor: 'info' },
+              { label: 'Clicks', value: 34567, icon: 'lucide:mouse-pointer', iconColor: 'primary' },
+              { label: 'CTR', value: 3.5, icon: 'lucide:percent',
+                iconColor: 'success', format: { unit: 'percentage', decimals: 2 } },
+              { label: 'Revenue', value: 189456,
+                icon: 'lucide:dollar-sign', iconColor: 'success', format: { unit: 'dollar' } },
+              { label: 'ROAS', value: 3.8,
+                icon: 'lucide:trending-up', iconColor: 'warning', format: { decimals: 1 } }
+            ]"
+          />
+        </div>
+      </section>
+
+      <!-- Different Column Layouts -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          Different Column Layouts
+        </h4>
+        <div class="space-y-4">
+          <!-- 2 columns -->
+          <VKpiMultiMetric
+            title="Product Comparison - 2 Columns"
+            icon="lucide:tags"
+            :columns="2"
+            :metrics="[
+              { label: 'Price', value: 49.99,
+                icon: 'lucide:dollar-sign', iconColor: 'primary', format: { unit: 'dollar' } },
+              { label: 'Sales', value: 1234,
+                icon: 'lucide:shopping-cart', iconColor: 'success' }
+            ]"
+          />
+
+          <!-- Auto columns (based on count) -->
+          <VKpiMultiMetric
+            title="Auto Layout - 6 Metrics"
+            icon="lucide:layout-grid"
+            :metrics="[
+              { label: 'Metric 1', value: 100, icon: 'lucide:circle', iconColor: 'primary' },
+              { label: 'Metric 2', value: 200, icon: 'lucide:circle', iconColor: 'success' },
+              { label: 'Metric 3', value: 300, icon: 'lucide:circle', iconColor: 'warning' },
+              { label: 'Metric 4', value: 400, icon: 'lucide:circle', iconColor: 'error' },
+              { label: 'Metric 5', value: 500, icon: 'lucide:circle', iconColor: 'info' },
+              { label: 'Metric 6', value: 600, icon: 'lucide:circle', iconColor: 'neutral' }
+            ]"
+          />
+        </div>
+      </section>
+
+      <!-- With Glassmorphism -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          With Glassmorphism Effect
+        </h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <VKpiMultiMetric
+            title="Premium Metrics"
+            icon="lucide:sparkles"
+            :glassmorphism="true"
+            :columns="3"
+            :metrics="[
+              { label: 'VIP Users', value: 1234, icon: 'lucide:crown', iconColor: 'warning' },
+              { label: 'Premium Rev', value: 567890,
+                icon: 'lucide:dollar-sign', iconColor: 'success', format: { unit: 'dollar' } },
+              { label: 'Satisfaction', value: 98.5,
+                icon: 'lucide:heart', iconColor: 'error',
+                format: { unit: 'percentage', decimals: 1 } }
+            ]"
+          />
+          <VKpiMultiMetric
+            title="Standard Metrics"
+            icon="lucide:bar-chart"
+            :glassmorphism="false"
+            :columns="3"
+            :metrics="[
+              { label: 'Users', value: 5678, icon: 'lucide:users', iconColor: 'info' },
+              { label: 'Revenue', value: 234567, icon: 'lucide:dollar-sign',
+                iconColor: 'success', format: { unit: 'dollar' } },
+              { label: 'Satisfaction', value: 92.3, icon: 'lucide:smile',
+                iconColor: 'success', format: { unit: 'percentage', decimals: 1 } }
+            ]"
+          />
+        </div>
+      </section>
+    </VCard>
+
     <!-- Basic Usage -->
     <VCard class="code-example-card">
       <h3 class="code-title">
@@ -475,6 +752,16 @@ const comparisonExample = `// Standalone comparison component
       </h3>
       <div class="code-block">
         <pre><code>{{ comparisonExample }}</code></pre>
+      </div>
+    </VCard>
+
+    <!-- Multi-Metric Component -->
+    <VCard class="code-example-card">
+      <h3 class="code-title">
+        📈 VKpiMultiMetric Component
+      </h3>
+      <div class="code-block">
+        <pre><code>{{ multiMetricExample }}</code></pre>
       </div>
     </VCard>
 
@@ -621,6 +908,86 @@ const comparisonExample = `// Standalone comparison component
       </div>
     </VCard>
 
+    <!-- Props Documentation - VKpiMultiMetric -->
+    <VCard>
+      <h3 class="section-title">
+        VKpiMultiMetric Props
+      </h3>
+      <div class="section-description mb-4">
+        Available props for VKpiMultiMetric component:
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="props-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>title</code></td>
+              <td><code>string</code></td>
+              <td><code>-</code></td>
+              <td>Card title</td>
+            </tr>
+            <tr>
+              <td><code>metrics</code></td>
+              <td><code>VKpiMultiMetric[]</code></td>
+              <td><code>-</code></td>
+              <td>Array of metrics to display</td>
+            </tr>
+            <tr>
+              <td><code>icon</code></td>
+              <td><code>string</code></td>
+              <td><code>'lucide:chart-column'</code></td>
+              <td>Header icon (Lucide format)</td>
+            </tr>
+            <tr>
+              <td><code>columns</code></td>
+              <td><code>2 | 3 | 4 | 5 | 'auto'</code></td>
+              <td><code>'auto'</code></td>
+              <td>Number of grid columns</td>
+            </tr>
+            <tr>
+              <td><code>glassmorphism</code></td>
+              <td><code>boolean</code></td>
+              <td><code>false</code></td>
+              <td>Enable glassmorphism effect (backdrop-blur)</td>
+            </tr>
+            <tr>
+              <td><code>class</code></td>
+              <td><code>string</code></td>
+              <td><code>''</code></td>
+              <td>Additional CSS classes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-6">
+        <h4 class="text-sm font-semibold text-mainText mb-3">
+          VKpiMultiMetric Type
+        </h4>
+        <div class="code-block">
+          <pre><code>{
+  label: string;
+  value: number | string;
+  icon?: string;
+  iconColor?: 'primary' | 'success' | 'warning' | 'error' | 'info' | 'neutral';
+  format?: {
+    unit?: 'number' | 'dollar' | 'percentage';
+    decimals?: boolean | number;
+    multiply?: number;
+  };
+}</code></pre>
+        </div>
+      </div>
+    </VCard>
+
     <!-- Type Definitions -->
     <VCard>
       <h3 class="section-title">
@@ -670,6 +1037,17 @@ const comparisonExample = `// Standalone comparison component
           </li>
         </ul>
       </div>
+
+      <div class="composable-section mt-6">
+        <h4 class="text-sm font-semibold text-mainText mb-3">
+          VKpiMultiMetric
+        </h4>
+        <ul class="composable-list">
+          <li>
+            <code>icon</code> - Custom icon in header (replaces default icon prop)
+          </li>
+        </ul>
+      </div>
     </VCard>
 
     <!-- Features Summary -->
@@ -689,6 +1067,11 @@ const comparisonExample = `// Standalone comparison component
         <li>✅ Tooltip support for additional info</li>
         <li>✅ Standalone comparison component</li>
         <li>✅ Custom slot for flexible content</li>
+        <li>✅ <strong>VKpiMultiMetric:</strong> Multiple metrics in one card (2-10+ metrics)</li>
+        <li>✅ <strong>VKpiMultiMetric:</strong> Flexible column layouts (2, 3, 4, 5 or auto)</li>
+        <li>✅ <strong>VKpiMultiMetric:</strong> Icon rotation animation on hover</li>
+        <li>✅ <strong>VKpiMultiMetric:</strong> Optional glassmorphism effect</li>
+        <li>✅ <strong>VKpiMultiMetric:</strong> Modular sub-components architecture</li>
       </ul>
     </VCard>
   </div>

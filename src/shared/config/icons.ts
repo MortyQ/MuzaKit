@@ -321,6 +321,21 @@ export const iconMap: Record<string, Component> = {
   "lucide:move-vertical": defineAsyncComponent(() => import("~icons/lucide/move-vertical")),
   "lucide:rows": defineAsyncComponent(() => import("~icons/lucide/rows")),
   "lucide:paintbrush": defineAsyncComponent(() => import("~icons/lucide/paintbrush")),
+  "lucide:eye": defineAsyncComponent(() => import("~icons/lucide/eye")),
+  "lucide:mouse-pointer": defineAsyncComponent(() => import("~icons/lucide/mouse-pointer")),
+  "lucide:shopping-bag": defineAsyncComponent(() => import("~icons/lucide/shopping-bag")),
+  "lucide:receipt": defineAsyncComponent(() => import("~icons/lucide/receipt")),
+  "lucide:users": defineAsyncComponent(() => import("~icons/lucide/users")),
+  "lucide:tags": defineAsyncComponent(() => import("~icons/lucide/tags")),
+  "lucide:layout-dashboard": defineAsyncComponent(() => import("~icons/lucide/layout-dashboard")),
+  "lucide:laptop": defineAsyncComponent(() => import("~icons/lucide/laptop")),
+  "lucide:shirt": defineAsyncComponent(() => import("~icons/lucide/shirt")),
+  "lucide:minus": defineAsyncComponent(() => import("~icons/lucide/minus")),
+  "lucide:gift": defineAsyncComponent(() => import("~icons/lucide/gift")),
+  "lucide:circle": defineAsyncComponent(() => import("~icons/lucide/circle")),
+  "lucide:crown": defineAsyncComponent(() => import("~icons/lucide/crown")),
+  "lucide:bar-chart": defineAsyncComponent(() => import("~icons/lucide/bar-chart")),
+  "lucide:smile": defineAsyncComponent(() => import("~icons/lucide/smile")),
 };
 
 /**

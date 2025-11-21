@@ -269,6 +269,20 @@ const sizeClasses = computed(() => {
   @apply ring-2 ring-black/70;
 }
 
+/* Icon rotation animation on card hover */
+.kpi-card:hover .kpi-icon-wrapper {
+  @apply scale-110 rotate-6;
+}
+
+/* Value scale animation on card hover */
+.kpi-card p.text-2xl {
+  @apply transition-all duration-200;
+}
+
+.kpi-card:hover p.text-2xl {
+  @apply scale-105;
+}
+
 /* Professional Grid-based expand animation */
 .additional-comparisons {
   display: grid;
