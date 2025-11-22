@@ -1,0 +1,124 @@
+.kpi-multi-metric {
+  @apply relative flex items-center gap-4;
+  @apply p-4 rounded-xl;
+  @apply border border-cardBorder;
+  @apply transition-all duration-300;
+  @apply hover:shadow-md;
+  @apply hover:border-primary-300 dark:hover:border-primary-600;
+  @apply cursor-pointer;
+}
+
+.kpi-multi-icon {
+  @apply flex items-center justify-center;
+  @apply w-14 h-14 rounded-xl;
+  @apply flex-shrink-0;
+  @apply transition-all duration-300;
+}
+
+.kpi-multi-metric:hover .kpi-multi-icon {
+  @apply scale-110 rotate-6;
+}
+
+.kpi-multi-content {
+  @apply flex flex-col gap-1;
+  @apply min-w-0 flex-1;
+}
+
+.kpi-multi-label {
+  @apply text-sm font-medium text-secondaryText;
+  @apply truncate;
+}
+
+.kpi-multi-value {
+  @apply text-2xl font-semibold text-mainText;
+  @apply transition-all duration-200;
+  @apply truncate;
+  @apply tabular-nums;
+}
+
+.kpi-multi-metric:hover .kpi-multi-value {
+  @apply scale-105;
+}
+
+/* Loading state overlay */
+.kpi-multi-metric__loading {
+  @apply absolute inset-0 flex items-center justify-center;
+  @apply bg-cardBg/10 rounded-xl;
+  @apply transition-opacity duration-200;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* Dim content when in loading state */
+.kpi-multi-metric--loading > div:not(.kpi-multi-metric__loading) {
+  opacity: 0.6;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Animated gradient border for loading state - "train" effect */
+.kpi-multi-metric--loading {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: conic-gradient(
+      from var(--gradient-angle, 0deg),
+      transparent 0deg,
+      transparent 70deg,
+      #87CEEB 100deg,
+      #4A90E2 140deg,
+      #00008B 180deg,
+      #4A90E2 220deg,
+      #87CEEB 260deg,
+      transparent 290deg,
+      transparent 360deg
+    );
+    /* Create border effect by masking out the center */
+    /* stylelint-disable-next-line */
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    /* stylelint-disable-next-line */
+    -webkit-mask-composite: xor;
+    /* stylelint-disable-next-line */
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    /* stylelint-disable-next-line */
+    mask-composite: exclude;
+    animation: rotate-gradient 2.5s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Dark theme gradient colors */
+  [data-theme="dark"] &::before {
+    background: conic-gradient(
+      from var(--gradient-angle, 0deg),
+      transparent 0deg,
+      transparent 70deg,
+      #38bdf8 100deg,
+      #0284c7 140deg,
+      #082f49 180deg,
+      #0284c7 220deg,
+      #38bdf8 260deg,
+      transparent 290deg,
+      transparent 360deg
+    );
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .kpi-multi-metric {
+    @apply p-3 gap-3;
+  }
+
+  .kpi-multi-icon {
+    @apply w-12 h-12;
+  }
+
+  .kpi-multi-value {
+    @apply text-xl;
+  }
+}

@@ -1,0 +1,20 @@
+.kpi-multi-metric-card {
+  @apply relative rounded-xl overflow-hidden;
+  /* Background applied via computed classes */
+  @apply border border-cardBorder;
+  @apply shadow-sm hover:shadow-md;
+  @apply dark:shadow-md dark:hover:shadow-xl;
+  @apply transition-all duration-300;
+}
+
+.kpi-multi-grid {
+  @apply grid gap-4;
+  @apply p-6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .kpi-multi-grid {
+    @apply gap-3 p-4;
+  }
+}

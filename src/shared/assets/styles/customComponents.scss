@@ -13,6 +13,13 @@
 @use './components/_vaccordion';
 @use './components/_vfloating.scss';
 
+// KPI Components
+@use './components/kpi/_vkpicard.scss';
+@use './components/kpi/_vkpicomparison.scss';
+@use './components/kpi/_vkpimultimetric.scss';
+@use './components/kpi/_vkpimultimetricheader.scss';
+@use './components/kpi/_vkpimultimetricitem.scss';
+
 @layer components {
   .page-title {
     @apply font-bold opacity-90 text-primary uppercase;

@@ -1,0 +1,190 @@
+.kpi-card--fit {
+  @apply w-fit;
+}
+
+.kpi-card--sm {
+  @apply w-full max-w-xs; /* max-width: 320px */
+}
+
+.kpi-card--md {
+  @apply w-full max-w-sm; /* max-width: 384px */
+}
+
+.kpi-card--lg {
+  @apply w-full max-w-md; /* max-width: 448px */
+}
+
+.kpi-card--xl {
+  @apply w-full max-w-lg; /* max-width: 512px */
+}
+
+.kpi-card--full {
+  @apply w-full;
+}
+
+.kpi-card {
+  /* Card structure */
+  @apply relative rounded-xl pt-4 px-4 pb-2 w-full;
+
+  /* Glassmorphism background */
+  @apply bg-cardBg/80 backdrop-blur-md;
+
+  /* Border */
+  @apply border border-cardBorder;
+
+  /* Shadow and transitions */
+  @apply transition-all duration-300;
+  @apply shadow-sm hover:shadow-md;
+  @apply dark:shadow-md dark:hover:shadow-xl;
+
+  /* Minimum height to prevent layout shift during loading */
+  min-height: 90px;
+}
+
+.kpi-card__loading {
+  @apply absolute inset-0 flex items-center justify-center;
+  @apply bg-cardBg/10 rounded-xl;
+  @apply transition-opacity duration-200;
+  pointer-events: none; /* Allow interaction with content behind */
+  z-index: 20; /* Above animated border (z-index: -1) and content */
+}
+
+/* Dim content when card is in loading state */
+.kpi-card--loading > div:not(.kpi-card__loading) {
+  opacity: 0.6;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Animated gradient border for loading state - "train" effect */
+.kpi-card--loading {
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: conic-gradient(
+      from var(--gradient-angle, 0deg),
+      transparent 0deg,
+      transparent 70deg,
+      #87CEEB 100deg,
+      #4A90E2 140deg,
+      #00008B 180deg,
+      #4A90E2 220deg,
+      #87CEEB 260deg,
+      transparent 290deg,
+      transparent 360deg
+    );
+    /* Create border effect by masking out the center */
+    /* stylelint-disable-next-line */
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    /* stylelint-disable-next-line */
+    -webkit-mask-composite: xor;
+    /* stylelint-disable-next-line */
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    /* stylelint-disable-next-line */
+    mask-composite: exclude;
+    animation: rotate-gradient 2.5s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Dark theme gradient colors */
+  [data-theme="dark"] &::before {
+    background: conic-gradient(
+      from var(--gradient-angle, 0deg),
+      transparent 0deg,
+      transparent 70deg,
+      #38bdf8 100deg,
+      #0284c7 140deg,
+      #082f49 180deg,
+      #0284c7 220deg,
+      #38bdf8 260deg,
+      transparent 290deg,
+      transparent 360deg
+    );
+  }
+}
+
+@keyframes rotate-gradient {
+  0% {
+    --gradient-angle: 0deg;
+  }
+  100% {
+    --gradient-angle: 360deg;
+  }
+}
+
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.kpi-icon-wrapper {
+  /* Light theme: very subtle shadow */
+  box-shadow:
+          0 2px 4px rgba(0, 0, 0, 0.06),
+          0 1px 2px rgba(0, 0, 0, 0.04);
+
+  /* Border for definition */
+  @apply ring-1 ring-white/20;
+}
+
+.dark .kpi-icon-wrapper {
+  /* Dark theme: much stronger shadow with very large offset + strong border for visibility */
+  box-shadow:
+          0 12px 32px rgba(0, 0, 0, 0.95),
+          0 24px 64px rgba(0, 0, 0, 0.85),
+          inset 0 1px 1px rgba(255, 255, 255, 0.06),
+          inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+
+  /* Strong border for depth on dark theme */
+  @apply ring-2 ring-black/70;
+}
+
+/* Icon rotation animation on card hover */
+.kpi-card:hover .kpi-icon-wrapper {
+  @apply scale-105 rotate-3;
+}
+
+/* Value scale animation on card hover */
+.kpi-card p.text-2xl {
+  @apply transition-all duration-200;
+}
+
+.kpi-card:hover p.text-2xl {
+  @apply scale-[1.02];
+}
+
+/* Professional Grid-based expand animation */
+.additional-comparisons {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* stylelint-disable-next-line */
+.additional-comparisons.is-expanded {
+  grid-template-rows: 1fr;
+}
+
+.additional-comparisons__inner {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.25s ease-out 0.05s, transform 0.25s ease-out 0.05s;
+  padding-top: 0.375rem; /* 6px spacing from primary comparison */
+}
+
+.additional-comparisons.is-expanded .additional-comparisons__inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Compact spacing between comparison items */
+.additional-comparisons__inner > * + * {
+  margin-top: 0.375rem; /* 6px between each comparison - more compact */
+}

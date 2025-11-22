@@ -41,7 +41,7 @@ const iconComponent = computed<Component>(() => {
   }
 
   if(props.loading) {
-    return iconMap["mdi:loading"];
+    return iconMap["lucid:loading"];
   }
 
   return iconMap[props.icon];

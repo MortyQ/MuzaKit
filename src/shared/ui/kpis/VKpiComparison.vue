@@ -93,7 +93,7 @@ const fullComparisonText = computed(() => {
     <VTooltip
       :text="fullComparisonText"
       placement="top"
-      wrapper-class="flex items-center gap-2 min-w-0 flex-1"
+      wrapper-class="flex items-center justify-between min-w-0 flex-1"
       :delay="150"
     >
       <!-- Difference Value -->
@@ -107,10 +107,11 @@ const fullComparisonText = computed(() => {
       <!-- Percentage Change -->
       <span
         :class="classes.textColor"
-        class="kpi-comparison__percentage"
+        class="kpi-comparison__percentage tabular-nums text-right"
+        style="min-width: 60px"
       >
-        {{ props.comparison.percentage >= 0 ? "+" : "" }}
-        {{ props.comparison.percentage.toFixed(0) }}%
+        {{ props.comparison.percentage >= 0 ? "+" : "" }}<!--
+        -->{{ props.comparison.percentage.toFixed(0) }}%
       </span>
     </VTooltip>
 
@@ -118,65 +119,3 @@ const fullComparisonText = computed(() => {
     <slot />
   </div>
 </template>
-
-<style scoped>
-.kpi-comparison {
-  @apply flex items-center text-sm;
-  gap: 0.5rem; /* 8px horizontal gap */
-  min-height: 1.5rem; /* 24px - tighter consistent height */
-  overflow: hidden; /* Prevent content overflow */
-  width: 100%; /* Ensure full width usage */
-}
-
-.kpi-comparison__label {
-  @apply flex items-center gap-1 cursor-help flex-shrink-0;
-  max-width: 4rem; /* Allow label to be flexible but not too wide */
-
-  /* On very small screens, allow more shrinking */
-  @media (max-width: 320px) {
-    max-width: 3rem;
-  }
-}
-
-.kpi-comparison__label-simple {
-  @apply text-xs font-medium text-secondaryText flex-shrink-0;
-  max-width: 4rem;
-  @apply truncate;
-
-  @media (max-width: 320px) {
-    max-width: 3rem;
-  }
-}
-
-.kpi-comparison__arrow {
-  @apply flex-shrink-0;
-}
-
-.kpi-comparison__value {
-  /* flex-1 instead of flex-shrink for better space distribution */
-  @apply font-semibold flex-1 truncate;
-  min-width: 0; /* Allow truncation to work properly */
-  max-width: 8rem; /* Limit max width */
-
-  /* On small screens, allow smaller max-width */
-  @media (max-width: 640px) {
-    max-width: 6rem;
-  }
-
-  @media (max-width: 320px) {
-    max-width: 4rem;
-  }
-}
-
-.kpi-comparison__percentage {
-  @apply font-semibold flex-shrink-0 whitespace-nowrap;
-  min-width: 3rem; /* Keep percentage width consistent */
-
-  /* On very small screens, reduce min-width */
-  @media (max-width: 320px) {
-    min-width: 2.5rem;
-    font-size: 0.75rem; /* Slightly smaller font */
-  }
-}
-</style>
-

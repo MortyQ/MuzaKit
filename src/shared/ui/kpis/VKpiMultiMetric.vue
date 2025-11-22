@@ -16,6 +16,10 @@ interface Props {
   columns?: VKpiMultiMetricColumns
   /** Enable glassmorphism effect (backdrop-blur) */
   glassmorphism?: boolean
+  /** Loading state */
+  loader?: boolean
+  /** Animate value changes (default: true) */
+  animate?: boolean
   /** Optional custom class */
   class?: string
 }
@@ -24,6 +28,8 @@ const props = withDefaults(defineProps<Props>(), {
   icon: "lucide:chart-column",
   columns: "auto",
   glassmorphism: false,
+  loader: false,
+  animate: true,
   class: "",
 });
 
@@ -89,31 +95,9 @@ const cardClasses = computed(() => ({
         :key="`metric-${index}`"
         :metric="metric"
         :glassmorphism="glassmorphism"
+        :loader="loader"
+        :animate="animate"
       />
     </div>
   </div>
 </template>
-
-<style scoped>
-.kpi-multi-metric-card {
-  @apply relative rounded-xl overflow-hidden;
-  /* Background applied via computed classes */
-  @apply border border-cardBorder;
-  @apply shadow-sm hover:shadow-md;
-  @apply dark:shadow-md dark:hover:shadow-xl;
-  @apply transition-all duration-300;
-}
-
-.kpi-multi-grid {
-  @apply grid gap-4;
-  @apply p-6;
-}
-
-/* Responsive adjustments */
-@media (max-width: 640px) {
-  .kpi-multi-grid {
-    @apply gap-3 p-4;
-  }
-}
-</style>
-

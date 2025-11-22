@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { computed } from "vue";
+
 import type { VKpiMultiMetric } from "./types/VKpiMultiMetric.types";
 
+import { useAnimatedValue } from "@/shared/composables";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VTooltip from "@/shared/ui/common/VTooltip.vue";
 import { formatKpiValue } from "@/shared/utils/kpi";
@@ -10,24 +13,41 @@ interface Props {
   metric: VKpiMultiMetric
   /** Enable glassmorphism effect */
   glassmorphism?: boolean
+  /** Loading state */
+  loader?: boolean
+  /** Animate value changes (default: true) */
+  animate?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   glassmorphism: false,
+  loader: false,
+  animate: true,
 });
 
-// Format metric value
-const formattedValue = () => {
-  const numValue = typeof props.metric.value === "string"
-    ? parseFloat(props.metric.value.replace(/,/g, ""))
-    : props.metric.value;
+// Extract format options with defaults
+const formatOptions = computed(() => ({
+  unit: props.metric.format?.unit || "number",
+  decimals: props.metric.format?.decimals ?? false,
+  multiply: props.metric.format?.multiply ?? 1,
+}));
 
-  return formatKpiValue(numValue, {
-    unit: props.metric.format?.unit || "number",
-    decimals: props.metric.format?.decimals ?? false,
-    multiply: props.metric.format?.multiply ?? 1,
+// Use animated value composable
+const { animatedValue } = useAnimatedValue(
+  () => props.metric.value,
+  {
+    animate: props.animate,
+    multiply: formatOptions.value.multiply,
+  },
+);
+
+// Format animated value
+const formattedValue = computed(() => {
+  return formatKpiValue(animatedValue.value, {
+    ...formatOptions.value,
+    multiply: 1, // Already multiplied in animatedValue
   });
-};
+});
 
 // Get icon color classes consistent with VKpiCard
 const iconColorClass = () => {
@@ -50,8 +70,15 @@ const iconColorClass = () => {
     :class="{
       'bg-cardBg/50 backdrop-blur-sm': glassmorphism,
       'bg-cardBg': !glassmorphism,
+      'kpi-multi-metric--loading': loader,
     }"
   >
+    <!-- Loading State Overlay -->
+    <div
+      v-if="loader"
+      class="kpi-multi-metric__loading"
+    />
+
     <!-- Icon -->
     <div
       v-if="metric.icon"
@@ -71,76 +98,16 @@ const iconColorClass = () => {
         {{ metric.label }}
       </div>
       <VTooltip
-        :text="`${formattedValue()}${metric.format?.unit === 'percentage' ? '%' : ''}`"
+        :text="`${formattedValue}${formatOptions.unit === 'percentage' ? '%' : ''}`"
         placement="top"
         wrapper-class="block w-full"
         :delay="150"
       >
         <div class="kpi-multi-value">
-          {{ formattedValue() }}
-          <span v-if="metric.format?.unit === 'percentage'">%</span>
+          {{ formattedValue }}
+          <span v-if="formatOptions.unit === 'percentage'">%</span>
         </div>
       </VTooltip>
     </div>
   </div>
 </template>
-
-<style scoped>
-.kpi-multi-metric {
-  @apply flex items-center gap-4;
-  @apply p-4 rounded-xl;
-  @apply border border-cardBorder;
-  @apply transition-all duration-300;
-  @apply hover:shadow-md;
-  @apply hover:border-primary-300 dark:hover:border-primary-600;
-  @apply cursor-pointer;
-}
-
-.kpi-multi-icon {
-  @apply flex items-center justify-center;
-  @apply w-14 h-14 rounded-xl;
-  @apply flex-shrink-0;
-  @apply transition-all duration-300;
-}
-
-.kpi-multi-metric:hover .kpi-multi-icon {
-  @apply scale-110 rotate-6;
-}
-
-.kpi-multi-content {
-  @apply flex flex-col gap-1;
-  @apply min-w-0 flex-1;
-}
-
-.kpi-multi-label {
-  @apply text-sm font-medium text-secondaryText;
-  @apply truncate;
-}
-
-.kpi-multi-value {
-  @apply text-2xl font-semibold text-mainText;
-  @apply transition-all duration-200;
-  @apply truncate;
-  @apply tabular-nums;
-}
-
-.kpi-multi-metric:hover .kpi-multi-value {
-  @apply scale-105;
-}
-
-/* Responsive adjustments */
-@media (max-width: 640px) {
-  .kpi-multi-metric {
-    @apply p-3 gap-3;
-  }
-
-  .kpi-multi-icon {
-    @apply w-12 h-12;
-  }
-
-  .kpi-multi-value {
-    @apply text-xl;
-  }
-}
-</style>
-
