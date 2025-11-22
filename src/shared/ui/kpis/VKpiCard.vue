@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<VKpiCardProps>(), {
   iconColor: "primary",
   comparisons: () => [],
   showAllComparisons: false,
-  loading: false,
+  loader: false,
   reverse: false,
   size: "full",
   animate: true, // Default to true for smooth animations
@@ -115,13 +115,13 @@ const sizeClasses = computed(() => {
     :class="[
       sizeClasses,
       props.class,
-      { 'kpi-card--loading': props.loading }
+      { 'kpi-card--loading': props.loader }
     ]"
     class="kpi-card"
   >
     <!-- Loading State Overlay -->
     <div
-      v-if="props.loading"
+      v-if="props.loader"
       class="kpi-card__loading"
     />
 

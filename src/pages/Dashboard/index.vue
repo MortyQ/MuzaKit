@@ -215,7 +215,7 @@ const kpiData = [
         :metrics="comparison.metrics"
         :columns="2"
         icon="lucide:tags"
-        :loading="isLoading"
+        :loader="isLoading"
       />
     </div>
 
@@ -234,7 +234,7 @@ const kpiData = [
         :show-all-comparisons="showAllComparisons"
         :format="kpi.format"
         :reverse="kpi.reverse"
-        :loading="isLoading"
+        :loader="isLoading"
       />
     </div>
 
@@ -256,7 +256,7 @@ const kpiData = [
         :title="dashboard.title"
         :metrics="dashboard.metrics"
         icon="lucide:layout-dashboard"
-        :loading="isLoading"
+        :loader="isLoading"
       />
     </div>
   </div>
