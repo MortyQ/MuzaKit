@@ -1,54 +1,20 @@
-// VKpiMultiMetric Component Styles
 .kpi-multi-metric-card {
-  position: relative;
-  border-radius: 0.75rem;
-  overflow: hidden;
-
-  /* Background applied via Tailwind classes in Vue computed (bg-cardBg or bg-cardBg/80 backdrop-blur-md) */
-
-  /* Border */
-  border: 1px solid transparent;
-
-  /* Default elevated shadow - match VCard and VKpiCard */
-  box-shadow:
-    0 10px 15px -3px rgb(0 0 0 / 0.1),
-    0 4px 6px -4px rgb(0 0 0 / 0.1);
-
-  transition: all 0.3s ease;
-
-  &:hover {
-    box-shadow:
-      0 20px 25px -5px rgb(0 0 0 / 0.1),
-      0 8px 10px -6px rgb(0 0 0 / 0.1);
-    transform: translateY(-2px);
-  }
+  @apply relative rounded-xl overflow-hidden;
+  /* Background applied via computed classes */
+  @apply border border-cardBorder;
+  @apply shadow-sm hover:shadow-md;
+  @apply dark:shadow-md dark:hover:shadow-xl;
+  @apply transition-all duration-300;
 }
-
-// Dark mode
-[data-theme="dark"] .kpi-multi-metric-card,
-.dark .kpi-multi-metric-card {
-  box-shadow:
-    0 20px 25px -5px rgb(0 0 0 / 0.3),
-    0 8px 10px -6px rgb(0 0 0 / 0.3);
-
-  &:hover {
-    box-shadow:
-      0 25px 30px -5px rgb(0 0 0 / 0.4),
-      0 10px 12px -6px rgb(0 0 0 / 0.4);
-  }
-}
-
-// Glassmorphism modifier (applied via Tailwind classes from Vue)
-// Note: bg-cardBg/80 and backdrop-blur-md are applied via computed classes in Vue component
 
 .kpi-multi-grid {
-  display: grid;
-  gap: 1.5rem 1rem;
-  padding: 1.5rem;
-
-  @media (max-width: 640px) {
-    gap: 1rem 0.75rem;
-    padding: 1rem;
-  }
+  @apply grid gap-4;
+  @apply p-6;
 }
 
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .kpi-multi-grid {
+    @apply gap-3 p-4;
+  }
+}

@@ -1,87 +1,56 @@
-// VKpiMultiMetricItem Component Styles
 .kpi-multi-metric {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0;
-  border-radius: 0.5rem;
-  /* Background applied via Tailwind classes in template (bg-cardBg or bg-cardBg/50 backdrop-blur-sm) */
-
-  /* No border - clean look inside card */
-  border: none;
-
-  /* Transitions */
-  transition: all 0.2s ease;
-
-  &:hover {
-    .kpi-multi-icon {
-      transform: scale(1.1);
-    }
-
-    .kpi-multi-value {
-      transform: scale(1.05);
-    }
-  }
-
-  @media (max-width: 640px) {
-    gap: 0.75rem;
-  }
+  @apply flex items-center gap-4;
+  @apply p-4 rounded-xl;
+  @apply border border-cardBorder;
+  @apply transition-all duration-300;
+  @apply hover:shadow-md;
+  @apply hover:border-primary-300 dark:hover:border-primary-600;
+  @apply cursor-pointer;
 }
 
 .kpi-multi-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 0.75rem;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
+  @apply flex items-center justify-center;
+  @apply w-14 h-14 rounded-xl;
+  @apply flex-shrink-0;
+  @apply transition-all duration-300;
+}
 
-  /* Subtle shadow for icon depth */
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.08),
-    0 1px 4px rgba(0, 0, 0, 0.06);
-
-  @media (max-width: 640px) {
-    width: 3rem;
-    height: 3rem;
-  }
+.kpi-multi-metric:hover .kpi-multi-icon {
+  @apply scale-110 rotate-6;
 }
 
 .kpi-multi-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  min-width: 0;
-  flex: 1;
+  @apply flex flex-col gap-1;
+  @apply min-w-0 flex-1;
 }
 
 .kpi-multi-label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: rgb(var(--secondary-text));
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  @apply text-sm font-medium text-secondaryText;
+  @apply truncate;
 }
 
 .kpi-multi-value {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: rgb(var(--main-text));
-  transition: all 0.2s ease;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-
-  .kpi-multi-metric:hover & {
-    transform: scale(1.05);
-  }
-
-  @media (max-width: 640px) {
-    font-size: 1.25rem;
-  }
+  @apply text-2xl font-semibold text-mainText;
+  @apply transition-all duration-200;
+  @apply truncate;
+  @apply tabular-nums;
 }
 
+.kpi-multi-metric:hover .kpi-multi-value {
+  @apply scale-105;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .kpi-multi-metric {
+    @apply p-3 gap-3;
+  }
+
+  .kpi-multi-icon {
+    @apply w-12 h-12;
+  }
+
+  .kpi-multi-value {
+    @apply text-xl;
+  }
+}
