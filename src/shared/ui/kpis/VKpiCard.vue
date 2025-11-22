@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed } from "vue";
 
+import { useAnimatedValue } from "@/shared/composables";
 import type { VKpiCardProps } from "@/shared/types/kpi";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VTooltip from "@/shared/ui/common/VTooltip.vue";
 import VKpiComparison from "@/shared/ui/kpis/VKpiComparison.vue";
 import {
-  animateValue,
   formatKpiValue,
   getKpiIconColorClass,
 } from "@/shared/utils/kpi";
@@ -22,10 +22,6 @@ const props = withDefaults(defineProps<VKpiCardProps>(), {
   class: "",
 });
 
-// Animated value for smooth transitions
-const animatedValue = ref(0);
-const isInitialized = ref(false);
-
 // Extract format options with defaults
 const formatOptions = computed(() => ({
   unit: props.format?.unit || "number",
@@ -34,46 +30,12 @@ const formatOptions = computed(() => ({
   formatter: props.format?.formatter,
 }));
 
-// Initialize animated value
-const initValue = () => {
-  const numValue = typeof props.value === "string"
-    ? parseFloat(props.value.replace(/,/g, ""))
-    : Number(props.value);
-
-  return isNaN(numValue) ? 0 : numValue * formatOptions.value.multiply;
-};
-
-// Animate to initial value on mount
-onMounted(() => {
-  const targetValue = initValue();
-
-  if (props.animate) {
-    animateValue(0, targetValue, 1000, (val) => {
-      animatedValue.value = val;
-    });
-  } else {
-    animatedValue.value = targetValue;
-  }
-
-  isInitialized.value = true;
-});
-
-// Watch for value changes and animate
-watch(
+// Use animated value composable
+const { animatedValue } = useAnimatedValue(
   () => props.value,
-  () => {
-    if (!isInitialized.value) return;
-
-    const targetValue = initValue();
-
-    if (!props.animate) {
-      animatedValue.value = targetValue;
-      return;
-    }
-
-    animateValue(animatedValue.value, targetValue, 1000, (val) => {
-      animatedValue.value = val;
-    });
+  {
+    animate: props.animate,
+    multiply: formatOptions.value.multiply,
   },
 );
 

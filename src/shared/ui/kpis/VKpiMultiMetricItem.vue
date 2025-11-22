@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { computed } from "vue";
+
 import type { VKpiMultiMetric } from "./types/VKpiMultiMetric.types";
 
+import { useAnimatedValue } from "@/shared/composables";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VTooltip from "@/shared/ui/common/VTooltip.vue";
 import { formatKpiValue } from "@/shared/utils/kpi";
@@ -10,24 +13,41 @@ interface Props {
   metric: VKpiMultiMetric
   /** Enable glassmorphism effect */
   glassmorphism?: boolean
+  /** Loading state */
+  loader?: boolean
+  /** Animate value changes (default: true) */
+  animate?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   glassmorphism: false,
+  loader: false,
+  animate: true,
 });
 
-// Format metric value
-const formattedValue = () => {
-  const numValue = typeof props.metric.value === "string"
-    ? parseFloat(props.metric.value.replace(/,/g, ""))
-    : props.metric.value;
+// Extract format options with defaults
+const formatOptions = computed(() => ({
+  unit: props.metric.format?.unit || "number",
+  decimals: props.metric.format?.decimals ?? false,
+  multiply: props.metric.format?.multiply ?? 1,
+}));
 
-  return formatKpiValue(numValue, {
-    unit: props.metric.format?.unit || "number",
-    decimals: props.metric.format?.decimals ?? false,
-    multiply: props.metric.format?.multiply ?? 1,
+// Use animated value composable
+const { animatedValue } = useAnimatedValue(
+  () => props.metric.value,
+  {
+    animate: props.animate,
+    multiply: formatOptions.value.multiply,
+  },
+);
+
+// Format animated value
+const formattedValue = computed(() => {
+  return formatKpiValue(animatedValue.value, {
+    ...formatOptions.value,
+    multiply: 1, // Already multiplied in animatedValue
   });
-};
+});
 
 // Get icon color classes consistent with VKpiCard
 const iconColorClass = () => {
@@ -50,8 +70,15 @@ const iconColorClass = () => {
     :class="{
       'bg-cardBg/50 backdrop-blur-sm': glassmorphism,
       'bg-cardBg': !glassmorphism,
+      'kpi-multi-metric--loading': loader,
     }"
   >
+    <!-- Loading State Overlay -->
+    <div
+      v-if="loader"
+      class="kpi-multi-metric__loading"
+    />
+
     <!-- Icon -->
     <div
       v-if="metric.icon"
@@ -71,14 +98,14 @@ const iconColorClass = () => {
         {{ metric.label }}
       </div>
       <VTooltip
-        :text="`${formattedValue()}${metric.format?.unit === 'percentage' ? '%' : ''}`"
+        :text="`${formattedValue}${formatOptions.unit === 'percentage' ? '%' : ''}`"
         placement="top"
         wrapper-class="block w-full"
         :delay="150"
       >
         <div class="kpi-multi-value">
-          {{ formattedValue() }}
-          <span v-if="metric.format?.unit === 'percentage'">%</span>
+          {{ formattedValue }}
+          <span v-if="formatOptions.unit === 'percentage'">%</span>
         </div>
       </VTooltip>
     </div>

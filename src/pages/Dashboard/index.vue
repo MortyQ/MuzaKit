@@ -12,15 +12,8 @@ const isLoading = ref(true);
 // Toggle for showing all comparisons
 const showAllComparisons = ref(false);
 
-// Simulate data loading from server
-onMounted(async () => {
-  // Simulate 2 second delay for server response
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  isLoading.value = false;
-});
-
-// Simple Comparison (2 metrics per card)
-const simpleComparisonData = [
+// Real data that will be loaded from server
+const realSimpleComparisonData = [
   {
     title: "Premium Products",
     metrics: [
@@ -37,8 +30,26 @@ const simpleComparisonData = [
   },
 ];
 
-// Comprehensive Dashboard (8 metrics per card)
-const comprehensiveDashboardData = [
+// Real data for Simple Comparison
+const simpleComparisonData = ref<any[]>([
+  {
+    title: "Premium Products",
+    metrics: [
+      { label: "Avg Price", value: 0, icon: "lucide:dollar-sign", iconColor: "primary" as const, format: { unit: "dollar" as const } },
+      { label: "Sales", value: 0, icon: "lucide:shopping-cart", iconColor: "success" as const },
+    ],
+  },
+  {
+    title: "Standard Products",
+    metrics: [
+      { label: "Avg Price", value: 0, icon: "lucide:dollar-sign", iconColor: "primary" as const, format: { unit: "dollar" as const } },
+      { label: "Sales", value: 0, icon: "lucide:shopping-cart", iconColor: "success" as const },
+    ],
+  },
+]);
+
+// Real data for Comprehensive Dashboard
+const realComprehensiveDashboardData = [
   {
     title: "Q4 2024 Performance Overview",
     metrics: [
@@ -54,8 +65,25 @@ const comprehensiveDashboardData = [
   },
 ];
 
-// Unified KPI Data with optional comparisons
-const kpiData = [
+// Comprehensive Dashboard data with zero values initially
+const comprehensiveDashboardData = ref<any[]>([
+  {
+    title: "Q4 2024 Performance Overview",
+    metrics: [
+      { label: "Revenue", value: 0, icon: "lucide:dollar-sign", iconColor: "success" as const, format: { unit: "dollar" as const } },
+      { label: "Orders", value: 0, icon: "lucide:shopping-bag", iconColor: "primary" as const },
+      { label: "Avg Order", value: 0, icon: "lucide:receipt", iconColor: "info" as const, format: { unit: "dollar" as const } },
+      { label: "Customers", value: 0, icon: "lucide:users", iconColor: "primary" as const },
+      { label: "Conversion", value: 0, icon: "lucide:percent", iconColor: "success" as const, format: { unit: "percentage" as const, decimals: 2 } },
+      { label: "Sessions", value: 0, icon: "lucide:activity", iconColor: "info" as const },
+      { label: "Rating", value: 0, icon: "lucide:star", iconColor: "warning" as const, format: { decimals: 1 } },
+      { label: "Reviews", value: 0, icon: "lucide:message-square", iconColor: "neutral" as const },
+    ],
+  },
+]);
+
+// Real KPI Data that will be loaded
+const realKpiData = [
   {
     title: "Revenue",
     value: 5865995,
@@ -192,6 +220,28 @@ const kpiData = [
     format: { unit: "number" as const },
   },
 ];
+
+// KPI Data with zero values initially - will be populated after loading
+const kpiData = ref<any[]>(realKpiData.map(kpi => ({
+  ...kpi,
+  value: 0,
+  comparisons: [],
+})));
+
+// Simulate data loading from server
+onMounted(async () => {
+  // Simulate 2 second delay for server response
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
+  // Load real data after delay - this will trigger animations from 0 to real values
+  kpiData.value = realKpiData;
+  simpleComparisonData.value = realSimpleComparisonData;
+  comprehensiveDashboardData.value = realComprehensiveDashboardData;
+
+  // Hide loader
+  isLoading.value = false;
+});
+
 </script>
 
 <template>
