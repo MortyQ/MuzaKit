@@ -9,6 +9,15 @@ const tabs = [
 
 <template>
   <div class="page-container">
+    <!-- Header -->
+    <div>
+      <h1 class="text-3xl font-bold text-mainText mb-2 text-gradient-animated">
+        Dashboard
+      </h1>
+      <p class="text-secondaryText">
+        Key Performance Indicators Overview
+      </p>
+    </div>
     <VTabs
       :tabs="tabs"
     >

@@ -246,16 +246,6 @@ onMounted(async () => {
 
 <template>
   <div class="dashboard-page flex flex-col gap-5">
-    <!-- Header -->
-    <div>
-      <h1 class="text-3xl font-bold text-mainText mb-2 text-gradient-animated">
-        Dashboard
-      </h1>
-      <p class="text-secondaryText">
-        Key Performance Indicators Overview
-      </p>
-    </div>
-
     <!-- Simple Comparison (2 metrics) -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <VKpiMultiMetric
