@@ -5,12 +5,14 @@ import FloatingTab from "@/pages/UIGallery/components/DisplayComponents/Floating
 import IconsTab from "@/pages/UIGallery/components/DisplayComponents/IconsTab.vue";
 import KpiTab from "@/pages/UIGallery/components/DisplayComponents/KpiTab.vue";
 import TabsComponentTab from "@/pages/UIGallery/components/DisplayComponents/TabsComponentTab.vue";
+import TagsTab from "@/pages/UIGallery/components/DisplayComponents/TagsTab.vue";
 import VTabs from "@/shared/ui/common/VTabs.vue";
 
 const tabs = [
   { id: "cards", label: "Cards", icon: "lucide:square" },
   { id: "kpi", label: "KPI Cards", icon: "lucide:bar-chart-3" },
   { id: "icons", label: "Icons", icon: "lucide:shapes" },
+  { id: "tags", label: "Tags", icon: "lucide:tag" },
   { id: "tabs", label: "Tabs", icon: "lucide:folder" },
   { id: "accordion", label: "Accordion", icon: "lucide:list" },
   { id: "floating", label: "Floating (Dropdown/Popover)", icon: "lucide:layers" },
@@ -20,6 +22,7 @@ const componentMap = {
   cards: CardsTab,
   kpi: KpiTab,
   icons: IconsTab,
+  tags: TagsTab,
   tabs: TabsComponentTab,
   accordion: AccordionTab,
   floating: FloatingTab,

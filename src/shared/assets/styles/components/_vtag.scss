@@ -1,0 +1,278 @@
+/* Base Tag Styles */
+.vtag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: theme('fontWeight.medium');
+  white-space: nowrap;
+  user-select: none;
+  transition-property: background-color, color, border-color;
+  transition-duration: theme('transitionDuration.200');
+  transition-timing-function: theme('transitionTimingFunction.DEFAULT');
+}
+
+/* Sizes */
+.vtag--xs {
+  font-size: theme('fontSize.xs');
+  padding: theme('spacing.1') theme('spacing.2');
+  gap: theme('spacing.1');
+}
+
+.vtag--sm {
+  font-size: theme('fontSize.xs');
+  padding: theme('spacing.1') theme('spacing.2');
+  gap: theme('spacing.1');
+}
+
+.vtag--md {
+  font-size: theme('fontSize.sm');
+  padding: theme('spacing.1') theme('spacing.2');
+  gap: theme('spacing.2');
+}
+
+.vtag--lg {
+  font-size: theme('fontSize.base');
+  padding: theme('spacing.2') theme('spacing.3');
+  gap: theme('spacing.2');
+}
+
+/* Rounded */
+.vtag--rounded {
+  border-radius: theme('borderRadius.full');
+}
+
+.vtag--square {
+  border-radius: theme('borderRadius.md');
+}
+
+/* Variants - Solid */
+.vtag--solid-primary {
+  background-color: theme('colors.primary');
+  color: theme('colors.white');
+}
+
+.vtag--solid-success {
+  background-color: theme('colors.success');
+  color: theme('colors.white');
+}
+
+.vtag--solid-warning {
+  background-color: theme('colors.warning');
+  color: theme('colors.white');
+}
+
+.vtag--solid-error {
+  background-color: theme('colors.error');
+  color: theme('colors.white');
+}
+
+.vtag--solid-info {
+  background-color: theme('colors.info');
+  color: theme('colors.white');
+}
+
+.vtag--solid-neutral {
+  background-color: theme('colors.neutral');
+  color: theme('colors.white');
+}
+
+.vtag--solid-gray {
+  background-color: theme('colors.neutral-600');
+  color: theme('colors.white');
+}
+
+[data-theme="dark"] .vtag--solid-gray {
+  background-color: theme('colors.neutral-500');
+}
+
+/* Variants - Soft (Default) */
+.vtag--soft-primary {
+  background-color: theme('colors.primary-100');
+  color: theme('colors.primary');
+}
+
+[data-theme="dark"] .vtag--soft-primary {
+  background-color: theme('colors.primary-900');
+  color: theme('colors.primary-light');
+}
+
+.vtag--soft-success {
+  background-color: theme('colors.success-100');
+  color: theme('colors.success');
+}
+
+[data-theme="dark"] .vtag--soft-success {
+  background-color: theme('colors.success-900');
+  color: theme('colors.success-300');
+}
+
+.vtag--soft-warning {
+  background-color: theme('colors.warning-100');
+  color: theme('colors.warning');
+}
+
+[data-theme="dark"] .vtag--soft-warning {
+  background-color: theme('colors.warning-900');
+  color: theme('colors.warning-300');
+}
+
+.vtag--soft-error {
+  background-color: theme('colors.error-100');
+  color: theme('colors.error');
+}
+
+[data-theme="dark"] .vtag--soft-error {
+  background-color: theme('colors.error-900');
+  color: theme('colors.error-300');
+}
+
+.vtag--soft-info {
+  background-color: theme('colors.info-100');
+  color: theme('colors.info');
+}
+
+[data-theme="dark"] .vtag--soft-info {
+  background-color: theme('colors.info-900');
+  color: theme('colors.info-300');
+}
+
+.vtag--soft-neutral {
+  background-color: theme('colors.neutral-100');
+  color: theme('colors.neutral-700');
+}
+
+[data-theme="dark"] .vtag--soft-neutral {
+  background-color: theme('colors.neutral-800');
+  color: theme('colors.neutral-300');
+}
+
+.vtag--soft-gray {
+  background-color: theme('colors.neutral-100');
+  color: theme('colors.neutral-700');
+}
+
+[data-theme="dark"] .vtag--soft-gray {
+  background-color: theme('colors.neutral-800');
+  color: theme('colors.neutral-300');
+}
+
+/* Variants - Outline */
+.vtag--outline-primary {
+  border: 1px solid theme('colors.primary');
+  color: theme('colors.primary');
+  background-color: transparent;
+}
+
+.vtag--outline-success {
+  border: 1px solid theme('colors.success');
+  color: theme('colors.success');
+  background-color: transparent;
+}
+
+.vtag--outline-warning {
+  border: 1px solid theme('colors.warning');
+  color: theme('colors.warning');
+  background-color: transparent;
+}
+
+.vtag--outline-error {
+  border: 1px solid theme('colors.error');
+  color: theme('colors.error');
+  background-color: transparent;
+}
+
+.vtag--outline-info {
+  border: 1px solid theme('colors.info');
+  color: theme('colors.info');
+  background-color: transparent;
+}
+
+.vtag--outline-neutral {
+  border: 1px solid theme('colors.neutral');
+  color: theme('colors.neutral');
+  background-color: transparent;
+}
+
+.vtag--outline-gray {
+  border: 1px solid theme('colors.neutral-300');
+  color: theme('colors.neutral-700');
+  background-color: transparent;
+}
+
+[data-theme="dark"] .vtag--outline-gray {
+  border-color: theme('colors.neutral-600');
+  color: theme('colors.neutral-300');
+}
+
+/* Variants - Ghost */
+.vtag--ghost-primary {
+  color: theme('colors.primary');
+  background-color: transparent;
+
+  &:hover {
+    background-color: theme('colors.primary-100');
+  }
+}
+
+.vtag--ghost-success {
+  color: theme('colors.success');
+  background-color: transparent;
+
+  &:hover {
+    background-color: theme('colors.success-100');
+  }
+}
+
+.vtag--ghost-warning {
+  color: theme('colors.warning');
+  background-color: transparent;
+
+  &:hover {
+    background-color: theme('colors.warning-100');
+  }
+}
+
+.vtag--ghost-error {
+  color: theme('colors.error');
+  background-color: transparent;
+
+  &:hover {
+    background-color: theme('colors.error-100');
+  }
+}
+
+.vtag--ghost-info {
+  color: theme('colors.info');
+  background-color: transparent;
+
+  &:hover {
+    background-color: theme('colors.info-100');
+  }
+}
+
+.vtag--ghost-neutral {
+  color: theme('colors.neutral');
+  background-color: transparent;
+
+  &:hover {
+    background-color: theme('colors.neutral-100');
+  }
+}
+
+.vtag--ghost-gray {
+  color: theme('colors.neutral-700');
+  background-color: transparent;
+
+  &:hover {
+    background-color: theme('colors.neutral-100');
+  }
+}
+
+[data-theme="dark"] .vtag--ghost-gray {
+  color: theme('colors.neutral-300');
+
+  &:hover {
+    background-color: theme('colors.neutral-800');
+  }
+}
+

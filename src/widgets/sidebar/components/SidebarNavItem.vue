@@ -5,6 +5,7 @@ import { useRoute } from "vue-router";
 import SidebarMenuFlyout from "./SidebarMenuFlyout.vue";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
+import VTag from "@/shared/ui/common/VTag.vue";
 import VTooltip from "@/shared/ui/common/VTooltip.vue";
 import { useSidebar } from "@/widgets/sidebar/composables/useSidebar";
 import type { SidebarNavItem } from "@/widgets/sidebar/types";
@@ -223,13 +224,12 @@ const itemClasses = computed(() => {
       </Transition>
 
       <!-- Badge -->
-      <span
+      <VTag
         v-if="item.badge && !isCollapsed"
-        class="flex-shrink-0 px-2 py-0.5 text-xs font-semibold
-         rounded-full bg-primary/20 text-primary"
-      >
-        {{ item.badge }}
-      </span>
+        :label="item.badge as string"
+        variant="soft"
+        color="primary"
+      />
 
       <!-- Expand/Collapse Icon (for parent items) -->
       <VIcon

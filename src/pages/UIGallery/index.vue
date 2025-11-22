@@ -34,8 +34,8 @@ const categories = [
     icon: "lucide:layout",
     iconColor: "#f59e0b",
     path: "/components/ui-gallery/display",
-    components: ["Cards", "KPI Cards", "Icons", "Tabs", "Accordion", "Popover", "Dropdown"],
-    badge: "7 components",
+    components: ["Cards", "KPI Cards", "Icons", "Tags", "Tabs", "Accordion", "Popover", "Dropdown"],
+    badge: "8 components",
   },
   {
     id: "layout",
