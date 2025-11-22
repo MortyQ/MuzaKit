@@ -93,7 +93,7 @@ const fullComparisonText = computed(() => {
     <VTooltip
       :text="fullComparisonText"
       placement="top"
-      wrapper-class="flex items-center gap-2 min-w-0 flex-1"
+      wrapper-class="flex items-center justify-between min-w-0 flex-1"
       :delay="150"
     >
       <!-- Difference Value -->
@@ -107,10 +107,11 @@ const fullComparisonText = computed(() => {
       <!-- Percentage Change -->
       <span
         :class="classes.textColor"
-        class="kpi-comparison__percentage"
+        class="kpi-comparison__percentage tabular-nums text-right"
+        style="min-width: 60px"
       >
-        {{ props.comparison.percentage >= 0 ? "+" : "" }}
-        {{ props.comparison.percentage.toFixed(0) }}%
+        {{ props.comparison.percentage >= 0 ? "+" : "" }}<!--
+        -->{{ props.comparison.percentage.toFixed(0) }}%
       </span>
     </VTooltip>
 
