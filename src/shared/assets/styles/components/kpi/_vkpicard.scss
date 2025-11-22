@@ -67,7 +67,7 @@
 
 /* Icon rotation animation on card hover */
 .kpi-card:hover .kpi-icon-wrapper {
-  @apply scale-110 rotate-6;
+  @apply scale-105 rotate-3;
 }
 
 /* Value scale animation on card hover */
@@ -76,7 +76,7 @@
 }
 
 .kpi-card:hover p.text-2xl {
-  @apply scale-105;
+  @apply scale-[1.02];
 }
 
 /* Professional Grid-based expand animation */
