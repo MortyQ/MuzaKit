@@ -519,26 +519,37 @@ import VKpiMultiMetric from '@/shared/ui/kpis/VKpiMultiMetric.vue';
         <h4 class="examples-subtitle">
           Loading State
         </h4>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <VKpiCard
-            title="Loading Data..."
-            :value="0"
-            icon="lucide:loader"
-            icon-color="info"
-            :loading="true"
-          />
-          <VKpiCard
-            title="Loading Data..."
-            :value="0"
-            icon="lucide:loader"
+            title="Primary"
+            :value="1234"
+            icon="lucide:star"
             icon-color="primary"
+            :format="{ unit: 'number' }"
             :loading="true"
           />
           <VKpiCard
-            title="Loading Data..."
-            :value="0"
-            icon="lucide:loader"
+            title="Success"
+            :value="5678"
+            icon="lucide:check"
             icon-color="success"
+            :format="{ unit: 'number' }"
+            :loading="true"
+          />
+          <VKpiCard
+            title="Warning"
+            :value="9012"
+            icon="lucide:alert-triangle"
+            icon-color="warning"
+            :format="{ unit: 'number' }"
+            :loading="true"
+          />
+          <VKpiCard
+            title="Error"
+            :value="3456"
+            icon="lucide:x-circle"
+            icon-color="error"
+            :format="{ unit: 'number' }"
             :loading="true"
           />
         </div>

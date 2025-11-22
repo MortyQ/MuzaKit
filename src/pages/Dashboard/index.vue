@@ -1,13 +1,23 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 import type { KpiComparison } from "@/shared/types/kpi";
 import VSwitch from "@/shared/ui/common/VSwitch.vue";
 import VKpiCard from "@/shared/ui/kpis/VKpiCard.vue";
 import VKpiMultiMetric from "@/shared/ui/kpis/VKpiMultiMetric.vue";
 
+// Loading state
+const isLoading = ref(true);
+
 // Toggle for showing all comparisons
 const showAllComparisons = ref(false);
+
+// Simulate data loading from server
+onMounted(async () => {
+  // Simulate 2 second delay for server response
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  isLoading.value = false;
+});
 
 // Simple Comparison (2 metrics per card)
 const simpleComparisonData = [
@@ -205,6 +215,7 @@ const kpiData = [
         :metrics="comparison.metrics"
         :columns="2"
         icon="lucide:tags"
+        :loading="isLoading"
       />
     </div>
 
@@ -223,6 +234,7 @@ const kpiData = [
         :show-all-comparisons="showAllComparisons"
         :format="kpi.format"
         :reverse="kpi.reverse"
+        :loading="isLoading"
       />
     </div>
 
@@ -244,6 +256,7 @@ const kpiData = [
         :title="dashboard.title"
         :metrics="dashboard.metrics"
         icon="lucide:layout-dashboard"
+        :loading="isLoading"
       />
     </div>
   </div>

@@ -112,26 +112,21 @@ const sizeClasses = computed(() => {
 
 <template>
   <div
-    :class="[sizeClasses, props.class]"
+    :class="[
+      sizeClasses,
+      props.class,
+      { 'kpi-card--loading': props.loading }
+    ]"
     class="kpi-card"
   >
-    <!-- Loading State -->
+    <!-- Loading State Overlay -->
     <div
       v-if="props.loading"
       class="kpi-card__loading"
-    >
-      <div class="flex items-center justify-center h-full">
-        <VIcon
-          icon="lucide:loader"
-          :size="32"
-          class="animate-spin text-primary"
-        />
-      </div>
-    </div>
+    />
 
     <!-- Content -->
     <div
-      v-else
       class="flex flex-col h-full"
     >
       <!-- Header with Icon and Title -->
