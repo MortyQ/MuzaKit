@@ -55,7 +55,7 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-/* Animated gradient border for loading state - "train" effect */
+/* Animated gradient border for loading state - "train" effect with primary color */
 .kpi-card--loading {
   &::before {
     content: '';
@@ -66,13 +66,10 @@
     background: conic-gradient(
       from var(--gradient-angle, 0deg),
       transparent 0deg,
-      transparent 70deg,
-      #87CEEB 100deg,
-      #4A90E2 140deg,
-      #00008B 180deg,
-      #4A90E2 220deg,
-      #87CEEB 260deg,
-      transparent 290deg,
+      transparent 60deg,
+      #0ea5e9 90deg,
+      #0ea5e9 150deg,
+      transparent 180deg,
       transparent 360deg
     );
     /* Create border effect by masking out the center */
@@ -89,18 +86,15 @@
     z-index: 1;
   }
 
-  /* Dark theme gradient colors */
+  /* Dark theme gradient with primary colors */
   [data-theme="dark"] &::before {
     background: conic-gradient(
       from var(--gradient-angle, 0deg),
       transparent 0deg,
-      transparent 70deg,
-      #38bdf8 100deg,
-      #0284c7 140deg,
-      #082f49 180deg,
-      #0284c7 220deg,
-      #38bdf8 260deg,
-      transparent 290deg,
+      transparent 60deg,
+      #38bdf8 90deg,
+      #38bdf8 150deg,
+      transparent 180deg,
       transparent 360deg
     );
   }

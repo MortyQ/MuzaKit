@@ -7,6 +7,8 @@ import coreRoutes from "./core/index";
 import type { AppRouteRecordRaw } from "./types/types";
 import { routesToMenuItems } from "./utils/utils";
 
+import { RouteNames } from "@/app/router/types/names";
+
 /**
  * All application routes
  */
@@ -17,30 +19,17 @@ const modules: Array<AppRouteRecordRaw> = [
     name: "Home",
     component: () => import("@/pages/Home/index.vue"),
     meta: {
-      title: "Home",
+      title: RouteNames.Home,
       showInMenu: true,
       menuTitle: "Home",
       menuIcon: "mdi:home",
       menuOrder: 1,
     },
   },
-  // Dashboard route
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    component: () => import("@/pages/Dashboard/index.vue"),
-    meta: {
-      title: "Dashboard",
-      showInMenu: true,
-      menuTitle: "Dashboard",
-      menuIcon: "mdi:view-dashboard",
-      menuOrder: 2,
-    },
-  },
   // 404 page with explicit path (public)
   {
     path: "/not-found",
-    name: "NotFound",
+    name: RouteNames.NotFound,
     component: () => import("@/pages/NotFound/index.vue"),
     meta: {
       title: "404 Not Found",

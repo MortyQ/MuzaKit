@@ -1,12 +1,14 @@
 import type { AppRouteRecordRaw } from "../types/types";
 
+import { RouteNames } from "@/app/router/types/names";
+
 /**
  * Component showcase routes
  */
 const componentRoutes: AppRouteRecordRaw[] = [
   {
     path: "/components",
-    name: "components.parent",
+    name: RouteNames.ComponentsParent,
     redirect: "/components/library",
     meta: {
       title: "Components",
@@ -17,7 +19,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
     children: [
       {
         path: "ui-gallery",
-        name: "uiGallery.parent",
+        name: RouteNames.UiGalleryDisplayParent,
         redirect: "/components/ui-gallery/overview",
         meta: {
           title: "UI Gallery",
@@ -29,7 +31,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
         children: [
           {
             path: "overview",
-            name: "uiGallery.overview",
+            name: RouteNames.UiGalleryOverview,
             component: () => import("@/pages/UIGallery/index.vue"),
             meta: {
               title: "Overview",
@@ -39,7 +41,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           },
           {
             path: "feedback",
-            name: "uiGallery.feedback",
+            name: RouteNames.UiGalleryFeedback,
             component: () => import("@/pages/UIGallery/Feedback.vue"),
             meta: {
               title: "Feedback",
@@ -49,7 +51,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           },
           {
             path: "forms",
-            name: "uiGallery.forms",
+            name: RouteNames.UiGalleryForms,
             component: () => import("@/pages/UIGallery/Forms.vue"),
             meta: {
               title: "Forms",
@@ -59,7 +61,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           },
           {
             path: "display",
-            name: "uiGallery.display",
+            name: RouteNames.UiGalleryDisplay,
             component: () => import("@/pages/UIGallery/Display.vue"),
             meta: {
               title: "Display",
@@ -69,7 +71,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           },
           {
             path: "layout",
-            name: "uiGallery.layout",
+            name: RouteNames.UiGalleryLayout,
             component: () => import("@/pages/UIGallery/Layout.vue"),
             meta: {
               title: "Layout",
@@ -82,7 +84,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
       },
       {
         path: "table",
-        name: "table.parent",
+        name: RouteNames.TableParent,
         redirect: "/components/table/examples",
         meta: {
           title: "Table",
@@ -93,7 +95,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
         children: [
           {
             path: "examples",
-            name: "table.examples",
+            name: RouteNames.TableExamples,
             component: () => import("@/pages/Table/index.vue"),
             meta: {
               title: "Examples",
@@ -103,7 +105,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           },
           {
             path: "documentation",
-            name: "table.documentation",
+            name: RouteNames.TableDocumentation,
             component: () => import("@/pages/Table/components/documentation/TableDocumentationWrapper.vue"),
             meta: {
               title: "Documentation",

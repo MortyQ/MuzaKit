@@ -83,6 +83,7 @@ export default [
       'style/eol-last': ['error', 'always'],
 
       // TypeScript specific rules
+      'no-unused-vars': 'off', // Disable base rule as it conflicts with @typescript-eslint/no-unused-vars
       '@typescript-eslint/no-unused-vars': ['warn', {
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',
