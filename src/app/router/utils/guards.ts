@@ -1,6 +1,6 @@
 import type { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 
-import type { RouteMeta } from "./types";
+import type { RouteMeta } from "../types/types";
 
 import { useAuthStore } from "@/features/auth";
 

@@ -4,8 +4,8 @@ import type { RouteRecordRaw } from "vue-router";
 import authRoutes from "./auth/index";
 import componentRoutes from "./components/index";
 import coreRoutes from "./core/index";
-import type { AppRouteRecordRaw } from "./types";
-import { routesToMenuItems } from "./utils";
+import type { AppRouteRecordRaw } from "./types/types";
+import { routesToMenuItems } from "./utils/utils";
 
 /**
  * All application routes

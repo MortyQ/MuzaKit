@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required, email, minLength, sameAs, helpers } from "@vuelidate/validators";
+import { computed, reactive } from "vue";
 
 import SocialLogin from "./SocialLogin.vue";
 
 import VButton from "@/shared/ui/common/VButton.vue";
 import VCheckbox from "@/shared/ui/common/VCheckbox.vue";
 import VInput from "@/shared/ui/common/VInput.vue";
-
 
 interface Props {
   loading?: boolean;
@@ -20,14 +21,16 @@ const emit = defineEmits<{
   socialLogin: [provider: "google" | "github"];
 }>();
 
-const name = ref("");
-const email = ref("");
-const password = ref("");
-const confirmPassword = ref("");
-const terms = ref(false);
+const formData = reactive({
+  name: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  terms: false,
+});
 
 const passwordStrength = computed(() => {
-  const pwd = password.value;
+  const pwd = formData.password;
   if (pwd.length === 0) return { strength: 0, label: "", color: "" };
 
   let strength = 0;
@@ -46,36 +49,42 @@ const passwordStrength = computed(() => {
   };
 });
 
-const passwordsMatch = computed(() => {
-  if (confirmPassword.value.length === 0) return true;
-  return password.value === confirmPassword.value;
-});
+const rules = computed(() => ({
+  name: {
+    required: helpers.withMessage("Full name is required", required),
+    minLength: helpers.withMessage("Name must be at least 2 characters", minLength(2)),
+  },
+  email: {
+    required: helpers.withMessage("Email is required", required),
+    email: helpers.withMessage("Please enter a valid email", email),
+  },
+  password: {
+    required: helpers.withMessage("Password is required", required),
+    minLength: helpers.withMessage("Password must be at least 8 characters", minLength(8)),
+  },
+  confirmPassword: {
+    required: helpers.withMessage("Please confirm your password", required),
+    sameAs: helpers.withMessage("Passwords do not match", sameAs(formData.password)),
+  },
+  terms: {
+    required: helpers.withMessage("You must agree to the terms", required),
+    sameAs: helpers.withMessage("You must agree to the terms", sameAs(true)),
+  },
+}));
 
-const isValid = computed(() => {
-  return (
-    name.value.length > 0 &&
-    email.value.length > 0 &&
-    password.value.length >= 8 &&
-    passwordsMatch.value &&
-    terms.value
-  );
-});
+const v$ = useVuelidate(rules, formData);
 
-const handleSubmit = () => {
-  if (!isValid.value || props.loading) return;
+const handleSubmit = async () => {
+  const isValid = await v$.value.$validate();
+
+  if (!isValid || props.loading) return;
 
   emit("submit", {
-    name: name.value,
-    email: email.value,
-    password: password.value,
-    terms: terms.value,
+    name: formData.name,
+    email: formData.email,
+    password: formData.password,
+    terms: formData.terms,
   });
-};
-
-const handleKeyPress = (e: KeyboardEvent) => {
-  if (e.key === "Enter" && isValid.value) {
-    handleSubmit();
-  }
 };
 </script>
 
@@ -112,11 +121,12 @@ const handleKeyPress = (e: KeyboardEvent) => {
     <!-- Register Form -->
     <form
       class="space-y-3"
+      novalidate
       @submit.prevent="handleSubmit"
     >
       <!-- Name -->
       <VInput
-        v-model="name"
+        v-model="formData.name"
         type="text"
         name="Full Name"
         placeholder="Enter your full name"
@@ -124,12 +134,12 @@ const handleKeyPress = (e: KeyboardEvent) => {
         size="sm"
         :disabled="loading"
         autocomplete="name"
-        @keypress="handleKeyPress"
+        :validation="v$.name"
       />
 
       <!-- Email -->
       <VInput
-        v-model="email"
+        v-model="formData.email"
         type="email"
         name="Email"
         placeholder="Enter your email"
@@ -137,13 +147,13 @@ const handleKeyPress = (e: KeyboardEvent) => {
         size="sm"
         :disabled="loading"
         autocomplete="email"
-        @keypress="handleKeyPress"
+        :validation="v$.email"
       />
 
       <!-- Password with inline strength -->
       <div>
         <VInput
-          v-model="password"
+          v-model="formData.password"
           type="password"
           name="Password"
           placeholder="Create a password"
@@ -151,12 +161,12 @@ const handleKeyPress = (e: KeyboardEvent) => {
           size="sm"
           :disabled="loading"
           autocomplete="new-password"
-          @keypress="handleKeyPress"
+          :validation="v$.password"
         />
         <!-- Inline Password Strength -->
         <div
-          v-if="password.length > 0"
-          class="flex gap-1 mt-1"
+          v-if="formData.password.length > 0"
+          class="flex gap-1 mt-1.5 px-0.5"
         >
           <div
             v-for="i in 4"
@@ -174,46 +184,46 @@ const handleKeyPress = (e: KeyboardEvent) => {
       </div>
 
       <!-- Confirm Password -->
-      <div>
-        <VInput
-          v-model="confirmPassword"
-          type="password"
-          name="Confirm Password"
-          placeholder="Confirm your password"
-          icon="mdi:lock-check-outline"
-          size="sm"
-          :disabled="loading"
-          autocomplete="new-password"
-          @keypress="handleKeyPress"
-        />
-        <p
-          v-if="confirmPassword && !passwordsMatch"
-          class="text-xs text-error mt-1"
-        >
-          Passwords do not match
-        </p>
-      </div>
+      <VInput
+        v-model="formData.confirmPassword"
+        type="password"
+        name="Confirm Password"
+        placeholder="Confirm your password"
+        icon="mdi:lock-check-outline"
+        size="sm"
+        :disabled="loading"
+        autocomplete="new-password"
+        :validation="v$.confirmPassword"
+      />
 
       <!-- Terms -->
-      <VCheckbox
-        v-model="terms"
-        :disabled="loading"
-      >
-        <template #label>
-          <span class="text-xs text-secondaryText">
-            I agree to the
-            <a
-              href="#"
-              class="text-primary hover:text-primary-dark"
-            >Terms</a>
-            and
-            <a
-              href="#"
-              class="text-primary hover:text-primary-dark"
-            >Privacy Policy</a>
-          </span>
-        </template>
-      </VCheckbox>
+      <div class="space-y-1">
+        <VCheckbox
+          v-model="formData.terms"
+          :disabled="loading"
+        >
+          <template #label>
+            <span class="text-xs text-secondaryText">
+              I agree to the
+              <a
+                href="#"
+                class="text-primary hover:text-primary-dark"
+              >Terms</a>
+              and
+              <a
+                href="#"
+                class="text-primary hover:text-primary-dark"
+              >Privacy Policy</a>
+            </span>
+          </template>
+        </VCheckbox>
+        <p
+          v-if="v$.terms.$error"
+          class="text-xs text-negative px-1"
+        >
+          {{ v$.terms.$errors[0].$message }}
+        </p>
+      </div>
 
       <!-- Submit Button -->
       <VButton
@@ -221,7 +231,7 @@ const handleKeyPress = (e: KeyboardEvent) => {
         variant="primary"
         text="Create Account"
         :loader="loading"
-        :disabled="!isValid || loading"
+        :disabled="loading"
         class="w-full"
       />
     </form>
@@ -235,17 +245,8 @@ const handleKeyPress = (e: KeyboardEvent) => {
   75% { transform: translateX(8px); }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 .animate-shake {
   animation: shake 0.4s ease-in-out;
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.3s ease-out;
 }
 </style>
 

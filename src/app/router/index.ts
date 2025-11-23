@@ -1,8 +1,8 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
 import "@/app/layouts/types";
-import { authGuard } from "@/app/router/guards";
 import modules from "@/app/router/modules"; // Import layout types for TypeScript support
+import { authGuard } from "@/app/router/utils/guards";
 
 /**
  * Application routes configuration

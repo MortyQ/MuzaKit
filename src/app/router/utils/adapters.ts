@@ -1,4 +1,4 @@
-import type { MenuItem } from "@/app/router/types";
+import type { MenuItem } from "@/app/router/types/types";
 import type { SidebarNavItem } from "@/widgets/sidebar/types";
 
 /**

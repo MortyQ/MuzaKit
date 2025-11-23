@@ -2,8 +2,8 @@
 import { computed } from "vue";
 import { RouterView } from "vue-router";
 
-import { menuItemsToSidebarConfig } from "@/app/router/adapters";
 import { menuItems } from "@/app/router/modules";
+import { menuItemsToSidebarConfig } from "@/app/router/utils/adapters";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import { Sidebar, useSidebar } from "@/widgets/sidebar";
 import type { SidebarConfig } from "@/widgets/sidebar";

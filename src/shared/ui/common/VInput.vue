@@ -1,17 +1,21 @@
 <script setup lang="ts">
 import DOMPurify from "dompurify";
 import debounceFunc from "lodash.debounce";
-import { ref, computed, useId, onUnmounted, useSlots } from "vue";
+import { ref, computed, useId, onUnmounted, useSlots, type Ref } from "vue";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
 
 type ValidationError = {
-  $message: string;
+  $message: string | Ref<string>;
+  [key: string]: any;
 };
 
 type Validation = {
-  $error: boolean;
-  $errors: ValidationError[];
+  $error?: boolean;
+  $errors?: ValidationError[];
+  $dirty?: boolean;
+  $touch?: () => void;
+  [key: string]: any;
 };
 
 type Props = {

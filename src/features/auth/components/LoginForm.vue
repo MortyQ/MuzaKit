@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required, email, minLength, helpers } from "@vuelidate/validators";
+import { computed, reactive } from "vue";
 
 import SocialLogin from "./SocialLogin.vue";
 
 import VButton from "@/shared/ui/common/VButton.vue";
 import VCheckbox from "@/shared/ui/common/VCheckbox.vue";
 import VInput from "@/shared/ui/common/VInput.vue";
-
 
 interface Props {
   loading?: boolean;
@@ -21,28 +22,35 @@ const emit = defineEmits<{
   forgotPassword: [];
 }>();
 
-const email = ref("");
-const password = ref("");
-const remember = ref(false);
-
-const isValid = computed(() => {
-  return email.value.length > 0 && password.value.length > 0;
+const formData = reactive({
+  email: "",
+  password: "",
+  remember: false,
 });
 
-const handleSubmit = () => {
-  if (!isValid.value || props.loading) return;
+const rules = computed(() => ({
+  email: {
+    required: helpers.withMessage("Email is required", required),
+    email: helpers.withMessage("Please enter a valid email", email),
+  },
+  password: {
+    required: helpers.withMessage("Password is required", required),
+    minLength: helpers.withMessage("Password must be at least 6 characters", minLength(6)),
+  },
+}));
+
+const v$ = useVuelidate(rules, formData);
+
+const handleSubmit = async () => {
+  const isValid = await v$.value.$validate();
+
+  if (!isValid || props.loading) return;
 
   emit("submit", {
-    email: email.value,
-    password: password.value,
-    remember: remember.value,
+    email: formData.email,
+    password: formData.password,
+    remember: formData.remember,
   });
-};
-
-const handleKeyPress = (e: KeyboardEvent) => {
-  if (e.key === "Enter" && isValid.value) {
-    handleSubmit();
-  }
 };
 </script>
 
@@ -79,38 +87,43 @@ const handleKeyPress = (e: KeyboardEvent) => {
     <!-- Login Form -->
     <form
       class="space-y-3"
+      novalidate
       @submit.prevent="handleSubmit"
     >
       <!-- Email -->
-      <VInput
-        v-model="email"
-        type="email"
-        name="Email"
-        placeholder="Enter your email"
-        icon="mdi:email-outline"
-        size="sm"
-        :disabled="loading"
-        autocomplete="email"
-        @keypress="handleKeyPress"
-      />
+      <div class="space-y-1">
+        <VInput
+          v-model="formData.email"
+          type="email"
+          name="Email"
+          placeholder="Enter your email"
+          icon="mdi:email-outline"
+          size="sm"
+          :disabled="loading"
+          autocomplete="email"
+          :validation="v$.email"
+        />
+      </div>
 
       <!-- Password -->
-      <VInput
-        v-model="password"
-        type="password"
-        name="Password"
-        placeholder="Enter your password"
-        icon="mdi:lock-outline"
-        size="sm"
-        :disabled="loading"
-        autocomplete="current-password"
-        @keypress="handleKeyPress"
-      />
+      <div class="space-y-1">
+        <VInput
+          v-model="formData.password"
+          type="password"
+          name="Password"
+          placeholder="Enter your password"
+          icon="mdi:lock-outline"
+          size="sm"
+          :disabled="loading"
+          autocomplete="current-password"
+          :validation="v$.password"
+        />
+      </div>
 
       <!-- Remember & Forgot -->
       <div class="flex items-center justify-between pt-0.5">
         <VCheckbox
-          v-model="remember"
+          v-model="formData.remember"
           label="Remember me"
           :disabled="loading"
         />
@@ -131,7 +144,7 @@ const handleKeyPress = (e: KeyboardEvent) => {
         variant="primary"
         text="Sign In"
         :loader="loading"
-        :disabled="!isValid || loading"
+        :disabled="loading"
         class="w-full !mt-4"
       />
 
@@ -141,7 +154,11 @@ const handleKeyPress = (e: KeyboardEvent) => {
           type="button"
           :disabled="loading"
           class="text-xs text-secondaryText hover:text-mainText transition-colors"
-          @click="email = 'demo@example.com'; password = 'password'; handleSubmit();"
+          @click="
+            formData.email = 'demo@example.com';
+            formData.password = 'password123';
+            handleSubmit();
+          "
         >
           Use demo account
         </button>

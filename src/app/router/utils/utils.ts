@@ -1,6 +1,6 @@
 import type { RouteRecordRaw } from "vue-router";
 
-import type { MenuItem, RouteMeta } from "./types";
+import type { MenuItem, RouteMeta } from "../types/types";
 
 /**
  * Convert routes to menu items
