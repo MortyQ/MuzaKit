@@ -3,6 +3,8 @@ import { computed } from "vue";
 
 import VIcon from "./VIcon.vue";
 
+import VTag from "@/shared/ui/common/VTag.vue";
+
 export type ChipVariant = "filled" | "outlined" | "soft";
 
 export type ChipColor =
@@ -101,30 +103,35 @@ const handleClose = (event: MouseEvent) => {
     class="vchip"
     @click="handleClick"
   >
-    <!-- Left Icon -->
-    <VIcon
-      v-if="icon"
-      :icon="icon"
-      :size="iconSize"
-    />
+    <!-- Content wrapper -->
+    <span class="vchip__content">
+      <!-- Left Icon -->
+      <VIcon
+        v-if="icon"
+        :icon="icon"
+        :size="iconSize"
+        class="vchip__icon"
+      />
 
-    <!-- Label or Slot Content -->
-    <span
-      v-if="label || $slots.default"
-      class="vchip__label"
-    >
-      <slot>{{ label }}</slot>
+      <!-- Label or Slot Content -->
+      <span
+        v-if="label || $slots.default"
+        class="vchip__label"
+      >
+        <slot>{{ label }}</slot>
+      </span>
+
+      <!-- Badge (positioned after label like on screenshot) -->
+      <VTag
+        v-if="badge"
+        variant="outline"
+        color="primary"
+        :label="badge"
+        size="sm"
+      />
     </span>
 
-    <!-- Badge -->
-    <span
-      v-if="badge"
-      class="vchip__badge"
-    >
-      {{ badge }}
-    </span>
-
-    <!-- Close Button -->
+    <!-- Close Button (outside of content wrapper) -->
     <button
       v-if="closable"
       class="vchip__close"
@@ -134,12 +141,8 @@ const handleClose = (event: MouseEvent) => {
     >
       <VIcon
         icon="lucide:x"
-        :size="iconSize"
+        :size="iconSize - 2"
       />
     </button>
   </span>
 </template>
-
-<style scoped lang="scss">
-// Component styles are in /src/shared/assets/styles/components/_vchip.scss
-</style>

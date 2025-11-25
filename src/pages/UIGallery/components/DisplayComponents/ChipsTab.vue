@@ -88,7 +88,7 @@ const removeSubcategory = (index: number) => {
           v-if="selectedCategory"
           :label="selectedCategory.name"
           icon="lucide:tag"
-          badge="Category"
+          badge="CATEGORY"
           variant="outlined"
           color="primary"
           :active="true"
@@ -102,6 +102,7 @@ const removeSubcategory = (index: number) => {
           icon="lucide:hash"
           variant="outlined"
           color="warning"
+          class="text-mainText"
           closable
           @close="removeSubcategory(index)"
         />
