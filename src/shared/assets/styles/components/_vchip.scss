@@ -140,6 +140,28 @@
 
 
 /* ===== SOFT VARIANT (Light backgrounds like first screenshot) ===== */
+
+/* Default color - neutral mainText color that changes on selection */
+.vchip--soft-default {
+  background-color: transparent;
+  color: var(--text-mainText);
+  border: 2px solid theme('colors.neutral-100');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-100');
+  }
+}
+
+[data-theme="dark"] .vchip--soft-default {
+  background-color: transparent;
+  color: var(--text-mainText);
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-800');
+  }
+}
+
 .vchip--soft-primary {
   background-color: theme('colors.primary-50');
   color: theme('colors.primary-dark');
@@ -365,6 +387,27 @@
 }
 
 /* ===== OUTLINED VARIANT (Thin borders like first screenshot) ===== */
+
+/* Default color - neutral mainText color that changes on selection */
+.vchip--outlined-default {
+  background-color: transparent;
+  color: var(--text-mainText);
+  border: 2px solid theme('colors.neutral-300');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-50');
+  }
+}
+
+[data-theme="dark"] .vchip--outlined-default {
+  color: var(--text-mainText);
+  border: 2px solid theme('colors.neutral-700');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-800');
+  }
+}
+
 .vchip--outlined-primary {
   background-color: transparent;
   color: theme('colors.primary');
@@ -583,6 +626,30 @@
 }
 
 /* ===== FILLED VARIANT (Bold colors) ===== */
+
+/* Default color - neutral mainText color that changes on selection */
+.vchip--filled-default {
+  background-color: theme('colors.neutral-200');
+  color: var(--text-mainText);
+  border: 1px solid theme('colors.neutral-300');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-300');
+    border-color: theme('colors.neutral-400');
+  }
+}
+
+[data-theme="dark"] .vchip--filled-default {
+  background-color: theme('colors.neutral-700');
+  color: var(--text-mainText);
+  border: 1px solid theme('colors.neutral-600');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-600');
+    border-color: theme('colors.neutral-500');
+  }
+}
+
 .vchip--filled-primary {
   background-color: theme('colors.primary');
   color: theme('colors.white');

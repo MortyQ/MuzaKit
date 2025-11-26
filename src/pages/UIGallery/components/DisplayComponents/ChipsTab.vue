@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+import { MultipleSelectValue, SingleSelectValue } from "@/shared/types";
 import VCard from "@/shared/ui/common/VCard.vue";
 import VChip from "@/shared/ui/common/VChip.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
@@ -20,6 +21,20 @@ const selectedSubcategories = ref([
   { id: "3", name: "Random Subcategory Nail Powders" },
 ]);
 
+// V-Model example data (with type-safe approach)
+const selectedChip = ref<SingleSelectValue<string>>("option1");
+const multiSelectChips = ref<MultipleSelectValue<string>>(["feature1", "feature3"]);
+
+// V-Model with objects example
+type User = { id: number; name: string };
+const selectedUser = ref<SingleSelectValue<User>>({ id: 2, name: "Alice" });
+const users: User[] = [
+  { id: 1, name: "John" },
+  { id: 2, name: "Alice" },
+  { id: 3, name: "Bob" },
+  { id: 4, name: "Emma" },
+];
+
 const toggleFilter = (id: string) => {
   const index = selectedFilters.value.indexOf(id);
   if (index > -1) {
@@ -28,6 +43,38 @@ const toggleFilter = (id: string) => {
     selectedFilters.value.push(id);
   }
 };
+
+const vModelExampleCode = `<` + `script setup lang="ts">
+import { ref } from 'vue';
+import type { SingleSelectValue, MultipleSelectValue } from '@/shared/ui/common/types';
+
+// Single selection (type-safe)
+const selectedChip = ref<SingleSelectValue<string>>('option1');
+
+// Multiple selection (type-safe)
+const multiSelectChips = ref<MultipleSelectValue<string>>(['feature1', 'feature3']);
+</` + `script>
+
+<template>
+  <!-- Single Selection -->
+  <VChip
+    v-model="selectedChip"
+    label="Option 1"
+    value="option1"
+    color="default"
+    selected-color="primary"
+  />
+
+  <!-- Multiple Selection -->
+  <VChip
+    v-model="multiSelectChips"
+    label="Feature A"
+    value="feature1"
+    color="default"
+    selected-color="primary"
+    multiple
+  />
+</template>`;
 
 const removeTag = (index: number) => {
   tags.value.splice(index, 1);
@@ -224,6 +271,67 @@ const removeSubcategory = (index: number) => {
 &lt;VChip label="Error" color="error" /&gt;
 &lt;VChip label="Info" color="info" /&gt;
 &lt;VChip label="Neutral" color="neutral" /&gt;</code></pre>
+        </div>
+      </section>
+
+      <!-- Default Color -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          Default Color with Dynamic Selection
+        </h4>
+        <p class="text-secondaryText mb-3 text-sm">
+          Use <code>color="default"</code> for neutral chips that adopt a color when selected.
+          Set <code>selectedColor</code> to control the active color.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <VChip
+            label="Default (Primary on select)"
+            color="default"
+            icon="lucide:tag"
+            :active="selectedFilters.includes('default-primary')"
+            @click="toggleFilter('default-primary')"
+          />
+          <VChip
+            label="Default (Success on select)"
+            color="default"
+            selected-color="success"
+            icon="lucide:check"
+            :active="selectedFilters.includes('default-success')"
+            @click="toggleFilter('default-success')"
+          />
+          <VChip
+            label="Default (Warning on select)"
+            color="default"
+            selected-color="warning"
+            icon="lucide:alert-circle"
+            :active="selectedFilters.includes('default-warning')"
+            @click="toggleFilter('default-warning')"
+          />
+          <VChip
+            label="Default (Error on select)"
+            color="default"
+            selected-color="error"
+            icon="lucide:x"
+            :active="selectedFilters.includes('default-error')"
+            @click="toggleFilter('default-error')"
+          />
+        </div>
+
+        <div class="code-block mt-4">
+          <pre><code>&lt;VChip
+  label="Default (Primary on select)"
+  color="default"
+  selected-color="primary"
+  :active="isSelected"
+  @click="toggle"
+/&gt;
+&lt;VChip
+  label="Default (Success on select)"
+  color="default"
+  selected-color="success"
+  :active="isSelected"
+  @click="toggle"
+/&gt;</code></pre>
         </div>
       </section>
 
@@ -430,6 +538,205 @@ const removeSubcategory = (index: number) => {
   closable
   @close="removeTag"
 /&gt;</code></pre>
+        </div>
+      </section>
+
+      <!-- V-Model Pattern - Single Select -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          V-Model Pattern - Single Select
+        </h4>
+        <p class="text-secondaryText mb-3 text-sm">
+          Use <code>v-model</code> for automatic state management.
+          Perfect for single-choice selections (radio-like behavior).
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <VChip
+            v-model="selectedChip"
+            label="Option 1"
+            value="option1"
+            color="default"
+            selected-color="primary"
+            icon="lucide:circle-dot"
+          />
+          <VChip
+            v-model="selectedChip"
+            label="Option 2"
+            value="option2"
+            color="default"
+            selected-color="success"
+            icon="lucide:circle-dot"
+          />
+          <VChip
+            v-model="selectedChip"
+            label="Option 3"
+            value="option3"
+            color="default"
+            selected-color="warning"
+            icon="lucide:circle-dot"
+          />
+          <VChip
+            v-model="selectedChip"
+            label="Option 4"
+            value="option4"
+            color="default"
+            selected-color="info"
+            icon="lucide:circle-dot"
+          />
+        </div>
+        <p class="text-sm text-secondaryText mt-3">
+          Selected: <span class="font-semibold">{{ selectedChip || "None" }}</span>
+        </p>
+
+        <div class="code-block mt-4">
+          <pre><code>{{ vModelExampleCode }}</code></pre>
+        </div>
+      </section>
+
+      <!-- V-Model Pattern - Multi Select -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          V-Model Pattern - Multi Select
+        </h4>
+        <p class="text-secondaryText mb-3 text-sm">
+          For multi-select, use an array and add <code>multiple</code> prop.
+          Perfect for filter chips and tag selections.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <VChip
+            v-model="multiSelectChips"
+            label="Feature A"
+            value="feature1"
+            color="default"
+            selected-color="primary"
+            icon="lucide:check"
+            multiple
+          />
+          <VChip
+            v-model="multiSelectChips"
+            label="Feature B"
+            value="feature2"
+            color="default"
+            selected-color="success"
+            icon="lucide:check"
+            multiple
+          />
+          <VChip
+            v-model="multiSelectChips"
+            label="Feature C"
+            value="feature3"
+            color="default"
+            selected-color="warning"
+            icon="lucide:check"
+            multiple
+          />
+          <VChip
+            v-model="multiSelectChips"
+            label="Feature D"
+            value="feature4"
+            color="default"
+            selected-color="info"
+            icon="lucide:check"
+            multiple
+          />
+          <VChip
+            v-model="multiSelectChips"
+            label="Feature E"
+            value="feature5"
+            color="default"
+            selected-color="error"
+            icon="lucide:check"
+            multiple
+          />
+        </div>
+        <p class="text-sm text-secondaryText mt-3">
+          Selected:
+          <span class="font-semibold">
+            {{ multiSelectChips.length > 0 ? multiSelectChips.join(", ") : "None" }}
+          </span>
+        </p>
+
+        <div class="code-block mt-4">
+          <pre><code>&lt;VChip
+  v-model="multiSelectChips"
+  label="Feature A"
+  value="feature1"
+  color="default"
+  selected-color="primary"
+  multiple
+/&gt;</code></pre>
+        </div>
+      </section>
+
+      <!-- V-Model with Objects -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          V-Model with Complex Objects
+        </h4>
+        <p class="text-secondaryText mb-3 text-sm">
+          VChip automatically handles object comparison using deep equality.
+          Works seamlessly with objects as values without additional configuration.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <VChip
+            v-for="user in users"
+            :key="user.id"
+            v-model="selectedUser"
+            :label="user.name"
+            :value="user"
+            color="default"
+            selected-color="primary"
+            icon="lucide:user"
+          />
+        </div>
+        <p class="text-sm text-secondaryText mt-3">
+          Selected user:
+          <span class="font-semibold">
+            {{ selectedUser ? `${selectedUser.name} (ID: ${selectedUser.id})` : "None" }}
+          </span>
+        </p>
+
+        <div class="code-block mt-4">
+          <pre><code>&lt;script setup lang="ts"&gt;
+import { ref } from 'vue';
+import type { SingleSelectValue } from '@/shared/ui/common/types';
+
+// Define your type
+type User = { id: number; name: string };
+
+// Type-safe ref with SingleSelectValue helper
+const selectedUser = ref&lt;SingleSelectValue&lt;User&gt;&gt;({ id: 2, name: 'Alice' });
+
+const users: User[] = [
+  { id: 1, name: 'John' },
+  { id: 2, name: 'Alice' },
+  { id: 3, name: 'Bob' },
+];
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;!-- Objects work automatically with deep equality --&gt;
+  &lt;VChip
+    v-for="user in users"
+    :key="user.id"
+    v-model="selectedUser"
+    :label="user.name"
+    :value="user"
+    color="default"
+    selected-color="primary"
+  /&gt;
+&lt;/template&gt;</code></pre>
+        </div>
+
+        <div class="info-note mt-4">
+          <VIcon
+            icon="lucide:lightbulb"
+            :size="16"
+          />
+          <span>
+            For custom comparison logic, use the <code>valueComparator</code> prop:
+            <code>:value-comparator="(a, b) => a.id === b.id"</code>
+          </span>
         </div>
       </section>
 
@@ -795,6 +1102,30 @@ const removeSubcategory = (index: number) => {
               <td><code>''</code></td>
               <td>Custom CSS class</td>
             </tr>
+            <tr>
+              <td><code>value</code></td>
+              <td><code>any</code></td>
+              <td><code>undefined</code></td>
+              <td>Value for v-model (unique identifier, supports primitives and objects)</td>
+            </tr>
+            <tr>
+              <td><code>modelValue</code></td>
+              <td><code>any</code></td>
+              <td><code>undefined</code></td>
+              <td>Model value for v-model binding</td>
+            </tr>
+            <tr>
+              <td><code>multiple</code></td>
+              <td><code>boolean</code></td>
+              <td><code>false</code></td>
+              <td>Enable multiple selection mode (array modelValue)</td>
+            </tr>
+            <tr>
+              <td><code>valueComparator</code></td>
+              <td><code>(a: any, b: any) => boolean</code></td>
+              <td><code>undefined</code></td>
+              <td>Custom comparison function for complex values</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -817,6 +1148,9 @@ const removeSubcategory = (index: number) => {
           <li>
             <code>@close</code> - Emitted when close button is clicked (MouseEvent)
           </li>
+          <li>
+            <code>@update:modelValue</code> - Emitted when v-model value changes (any)
+          </li>
         </ul>
       </div>
 
@@ -829,6 +1163,56 @@ const removeSubcategory = (index: number) => {
             <code>default</code> - Custom content to replace label text
           </li>
         </ul>
+      </div>
+
+      <div class="composable-section mt-6">
+        <h4 class="text-base font-semibold text-mainText mb-3">
+          TypeScript Types
+        </h4>
+        <p class="text-sm text-secondaryText mb-3">
+          Import helper types from <code>@/shared/ui/common/types</code>
+          for type-safe v-model usage:
+        </p>
+        <ul class="composable-list">
+          <li>
+            <code>VModelValue</code> - Base type for any v-model value (string | number | boolean |
+            object | null | undefined)
+          </li>
+          <li>
+            <code>SingleSelectValue&lt;T&gt;</code> - Type for single selection (T | null)
+          </li>
+          <li>
+            <code>MultipleSelectValue&lt;T&gt;</code> - Type for multiple selection (T[])
+          </li>
+          <li>
+            <code>SelectValue&lt;T&gt;</code> - Union type for both single and multiple selection
+          </li>
+          <li>
+            <code>ValueComparator&lt;T&gt;</code> - Type for custom comparison functions
+          </li>
+        </ul>
+
+        <div class="code-block mt-4">
+          <pre><code>// Example with TypeScript
+import type {
+  SingleSelectValue,
+  MultipleSelectValue,
+  ValueComparator
+} from '@/shared/ui/common/types';
+
+// Single select
+const selected = ref&lt;SingleSelectValue&lt;string&gt;&gt;('option1');
+
+// Multiple select
+const filters = ref&lt;MultipleSelectValue&lt;string&gt;&gt;(['filter1', 'filter2']);
+
+// With custom objects
+type Product = { id: number; name: string };
+const selectedProduct = ref&lt;SingleSelectValue&lt;Product&gt;&gt;(null);
+
+// Custom comparator
+const comparator: ValueComparator&lt;Product&gt; = (a, b) => a.id === b.id;</code></pre>
+        </div>
       </div>
     </VCard>
   </div>
