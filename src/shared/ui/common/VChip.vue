@@ -3,7 +3,7 @@ import { computed } from "vue";
 
 import VIcon from "./VIcon.vue";
 
-import VTag from "@/shared/ui/common/VTag.vue";
+import VTag, { type TagColor } from "@/shared/ui/common/VTag.vue";
 
 export type ChipVariant = "filled" | "outlined" | "soft";
 
@@ -37,6 +37,8 @@ interface Props {
   disabled?: boolean;
   /** Custom badge text (e.g., "Category", "New") */
   badge?: string;
+  /** Badge color theme */
+  badgeColor?: TagColor;
   /** Custom class */
   class?: string;
 }
@@ -51,6 +53,7 @@ const props = withDefaults(defineProps<Props>(), {
   active: false,
   disabled: false,
   badge: undefined,
+  badgeColor: "primary",
   class: "",
 });
 
@@ -75,7 +78,7 @@ const sizeClass = computed(() => `vchip--${props.size}`);
 // Variant and color class
 const variantColorClass = computed(() => {
   const base = `vchip--${props.variant}-${props.color}`;
-  return props.active ? `${base}-active` : base;
+  return props.active ? `${base}-selected` : base;
 });
 
 // State class
@@ -122,13 +125,15 @@ const handleClose = (event: MouseEvent) => {
       </span>
 
       <!-- Badge (positioned after label like on screenshot) -->
-      <VTag
-        v-if="badge"
-        variant="outline"
-        color="primary"
-        :label="badge"
-        size="sm"
-      />
+      <slot name="badge">
+        <VTag
+          v-if="badge"
+          variant="outline"
+          :color="badgeColor"
+          :label="badge"
+          size="sm"
+        />
+      </slot>
     </span>
 
     <!-- Close Button (outside of content wrapper) -->

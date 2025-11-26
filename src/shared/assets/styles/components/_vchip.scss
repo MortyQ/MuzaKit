@@ -9,6 +9,7 @@
   transition: all theme('transitionDuration.150') ease;
   position: relative;
   line-height: 1.4;
+  border: 2px solid transparent;
 }
 
 /* Content Wrapper */
@@ -22,7 +23,7 @@
 .vchip--sm {
   font-size: theme('fontSize.xs');
   padding: 0.25rem 0.75rem;
-  min-height: 26px;
+  height: 28px; /* Fixed height to accommodate badge */
   border-radius: theme('borderRadius.md');
 
   .vchip__content {
@@ -33,7 +34,7 @@
 .vchip--md {
   font-size: theme('fontSize.sm');
   padding: 0.375rem 1rem;
-  min-height: 32px;
+  height: 36px; /* Fixed height to accommodate badge */
   border-radius: theme('borderRadius.lg');
 
   .vchip__content {
@@ -44,7 +45,7 @@
 .vchip--lg {
   font-size: theme('fontSize.base');
   padding: 0.5rem 1.25rem;
-  min-height: 38px;
+  height: 42px; /* Fixed height to accommodate badge */
   border-radius: theme('borderRadius.lg');
 
   .vchip__content {
@@ -137,10 +138,6 @@
   pointer-events: none;
 }
 
-/* Active state - apply to all active chips */
-[class*="-active"] {
-  border-width: 2px;
-}
 
 /* ===== SOFT VARIANT (Light backgrounds like first screenshot) ===== */
 .vchip--soft-primary {
@@ -163,13 +160,13 @@
   }
 }
 
-.vchip--soft-primary-active {
+.vchip--soft-primary-selected {
   background-color: theme('colors.primary-200');
   color: theme('colors.primary-dark');
   border-color: theme('colors.primary-600');
 }
 
-[data-theme="dark"] .vchip--soft-primary-active {
+[data-theme="dark"] .vchip--soft-primary-selected {
   background-color: theme('colors.primary-800');
   color: theme('colors.primary-light');
   border-color: theme('colors.primary-400');
@@ -195,13 +192,13 @@
   }
 }
 
-.vchip--soft-secondary-active {
+.vchip--soft-secondary-selected {
   background-color: theme('colors.neutral-300');
   color: theme('colors.neutral-800');
   border-color: theme('colors.neutral-600');
 }
 
-[data-theme="dark"] .vchip--soft-secondary-active {
+[data-theme="dark"] .vchip--soft-secondary-selected {
   background-color: theme('colors.neutral-600');
   color: theme('colors.neutral-200');
   border-color: theme('colors.neutral-500');
@@ -227,13 +224,13 @@
   }
 }
 
-.vchip--soft-success-active {
+.vchip--soft-success-selected {
   background-color: theme('colors.success-200');
   color: theme('colors.success-dark');
   border-color: theme('colors.success-700');
 }
 
-[data-theme="dark"] .vchip--soft-success-active {
+[data-theme="dark"] .vchip--soft-success-selected {
   background-color: theme('colors.success-700');
   color: theme('colors.success-300');
   border-color: theme('colors.success-400');
@@ -259,13 +256,13 @@
   }
 }
 
-.vchip--soft-warning-active {
+.vchip--soft-warning-selected {
   background-color: theme('colors.warning-200');
   color: theme('colors.warning-dark');
   border-color: theme('colors.warning-700');
 }
 
-[data-theme="dark"] .vchip--soft-warning-active {
+[data-theme="dark"] .vchip--soft-warning-selected {
   background-color: theme('colors.warning-700');
   color: theme('colors.warning-300');
   border-color: theme('colors.warning-400');
@@ -291,13 +288,13 @@
   }
 }
 
-.vchip--soft-error-active {
+.vchip--soft-error-selected {
   background-color: theme('colors.error-200');
   color: theme('colors.error-dark');
   border-color: theme('colors.error-700');
 }
 
-[data-theme="dark"] .vchip--soft-error-active {
+[data-theme="dark"] .vchip--soft-error-selected {
   background-color: theme('colors.error-700');
   color: theme('colors.error-300');
   border-color: theme('colors.error-400');
@@ -323,13 +320,13 @@
   }
 }
 
-.vchip--soft-info-active {
+.vchip--soft-info-selected {
   background-color: theme('colors.info-200');
   color: theme('colors.info-dark');
   border-color: theme('colors.info-700');
 }
 
-[data-theme="dark"] .vchip--soft-info-active {
+[data-theme="dark"] .vchip--soft-info-selected {
   background-color: theme('colors.info-700');
   color: theme('colors.info-300');
   border-color: theme('colors.info-400');
@@ -355,13 +352,13 @@
   }
 }
 
-.vchip--soft-neutral-active {
+.vchip--soft-neutral-selected {
   background-color: theme('colors.neutral-300');
   color: theme('colors.neutral-800');
   border-color: theme('colors.neutral-600');
 }
 
-[data-theme="dark"] .vchip--soft-neutral-active {
+[data-theme="dark"] .vchip--soft-neutral-selected {
   background-color: theme('colors.neutral-600');
   color: theme('colors.neutral-200');
   border-color: theme('colors.neutral-500');
@@ -387,13 +384,13 @@
   }
 }
 
-.vchip--outlined-primary-active {
+.vchip--outlined-primary-selected {
   background-color: theme('colors.primary-100');
   color: theme('colors.primary-dark');
   border-color: theme('colors.primary-600');
 }
 
-[data-theme="dark"] .vchip--outlined-primary-active {
+[data-theme="dark"] .vchip--outlined-primary-selected {
   background-color: theme('colors.primary-800');
   color: theme('colors.primary-light');
   border-color: theme('colors.primary-400');
@@ -418,13 +415,13 @@
   }
 }
 
-.vchip--outlined-secondary-active {
+.vchip--outlined-secondary-selected {
   background-color: theme('colors.neutral-200');
   color: theme('colors.neutral-800');
   border-color: theme('colors.neutral-700');
 }
 
-[data-theme="dark"] .vchip--outlined-secondary-active {
+[data-theme="dark"] .vchip--outlined-secondary-selected {
   background-color: theme('colors.neutral-700');
   color: theme('colors.neutral-200');
   border-color: theme('colors.neutral-400');
@@ -449,13 +446,13 @@
   }
 }
 
-.vchip--outlined-success-active {
+.vchip--outlined-success-selected {
   background-color: theme('colors.success-100');
   color: theme('colors.success-dark');
   border-color: theme('colors.success-700');
 }
 
-[data-theme="dark"] .vchip--outlined-success-active {
+[data-theme="dark"] .vchip--outlined-success-selected {
   background-color: theme('colors.success-800');
   color: theme('colors.success-300');
   border-color: theme('colors.success-400');
@@ -480,13 +477,13 @@
   }
 }
 
-.vchip--outlined-warning-active {
+.vchip--outlined-warning-selected {
   background-color: theme('colors.warning-100');
   color: theme('colors.warning-dark');
   border-color: theme('colors.warning-700');
 }
 
-[data-theme="dark"] .vchip--outlined-warning-active {
+[data-theme="dark"] .vchip--outlined-warning-selected {
   background-color: theme('colors.warning-800');
   color: theme('colors.warning-300');
   border-color: theme('colors.warning-400');
@@ -511,13 +508,13 @@
   }
 }
 
-.vchip--outlined-error-active {
+.vchip--outlined-error-selected {
   background-color: theme('colors.error-100');
   color: theme('colors.error-dark');
   border-color: theme('colors.error-700');
 }
 
-[data-theme="dark"] .vchip--outlined-error-active {
+[data-theme="dark"] .vchip--outlined-error-selected {
   background-color: theme('colors.error-800');
   color: theme('colors.error-300');
   border-color: theme('colors.error-400');
@@ -542,13 +539,13 @@
   }
 }
 
-.vchip--outlined-info-active {
+.vchip--outlined-info-selected {
   background-color: theme('colors.info-100');
   color: theme('colors.info-dark');
   border-color: theme('colors.info-700');
 }
 
-[data-theme="dark"] .vchip--outlined-info-active {
+[data-theme="dark"] .vchip--outlined-info-selected {
   background-color: theme('colors.info-800');
   color: theme('colors.info-300');
   border-color: theme('colors.info-400');
@@ -573,13 +570,13 @@
   }
 }
 
-.vchip--outlined-neutral-active {
+.vchip--outlined-neutral-selected {
   background-color: theme('colors.neutral-200');
   color: theme('colors.neutral-800');
   border-color: theme('colors.neutral-700');
 }
 
-[data-theme="dark"] .vchip--outlined-neutral-active {
+[data-theme="dark"] .vchip--outlined-neutral-selected {
   background-color: theme('colors.neutral-700');
   color: theme('colors.neutral-200');
   border-color: theme('colors.neutral-400');
@@ -597,7 +594,7 @@
   }
 }
 
-.vchip--filled-primary-active {
+.vchip--filled-primary-selected {
   background-color: theme('colors.primary-dark');
   color: theme('colors.white');
   border-color: theme('colors.primary-dark');
@@ -614,7 +611,7 @@
   }
 }
 
-.vchip--filled-secondary-active {
+.vchip--filled-secondary-selected {
   background-color: theme('colors.neutral-800');
   color: theme('colors.white');
   border-color: theme('colors.neutral-800');
@@ -631,7 +628,7 @@
   }
 }
 
-.vchip--filled-success-active {
+.vchip--filled-success-selected {
   background-color: theme('colors.success-dark');
   color: theme('colors.white');
   border-color: theme('colors.success-dark');
@@ -648,7 +645,7 @@
   }
 }
 
-.vchip--filled-warning-active {
+.vchip--filled-warning-selected {
   background-color: theme('colors.warning-dark');
   color: theme('colors.white');
   border-color: theme('colors.warning-dark');
@@ -665,7 +662,7 @@
   }
 }
 
-.vchip--filled-error-active {
+.vchip--filled-error-selected {
   background-color: theme('colors.error-dark');
   color: theme('colors.white');
   border-color: theme('colors.error-dark');
@@ -682,7 +679,7 @@
   }
 }
 
-.vchip--filled-info-active {
+.vchip--filled-info-selected {
   background-color: theme('colors.info-dark');
   color: theme('colors.white');
   border-color: theme('colors.info-dark');
@@ -699,7 +696,7 @@
   }
 }
 
-.vchip--filled-neutral-active {
+.vchip--filled-neutral-selected {
   background-color: theme('colors.neutral-800');
   color: theme('colors.white');
   border-color: theme('colors.neutral-800');

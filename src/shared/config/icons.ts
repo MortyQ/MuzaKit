@@ -342,6 +342,8 @@ export const iconMap: Record<string, Component> = {
   "lucide:droplet": defineAsyncComponent(() => import("~icons/lucide/droplet")),
   "lucide:alert-circle": defineAsyncComponent(() => import("~icons/lucide/alert-circle")),
   "lucide:flask-conical": defineAsyncComponent(() => import("~icons/lucide/flask-conical")),
+  "lucide:badge": defineAsyncComponent(() => import("~icons/lucide/badge")),
+  "lucide:square-slash": defineAsyncComponent(() => import("~icons/lucide/square-slash")),
 };
 
 /**
