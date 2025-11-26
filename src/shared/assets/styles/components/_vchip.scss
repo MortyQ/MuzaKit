@@ -1,0 +1,771 @@
+.vchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: theme('fontWeight.medium');
+  white-space: nowrap;
+  user-select: none;
+  border-radius: theme('borderRadius.lg'); /* Less rounded, more modern */
+  transition: all theme('transitionDuration.150') ease;
+  position: relative;
+  line-height: 1.4;
+  border: 2px solid transparent;
+}
+
+/* Content Wrapper */
+.vchip__content {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+/* ===== SIZES ===== */
+.vchip--sm {
+  font-size: theme('fontSize.xs');
+  padding: 0.25rem 0.75rem;
+  height: 28px; /* Fixed height to accommodate badge */
+  border-radius: theme('borderRadius.md');
+
+  .vchip__content {
+    gap: 0.25rem;
+  }
+}
+
+.vchip--md {
+  font-size: theme('fontSize.sm');
+  padding: 0.375rem 1rem;
+  height: 36px; /* Fixed height to accommodate badge */
+  border-radius: theme('borderRadius.lg');
+
+  .vchip__content {
+    gap: 0.375rem;
+  }
+}
+
+.vchip--lg {
+  font-size: theme('fontSize.base');
+  padding: 0.5rem 1.25rem;
+  height: 42px; /* Fixed height to accommodate badge */
+  border-radius: theme('borderRadius.lg');
+
+  .vchip__content {
+    gap: 0.5rem;
+  }
+}
+
+/* ===== ELEMENTS ===== */
+.vchip__icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.85;
+}
+
+.vchip__label {
+  line-height: 1.4;
+  font-weight: theme('fontWeight.medium');
+}
+
+/* Badge - Small uppercase label like "CATEGORY", "NEW" */
+.vchip__badge {
+  padding: 0.125rem 0.375rem;
+  font-size: 0.625rem;
+  line-height: 1.2;
+  border-radius: theme('borderRadius.sm');
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: rgba(255, 255, 255, 0.25);
+  color: inherit;
+  opacity: 0.9;
+}
+
+[data-theme="dark"] .vchip__badge {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Close Button - Red circle on hover like screenshot */
+.vchip__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.125rem;
+  margin-left: 0.375rem;
+  margin-right: -0.125rem;
+  border-radius: theme('borderRadius.full');
+  transition: all theme('transitionDuration.200');
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: currentColor;
+  opacity: 0.6;
+  width: 18px;
+  height: 18px;
+
+  &:hover:not(:disabled) {
+    opacity: 1;
+    background-color: theme('colors.error');
+    color: theme('colors.white');
+    transform: scale(1.1);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+/* ===== STATES ===== */
+.vchip--interactive {
+  cursor: pointer;
+  transition: all theme('transitionDuration.150') ease;
+
+  &:hover:not(.vchip--disabled) {
+    opacity: 0.9;
+  }
+
+  &:active:not(.vchip--disabled) {
+    opacity: 0.8;
+  }
+}
+
+.vchip--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+
+/* ===== SOFT VARIANT (Light backgrounds like first screenshot) ===== */
+
+/* Default color - neutral mainText color that changes on selection */
+.vchip--soft-default {
+  background-color: transparent;
+  color: var(--text-mainText);
+  border: 2px solid theme('colors.neutral-100');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-100');
+  }
+}
+
+[data-theme="dark"] .vchip--soft-default {
+  background-color: transparent;
+  color: var(--text-mainText);
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-800');
+  }
+}
+
+.vchip--soft-primary {
+  background-color: theme('colors.primary-50');
+  color: theme('colors.primary-dark');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.primary-100');
+  }
+}
+
+[data-theme="dark"] .vchip--soft-primary {
+  background-color: theme('colors.primary-900');
+  color: theme('colors.primary-light');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.primary-800');
+  }
+}
+
+.vchip--soft-primary-selected {
+  background-color: theme('colors.primary-200');
+  color: theme('colors.primary-dark');
+  border-color: theme('colors.primary-600');
+}
+
+[data-theme="dark"] .vchip--soft-primary-selected {
+  background-color: theme('colors.primary-800');
+  color: theme('colors.primary-light');
+  border-color: theme('colors.primary-400');
+}
+
+.vchip--soft-secondary {
+  background-color: theme('colors.neutral-100');
+  color: theme('colors.neutral-700');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-200');
+  }
+}
+
+[data-theme="dark"] .vchip--soft-secondary {
+  background-color: theme('colors.neutral-800');
+  color: theme('colors.neutral-300');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-700');
+  }
+}
+
+.vchip--soft-secondary-selected {
+  background-color: theme('colors.neutral-300');
+  color: theme('colors.neutral-800');
+  border-color: theme('colors.neutral-600');
+}
+
+[data-theme="dark"] .vchip--soft-secondary-selected {
+  background-color: theme('colors.neutral-600');
+  color: theme('colors.neutral-200');
+  border-color: theme('colors.neutral-500');
+}
+
+.vchip--soft-success {
+  background-color: theme('colors.success-50');
+  color: theme('colors.success-dark');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.success-100');
+  }
+}
+
+[data-theme="dark"] .vchip--soft-success {
+  background-color: theme('colors.success-900');
+  color: theme('colors.success-300');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.success-800');
+  }
+}
+
+.vchip--soft-success-selected {
+  background-color: theme('colors.success-200');
+  color: theme('colors.success-dark');
+  border-color: theme('colors.success-700');
+}
+
+[data-theme="dark"] .vchip--soft-success-selected {
+  background-color: theme('colors.success-700');
+  color: theme('colors.success-300');
+  border-color: theme('colors.success-400');
+}
+
+.vchip--soft-warning {
+  background-color: theme('colors.warning-50');
+  color: theme('colors.warning-dark');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.warning-100');
+  }
+}
+
+[data-theme="dark"] .vchip--soft-warning {
+  background-color: theme('colors.warning-900');
+  color: theme('colors.warning-300');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.warning-800');
+  }
+}
+
+.vchip--soft-warning-selected {
+  background-color: theme('colors.warning-200');
+  color: theme('colors.warning-dark');
+  border-color: theme('colors.warning-700');
+}
+
+[data-theme="dark"] .vchip--soft-warning-selected {
+  background-color: theme('colors.warning-700');
+  color: theme('colors.warning-300');
+  border-color: theme('colors.warning-400');
+}
+
+.vchip--soft-error {
+  background-color: theme('colors.error-50');
+  color: theme('colors.error-dark');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.error-100');
+  }
+}
+
+[data-theme="dark"] .vchip--soft-error {
+  background-color: theme('colors.error-900');
+  color: theme('colors.error-300');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.error-800');
+  }
+}
+
+.vchip--soft-error-selected {
+  background-color: theme('colors.error-200');
+  color: theme('colors.error-dark');
+  border-color: theme('colors.error-700');
+}
+
+[data-theme="dark"] .vchip--soft-error-selected {
+  background-color: theme('colors.error-700');
+  color: theme('colors.error-300');
+  border-color: theme('colors.error-400');
+}
+
+.vchip--soft-info {
+  background-color: theme('colors.info-50');
+  color: theme('colors.info-dark');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.info-100');
+  }
+}
+
+[data-theme="dark"] .vchip--soft-info {
+  background-color: theme('colors.info-900');
+  color: theme('colors.info-300');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.info-800');
+  }
+}
+
+.vchip--soft-info-selected {
+  background-color: theme('colors.info-200');
+  color: theme('colors.info-dark');
+  border-color: theme('colors.info-700');
+}
+
+[data-theme="dark"] .vchip--soft-info-selected {
+  background-color: theme('colors.info-700');
+  color: theme('colors.info-300');
+  border-color: theme('colors.info-400');
+}
+
+.vchip--soft-neutral {
+  background-color: theme('colors.neutral-100');
+  color: theme('colors.neutral-700');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-200');
+  }
+}
+
+[data-theme="dark"] .vchip--soft-neutral {
+  background-color: theme('colors.neutral-800');
+  color: theme('colors.neutral-300');
+  border: 2px solid transparent;
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-700');
+  }
+}
+
+.vchip--soft-neutral-selected {
+  background-color: theme('colors.neutral-300');
+  color: theme('colors.neutral-800');
+  border-color: theme('colors.neutral-600');
+}
+
+[data-theme="dark"] .vchip--soft-neutral-selected {
+  background-color: theme('colors.neutral-600');
+  color: theme('colors.neutral-200');
+  border-color: theme('colors.neutral-500');
+}
+
+/* ===== OUTLINED VARIANT (Thin borders like first screenshot) ===== */
+
+/* Default color - neutral mainText color that changes on selection */
+.vchip--outlined-default {
+  background-color: transparent;
+  color: var(--text-mainText);
+  border: 2px solid theme('colors.neutral-300');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-50');
+  }
+}
+
+[data-theme="dark"] .vchip--outlined-default {
+  color: var(--text-mainText);
+  border: 2px solid theme('colors.neutral-700');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-800');
+  }
+}
+
+.vchip--outlined-primary {
+  background-color: transparent;
+  color: theme('colors.primary');
+  border: 2px solid theme('colors.primary');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.primary-50');
+  }
+}
+
+[data-theme="dark"] .vchip--outlined-primary {
+  color: theme('colors.primary-light');
+  border: 2px solid theme('colors.primary-light');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.primary-900');
+  }
+}
+
+.vchip--outlined-primary-selected {
+  background-color: theme('colors.primary-100');
+  color: theme('colors.primary-dark');
+  border-color: theme('colors.primary-600');
+}
+
+[data-theme="dark"] .vchip--outlined-primary-selected {
+  background-color: theme('colors.primary-800');
+  color: theme('colors.primary-light');
+  border-color: theme('colors.primary-400');
+}
+
+.vchip--outlined-secondary {
+  background-color: transparent;
+  color: theme('colors.neutral-700');
+  border: 2px solid theme('colors.neutral-400');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-50');
+  }
+}
+
+[data-theme="dark"] .vchip--outlined-secondary {
+  color: theme('colors.neutral-300');
+  border: 2px solid theme('colors.neutral-600');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-800');
+  }
+}
+
+.vchip--outlined-secondary-selected {
+  background-color: theme('colors.neutral-200');
+  color: theme('colors.neutral-800');
+  border-color: theme('colors.neutral-700');
+}
+
+[data-theme="dark"] .vchip--outlined-secondary-selected {
+  background-color: theme('colors.neutral-700');
+  color: theme('colors.neutral-200');
+  border-color: theme('colors.neutral-400');
+}
+
+.vchip--outlined-success {
+  background-color: transparent;
+  color: theme('colors.success');
+  border: 2px solid theme('colors.success');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.success-50');
+  }
+}
+
+[data-theme="dark"] .vchip--outlined-success {
+  color: theme('colors.success-300');
+  border: 2px solid theme('colors.success-300');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.success-900');
+  }
+}
+
+.vchip--outlined-success-selected {
+  background-color: theme('colors.success-100');
+  color: theme('colors.success-dark');
+  border-color: theme('colors.success-700');
+}
+
+[data-theme="dark"] .vchip--outlined-success-selected {
+  background-color: theme('colors.success-800');
+  color: theme('colors.success-300');
+  border-color: theme('colors.success-400');
+}
+
+.vchip--outlined-warning {
+  background-color: transparent;
+  color: theme('colors.warning');
+  border: 2px solid theme('colors.warning');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.warning-50');
+  }
+}
+
+[data-theme="dark"] .vchip--outlined-warning {
+  color: theme('colors.warning-300');
+  border: 2px solid theme('colors.warning-300');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.warning-900');
+  }
+}
+
+.vchip--outlined-warning-selected {
+  background-color: theme('colors.warning-100');
+  color: theme('colors.warning-dark');
+  border-color: theme('colors.warning-700');
+}
+
+[data-theme="dark"] .vchip--outlined-warning-selected {
+  background-color: theme('colors.warning-800');
+  color: theme('colors.warning-300');
+  border-color: theme('colors.warning-400');
+}
+
+.vchip--outlined-error {
+  background-color: transparent;
+  color: theme('colors.error');
+  border: 2px solid theme('colors.error');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.error-50');
+  }
+}
+
+[data-theme="dark"] .vchip--outlined-error {
+  color: theme('colors.error-300');
+  border: 2px solid theme('colors.error-300');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.error-900');
+  }
+}
+
+.vchip--outlined-error-selected {
+  background-color: theme('colors.error-100');
+  color: theme('colors.error-dark');
+  border-color: theme('colors.error-700');
+}
+
+[data-theme="dark"] .vchip--outlined-error-selected {
+  background-color: theme('colors.error-800');
+  color: theme('colors.error-300');
+  border-color: theme('colors.error-400');
+}
+
+.vchip--outlined-info {
+  background-color: transparent;
+  color: theme('colors.info');
+  border: 2px solid theme('colors.info');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.info-50');
+  }
+}
+
+[data-theme="dark"] .vchip--outlined-info {
+  color: theme('colors.info-300');
+  border: 2px solid theme('colors.info-300');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.info-900');
+  }
+}
+
+.vchip--outlined-info-selected {
+  background-color: theme('colors.info-100');
+  color: theme('colors.info-dark');
+  border-color: theme('colors.info-700');
+}
+
+[data-theme="dark"] .vchip--outlined-info-selected {
+  background-color: theme('colors.info-800');
+  color: theme('colors.info-300');
+  border-color: theme('colors.info-400');
+}
+
+.vchip--outlined-neutral {
+  background-color: transparent;
+  color: theme('colors.neutral-700');
+  border: 2px solid theme('colors.neutral-400');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-50');
+  }
+}
+
+[data-theme="dark"] .vchip--outlined-neutral {
+  color: theme('colors.neutral-300');
+  border: 2px solid theme('colors.neutral-600');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-800');
+  }
+}
+
+.vchip--outlined-neutral-selected {
+  background-color: theme('colors.neutral-200');
+  color: theme('colors.neutral-800');
+  border-color: theme('colors.neutral-700');
+}
+
+[data-theme="dark"] .vchip--outlined-neutral-selected {
+  background-color: theme('colors.neutral-700');
+  color: theme('colors.neutral-200');
+  border-color: theme('colors.neutral-400');
+}
+
+/* ===== FILLED VARIANT (Bold colors) ===== */
+
+/* Default color - neutral mainText color that changes on selection */
+.vchip--filled-default {
+  background-color: theme('colors.neutral-200');
+  color: var(--text-mainText);
+  border: 1px solid theme('colors.neutral-300');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-300');
+    border-color: theme('colors.neutral-400');
+  }
+}
+
+[data-theme="dark"] .vchip--filled-default {
+  background-color: theme('colors.neutral-700');
+  color: var(--text-mainText);
+  border: 1px solid theme('colors.neutral-600');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-600');
+    border-color: theme('colors.neutral-500');
+  }
+}
+
+.vchip--filled-primary {
+  background-color: theme('colors.primary');
+  color: theme('colors.white');
+  border: 1px solid theme('colors.primary');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.primary-dark');
+    border-color: theme('colors.primary-dark');
+  }
+}
+
+.vchip--filled-primary-selected {
+  background-color: theme('colors.primary-dark');
+  color: theme('colors.white');
+  border-color: theme('colors.primary-dark');
+}
+
+.vchip--filled-secondary {
+  background-color: theme('colors.neutral-600');
+  color: theme('colors.white');
+  border: 1px solid theme('colors.neutral-600');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-700');
+    border-color: theme('colors.neutral-700');
+  }
+}
+
+.vchip--filled-secondary-selected {
+  background-color: theme('colors.neutral-800');
+  color: theme('colors.white');
+  border-color: theme('colors.neutral-800');
+}
+
+.vchip--filled-success {
+  background-color: theme('colors.success');
+  color: theme('colors.white');
+  border: 1px solid theme('colors.success');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.success-dark');
+    border-color: theme('colors.success-dark');
+  }
+}
+
+.vchip--filled-success-selected {
+  background-color: theme('colors.success-dark');
+  color: theme('colors.white');
+  border-color: theme('colors.success-dark');
+}
+
+.vchip--filled-warning {
+  background-color: theme('colors.warning');
+  color: theme('colors.white');
+  border: 1px solid theme('colors.warning');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.warning-dark');
+    border-color: theme('colors.warning-dark');
+  }
+}
+
+.vchip--filled-warning-selected {
+  background-color: theme('colors.warning-dark');
+  color: theme('colors.white');
+  border-color: theme('colors.warning-dark');
+}
+
+.vchip--filled-error {
+  background-color: theme('colors.error');
+  color: theme('colors.white');
+  border: 1px solid theme('colors.error');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.error-dark');
+    border-color: theme('colors.error-dark');
+  }
+}
+
+.vchip--filled-error-selected {
+  background-color: theme('colors.error-dark');
+  color: theme('colors.white');
+  border-color: theme('colors.error-dark');
+}
+
+.vchip--filled-info {
+  background-color: theme('colors.info');
+  color: theme('colors.white');
+  border: 1px solid theme('colors.info');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.info-dark');
+    border-color: theme('colors.info-dark');
+  }
+}
+
+.vchip--filled-info-selected {
+  background-color: theme('colors.info-dark');
+  color: theme('colors.white');
+  border-color: theme('colors.info-dark');
+}
+
+.vchip--filled-neutral {
+  background-color: theme('colors.neutral-600');
+  color: theme('colors.white');
+  border: 1px solid theme('colors.neutral-600');
+
+  &:hover:not(.vchip--disabled) {
+    background-color: theme('colors.neutral-700');
+    border-color: theme('colors.neutral-700');
+  }
+}
+
+.vchip--filled-neutral-selected {
+  background-color: theme('colors.neutral-800');
+  color: theme('colors.white');
+  border-color: theme('colors.neutral-800');
+}
+

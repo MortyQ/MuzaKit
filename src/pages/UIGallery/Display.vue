@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AccordionTab from "@/pages/UIGallery/components/DisplayComponents/AccordionTab.vue";
 import CardsTab from "@/pages/UIGallery/components/DisplayComponents/CardsTab.vue";
+import ChipsTab from "@/pages/UIGallery/components/DisplayComponents/ChipsTab.vue";
 import FloatingTab from "@/pages/UIGallery/components/DisplayComponents/FloatingTab.vue";
 import IconsTab from "@/pages/UIGallery/components/DisplayComponents/IconsTab.vue";
 import KpiTab from "@/pages/UIGallery/components/DisplayComponents/KpiTab.vue";
@@ -13,6 +14,7 @@ const tabs = [
   { id: "kpi", label: "KPI Cards", icon: "lucide:bar-chart-3" },
   { id: "icons", label: "Icons", icon: "lucide:shapes" },
   { id: "tags", label: "Tags", icon: "lucide:tag" },
+  { id: "chips", label: "Chips", icon: "lucide:tags" },
   { id: "tabs", label: "Tabs", icon: "lucide:folder" },
   { id: "accordion", label: "Accordion", icon: "lucide:list" },
   { id: "floating", label: "Floating (Dropdown/Popover)", icon: "lucide:layers" },
@@ -23,6 +25,7 @@ const componentMap = {
   kpi: KpiTab,
   icons: IconsTab,
   tags: TagsTab,
+  chips: ChipsTab,
   tabs: TabsComponentTab,
   accordion: AccordionTab,
   floating: FloatingTab,

@@ -57,4 +57,5 @@ export type RequiredBy<T, K extends keyof T> = T & Required<Pick<T, K>>;
 
 // KPI Types
 export * from "./kpi";
+export * from "./vmodel";
 
