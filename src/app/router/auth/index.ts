@@ -29,6 +29,14 @@ const authRoutes: AppRouteRecordRaw[] = [
       showInMenu: false,
     },
   },
+  {
+    path: "/example-auth",
+    name: "example-auth",
+    component: () => import("@/pages/Examples/ApiArchitectureExample.vue"),
+    meta: {
+      title: "Example",
+    },
+  },
 ];
 
 export default authRoutes;
