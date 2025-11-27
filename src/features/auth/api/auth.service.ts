@@ -2,7 +2,7 @@ import { typedApiClient } from "@/shared/api/client";
 import type { ApiRequestConfig } from "@/shared/api/types";
 
 /**
- * Auth типы
+ * Auth types
  */
 export interface User {
   id: string;

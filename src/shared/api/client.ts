@@ -1,11 +1,11 @@
 /**
  * API Client
  *
- * Настроенный axios instance с interceptors
- * - Автоматическое добавление токена авторизации
- * - Обработка 401 ошибок и refresh токена
- * - Решение race condition при обновлении токена
- * - Типобезопасность
+ * Configured axios instance with interceptors
+ * - Automatic authorization token addition
+ * - Handle 401 errors and token refresh
+ * - Race condition protection for token refresh
+ * - Type safety
  */
 
 import axios, { type AxiosInstance } from "axios";
@@ -14,7 +14,7 @@ import { setupInterceptors } from "./interceptors";
 import type { ApiRequestConfig, TypedAxiosResponse } from "./types";
 
 /**
- * Создание axios instance
+ * Create axios instance
  */
 function createApiClient(): AxiosInstance {
   const instance = axios.create({
@@ -31,12 +31,12 @@ function createApiClient(): AxiosInstance {
 }
 
 /**
- * Основной API клиент
+ * Main API client
  */
 const apiClient = createApiClient();
 
 /**
- * Настройка interceptors с обработкой ошибок авторизации
+ * Setup interceptors with auth error handling
  */
 let isInterceptorsSetup = false;
 
@@ -55,7 +55,7 @@ export function setupApiClient(options: {
 }
 
 /**
- * Типизированные методы для удобства использования
+ * Typed methods for convenience
  */
 export const typedApiClient = {
   get: <T = unknown>(url: string, config?: ApiRequestConfig) =>
@@ -76,5 +76,5 @@ export const typedApiClient = {
 
 export default apiClient;
 
-// Обратная совместимость
+// Backward compatibility
 export const axiosIns = apiClient;

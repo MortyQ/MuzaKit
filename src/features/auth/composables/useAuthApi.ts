@@ -1,7 +1,7 @@
 /**
  * useAuthApi Composable
  *
- * Специализированный composable для работы с auth API
+ * Specialized composable for auth API operations
  * - Login
  * - Logout
  * - Refresh token
@@ -18,7 +18,7 @@ import { tokenManager } from "@/shared/api/tokenManager";
 import type { AuthTokens } from "@/shared/api/types";
 
 /**
- * Типы для auth API
+ * Types for auth API
  */
 export interface LoginCredentials {
   email: string;
@@ -49,7 +49,7 @@ export interface RefreshTokenResponse {
 }
 
 /**
- * Composable для auth API
+ * Composable for auth API
  */
 export function useAuthApi() {
   const router = useRouter();
@@ -63,12 +63,12 @@ export function useAuthApi() {
   const isAuthenticated = computed(() => tokenManager.hasTokens());
 
   /**
-   * Настройка API клиента (вызывается при инициализации приложения)
+   * Setup API client (called on app initialization)
    */
   const initialize = () => {
     setupApiClient({
       onTokenRefreshFailed: () => {
-        // При неудачном refresh токена редиректим на login
+        // On failed token refresh, redirect to login
         tokenManager.clearTokens();
         const currentRoute = router.currentRoute.value;
 
@@ -93,7 +93,7 @@ export function useAuthApi() {
       const response = await apiClient.post<LoginResponse>("/auth/login", credentials);
       const data = response.data;
 
-      // Сохраняем токены
+      // Save tokens
       tokenManager.setTokens({
         accessToken: data.accessToken,
         refreshToken: data.refreshToken,
@@ -121,7 +121,7 @@ export function useAuthApi() {
       const response = await apiClient.post<LoginResponse>("/auth/register", data);
       const result = response.data;
 
-      // Автоматически логиним после регистрации
+      // Auto-login after registration
       tokenManager.setTokens({
         accessToken: result.accessToken,
         refreshToken: result.refreshToken,
@@ -145,23 +145,23 @@ export function useAuthApi() {
     isLoading.value = true;
 
     try {
-      // Вызываем API logout (опционально)
+      // Call API logout (optional)
       await apiClient.post("/auth/logout");
     } catch (err) {
-      // Игнорируем ошибки logout на сервере
+      // Ignore server logout errors
       console.error("Logout error:", err);
     } finally {
-      // Всегда очищаем токены локально
+      // Always clear tokens locally
       tokenManager.clearTokens();
       isLoading.value = false;
 
-      // Редирект на login
+      // Redirect to login
       router.push({ name: "login" });
     }
   };
 
   /**
-   * Refresh token (обычно вызывается автоматически interceptor'ом)
+   * Refresh token (usually called automatically by interceptor)
    */
   const refreshToken = async (): Promise<string | null> => {
     const currentRefreshToken = tokenManager.getRefreshToken();
@@ -181,7 +181,7 @@ export function useAuthApi() {
 
       const { accessToken, refreshToken: newRefreshToken, expiresIn } = response.data;
 
-      // Сохраняем новые токены
+      // Save new tokens
       tokenManager.setTokens({
         accessToken,
         refreshToken: newRefreshToken || currentRefreshToken,
@@ -243,7 +243,7 @@ export function useAuthApi() {
   };
 
   /**
-   * Проверить валидность токена
+   * Validate token
    */
   const validateToken = async (): Promise<boolean> => {
     if (!tokenManager.hasTokens()) {
@@ -260,7 +260,7 @@ export function useAuthApi() {
   };
 
   /**
-   * Получить токены (для отладки)
+   * Get tokens (for debugging)
    */
   const getTokens = (): AuthTokens | null => {
     const accessToken = tokenManager.getAccessToken();

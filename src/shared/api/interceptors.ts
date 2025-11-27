@@ -1,10 +1,10 @@
 /**
  * API Interceptors
  *
- * Модульные interceptors для axios
- * - Request interceptor для добавления токена
- * - Response interceptor для обработки 401 и refresh token
- * - Решение race condition при refresh токена
+ * Modular interceptors for axios
+ * - Request interceptor for adding token
+ * - Response interceptor for handling 401 and token refresh
+ * - Race condition protection for token refresh
  */
 
 import type {
@@ -21,7 +21,7 @@ export const AUTH_HEADER = "Authorization";
 export const REFRESH_TOKEN_URL = "/auth/refresh";
 
 /**
- * Очередь запросов, ожидающих обновления токена
+ * Queue of requests waiting for token refresh
  */
 interface FailedRequestQueue {
   resolve: (value: string) => void;
@@ -32,7 +32,7 @@ let failedQueue: FailedRequestQueue[] = [];
 let isRefreshing = false;
 
 /**
- * Обработка очереди запросов после обновления токена
+ * Process request queue after token refresh
  */
 function processQueue(error: unknown, token: string | null = null): void {
   failedQueue.forEach((promise) => {
@@ -48,12 +48,12 @@ function processQueue(error: unknown, token: string | null = null): void {
 
 /**
  * Request Interceptor
- * Добавляет токен авторизации к каждому запросу
+ * Adds authorization token to each request
  */
 export function setupRequestInterceptor(axiosInstance: AxiosInstance): void {
   axiosInstance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      // Проверяем, нужно ли добавлять токен
+      // Check if we need to add token
       const skipAuth = (config as InternalAxiosRequestConfig & { skipAuth?: boolean }).skipAuth;
 
       if (!skipAuth) {
@@ -73,7 +73,7 @@ export function setupRequestInterceptor(axiosInstance: AxiosInstance): void {
 
 /**
  * Response Interceptor
- * Обрабатывает ошибки 401 и выполняет refresh токена
+ * Handles 401 errors and performs token refresh
  */
 export function setupResponseInterceptor(
   axiosInstance: AxiosInstance,
@@ -87,26 +87,26 @@ export function setupResponseInterceptor(
         skipAuth?: boolean;
       };
 
-      // Если ошибка не 401 или запрос уже был повторен, отклоняем
+      // If not 401 error or request was already retried, reject
       if (!originalRequest || error.response?.status !== 401 || originalRequest._retry) {
         return Promise.reject(error);
       }
 
-      // Если это запрос на refresh токена, не пытаемся его обновить снова
+      // If this is refresh token request, don't try to refresh again
       if (originalRequest.url === REFRESH_TOKEN_URL) {
         isRefreshing = false;
         processQueue(error, null);
 
-        // Очищаем токены
+        // Clear tokens
         tokenManager.clearTokens();
 
-        // Вызываем callback для редиректа на login
+        // Call callback for redirect to login
         onTokenRefreshFailed?.();
 
         return Promise.reject(error);
       }
 
-      // Если токен уже обновляется, добавляем запрос в очередь
+      // If token is already refreshing, add request to queue
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({
@@ -121,7 +121,7 @@ export function setupResponseInterceptor(
         });
       }
 
-      // Помечаем запрос как повторный
+      // Mark request as retry
       originalRequest._retry = true;
       isRefreshing = true;
 
@@ -135,7 +135,7 @@ export function setupResponseInterceptor(
       }
 
       try {
-        // Выполняем refresh токена
+        // Perform token refresh
         const response = await axiosInstance.post<RefreshTokenResponse>(
           REFRESH_TOKEN_URL,
           { refreshToken },
@@ -144,24 +144,24 @@ export function setupResponseInterceptor(
 
         const { accessToken, refreshToken: newRefreshToken } = response.data;
 
-        // Сохраняем новые токены
+        // Save new tokens
         tokenManager.setTokens({
           accessToken,
           refreshToken: newRefreshToken || refreshToken,
         });
 
-        // Обновляем дефолтный header
+        // Update default header
         axiosInstance.defaults.headers.common[AUTH_HEADER] = `${TOKEN_TYPE} ${accessToken}`;
 
-        // Обрабатываем очередь запросов
+        // Process request queue
         processQueue(null, accessToken);
 
-        // Повторяем оригинальный запрос с новым токеном
+        // Retry original request with new token
         originalRequest.headers.set(AUTH_HEADER, `${TOKEN_TYPE} ${accessToken}`);
 
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        // Refresh токена не удался
+        // Token refresh failed
         processQueue(refreshError, null);
         tokenManager.clearTokens();
         onTokenRefreshFailed?.();
@@ -175,7 +175,7 @@ export function setupResponseInterceptor(
 }
 
 /**
- * Настройка всех interceptors
+ * Setup all interceptors
  */
 export function setupInterceptors(
   axiosInstance: AxiosInstance,
@@ -188,7 +188,7 @@ export function setupInterceptors(
 }
 
 /**
- * Получить статус обновления токена
+ * Get token refresh status
  */
 export function getRefreshStatus(): {
   isRefreshing: boolean;

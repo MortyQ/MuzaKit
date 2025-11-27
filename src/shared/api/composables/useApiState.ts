@@ -1,47 +1,47 @@
 /**
  * API State Composable
  *
- * Управление состоянием API запросов
- * Базовый composable для создания реактивного состояния
+ * Managing API request state
+ * Base composable for creating reactive state
  */
 
 import { ref, computed, type Ref, type ComputedRef } from "vue";
 
-import { RequestStatus, type ApiState, type ApiError } from "../api/types";
+import { RequestStatus, type ApiState, type ApiError } from "../types";
 
 export interface UseApiStateReturn<T = unknown> {
-  /** Данные */
+  /** Data */
   data: Ref<T | null>;
-  /** Флаг загрузки */
+  /** Loading flag */
   loading: Ref<boolean>;
-  /** Ошибка */
+  /** Error */
   error: Ref<ApiError | null>;
-  /** HTTP статус код */
+  /** HTTP status code */
   statusCode: Ref<number | null>;
-  /** Статус запроса */
+  /** Request status */
   status: Ref<RequestStatus>;
-  /** Есть ли данные */
+  /** Has data */
   hasData: ComputedRef<boolean>;
-  /** Есть ли ошибка */
+  /** Has error */
   hasError: ComputedRef<boolean>;
-  /** Запрос в процессе */
+  /** Request is pending */
   isPending: ComputedRef<boolean>;
-  /** Запрос успешен */
+  /** Request is successful */
   isSuccess: ComputedRef<boolean>;
-  /** Установить данные */
+  /** Set data */
   setData: (newData: T | null) => void;
-  /** Установить ошибку */
+  /** Set error */
   setError: (newError: ApiError | null) => void;
-  /** Установить загрузку */
+  /** Set loading */
   setLoading: (isLoading: boolean) => void;
-  /** Установить статус код */
+  /** Set status code */
   setStatusCode: (code: number | null) => void;
-  /** Сбросить состояние */
+  /** Reset state */
   reset: () => void;
 }
 
 /**
- * Composable для управления состоянием API
+ * Composable for API state management
  */
 export function useApiState<T = unknown>(initialData: T | null = null): UseApiStateReturn<T> {
   // State
@@ -107,7 +107,7 @@ export function useApiState<T = unknown>(initialData: T | null = null): UseApiSt
 }
 
 /**
- * Создать начальное состояние API
+ * Create initial API state
  */
 export function createInitialApiState<T = unknown>(initialData: T | null = null): ApiState<T> {
   return {

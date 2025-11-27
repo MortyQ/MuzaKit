@@ -1,14 +1,14 @@
 /**
  * API Types
  *
- * Централизованные типы для работы с API
+ * Centralized types for API operations
  */
 
 import type { AxiosRequestConfig, AxiosError, AxiosResponse } from "axios";
 import type { Ref, ComputedRef } from "vue";
 
 /**
- * Базовый ответ API с типизацией данных
+ * Base API response with typed data
  */
 export interface ApiResponse<T = unknown> {
   data: T;
@@ -17,7 +17,7 @@ export interface ApiResponse<T = unknown> {
 }
 
 /**
- * Ошибка API с деталями
+ * API error with details
  */
 export interface ApiError {
   message: string;
@@ -28,85 +28,85 @@ export interface ApiError {
 }
 
 /**
- * Конфигурация для API запросов с расширенными опциями
+ * API request configuration with extended options
  */
 export interface ApiRequestConfig<D = unknown> extends AxiosRequestConfig<D> {
-  /** Скрыть toast уведомления об ошибках */
+  /** Skip error toast notifications */
   skipErrorNotification?: boolean;
-  /** Скрыть toast уведомления об успехе */
+  /** Skip success toast notifications */
   skipSuccessNotification?: boolean;
-  /** Кастомное сообщение об успехе */
+  /** Custom success message */
   successMessage?: string;
-  /** Не добавлять токен авторизации */
+  /** Skip authorization token */
   skipAuth?: boolean;
-  /** Использовать retry логику */
+  /** Use retry logic */
   retry?: boolean | number;
-  /** Задержка между retry попытками */
+  /** Delay between retry attempts */
   retryDelay?: number;
 }
 
 /**
- * Состояние API запроса
+ * API request state
  */
 export interface ApiState<T = unknown> {
-  /** Данные ответа */
+  /** Response data */
   data: T | null;
-  /** Флаг загрузки */
+  /** Loading flag */
   loading: boolean;
-  /** Ошибка */
+  /** Error */
   error: ApiError | null;
-  /** HTTP статус код */
+  /** HTTP status code */
   statusCode: number | null;
 }
 
 /**
- * Опции для composable useApi
+ * Options for useApi composable
  */
 export interface UseApiOptions<T = unknown, D = unknown> extends ApiRequestConfig<D> {
-  /** Выполнить запрос сразу при создании */
+  /** Execute request immediately on creation */
   immediate?: boolean;
-  /** Callback при успешном запросе */
+  /** Callback on successful request */
   onSuccess?: (data: T) => void;
-  /** Callback при ошибке */
+  /** Callback on error */
   onError?: (error: ApiError) => void;
-  /** Callback перед запросом */
+  /** Callback before request */
   onBefore?: () => void;
-  /** Callback после завершения (успех или ошибка) */
+  /** Callback after completion (success or error) */
   onFinish?: () => void;
-  /** Начальные данные */
+  /** Initial data */
   initialData?: T;
-  /** Задержка перед запросом (debounce) */
+  /** Delay before request (debounce) */
   debounce?: number;
-  /** Таймаут для запроса */
+  /** Request timeout */
   timeout?: number;
 }
 
 /**
- * Результат composable useApi
+ * Return type of useApi composable
  */
 export interface UseApiReturn<T = unknown, D = unknown> {
-  /** Реактивные данные */
+  /** Reactive data */
   data: Ref<T | null>;
-  /** Флаг загрузки */
+  /** Loading flag */
   loading: Ref<boolean>;
-  /** Ошибка */
+  /** Error */
   error: Ref<ApiError | null>;
-  /** HTTP статус код */
+  /** HTTP status code */
   statusCode: Ref<number | null>;
-  /** Выполнить запрос */
+  /** Execute request */
   execute: (config?: ApiRequestConfig<D>) => Promise<T | null>;
-  /** Отменить запрос */
+  /** Abort request */
   abort: (message?: string) => void;
-  /** Сбросить состояние */
+  /** Reset state */
   reset: () => void;
-  /** Есть ли данные */
+  /** Has data */
   hasData: ComputedRef<boolean>;
-  /** Есть ли ошибка */
+  /** Has error */
   hasError: ComputedRef<boolean>;
 }
 
 /**
- * Токены авторизации
+ * Authorization tokens
  */
 export interface AuthTokens {
   accessToken: string;
@@ -115,7 +115,7 @@ export interface AuthTokens {
 }
 
 /**
- * Ответ при обновлении токена
+ * Token refresh response
  */
 export interface RefreshTokenResponse {
   accessToken: string;
@@ -124,14 +124,14 @@ export interface RefreshTokenResponse {
 }
 
 /**
- * Запрос для обновления токена
+ * Token refresh request
  */
 export interface RefreshTokenRequest {
   refreshToken: string;
 }
 
 /**
- * Generic типизированная ошибка Axios
+ * Generic typed Axios error
  */
 export type TypedAxiosError<T = unknown> = AxiosError<{
   message?: string;
@@ -141,17 +141,17 @@ export type TypedAxiosError<T = unknown> = AxiosError<{
 }>;
 
 /**
- * Generic типизированный ответ Axios
+ * Generic typed Axios response
  */
 export type TypedAxiosResponse<T = unknown> = AxiosResponse<T>;
 
 /**
- * HTTP методы
+ * HTTP methods
  */
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 /**
- * Статусы запроса
+ * Request statuses
  */
 export enum RequestStatus {
   IDLE = "idle",
@@ -161,16 +161,16 @@ export enum RequestStatus {
 }
 
 /**
- * Опции для retry логики
+ * Retry logic options
  */
 export interface RetryOptions {
-  /** Количество попыток */
+  /** Number of attempts */
   maxRetries?: number;
-  /** Задержка между попытками (ms) */
+  /** Delay between attempts (ms) */
   retryDelay?: number;
-  /** Использовать exponential backoff */
+  /** Use exponential backoff */
   exponentialBackoff?: boolean;
-  /** Функция для проверки, нужен ли retry */
+  /** Function to check if retry is needed */
   shouldRetry?: (error: AxiosError) => boolean;
 }
 

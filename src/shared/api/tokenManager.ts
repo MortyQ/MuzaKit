@@ -1,11 +1,11 @@
 /**
  * Token Manager
  *
- * Централизованное управление токенами авторизации
- * Решает проблемы:
- * - Жесткой связи с localStorage
- * - Позволяет легко мокать в тестах
- * - Единая точка доступа к токенам
+ * Centralized authorization token management
+ * Solves problems:
+ * - Tight coupling with localStorage
+ * - Easy to mock in tests
+ * - Single point of access to tokens
  */
 
 import type { AuthTokens } from "./types";
@@ -25,7 +25,7 @@ interface TokenStorage {
 }
 
 /**
- * LocalStorage реализация хранилища токенов
+ * LocalStorage implementation of token storage
  */
 class LocalStorageTokenStorage implements TokenStorage {
   getAccessToken(): string | null {
@@ -61,14 +61,14 @@ class LocalStorageTokenStorage implements TokenStorage {
     const expiresAt = this.getTokenExpiresAt();
     if (!expiresAt) return false;
 
-    // Добавляем 5 секунд буфера для предотвращения race conditions
+    // Add 5 seconds buffer to prevent race conditions
     return Date.now() >= expiresAt - 5000;
   }
 }
 
 /**
- * Token Manager класс
- * Singleton для управления токенами
+ * Token Manager class
+ * Singleton for token management
  */
 class TokenManager {
   private storage: TokenStorage;
@@ -79,28 +79,28 @@ class TokenManager {
   }
 
   /**
-   * Получить access token
+   * Get access token
    */
   getAccessToken(): string | null {
     return this.storage.getAccessToken();
   }
 
   /**
-   * Получить refresh token
+   * Get refresh token
    */
   getRefreshToken(): string | null {
     return this.storage.getRefreshToken();
   }
 
   /**
-   * Сохранить токены
+   * Save tokens
    */
   setTokens(tokens: AuthTokens): void {
     this.storage.setTokens(tokens);
   }
 
   /**
-   * Очистить токены
+   * Clear tokens
    */
   clearTokens(): void {
     this.storage.clearTokens();
@@ -108,28 +108,28 @@ class TokenManager {
   }
 
   /**
-   * Проверить, истек ли токен
+   * Check if token is expired
    */
   isTokenExpired(): boolean {
     return this.storage.isTokenExpired();
   }
 
   /**
-   * Получить время истечения токена
+   * Get token expiration time
    */
   getTokenExpiresAt(): number | null {
     return this.storage.getTokenExpiresAt();
   }
 
   /**
-   * Проверить наличие токенов
+   * Check if tokens exist
    */
   hasTokens(): boolean {
     return !!(this.getAccessToken() && this.getRefreshToken());
   }
 
   /**
-   * Получить Authorization header
+   * Get Authorization header
    */
   getAuthHeader(): string | null {
     const token = this.getAccessToken();
@@ -137,40 +137,40 @@ class TokenManager {
   }
 
   /**
-   * Установить promise обновления токена (для предотвращения race conditions)
+   * Set token refresh promise (to prevent race conditions)
    */
   setRefreshPromise(promise: Promise<string | null>): void {
     this.refreshPromise = promise;
   }
 
   /**
-   * Получить promise обновления токена
+   * Get token refresh promise
    */
   getRefreshPromise(): Promise<string | null> | null {
     return this.refreshPromise;
   }
 
   /**
-   * Очистить promise обновления токена
+   * Clear token refresh promise
    */
   clearRefreshPromise(): void {
     this.refreshPromise = null;
   }
 
   /**
-   * Изменить хранилище (полезно для тестов)
+   * Set storage (useful for tests)
    */
   setStorage(storage: TokenStorage): void {
     this.storage = storage;
   }
 }
 
-// Экспортируем singleton instance
+// Export singleton instance
 export const tokenManager = new TokenManager();
 
-// Экспортируем класс для тестов
+// Export class for tests
 export { TokenManager, LocalStorageTokenStorage };
 
-// Экспортируем тип для мокирования
+// Export type for mocking
 export type { TokenStorage };
 

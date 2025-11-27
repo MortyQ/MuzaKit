@@ -1,7 +1,7 @@
 /**
  * Auth API
  *
- * Экспорт auth сервиса и типов
+ * Export auth service and types
  */
 
 export * from "./auth.service";

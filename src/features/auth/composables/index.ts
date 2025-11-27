@@ -1,7 +1,7 @@
 /**
  * Auth Composables
  *
- * Экспорт auth composables
+ * Export auth composables
  */
 
 export { useAuthApi } from "./useAuthApi";

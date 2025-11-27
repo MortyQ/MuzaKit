@@ -1,15 +1,15 @@
 /**
  * useApi Composable
  *
- * Универсальный composable для работы с API
+ * Universal composable for working with API
  *
- * Возможности:
- * - Автоматическое управление состоянием (loading, error, data)
- * - Отмена запросов через AbortController
- * - Retry логика
+ * Features:
+ * - Automatic state management (loading, error, data)
+ * - Request cancellation via AbortController
+ * - Retry logic
  * - Debouncing
  * - Callbacks (onSuccess, onError, onBefore, onFinish)
- * - Типобезопасность
+ * - Type safety
  *
  * @example
  * ```ts
@@ -23,9 +23,7 @@
 import { useDebounceFn } from "@vueuse/core";
 import { ref, onUnmounted, type Ref } from "vue";
 
-import { useApiState } from "./useApiState";
 import apiClient from "../api/client";
-import { handleApiError } from "../api/errorHandler";
 import type {
   UseApiOptions,
   UseApiReturn,
@@ -33,8 +31,11 @@ import type {
   ApiError,
 } from "../api/types";
 
+import { handleApiError } from "@/shared/api";
+import { useApiState } from "@/shared/api/composables";
+
 /**
- * Основной composable для API запросов
+ * Main composable for API requests
  */
 export function useApi<T = unknown, D = unknown>(
   url: string | Ref<string>,
@@ -60,21 +61,21 @@ export function useApi<T = unknown, D = unknown>(
   const abortController = ref<AbortController | null>(null);
 
   /**
-   * Выполнение запроса
+   * Execute request
    */
   const executeRequest = async (config?: ApiRequestConfig<D>): Promise<T | null> => {
-    // Отменяем предыдущий запрос если он есть
+    // Cancel previous request if exists
     if (abortController.value) {
       abortController.value.abort();
     }
 
-    // Создаем новый AbortController
+    // Create new AbortController
     abortController.value = new AbortController();
 
     // Before callback
     onBefore?.();
 
-    // Устанавливаем состояние загрузки
+    // Set loading state
     state.setLoading(true);
     state.setError(null);
 
@@ -86,14 +87,14 @@ export function useApi<T = unknown, D = unknown>(
         signal: abortController.value.signal,
       };
 
-      // Выполняем запрос
+      // Execute request
       const response = await apiClient.request<T>({
         url: requestUrl,
         method,
         ...mergedConfig,
       });
 
-      // Устанавливаем данные
+      // Set data
       state.setData(response.data);
       state.setStatusCode(response.status);
 
@@ -102,12 +103,12 @@ export function useApi<T = unknown, D = unknown>(
 
       return response.data;
     } catch (err: unknown) {
-      // Игнорируем отмененные запросы
+      // Ignore cancelled requests
       if ((err as { name?: string })?.name === "AbortError" || (err as { name?: string })?.name === "CanceledError") {
         return null;
       }
 
-      // Обрабатываем ошибку
+      // Handle error
       const apiError = handleApiError(err, {
         showToast: !skipErrorNotification,
       });
@@ -118,7 +119,7 @@ export function useApi<T = unknown, D = unknown>(
       // Error callback
       onError?.(apiError);
 
-      // Retry логика
+      // Retry logic
       if (retry && shouldRetry(apiError, retry)) {
         const retryCount = typeof retry === "number" ? retry : 3;
         return retryRequest(executeRequest, retryCount, retryDelay, config);
@@ -132,14 +133,14 @@ export function useApi<T = unknown, D = unknown>(
   };
 
   /**
-   * Execute с debouncing если указан
+   * Execute with debouncing if specified
    */
   const execute = debounce > 0
     ? useDebounceFn(executeRequest, debounce)
     : executeRequest;
 
   /**
-   * Отмена запроса
+   * Abort request
    */
   const abort = (message?: string) => {
     if (abortController.value) {
@@ -149,14 +150,14 @@ export function useApi<T = unknown, D = unknown>(
   };
 
   /**
-   * Сброс состояния
+   * Reset state
    */
   const reset = () => {
     abort();
     state.reset();
   };
 
-  // Автоматическая отмена при unmount
+  // Automatic abort on unmount
   onUnmounted(() => {
     abort();
   });
@@ -175,24 +176,24 @@ export function useApi<T = unknown, D = unknown>(
 }
 
 /**
- * Проверка, нужен ли retry
+ * Check if retry is needed
  */
 function shouldRetry(error: ApiError, retry: boolean | number): boolean {
   if (typeof retry === "boolean") {
     return retry;
   }
 
-  // Не делаем retry для клиентских ошибок (4xx)
+  // Don't retry for client errors (4xx)
   if (error.status >= 400 && error.status < 500) {
     return false;
   }
 
-  // Retry для серверных ошибок (5xx) и network ошибок
+  // Retry for server errors (5xx) and network errors
   return error.status >= 500 || error.status === 0;
 }
 
 /**
- * Retry логика с exponential backoff
+ * Retry logic with exponential backoff
  */
 async function retryRequest<T, D>(
   requestFn: (config?: ApiRequestConfig<D>) => Promise<T | null>,
@@ -218,7 +219,7 @@ async function retryRequest<T, D>(
 }
 
 /**
- * Хелпер для GET запросов
+ * Helper for GET requests
  */
 export function useGet<T = unknown>(
   url: string | Ref<string>,
@@ -228,7 +229,7 @@ export function useGet<T = unknown>(
 }
 
 /**
- * Хелпер для POST запросов
+ * Helper for POST requests
  */
 export function usePost<T = unknown, D = unknown>(
   url: string | Ref<string>,
@@ -238,7 +239,7 @@ export function usePost<T = unknown, D = unknown>(
 }
 
 /**
- * Хелпер для PUT запросов
+ * Helper for PUT requests
  */
 export function usePut<T = unknown, D = unknown>(
   url: string | Ref<string>,
@@ -248,7 +249,7 @@ export function usePut<T = unknown, D = unknown>(
 }
 
 /**
- * Хелпер для PATCH запросов
+ * Helper for PATCH requests
  */
 export function usePatch<T = unknown, D = unknown>(
   url: string | Ref<string>,
@@ -258,7 +259,7 @@ export function usePatch<T = unknown, D = unknown>(
 }
 
 /**
- * Хелпер для DELETE запросов
+ * Helper for DELETE requests
  */
 export function useDelete<T = unknown>(
   url: string | Ref<string>,

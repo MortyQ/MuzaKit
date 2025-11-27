@@ -1,34 +1,35 @@
 /**
  * Error Handler
  *
- * Централизованная обработка ошибок API
- * - Парсинг ошибок
- * - Toast уведомления
- * - Логирование
+ * Centralized API error handling
+ * - Error parsing
+ * - Toast notifications
+ * - Logging
  */
 
 import type { AxiosError } from "axios";
-import { toast } from "vue-sonner";
 
 import type { ApiError, TypedAxiosError } from "./types";
 
+import { useToast } from "@/shared/composables/useToast";
+
 /**
- * Опции обработки ошибок
+ * Error handler options
  */
 export interface ErrorHandlerOptions {
-  /** Показать toast уведомление */
+  /** Show toast notification */
   showToast?: boolean;
-  /** Кастомное сообщение */
+  /** Custom message */
   customMessage?: string;
-  /** Логировать в консоль */
+  /** Log to console */
   logToConsole?: boolean;
 }
 
 /**
- * Парсинг ошибки Axios в ApiError
+ * Parse Axios error to ApiError
  */
 export function parseAxiosError(error: AxiosError | TypedAxiosError): ApiError {
-  // Если нет ответа (network error, timeout, etc.)
+  // If no response (network error, timeout, etc.)
   if (!error.response) {
     return {
       message: error.message || "Network error",
@@ -39,7 +40,7 @@ export function parseAxiosError(error: AxiosError | TypedAxiosError): ApiError {
 
   const { data, status } = error.response;
 
-  // Попытка извлечь сообщение из разных форматов ответа
+  // Try to extract message from different response formats
   const message =
     (data as Record<string, unknown>)?.message as string ||
     (data as Record<string, unknown>)?.error as string ||
@@ -56,7 +57,7 @@ export function parseAxiosError(error: AxiosError | TypedAxiosError): ApiError {
 }
 
 /**
- * Получить дефолтное сообщение по HTTP коду
+ * Get default error message by HTTP status code
  */
 export function getDefaultErrorMessage(status: number): string {
   const messages: Record<number, string> = {
@@ -76,11 +77,11 @@ export function getDefaultErrorMessage(status: number): string {
 }
 
 /**
- * Обработчик ошибок
+ * Error handler
  */
 export class ErrorHandler {
   /**
-   * Обработать ошибку
+   * Handle error
    */
   static handle(
     error: AxiosError | TypedAxiosError,
@@ -94,7 +95,7 @@ export class ErrorHandler {
 
     const apiError = parseAxiosError(error);
 
-    // Логирование в development режиме
+    // Logging in development mode
     if (logToConsole) {
       console.error("[API Error]", {
         message: apiError.message,
@@ -106,11 +107,12 @@ export class ErrorHandler {
       });
     }
 
-    // Показать toast уведомление
+    // Show toast notification
     if (showToast) {
+      const toast = useToast();
       const message = customMessage || apiError.message;
 
-      // Для validation ошибок показываем первую ошибку
+      // For validation errors, show the first error
       if (apiError.errors && Object.keys(apiError.errors).length > 0) {
         const firstError = Object.values(apiError.errors)[0][0];
         toast.error(firstError || message);
@@ -123,7 +125,7 @@ export class ErrorHandler {
   }
 
   /**
-   * Обработать validation ошибки
+   * Handle validation errors
    */
   static handleValidationErrors(errors: Record<string, string[]>): string[] {
     const messages: string[] = [];
@@ -138,28 +140,28 @@ export class ErrorHandler {
   }
 
   /**
-   * Проверить, является ли ошибка ошибкой авторизации
+   * Check if error is an authorization error
    */
   static isAuthError(error: ApiError): boolean {
     return error.status === 401;
   }
 
   /**
-   * Проверить, является ли ошибка validation ошибкой
+   * Check if error is a validation error
    */
   static isValidationError(error: ApiError): boolean {
     return error.status === 422 && !!error.errors;
   }
 
   /**
-   * Проверить, является ли ошибка network ошибкой
+   * Check if error is a network error
    */
   static isNetworkError(error: ApiError): boolean {
     return error.status === 0;
   }
 
   /**
-   * Создать ApiError из произвольной ошибки
+   * Create ApiError from any error
    */
   static fromError(error: unknown): ApiError {
     if (error instanceof Error) {
@@ -177,7 +179,7 @@ export class ErrorHandler {
 }
 
 /**
- * Хелпер для обработки ошибок в try-catch блоках
+ * Helper for handling errors in try-catch blocks
  */
 export function handleApiError(
   error: unknown,

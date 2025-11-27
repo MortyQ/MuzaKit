@@ -1,17 +1,17 @@
 /**
  * API Client
  *
- * Централизованный API клиент с interceptors и типизацией
- * - Автоматическая авторизация
- * - Обновление токенов
- * - Обработка ошибок
- * - Типобезопасность
+ * Centralized API client with interceptors and typing
+ * - Automatic authorization
+ * - Token refresh
+ * - Error handling
+ * - Type safety
  */
 
-// Основной клиент
+// Main client
 export { default as apiClient, typedApiClient, setupApiClient } from "./client";
 
-// Legacy экспорт для обратной совместимости
+// Legacy export for backward compatibility
 export { axiosIns } from "./client";
 
 // Token Manager
