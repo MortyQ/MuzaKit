@@ -1,13 +1,63 @@
 /**
  * API Client
  *
- * Centralized API client configuration with interceptors.
- * Handles authentication, token refresh, and error handling.
+ * Centralized API client with interceptors and typing
+ * - Automatic authorization
+ * - Token refresh
+ * - Error handling
+ * - Type safety
  */
-export { default as apiClient } from "./client";
+
+// Main client
+export { default as apiClient, typedApiClient, setupApiClient } from "./client";
+
+// Legacy export for backward compatibility
+export { axiosIns } from "./client";
+
+// Token Manager
 export {
+  tokenManager,
   TOKEN_TYPE,
-  ACCESS_TOKEN,
-  REFRESH_TOKEN,
+  ACCESS_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+  TOKEN_EXPIRES_KEY,
+  type TokenStorage,
+} from "./tokenManager";
+
+// Interceptors
+export {
+  setupInterceptors,
+  setupRequestInterceptor,
+  setupResponseInterceptor,
+  getRefreshStatus,
   AUTH_HEADER,
-} from "./client";
+  REFRESH_TOKEN_URL,
+} from "./interceptors";
+
+// Error Handler
+export {
+  ErrorHandler,
+  handleApiError,
+  parseAxiosError,
+  getDefaultErrorMessage,
+  type ErrorHandlerOptions,
+} from "./errorHandler";
+
+// Types
+export type {
+  ApiResponse,
+  ApiError,
+  ApiRequestConfig,
+  ApiState,
+  UseApiOptions,
+  UseApiReturn,
+  AuthTokens,
+  RefreshTokenResponse,
+  RefreshTokenRequest,
+  TypedAxiosError,
+  TypedAxiosResponse,
+  HttpMethod,
+  RetryOptions,
+} from "./types";
+
+export { RequestStatus } from "./types";

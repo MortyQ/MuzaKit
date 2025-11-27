@@ -1,61 +1,80 @@
-import axios from "axios";
+/**
+ * API Client
+ *
+ * Configured axios instance with interceptors
+ * - Automatic authorization token addition
+ * - Handle 401 errors and token refresh
+ * - Race condition protection for token refresh
+ * - Type safety
+ */
 
-import router from "@/app/router";
+import axios, { type AxiosInstance } from "axios";
 
-export const TOKEN_TYPE = "Bearer";
-export const ACCESS_TOKEN = "accessToken";
-export const REFRESH_TOKEN = "refreshToken";
-export const AUTH_HEADER = "Authorization";
-export const REFRESH_TOKEN_URL = "/refresh-token";
+import { setupInterceptors } from "./interceptors";
+import type { ApiRequestConfig, TypedAxiosResponse } from "./types";
 
-const axiosIns = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : "/api",
-});
+/**
+ * Create axios instance
+ */
+function createApiClient(): AxiosInstance {
+  const instance = axios.create({
+    baseURL: import.meta.env.VITE_API_URL
+      ? `${import.meta.env.VITE_API_URL}`
+      : "/api",
+    timeout: 30000,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-axiosIns.interceptors.request.use((config) => {
-  const accessToken = localStorage.getItem(ACCESS_TOKEN);
+  return instance;
+}
 
-  if (accessToken) {
-    config.headers.set(AUTH_HEADER, `${TOKEN_TYPE} ${accessToken}`);
-  }
-  return config;
-}, (error) => Promise.reject(error));
+/**
+ * Main API client
+ */
+const apiClient = createApiClient();
 
-axiosIns.interceptors.response.use((response) => {
-  return response;
-}, (error) => {
-  const { config, response } = error;
-  const status = response?.status;
-  const originalRequest = config;
+/**
+ * Setup interceptors with auth error handling
+ */
+let isInterceptorsSetup = false;
 
-  if (status === 401) {
-    return axiosIns.post(REFRESH_TOKEN_URL, {
-      refreshToken: localStorage.getItem(REFRESH_TOKEN),
-    }).then(({ data }) => {
-      if (data.accessToken) {
-        localStorage.setItem(ACCESS_TOKEN, data.accessToken);
-
-
-        axiosIns.defaults.headers.common[AUTH_HEADER] = `${TOKEN_TYPE} ${data.accessToken}`;
-
-        return axiosIns(originalRequest);
-      } else {
-        localStorage.removeItem(ACCESS_TOKEN);
-        localStorage.removeItem(REFRESH_TOKEN);
-        if (router.currentRoute.value.name !== "login") {
-          router.push({ name: "login" });
-        }
-      }
-    }).catch(() => {
-      localStorage.removeItem(ACCESS_TOKEN);
-      localStorage.removeItem(REFRESH_TOKEN);
-      if (router.currentRoute.value.name !== "login") {
-        router.push({ name: "login" });
-      }
-    });
+export function setupApiClient(options: {
+  onTokenRefreshFailed?: () => void;
+} = {}): void {
+  if (isInterceptorsSetup) {
+    return;
   }
 
-  return Promise.reject(error);
-});
+  setupInterceptors(apiClient, {
+    onTokenRefreshFailed: options.onTokenRefreshFailed,
+  });
 
-export default axiosIns;
+  isInterceptorsSetup = true;
+}
+
+/**
+ * Typed methods for convenience
+ */
+export const typedApiClient = {
+  get: <T = unknown>(url: string, config?: ApiRequestConfig) =>
+    apiClient.get<T>(url, config) as Promise<TypedAxiosResponse<T>>,
+
+  post: <T = unknown, D = unknown>(url: string, data?: D, config?: ApiRequestConfig<D>) =>
+    apiClient.post<T>(url, data, config) as Promise<TypedAxiosResponse<T>>,
+
+  put: <T = unknown, D = unknown>(url: string, data?: D, config?: ApiRequestConfig<D>) =>
+    apiClient.put<T>(url, data, config) as Promise<TypedAxiosResponse<T>>,
+
+  patch: <T = unknown, D = unknown>(url: string, data?: D, config?: ApiRequestConfig<D>) =>
+    apiClient.patch<T>(url, data, config) as Promise<TypedAxiosResponse<T>>,
+
+  delete: <T = unknown>(url: string, config?: ApiRequestConfig) =>
+    apiClient.delete<T>(url, config) as Promise<TypedAxiosResponse<T>>,
+};
+
+export default apiClient;
+
+// Backward compatibility
+export const axiosIns = apiClient;
