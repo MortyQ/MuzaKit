@@ -219,15 +219,6 @@ toast.info('New feature available');
 
 ---
 
-## 📚 Documentation
-
-- 📖 [Full Documentation](./src/docs/API_ARCHITECTURE.md)
-- 🔄 [Migration Guide](./MIGRATION_GUIDE.md)
-- 🏗️ [Feature-First Architecture](./FEATURE_FIRST_ARCHITECTURE.md)
-- 🎨 [Examples](./src/pages/Examples/ApiArchitectureExample.vue)
-
----
-
 ## ✨ Advantages
 
 ✅ Less boilerplate code  
