@@ -5,7 +5,7 @@
  */
 
 import type { AxiosRequestConfig, AxiosError, AxiosResponse } from "axios";
-import type { Ref, ComputedRef } from "vue";
+import type { Ref } from "vue";
 
 /**
  * Base API response with typed data
@@ -83,6 +83,13 @@ export interface UseApiOptions<T = unknown, D = unknown> extends ApiRequestConfi
 
 /**
  * Return type of useApi composable
+ *
+ * Keep it simple - no computed helpers, use raw state directly:
+ * - if (loading.value) { ... }
+ * - if (error.value) { ... }
+ * - if (data.value) { ... }
+ * - if (data.value?.length === 0) { ... } // For arrays
+ * - if (response.value) { console.log(response.value.headers) } // For advanced cases
  */
 export interface UseApiReturn<T = unknown, D = unknown> {
   /** Reactive data */
@@ -93,16 +100,14 @@ export interface UseApiReturn<T = unknown, D = unknown> {
   error: Ref<ApiError | null>;
   /** HTTP status code */
   statusCode: Ref<number | null>;
+  /** Full Axios response - includes headers, status, config (optional, for advanced use) */
+  response: Ref<AxiosResponse<T> | null>;
   /** Execute request */
   execute: (config?: ApiRequestConfig<D>) => Promise<T | null>;
   /** Abort request */
   abort: (message?: string) => void;
   /** Reset state */
   reset: () => void;
-  /** Has data */
-  hasData: ComputedRef<boolean>;
-  /** Has error */
-  hasError: ComputedRef<boolean>;
 }
 
 /**
@@ -151,14 +156,14 @@ export type TypedAxiosResponse<T = unknown> = AxiosResponse<T>;
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 /**
- * Request statuses
+ * Request status can be derived from state:
+ * - loading === true → PENDING
+ * - error !== null → ERROR
+ * - data !== null && !error && !loading → SUCCESS
+ * - !data && !error && !loading → IDLE
+ *
+ * No need for enum - keep it simple!
  */
-export enum RequestStatus {
-  IDLE = "idle",
-  PENDING = "pending",
-  SUCCESS = "success",
-  ERROR = "error",
-}
 
 /**
  * Retry logic options

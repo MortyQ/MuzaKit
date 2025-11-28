@@ -10,12 +10,38 @@
  * - Debouncing
  * - Callbacks (onSuccess, onError, onBefore, onFinish)
  * - Type safety
+ * - Full response access (headers, status, config)
  *
- * @example
+ * @example Basic usage (most common)
  * ```ts
  * const { data, loading, error, execute } = useApi<User[]>('/users', {
  *   immediate: true,
  *   onSuccess: (users) => console.log('Loaded', users.length, 'users')
+ * })
+ * ```
+ *
+ * @example Advanced usage with full response
+ * ```ts
+ * const { data, response, execute } = useApi<User[]>('/users', {
+ *   immediate: true
+ * })
+ *
+ * // Access response headers, status, etc
+ * watch(response, (res) => {
+ *   if (res) {
+ *     console.log('Headers:', res.headers)
+ *     console.log('Status:', res.status)
+ *
+ *     // Example: Check pagination headers
+ *     const total = res.headers['x-total-count']
+ *     const page = res.headers['x-page']
+ *
+ *     // Example: Check rate limit
+ *     const rateLimit = res.headers['x-ratelimit-remaining']
+ *     if (rateLimit && parseInt(rateLimit) < 10) {
+ *       console.warn('Low rate limit!')
+ *     }
+ *   }
  * })
  * ```
  */
@@ -94,8 +120,8 @@ export function useApi<T = unknown, D = unknown>(
         ...mergedConfig,
       });
 
-      // Set data
-      state.setData(response.data);
+      // Set data and full response
+      state.setData(response.data, response);
       state.setStatusCode(response.status);
 
       // Success callback
@@ -220,8 +246,15 @@ async function retryRequest<T, D>(
 
 /**
  * Helper for GET requests
+ *
+ * @example
+ * ```ts
+ * const { data, loading, error } = useApiGet<User[]>('/users', {
+ *   immediate: true
+ * })
+ * ```
  */
-export function useGet<T = unknown>(
+export function useApiGet<T = unknown>(
   url: string | Ref<string>,
   options?: Omit<UseApiOptions<T>, "method">,
 ): UseApiReturn<T> {
@@ -230,8 +263,14 @@ export function useGet<T = unknown>(
 
 /**
  * Helper for POST requests
+ *
+ * @example
+ * ```ts
+ * const { data, loading, execute } = useApiPost<User, CreateUserDto>('/users')
+ * await execute({ data: { name: 'John' } })
+ * ```
  */
-export function usePost<T = unknown, D = unknown>(
+export function useApiPost<T = unknown, D = unknown>(
   url: string | Ref<string>,
   options?: Omit<UseApiOptions<T, D>, "method">,
 ): UseApiReturn<T, D> {
@@ -240,8 +279,14 @@ export function usePost<T = unknown, D = unknown>(
 
 /**
  * Helper for PUT requests
+ *
+ * @example
+ * ```ts
+ * const { execute } = useApiPut<User, UpdateUserDto>('/users/1')
+ * await execute({ data: { name: 'John Doe' } })
+ * ```
  */
-export function usePut<T = unknown, D = unknown>(
+export function useApiPut<T = unknown, D = unknown>(
   url: string | Ref<string>,
   options?: Omit<UseApiOptions<T, D>, "method">,
 ): UseApiReturn<T, D> {
@@ -250,8 +295,14 @@ export function usePut<T = unknown, D = unknown>(
 
 /**
  * Helper for PATCH requests
+ *
+ * @example
+ * ```ts
+ * const { execute } = useApiPatch<User, Partial<User>>('/users/1')
+ * await execute({ data: { name: 'John' } })
+ * ```
  */
-export function usePatch<T = unknown, D = unknown>(
+export function useApiPatch<T = unknown, D = unknown>(
   url: string | Ref<string>,
   options?: Omit<UseApiOptions<T, D>, "method">,
 ): UseApiReturn<T, D> {
@@ -260,8 +311,14 @@ export function usePatch<T = unknown, D = unknown>(
 
 /**
  * Helper for DELETE requests
+ *
+ * @example
+ * ```ts
+ * const { execute } = useApiDelete('/users/1')
+ * await execute()
+ * ```
  */
-export function useDelete<T = unknown>(
+export function useApiDelete<T = unknown>(
   url: string | Ref<string>,
   options?: Omit<UseApiOptions<T>, "method">,
 ): UseApiReturn<T> {

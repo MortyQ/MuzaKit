@@ -4,10 +4,10 @@ export { useAnimatedValue } from "./useAnimatedValue";
 
 export {
   useApi,
-  useGet,
-  usePost,
-  usePut,
-  usePatch,
-  useDelete,
+  useApiGet,
+  useApiPost,
+  useApiPut,
+  useApiPatch,
+  useApiDelete,
 } from "./useApi";
 

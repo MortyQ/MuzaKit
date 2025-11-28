@@ -8,9 +8,10 @@ Composable-First Architecture для работы с API в Vue 3 приложе
 
 ✅ **Полная типобезопасность** - TypeScript first approach  
 ✅ **Реактивность** - автоматическое управление состоянием (loading, error, data)  
+✅ **Простота** - минимальный API без over-engineering  
 ✅ **Отмена запросов** - AbortController для предотвращения memory leaks  
 ✅ **Retry логика** - автоматические повторы с exponential backoff  
-✅ **Race condition protection** - правильная обработка concurrent refresh токенов  
+✅ **Полный контроль** - доступ к response для продвинутых случаев  
 ✅ **Модульность** - легко тестировать и расширять  
 ✅ **DX** - отличный developer experience с autocomplete
 
@@ -39,11 +40,11 @@ src/shared/composables/
 
 ## 📖 Примеры использования
 
-### 1. Базовое использование - useApi
+### 1. Базовое использование - useApiGet
 
 ```vue
 <script setup lang="ts">
-import { useApi } from '@/shared/composables';
+import { useApiGet } from '@/shared/composables';
 
 interface User {
   id: string;
@@ -52,7 +53,7 @@ interface User {
 }
 
 // Автоматический запрос при создании компонента
-const { data, loading, error, hasData } = useApi<User[]>('/users', {
+const { data, loading, error } = useApiGet<User[]>('/users', {
   immediate: true,
   onSuccess: (users) => {
     console.log('Loaded', users.length, 'users');
@@ -64,22 +65,26 @@ const { data, loading, error, hasData } = useApi<User[]>('/users', {
   <div>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error: {{ error.message }}</div>
-    <div v-else-if="hasData">
-      <div v-for="user in data" :key="user.id">
-        {{ user.name }}
+    <div v-else-if="data">
+      <!-- Явная проверка на пустой массив -->
+      <div v-if="data.length === 0">No users found</div>
+      <div v-else>
+        <div v-for="user in data" :key="user.id">
+          {{ user.name }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 ```
 
-### 2. Ручное выполнение запроса
+### 2. POST запрос - useApiPost
 
 ```vue
 <script setup lang="ts">
-import { usePost } from '@/shared/composables';
+import { useApiPost } from '@/shared/composables';
 
-interface CreateUserData {
+interface CreateUserDto {
   name: string;
   email: string;
 }
@@ -90,7 +95,7 @@ interface User {
   email: string;
 }
 
-const { data, loading, error, execute } = usePost<User, CreateUserData>('/users', {
+const { data, loading, error, execute } = useApiPost<User, CreateUserDto>('/users', {
   immediate: false,
   onSuccess: (user) => {
     console.log('User created:', user);
@@ -109,8 +114,10 @@ const createUser = async () => {
 
 <template>
   <button @click="createUser" :disabled="loading">
-    Create User
+    {{ loading ? 'Creating...' : 'Create User' }}
   </button>
+  <div v-if="error" class="error">{{ error.message }}</div>
+  <div v-if="data" class="success">User created: {{ data.name }}</div>
 </template>
 ```
 
@@ -119,17 +126,24 @@ const createUser = async () => {
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useApi } from '@/shared/composables';
+import { useApiGet } from '@/shared/composables';
+
+interface SearchResult {
+  id: string;
+  title: string;
+}
 
 const searchQuery = ref('');
 
-const { data: results, loading } = useApi('/search', {
+const { data: results, loading, execute } = useApiGet<SearchResult[]>('/search', {
   immediate: false,
   debounce: 500, // 500ms debounce
 });
 
 const search = () => {
-  execute({ params: { q: searchQuery.value } });
+  if (searchQuery.value.trim()) {
+    execute({ params: { q: searchQuery.value } });
+  }
 };
 </script>
 
@@ -140,7 +154,9 @@ const search = () => {
     placeholder="Search..."
   />
   <div v-if="loading">Searching...</div>
-  <div v-else>{{ results?.length }} results</div>
+  <div v-else-if="results">
+    {{ results.length }} results found
+  </div>
 </template>
 ```
 
@@ -148,9 +164,9 @@ const search = () => {
 
 ```vue
 <script setup lang="ts">
-import { useApi } from '@/shared/composables';
+import { useApiGet } from '@/shared/composables';
 
-const { data, loading, execute, abort } = useApi('/heavy-operation', {
+const { data, loading, execute, abort } = useApiGet('/heavy-operation', {
   immediate: false,
   timeout: 30000, // 30 seconds timeout
 });
@@ -174,9 +190,9 @@ const cancelOperation = () => {
 
 ```vue
 <script setup lang="ts">
-import { useApi } from '@/shared/composables';
+import { useApiGet } from '@/shared/composables';
 
-const { data, error, execute } = useApi('/unstable-endpoint', {
+const { data, error, execute } = useApiGet('/unstable-endpoint', {
   retry: 3, // Retry 3 times
   retryDelay: 1000, // 1 second between retries
   onError: (err) => {
@@ -186,151 +202,63 @@ const { data, error, execute } = useApi('/unstable-endpoint', {
 </script>
 ```
 
-### 6. Auth API - Login
+### 6. Полный доступ к response (продвинутое использование)
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthApi } from '@/shared/composables';
-import { useAuthStore } from '@/features/auth/store';
+import { watch } from 'vue';
+import { useApiGet } from '@/shared/composables';
 
-const router = useRouter();
-const authApi = useAuthApi();
-const authStore = useAuthStore();
+interface Product {
+  id: string;
+  name: string;
+}
 
-const email = ref('');
-const password = ref('');
+// Получаем и data и полный response
+const { data, response, execute } = useApiGet<Product[]>('/products', {
+  immediate: true
+});
 
-const handleLogin = async () => {
-  const result = await authApi.login({
-    email: email.value,
-    password: password.value
-  });
-
-  if (result) {
-    // Загружаем данные пользователя
-    await authStore.initialize();
+// Используем response для доступа к headers
+watch(response, (res) => {
+  if (res) {
+    // Пагинация из headers
+    const totalItems = res.headers['x-total-count'];
+    const currentPage = res.headers['x-page'];
+    console.log(`Page ${currentPage}, Total: ${totalItems}`);
     
-    // Редирект на dashboard
-    router.push('/dashboard');
+    // Rate limiting
+    const rateLimit = res.headers['x-ratelimit-remaining'];
+    if (rateLimit && parseInt(rateLimit) < 10) {
+      console.warn('⚠️ Low rate limit!');
+    }
+    
+    // ETag для кеширования
+    const etag = res.headers['etag'];
+    console.log('ETag:', etag);
   }
-};
+});
 </script>
 
 <template>
-  <form @submit.prevent="handleLogin">
-    <input v-model="email" type="email" placeholder="Email" />
-    <input v-model="password" type="password" placeholder="Password" />
-    <button type="submit" :disabled="authApi.isLoading">
-      {{ authApi.isLoading ? 'Logging in...' : 'Login' }}
-    </button>
-    <div v-if="authApi.error" class="error">
-      {{ authApi.error }}
-    </div>
-  </form>
+  <div>
+    <ProductList :products="data" />
+  </div>
 </template>
 ```
 
-### 7. Типизированные сервисы - прямые вызовы
-
-```ts
-import { authService, userService } from '@/shared/api/services';
-
-// В actions Pinia store или composable
-const login = async (email: string, password: string) => {
-  try {
-    const response = await authService.login({ email, password });
-    
-    // TypeScript знает точный тип response
-    console.log(response.user.name);
-    console.log(response.accessToken);
-    
-    return response;
-  } catch (error) {
-    // Ошибка уже обработана errorHandler
-    console.error('Login failed');
-    return null;
-  }
-};
-
-// Обновление профиля
-const updateProfile = async (name: string) => {
-  const user = await userService.updateProfile({ name });
-  console.log('Updated user:', user);
-};
-
-// Загрузка аватара
-const uploadAvatar = async (file: File) => {
-  const { url } = await userService.uploadAvatar(file);
-  console.log('Avatar URL:', url);
-};
-```
-
-### 8. Использование в Pinia Store
-
-```ts
-import { defineStore } from 'pinia';
-import { authService, type User } from '@/shared/api/services';
-import { tokenManager } from '@/shared/api';
-
-export const useAuthStore = defineStore('auth', () => {
-  const user = ref<User | null>(null);
-  const isLoading = ref(false);
-
-  const initialize = async () => {
-    if (!tokenManager.hasTokens()) {
-      return;
-    }
-
-    isLoading.value = true;
-    try {
-      user.value = await authService.getMe();
-    } catch (error) {
-      console.error('Failed to load user:', error);
-      tokenManager.clearTokens();
-    } finally {
-      isLoading.value = false;
-    }
-  };
-
-  const login = async (email: string, password: string) => {
-    isLoading.value = true;
-    try {
-      const response = await authService.login({ email, password });
-      
-      // Токены уже сохранены в authService через useAuthApi
-      user.value = response.user;
-      
-      return true;
-    } catch {
-      return false;
-    } finally {
-      isLoading.value = false;
-    }
-  };
-
-  return {
-    user,
-    isLoading,
-    initialize,
-    login,
-  };
-});
-```
-
-### 9. Реактивный URL
+### 7. Реактивный URL
 
 ```vue
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useApi } from '@/shared/composables';
+import { useApiGet } from '@/shared/composables';
 
 const userId = ref('123');
 const url = computed(() => `/users/${userId.value}`);
 
 // Запрос автоматически обновится при изменении userId
-const { data: user, loading } = useApi(url, {
+const { data: user, loading } = useApiGet(url, {
   immediate: true,
 });
 
@@ -340,14 +268,14 @@ const changeUser = (id: string) => {
 </script>
 ```
 
-### 10. Кастомная обработка ошибок
+### 8. Кастомная обработка ошибок
 
 ```vue
 <script setup lang="ts">
-import { useApi } from '@/shared/composables';
+import { useApiGet } from '@/shared/composables';
 import { toast } from 'vue-sonner';
 
-const { execute } = useApi('/users', {
+const { execute } = useApiGet('/users', {
   skipErrorNotification: true, // Отключаем автоматический toast
   onError: (error) => {
     // Кастомная обработка
@@ -365,31 +293,6 @@ const { execute } = useApi('/users', {
 
 ---
 
-## 🔧 Инициализация в приложении
-
-### main.ts
-
-```ts
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
-import { useAuthApi } from '@/shared/composables';
-import App from './App.vue';
-import router from './router';
-
-const app = createApp(App);
-const pinia = createPinia();
-
-app.use(pinia);
-app.use(router);
-
-// Инициализация API клиента с обработкой ошибок auth
-const authApi = useAuthApi();
-authApi.initialize();
-
-app.mount('#app');
-```
-
----
 
 ## 🧪 Тестирование
 
@@ -397,12 +300,11 @@ app.mount('#app');
 
 ```ts
 import { describe, it, expect, vi } from 'vitest';
-import { useApi } from '@/shared/composables';
-import { tokenManager } from '@/shared/api';
+import { useApiGet } from '@/shared/composables';
 
-describe('useApi', () => {
+describe('useApiGet', () => {
   it('should fetch data successfully', async () => {
-    const { data, loading, execute } = useApi('/users', {
+    const { data, loading, execute } = useApiGet('/users', {
       immediate: false,
     });
 
@@ -417,7 +319,7 @@ describe('useApi', () => {
   it('should handle errors', async () => {
     const onError = vi.fn();
     
-    const { error, execute } = useApi('/invalid', {
+    const { error, execute } = useApiGet('/invalid', {
       immediate: false,
       onError,
     });
@@ -427,33 +329,19 @@ describe('useApi', () => {
     expect(error.value).toBeTruthy();
     expect(onError).toHaveBeenCalled();
   });
+
+  it('should abort request on unmount', async () => {
+    const { abort, loading, execute } = useApiGet('/users', {
+      immediate: false,
+    });
+
+    execute();
+    expect(loading.value).toBe(true);
+    
+    abort();
+    expect(loading.value).toBe(false);
+  });
 });
-```
-
-### Мокирование tokenManager в тестах
-
-```ts
-import { TokenManager } from '@/shared/api/tokenManager';
-
-class MockTokenStorage implements TokenStorage {
-  private tokens: Map<string, string> = new Map();
-
-  getAccessToken() {
-    return this.tokens.get('access') || null;
-  }
-
-  setTokens(tokens: AuthTokens) {
-    this.tokens.set('access', tokens.accessToken);
-    this.tokens.set('refresh', tokens.refreshToken);
-  }
-
-  clearTokens() {
-    this.tokens.clear();
-  }
-}
-
-// В тестах
-const mockManager = new TokenManager(new MockTokenStorage());
 ```
 
 ---
@@ -485,9 +373,9 @@ const loadUsers = async () => {
 ### Стало (новый подход)
 
 ```ts
-import { useApi } from '@/shared/composables';
+import { useApiGet } from '@/shared/composables';
 
-const { data: users, loading } = useApi('/users', {
+const { data: users, loading, error } = useApiGet('/users', {
   immediate: true,
 });
 ```
@@ -497,29 +385,36 @@ const { data: users, loading } = useApi('/users', {
 - ✅ Автоматическая отмена при unmount
 - ✅ Типобезопасность
 - ✅ Декларативный API
+- ✅ Автоматическая обработка ошибок
 
 ---
 
 ## 🎯 Best Practices
 
-### 1. Используйте типизированные сервисы для store actions
+### 1. Используйте правильные хелперы для HTTP методов
 
 ```ts
-// ❌ Плохо
-const user = await apiClient.get('/users/me');
+// ❌ Плохо - универсальный useApi с method
+const { data } = useApi('/users', { method: 'GET' });
 
-// ✅ Хорошо
-const user = await authService.getMe();
+// ✅ Хорошо - специализированные хелперы
+const { data } = useApiGet('/users');
+const { execute } = useApiPost('/users');
+const { execute } = useApiPut('/users/1');
+const { execute } = useApiPatch('/users/1');
+const { execute } = useApiDelete('/users/1');
 ```
 
-### 2. Используйте composables в компонентах
+### 2. Явные проверки состояний (нет magic helpers)
 
 ```ts
-// ❌ Плохо - прямой вызов в компоненте
-const response = await apiClient.get('/users');
+// ❌ Плохо - hasData бесполезен для массивов
+// (removed - больше не существует)
 
-// ✅ Хорошо - использование composable
-const { data: users, loading } = useApi('/users', { immediate: true });
+// ✅ Хорошо - явная проверка
+const { data } = useApiGet<User[]>('/users');
+if (data.value && data.value.length > 0) { ... } // Правильно!
+if (data.value?.length === 0) { ... } // Пустой массив
 ```
 
 ### 3. Выносите API логику в отдельные composables
@@ -527,7 +422,7 @@ const { data: users, loading } = useApi('/users', { immediate: true });
 ```ts
 // composables/useUsers.ts
 export function useUsers() {
-  const { data: users, loading, error, execute: refetch } = useApi<User[]>('/users', {
+  const { data: users, loading, error, execute: refetch } = useApiGet<User[]>('/users', {
     immediate: true,
   });
 
@@ -548,7 +443,7 @@ export function useUsers() {
 ### 4. Используйте AbortController для длительных операций
 
 ```ts
-const { execute, abort } = useApi('/export-data', {
+const { execute, abort } = useApiGet('/export-data', {
   immediate: false,
   timeout: 120000, // 2 minutes
 });
@@ -558,23 +453,45 @@ onUnmounted(() => {
 });
 ```
 
+### 5. Используйте response только когда нужно
+
+```ts
+// ❌ Плохо - response не нужен
+const { data, response } = useApiGet('/users');
+// Используем только data
+
+// ✅ Хорошо - response для headers
+const { data, response } = useApiGet('/users');
+watch(response, (res) => {
+  const rateLimit = res?.headers['x-ratelimit-remaining'];
+  console.log('Rate limit:', rateLimit);
+});
+```
+
 ---
 
 ## 🚀 Следующие шаги
 
-1. ✅ Инициализировать API в `main.ts`
-2. ✅ Обновить auth store для использования новых сервисов
-3. ✅ Постепенно мигрировать компоненты на новые composables
-4. ✅ Добавить новые сервисы по мере необходимости
+1. ✅ Использовать правильные хелперы (`useApiGet`, `useApiPost`, etc)
+2. ✅ Явно проверять состояния (без `hasData`, `hasError`)
+3. ✅ Использовать `response` только для продвинутых случаев
+4. ✅ Постепенно мигрировать компоненты на новые composables
 5. ✅ Покрыть тестами критические части
 
 ---
 
 ## 📝 Заметки
 
-- API клиент автоматически обрабатывает 401 ошибки и обновляет токены
-- Все запросы автоматически отменяются при unmount компонента
-- Ошибки автоматически показываются через toast (можно отключить)
-- Поддержка как composables, так и прямых вызовов сервисов
-- Полная обратная совместимость с существующим кодом
+- **API клиент** автоматически обрабатывает 401 ошибки и обновляет токены
+- **Все запросы** автоматически отменяются при unmount компонента
+- **Ошибки** автоматически показываются через toast (можно отключить)
+- **Простой API** - только нужные поля: `data`, `loading`, `error`, `statusCode`, `response`
+- **Полный контроль** - доступ к `response` для headers, rate limiting, etc
+- **Обратная совместимость** - старый `axiosIns` все еще работает
+
+---
+
+## 📚 Дополнительная документация
+
+- [Toast Usage](./TOAST_USAGE.md) - Уведомления об ошибках
 

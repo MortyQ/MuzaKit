@@ -60,4 +60,3 @@ export type {
   RetryOptions,
 } from "./types";
 
-export { RequestStatus } from "./types";

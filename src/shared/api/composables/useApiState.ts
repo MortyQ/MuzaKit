@@ -1,79 +1,107 @@
 /**
  * API State Composable
  *
- * Managing API request state
- * Base composable for creating reactive state
+ * Managing API request state with minimal, essential properties
+ *
+ * Design principles:
+ * - Keep it simple: only data, loading, error, statusCode
+ * - No computed helpers: use raw state directly (more explicit, less magic)
+ * - No status enum: state can be derived from loading/error/data
+ *
+ * State derivation:
+ * - loading === true → request in progress
+ * - error !== null → request failed
+ * - data !== null && !error && !loading → request succeeded
+ * - !data && !error && !loading → idle
  */
 
-import { ref, computed, type Ref, type ComputedRef } from "vue";
+import type { AxiosResponse } from "axios";
+import { ref, type Ref } from "vue";
 
-import { RequestStatus, type ApiState, type ApiError } from "../types";
+import type { ApiState, ApiError } from "../types";
 
 export interface UseApiStateReturn<T = unknown> {
-  /** Data */
+  /** Response data */
   data: Ref<T | null>;
-  /** Loading flag */
+  /** Loading flag - true while request is in progress */
   loading: Ref<boolean>;
-  /** Error */
+  /** Error object - null if no error */
   error: Ref<ApiError | null>;
-  /** HTTP status code */
+  /** HTTP status code - useful for handling specific codes (404, 403, etc) */
   statusCode: Ref<number | null>;
-  /** Request status */
-  status: Ref<RequestStatus>;
-  /** Has data */
-  hasData: ComputedRef<boolean>;
-  /** Has error */
-  hasError: ComputedRef<boolean>;
-  /** Request is pending */
-  isPending: ComputedRef<boolean>;
-  /** Request is successful */
-  isSuccess: ComputedRef<boolean>;
-  /** Set data */
-  setData: (newData: T | null) => void;
+  /** Full Axios response - includes headers, status, config, etc (optional, for advanced use cases) */
+  response: Ref<AxiosResponse<T> | null>;
+  /** Set data and clear error */
+  setData: (newData: T | null, fullResponse?: AxiosResponse<T> | null) => void;
   /** Set error */
   setError: (newError: ApiError | null) => void;
-  /** Set loading */
+  /** Set loading state */
   setLoading: (isLoading: boolean) => void;
-  /** Set status code */
+  /** Set HTTP status code */
   setStatusCode: (code: number | null) => void;
-  /** Reset state */
+  /** Reset to initial state */
   reset: () => void;
 }
 
 /**
  * Composable for API state management
+ *
+ * Simple, explicit state management without magic computed properties
+ * Use raw state directly in your components for clarity
+ *
+ * @example Basic usage (most common)
+ * ```ts
+ * const state = useApiState<User[]>();
+ *
+ * // Check states explicitly (no magic):
+ * if (state.loading.value) { ... }
+ * if (state.error.value) { ... }
+ * if (state.data.value) { ... }
+ * if (state.data.value?.length === 0) { ... } // Empty array check
+ * ```
+ *
+ * @example Advanced usage with full response
+ * ```ts
+ * const state = useApiState<User[]>();
+ *
+ * // Access response headers, status, etc:
+ * if (state.response.value) {
+ *   console.log('Headers:', state.response.value.headers)
+ *   console.log('Status:', state.response.value.status)
+ *   console.log('Status Text:', state.response.value.statusText)
+ *   console.log('Config:', state.response.value.config)
+ *
+ *   // Example: Check rate limit headers
+ *   const rateLimit = state.response.value.headers['x-ratelimit-remaining']
+ *   if (rateLimit && parseInt(rateLimit) < 10) {
+ *     console.warn('Low rate limit!')
+ *   }
+ * }
+ * ```
  */
 export function useApiState<T = unknown>(initialData: T | null = null): UseApiStateReturn<T> {
-  // State
+  // State - simple and explicit
   const data = ref<T | null>(initialData) as Ref<T | null>;
   const loading = ref(false);
   const error = ref<ApiError | null>(null);
   const statusCode = ref<number | null>(null);
-  const status = ref<RequestStatus>(RequestStatus.IDLE);
-
-  // Computed
-  const hasData = computed(() => data.value !== null);
-  const hasError = computed(() => error.value !== null);
-  const isPending = computed(() => status.value === RequestStatus.PENDING);
-  const isSuccess = computed(() => status.value === RequestStatus.SUCCESS);
+  const response = ref<AxiosResponse<T> | null>(null) as Ref<AxiosResponse<T> | null>;
 
   // Methods
-  const setData = (newData: T | null) => {
+  const setData = (newData: T | null, fullResponse?: AxiosResponse<T> | null) => {
     data.value = newData;
-    error.value = null;
-    status.value = RequestStatus.SUCCESS;
+    error.value = null; // Clear error on successful data set
+    if (fullResponse) {
+      response.value = fullResponse;
+    }
   };
 
   const setError = (newError: ApiError | null) => {
     error.value = newError;
-    status.value = newError ? RequestStatus.ERROR : RequestStatus.IDLE;
   };
 
   const setLoading = (isLoading: boolean) => {
     loading.value = isLoading;
-    if (isLoading) {
-      status.value = RequestStatus.PENDING;
-    }
   };
 
   const setStatusCode = (code: number | null) => {
@@ -85,7 +113,7 @@ export function useApiState<T = unknown>(initialData: T | null = null): UseApiSt
     loading.value = false;
     error.value = null;
     statusCode.value = null;
-    status.value = RequestStatus.IDLE;
+    response.value = null;
   };
 
   return {
@@ -93,11 +121,7 @@ export function useApiState<T = unknown>(initialData: T | null = null): UseApiSt
     loading,
     error,
     statusCode,
-    status,
-    hasData,
-    hasError,
-    isPending,
-    isSuccess,
+    response,
     setData,
     setError,
     setLoading,
