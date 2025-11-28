@@ -76,8 +76,8 @@ const isRouterLink = computed(() => !!props.to);
     >
       <VIcon
         v-if="props.loader"
-        icon="mdi:loading"
-        :size="32"
+        icon="lucid:loading"
+        :size="24"
         :loading="props.loader"
       />
       <template v-else>

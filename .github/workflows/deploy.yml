@@ -49,8 +49,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
+      - name: Build main app
         run: pnpm build
+
+      - name: Build Storybook
+        run: pnpm build-storybook
+
+      - name: Combine builds
+        run: |
+          mkdir -p dist/storybook
+          cp -r storybook-static/* dist/storybook/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
