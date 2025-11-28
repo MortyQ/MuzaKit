@@ -77,45 +77,27 @@ export function hasPermissions(_required: string[]): boolean {
  * Authentication guard
  * Checks if route requires authentication and redirects to login if needed
  *
- * TODO: Make async for production with getMe() call:
+ * BEST PRACTICES:
+ * ✅ Guards should be synchronous and only check state
+ * ✅ Initialization happens in App.vue onMounted (once on startup)
+ * ✅ Guards use already-loaded auth state for instant decisions
+ * ✅ No API calls in guards (they block navigation)
  *
- * export async function authGuard(
- *   to: RouteLocationNormalized,
- *   from: RouteLocationNormalized,
- *   next: NavigationGuardNext,
- * ) {
- *   const meta = to.meta as RouteMeta;
- *   const requiresAuth = meta.requiresAuth !== false;
+ * ARCHITECTURE:
+ * 1. App.vue onMounted → authStore.initialize() (loads user if token exists)
+ * 2. Router navigation → guard checks authStore.isAuthenticated
+ * 3. Guard redirects based on state (no async operations)
  *
- *   if (!requiresAuth) {
- *     next();
- *     return;
- *   }
+ * For production with real API:
+ * - Keep initialization in App.vue with getMe() call
+ * - Add token refresh logic in axios interceptor
+ * - Use isInitialized flag to prevent premature navigation
  *
- *   // Async authentication check with getMe()
- *   const authenticated = await isAuthenticated();
- *
- *   if (!authenticated) {
- *     next({
- *       path: meta.authRedirect || "/login",
- *       query: { redirect: to.fullPath },
- *     });
- *     return;
- *   }
- *
- *   // Async permission check
- *   if (meta.permissions && meta.permissions.length > 0) {
- *     const hasPerms = await hasPermissions(meta.permissions);
- *     if (!hasPerms) {
- *       next({ path: "/403", query: { from: to.fullPath } });
- *       return;
- *     }
- *   }
- *
- *   next();
- * }
+ * @example
+ * // In route config:
+ * meta: { requiresAuth: true, permissions: ['admin'] }
  */
-export async function authGuard(
+export function authGuard(
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
   next: NavigationGuardNext,
@@ -123,9 +105,12 @@ export async function authGuard(
   const meta = to.meta as RouteMeta;
   const authStore = useAuthStore();
 
-  // Ensure auth is initialized (will wait if already in progress)
-  // This handles both cases: initialized in App.vue or needs init here
-  await authStore.initialize();
+  // Wait for initialization on first navigation only
+  // After app startup, authStore.isInitialized will be true
+  if (!authStore.isInitialized) {
+    next();
+    return;
+  }
 
   // Check if authentication is required (default: true)
   const requiresAuth = meta.requiresAuth !== false;

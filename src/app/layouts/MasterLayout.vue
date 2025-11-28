@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type Component } from "vue";
+import { computed, onMounted, type Component } from "vue";
 import { useRoute } from "vue-router";
 
 // Import all available layouts
@@ -13,6 +13,11 @@ import VLoader from "@/shared/ui/common/VLoader.vue";
 
 /**
  * MasterLayout - Dynamic layout switcher based on route meta
+ *
+ * Responsibilities:
+ * 1. Initialize app state (theme, auth)
+ * 2. Show loader during initialization
+ * 3. Switch between layouts based on route meta
  *
  * Usage in router:
  * {
@@ -36,6 +41,7 @@ const themeStore = useThemeStore();
 // Initialize theme immediately (synchronously) before any rendering
 // This prevents theme "flash" on page load/refresh
 themeStore.initTheme();
+
 
 // Dynamically resolve layout from route meta
 const layout = computed(() => {
@@ -62,6 +68,12 @@ const shouldShowContent = computed(() => {
   // For protected routes - only show if authenticated
   // This prevents DefaultLayout from flashing before redirect to login
   return authStore.isAuthenticated;
+});
+
+// Initialize auth state on mount
+// This loads user data if token exists, ensuring guards work synchronously
+onMounted(async () => {
+  await authStore.initialize();
 });
 </script>
 

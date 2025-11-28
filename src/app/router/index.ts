@@ -23,15 +23,12 @@ const router = createRouter({
   routes: modules,
 });
 
-/**
- * Global navigation guards
- */
-router.beforeEach(async (to, from, next) => {
+router.beforeEach((to, from, next) => {
   // 1. Set page title
   document.title = (to.meta.title as string) || "Vue 3 Starter";
 
-  // 2. Check authentication
-  await authGuard(to, from, next);
+  // 2. Check authentication (synchronous - uses pre-loaded state)
+  authGuard(to, from, next);
 });
 
 export default router;
