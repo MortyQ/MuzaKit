@@ -14,7 +14,9 @@
     "deploy:preview": "pnpm build && pnpm preview",
     "deploy:check": "bash scripts/check-deploy-ready.sh",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "storybook:preview": "pnpm build-storybook && npx http-server storybook-static -p 6007",
+    "deploy:storybook": "pnpm build-storybook"
   },
   "dependencies": {
     "@tanstack/vue-virtual": "^3.13.12",
