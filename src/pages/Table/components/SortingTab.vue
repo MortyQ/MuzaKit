@@ -9,7 +9,11 @@ import { mockDataUsers } from "@/widgets/table/utils/mockData";
 
 // Server-side sorting example
 const serverData = ref([...mockDataUsers]);
-const serverSortState = ref<SortItem[]>([]);
+// ✅ PRESET: Initial sort by name (ascending)
+// You can set initial sort state - table will apply it on mount
+const serverSortState = ref<SortItem[]>([
+  { column: "name", order: "desc" },
+]);
 const serverLoading = ref(false);
 
 const pagination = reactive({
@@ -65,7 +69,11 @@ const handleServerRequest = async ({ sort, page }: RequestPayload) => {
 
 // Frontend sorting example
 const frontData = ref([...mockDataUsers]);
-const frontSortState = ref<SortItem[]>([]);
+// ✅ PRESET: Multi-sort - first by age (desc), then by name (asc)
+const frontSortState = ref<SortItem[]>([
+  { column: "age", order: "desc" },
+  { column: "name", order: "asc" },
+]);
 
 // Example: All flexible columns - fill container width equally
 const frontColumns: Column[] = [
@@ -94,6 +102,7 @@ const frontColumns: Column[] = [
 
 // Single-sort example
 const singleData = ref([...mockDataUsers]);
+// No preset - starts with no sorting
 const singleSortState = ref<SortItem[]>([]);
 const singleLoading = ref(false);
 
@@ -263,6 +272,7 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
         Server-side Multi-Sort (default)
       </h2>
       <p class="section-description">
+        <strong>✅ Preset:</strong> Initially sorted by <code>name (asc)</code>.
         Click on different columns to add multiple sorts.
         Click same column to cycle: none → asc → desc → none
       </p>
@@ -299,6 +309,8 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
         Frontend Multi-Sort
       </h2>
       <p class="section-description">
+        <strong>✅ Preset:</strong> Initially sorted by
+        <code>age (desc)</code>, then <code>name (asc)</code>.
         Sorting happens on client-side. All data is sorted in browser without API calls.
       </p>
       <div class="section-info">
@@ -327,6 +339,7 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
         Single-Sort Mode
       </h2>
       <p class="section-description">
+        <strong>No preset</strong> - table starts unsorted.
         Only one column can be sorted at a time. Clicking another column replaces the current sort.
       </p>
       <div class="section-info">
