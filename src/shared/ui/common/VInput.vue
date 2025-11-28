@@ -98,7 +98,7 @@ const sizeClasses = computed(() => {
 
 // Show left icon: either custom icon, search icon, or slot
 const showLeftIcon = computed(() => {
-  return props.icon || isSearchType.value || !!slots["icon-left"];
+  return props.icon || isSearchType.value || !!slots["icon-left"] || props.loading;
 });
 
 // Show right icon: password toggle or slot
@@ -161,8 +161,8 @@ onUnmounted(() => {
         class="v-input-icon v-input-icon-left"
         :class="{
           'v-input-icon-textarea': textarea,
-          'text-primary': isFocused && isSearchType,
-          'text-secondaryText': !isFocused || !isSearchType
+          'text-primary': isFocused && isSearchType || loading,
+          'text-secondaryText': !isFocused || !isSearchType,
         }"
       >
         <slot name="icon-left">
