@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { ref } from "vue";
 
-import VInput from "./VInput.vue";
+import VInput from "../VInput.vue";
 
 const meta = {
   title: "UI/Common/VInput",

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { ref } from "vue";
 
-import VSwitch from "./VSwitch.vue";
+import VSwitch from "../VSwitch.vue";
 
 const meta = {
   title: "UI/Common/VSwitch",
@@ -106,32 +106,6 @@ export const WithIcons: Story = {
         true-icon="lucide:check" 
         false-icon="lucide:x" 
       />
-    `,
-  }),
-};
-
-export const Disabled: Story = {
-  render: (args) => ({
-    components: { VSwitch },
-    setup() {
-      const enabled = ref(false);
-      return { args, enabled };
-    },
-    template: `
-      <VSwitch v-model="enabled" v-bind="args" disabled />
-    `,
-  }),
-};
-
-export const DisabledChecked: Story = {
-  render: (args) => ({
-    components: { VSwitch },
-    setup() {
-      const enabled = ref(true);
-      return { args, enabled };
-    },
-    template: `
-      <VSwitch v-model="enabled" v-bind="args" disabled />
     `,
   }),
 };
