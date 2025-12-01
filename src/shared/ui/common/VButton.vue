@@ -16,8 +16,6 @@ const props = withDefaults(
     variant?: "default" | "primary" | "positive" | "negative" | "warning" | "link";
     to?: string | object;
     replace?: boolean;
-    activeClass?: string;
-    exactActiveClass?: string;
   }>(),
   {
     type: "button",
@@ -25,8 +23,6 @@ const props = withDefaults(
     replace: false,
     icon: undefined,
     to: undefined,
-    activeClass: undefined,
-    exactActiveClass: undefined,
     text:"",
   },
 );
@@ -63,8 +59,6 @@ const isRouterLink = computed(() => !!props.to);
         ? {
           to: props.to,
           replace: props.replace,
-          activeClass: props.activeClass,
-          exactActiveClass: props.exactActiveClass,
           ...$attrs,
         }
         : { type: props.type, disabled: props.disabled || props.loader, ...$attrs }

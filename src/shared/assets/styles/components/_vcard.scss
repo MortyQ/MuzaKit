@@ -61,7 +61,6 @@
     /* Solid background on mobile, glass effect on desktop */
     background-color: rgb(var(--color-base-100));
     border: 1px solid rgb(var(--color-base-300) / 0.3);
-    border-radius: 1rem;
 
     /* Modern multi-layered shadow - PROMINENT by default */
     /* Inspired by Apple Design System & Material Design 3 */
@@ -110,7 +109,6 @@
     /* Premium glass card with strongest effect & elevation */
     background-color: rgb(var(--color-base-100));
     border: 1px solid rgb(var(--color-base-300) / 0.4);
-    border-radius: 1rem;
 
     /* Premium multi-layered shadow - VERY PROMINENT by default */
     box-shadow:

@@ -1,46 +1,46 @@
 # 🚀 API Architecture Documentation
 
-## 📚 Обзор
+## 📚 Overview
 
-Composable-First Architecture для работы с API в Vue 3 приложении.
+Composable-First Architecture for API operations in Vue 3 applications.
 
-### Основные преимущества
+### Key Benefits
 
-✅ **Полная типобезопасность** - TypeScript first approach  
-✅ **Реактивность** - автоматическое управление состоянием (loading, error, data)  
-✅ **Простота** - минимальный API без over-engineering  
-✅ **Отмена запросов** - AbortController для предотвращения memory leaks  
-✅ **Retry логика** - автоматические повторы с exponential backoff  
-✅ **Полный контроль** - доступ к response для продвинутых случаев  
-✅ **Модульность** - легко тестировать и расширять  
-✅ **DX** - отличный developer experience с autocomplete
+✅ **Full Type Safety** - TypeScript first approach  
+✅ **Reactivity** - automatic state management (loading, error, data)  
+✅ **Simplicity** - minimal API without over-engineering  
+✅ **Request Cancellation** - AbortController to prevent memory leaks  
+✅ **Retry Logic** - automatic retries with exponential backoff  
+✅ **Full Control** - access to response for advanced cases  
+✅ **Modularity** - easy to test and extend  
+✅ **DX** - excellent developer experience with autocomplete
 
 ---
 
-## 🏗️ Архитектура
+## 🏗️ Architecture
 
 ```
 src/shared/api/
-├── client.ts              # Настроенный axios instance
-├── interceptors.ts        # Модульные interceptors
-├── types.ts              # Типы для API
-├── tokenManager.ts       # Управление токенами
-├── errorHandler.ts       # Обработка ошибок
-└── services/             # Типизированные сервисы
+├── client.ts              # Configured axios instance
+├── interceptors.ts        # Modular interceptors
+├── types.ts              # API types
+├── tokenManager.ts       # Token management
+├── errorHandler.ts       # Error handling
+└── services/             # Typed services
     ├── auth.service.ts   # Auth API
     └── user.service.ts   # User API
 
 src/shared/composables/
-├── useApi.ts             # Универсальный API composable
-├── useAuthApi.ts         # Auth специализированный composable
-└── useApiState.ts        # Управление состоянием
+├── useApi.ts             # Universal API composable
+├── useAuthApi.ts         # Auth specialized composable
+└── useApiState.ts        # State management
 ```
 
 ---
 
-## 📖 Примеры использования
+## 📖 Usage Examples
 
-### 1. Базовое использование - useApiGet
+### 1. Basic Usage - useApiGet
 
 ```vue
 <script setup lang="ts">
@@ -52,7 +52,7 @@ interface User {
   email: string;
 }
 
-// Автоматический запрос при создании компонента
+// Automatic request on component creation
 const { data, loading, error } = useApiGet<User[]>('/users', {
   immediate: true,
   onSuccess: (users) => {
@@ -66,7 +66,7 @@ const { data, loading, error } = useApiGet<User[]>('/users', {
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error: {{ error.message }}</div>
     <div v-else-if="data">
-      <!-- Явная проверка на пустой массив -->
+      <!-- Explicit check for empty array -->
       <div v-if="data.length === 0">No users found</div>
       <div v-else>
         <div v-for="user in data" :key="user.id">
@@ -78,7 +78,7 @@ const { data, loading, error } = useApiGet<User[]>('/users', {
 </template>
 ```
 
-### 2. POST запрос - useApiPost
+### 2. POST Request - useApiPost
 
 ```vue
 <script setup lang="ts">
@@ -160,7 +160,7 @@ const search = () => {
 </template>
 ```
 
-### 4. Отмена запроса
+### 4. Request Cancellation
 
 ```vue
 <script setup lang="ts">
@@ -186,7 +186,7 @@ const cancelOperation = () => {
 </template>
 ```
 
-### 5. Retry логика
+### 5. Retry Logic
 
 ```vue
 <script setup lang="ts">
@@ -202,7 +202,7 @@ const { data, error, execute } = useApiGet('/unstable-endpoint', {
 </script>
 ```
 
-### 6. Полный доступ к response (продвинутое использование)
+### 6. Full Response Access (Advanced Usage)
 
 ```vue
 <script setup lang="ts">
@@ -214,15 +214,15 @@ interface Product {
   name: string;
 }
 
-// Получаем и data и полный response
+// Get both data and full response
 const { data, response, execute } = useApiGet<Product[]>('/products', {
   immediate: true
 });
 
-// Используем response для доступа к headers
+// Use response to access headers
 watch(response, (res) => {
   if (res) {
-    // Пагинация из headers
+    // Pagination from headers
     const totalItems = res.headers['x-total-count'];
     const currentPage = res.headers['x-page'];
     console.log(`Page ${currentPage}, Total: ${totalItems}`);
@@ -233,7 +233,7 @@ watch(response, (res) => {
       console.warn('⚠️ Low rate limit!');
     }
     
-    // ETag для кеширования
+    // ETag for caching
     const etag = res.headers['etag'];
     console.log('ETag:', etag);
   }
@@ -247,7 +247,7 @@ watch(response, (res) => {
 </template>
 ```
 
-### 7. Реактивный URL
+### 7. Reactive URL
 
 ```vue
 <script setup lang="ts">
@@ -257,18 +257,18 @@ import { useApiGet } from '@/shared/composables';
 const userId = ref('123');
 const url = computed(() => `/users/${userId.value}`);
 
-// Запрос автоматически обновится при изменении userId
+// Request automatically updates when userId changes
 const { data: user, loading } = useApiGet(url, {
   immediate: true,
 });
 
 const changeUser = (id: string) => {
-  userId.value = id; // Триггерит новый запрос
+  userId.value = id; // Triggers new request
 };
 </script>
 ```
 
-### 8. Кастомная обработка ошибок
+### 8. Custom Error Handling
 
 ```vue
 <script setup lang="ts">
@@ -276,9 +276,9 @@ import { useApiGet } from '@/shared/composables';
 import { toast } from 'vue-sonner';
 
 const { execute } = useApiGet('/users', {
-  skipErrorNotification: true, // Отключаем автоматический toast
+  skipErrorNotification: true, // Disable automatic toast
   onError: (error) => {
-    // Кастомная обработка
+    // Custom handling
     if (error.status === 404) {
       toast.error('Users not found');
     } else if (error.status === 403) {
@@ -294,9 +294,9 @@ const { execute } = useApiGet('/users', {
 ---
 
 
-## 🧪 Тестирование
+## 🧪 Testing
 
-### Пример теста для composable
+### Example Test for Composable
 
 ```ts
 import { describe, it, expect, vi } from 'vitest';
@@ -346,14 +346,14 @@ describe('useApiGet', () => {
 
 ---
 
-## 📊 Миграция с текущего API
+## 📊 Migration from Current API
 
-### Было (старый подход)
+### Before (Old Approach)
 
 ```ts
 import axiosIns from '@/shared/api/client';
 
-// В компоненте
+// In component
 const users = ref([]);
 const loading = ref(false);
 
@@ -370,7 +370,7 @@ const loadUsers = async () => {
 };
 ```
 
-### Стало (новый подход)
+### After (New Approach)
 
 ```ts
 import { useApiGet } from '@/shared/composables';
@@ -380,24 +380,24 @@ const { data: users, loading, error } = useApiGet('/users', {
 });
 ```
 
-Преимущества:
-- ✅ Меньше boilerplate кода
-- ✅ Автоматическая отмена при unmount
-- ✅ Типобезопасность
-- ✅ Декларативный API
-- ✅ Автоматическая обработка ошибок
+Benefits:
+- ✅ Less boilerplate code
+- ✅ Automatic cancellation on unmount
+- ✅ Type safety
+- ✅ Declarative API
+- ✅ Automatic error handling
 
 ---
 
 ## 🎯 Best Practices
 
-### 1. Используйте правильные хелперы для HTTP методов
+### 1. Use Proper Helpers for HTTP Methods
 
 ```ts
-// ❌ Плохо - универсальный useApi с method
+// ❌ Bad - universal useApi with method
 const { data } = useApi('/users', { method: 'GET' });
 
-// ✅ Хорошо - специализированные хелперы
+// ✅ Good - specialized helpers
 const { data } = useApiGet('/users');
 const { execute } = useApiPost('/users');
 const { execute } = useApiPut('/users/1');
@@ -405,19 +405,19 @@ const { execute } = useApiPatch('/users/1');
 const { execute } = useApiDelete('/users/1');
 ```
 
-### 2. Явные проверки состояний (нет magic helpers)
+### 2. Explicit State Checks (no magic helpers)
 
 ```ts
-// ❌ Плохо - hasData бесполезен для массивов
-// (removed - больше не существует)
+// ❌ Bad - hasData is useless for arrays
+// (removed - no longer exists)
 
-// ✅ Хорошо - явная проверка
+// ✅ Good - explicit check
 const { data } = useApiGet<User[]>('/users');
-if (data.value && data.value.length > 0) { ... } // Правильно!
-if (data.value?.length === 0) { ... } // Пустой массив
+if (data.value && data.value.length > 0) { ... } // Correct!
+if (data.value?.length === 0) { ... } // Empty array
 ```
 
-### 3. Выносите API логику в отдельные composables
+### 3. Extract API Logic into Separate Composables
 
 ```ts
 // composables/useUsers.ts
@@ -440,7 +440,7 @@ export function useUsers() {
 }
 ```
 
-### 4. Используйте AbortController для длительных операций
+### 4. Use AbortController for Long-Running Operations
 
 ```ts
 const { execute, abort } = useApiGet('/export-data', {
@@ -449,18 +449,18 @@ const { execute, abort } = useApiGet('/export-data', {
 });
 
 onUnmounted(() => {
-  abort(); // Автоматически отменяется
+  abort(); // Automatically cancelled
 });
 ```
 
-### 5. Используйте response только когда нужно
+### 5. Use response Only When Needed
 
 ```ts
-// ❌ Плохо - response не нужен
+// ❌ Bad - response not needed
 const { data, response } = useApiGet('/users');
-// Используем только data
+// Using only data
 
-// ✅ Хорошо - response для headers
+// ✅ Good - response for headers
 const { data, response } = useApiGet('/users');
 watch(response, (res) => {
   const rateLimit = res?.headers['x-ratelimit-remaining'];
@@ -470,28 +470,28 @@ watch(response, (res) => {
 
 ---
 
-## 🚀 Следующие шаги
+## 🚀 Next Steps
 
-1. ✅ Использовать правильные хелперы (`useApiGet`, `useApiPost`, etc)
-2. ✅ Явно проверять состояния (без `hasData`, `hasError`)
-3. ✅ Использовать `response` только для продвинутых случаев
-4. ✅ Постепенно мигрировать компоненты на новые composables
-5. ✅ Покрыть тестами критические части
-
----
-
-## 📝 Заметки
-
-- **API клиент** автоматически обрабатывает 401 ошибки и обновляет токены
-- **Все запросы** автоматически отменяются при unmount компонента
-- **Ошибки** автоматически показываются через toast (можно отключить)
-- **Простой API** - только нужные поля: `data`, `loading`, `error`, `statusCode`, `response`
-- **Полный контроль** - доступ к `response` для headers, rate limiting, etc
-- **Обратная совместимость** - старый `axiosIns` все еще работает
+1. ✅ Use proper helpers (`useApiGet`, `useApiPost`, etc)
+2. ✅ Explicitly check states (without `hasData`, `hasError`)
+3. ✅ Use `response` only for advanced cases
+4. ✅ Gradually migrate components to new composables
+5. ✅ Cover critical parts with tests
 
 ---
 
-## 📚 Дополнительная документация
+## 📝 Notes
 
-- [Toast Usage](./TOAST_USAGE.md) - Уведомления об ошибках
+- **API client** automatically handles 401 errors and refreshes tokens
+- **All requests** are automatically cancelled on component unmount
+- **Errors** are automatically shown via toast (can be disabled)
+- **Simple API** - only necessary fields: `data`, `loading`, `error`, `statusCode`, `response`
+- **Full control** - access to `response` for headers, rate limiting, etc
+- **Backward compatibility** - old `axiosIns` still works
+
+---
+
+## 📚 Additional Documentation
+
+- [Toast Usage](./TOAST_USAGE.md) - Error notifications
 
