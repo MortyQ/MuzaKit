@@ -16,7 +16,7 @@
  * ```ts
  * const { data, loading, error, execute } = useApi<User[]>('/users', {
  *   immediate: true,
- *   onSuccess: (users) => console.log('Loaded', users.length, 'users')
+ *   onSuccess: (response) => console.log('Loaded', response.data.length, 'users')
  * })
  * ```
  *
@@ -47,6 +47,7 @@
  */
 
 import { useDebounceFn } from "@vueuse/core";
+import { AxiosResponse } from "axios";
 import { ref, onUnmounted, type Ref } from "vue";
 
 import apiClient from "../api/client";
@@ -125,7 +126,9 @@ export function useApi<T = unknown, D = unknown>(
       state.setStatusCode(response.status);
 
       // Success callback
-      onSuccess?.(response.data);
+      if (onSuccess) {
+        onSuccess(response as AxiosResponse<T>);
+      }
 
       return response.data;
     } catch (err: unknown) {

@@ -66,7 +66,7 @@ export interface UseApiOptions<T = unknown, D = unknown> extends ApiRequestConfi
   /** Execute request immediately on creation */
   immediate?: boolean;
   /** Callback on successful request */
-  onSuccess?: (data: T) => void;
+  onSuccess?: (response: AxiosResponse<T>) => void
   /** Callback on error */
   onError?: (error: ApiError) => void;
   /** Callback before request */
