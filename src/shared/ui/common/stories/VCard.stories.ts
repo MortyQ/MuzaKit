@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 
 import VCard from "../VCard.vue";
-import VIcon from "../VIcon.vue";
 
 const meta = {
   title: "UI/Common/VCard",
