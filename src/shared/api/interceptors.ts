@@ -15,7 +15,7 @@ import type {
 } from "axios";
 
 import { tokenManager, TOKEN_TYPE } from "./tokenManager";
-import type { RefreshTokenResponse } from "./types";
+import type { RefreshTokenResponse } from "./types.ts";
 
 export const AUTH_HEADER = "Authorization";
 export const REFRESH_TOKEN_URL = "/auth/refresh";
@@ -24,8 +24,8 @@ export const REFRESH_TOKEN_URL = "/auth/refresh";
  * Queue of requests waiting for token refresh
  */
 interface FailedRequestQueue {
-  resolve: (value: string) => void;
-  reject: (reason: unknown) => void;
+  resolve: (value: string) => void
+  reject: (reason: unknown) => void
 }
 
 let failedQueue: FailedRequestQueue[] = [];
@@ -38,7 +38,8 @@ function processQueue(error: unknown, token: string | null = null): void {
   failedQueue.forEach((promise) => {
     if (error) {
       promise.reject(error);
-    } else if (token) {
+    }
+    else if (token) {
       promise.resolve(token);
     }
   });
@@ -54,7 +55,8 @@ export function setupRequestInterceptor(axiosInstance: AxiosInstance): void {
   axiosInstance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
       // Check if we need to add token
-      const skipAuth = (config as InternalAxiosRequestConfig & { skipAuth?: boolean }).skipAuth;
+      const skipAuth = (config as InternalAxiosRequestConfig &
+                { skipAuth?: boolean }).skipAuth;
 
       if (!skipAuth) {
         const authHeader = tokenManager.getAuthHeader();
@@ -83,12 +85,13 @@ export function setupResponseInterceptor(
     (response: AxiosResponse) => response,
     async (error: AxiosError) => {
       const originalRequest = error.config as InternalAxiosRequestConfig & {
-        _retry?: boolean;
-        skipAuth?: boolean;
+        _retry?: boolean
+        skipAuth?: boolean
       };
 
       // If not 401 error or request was already retried, reject
-      if (!originalRequest || error.response?.status !== 401 || originalRequest._retry) {
+      if (!originalRequest || error.response?.status !== 401
+                || originalRequest._retry) {
         return Promise.reject(error);
       }
 
@@ -125,29 +128,29 @@ export function setupResponseInterceptor(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      const refreshToken = tokenManager.getRefreshToken();
-
-      if (!refreshToken) {
-        isRefreshing = false;
-        tokenManager.clearTokens();
-        onTokenRefreshFailed?.();
-        return Promise.reject(error);
-      }
-
       try {
         // Perform token refresh
+        // Note: refresh token is sent via cookies (withCredentials), not in body
         const response = await axiosInstance.post<RefreshTokenResponse>(
           REFRESH_TOKEN_URL,
-          { refreshToken },
-          { skipAuth: true } as InternalAxiosRequestConfig & { skipAuth: boolean },
+          {},
+          {
+            skipAuth: true,
+            withCredentials: true,
+          } as InternalAxiosRequestConfig & { skipAuth: boolean },
         );
 
-        const { accessToken, refreshToken: newRefreshToken } = response.data;
+        // Handle both snake_case (from API) and camelCase
+        const accessToken = (response.data as Omit<RefreshTokenResponse, "accessToken">)?.access_token
+                    || response.data.accessToken;
+        const newRefreshToken = (response.data as Omit<RefreshTokenResponse, "accessToken">)?.refresh_token
+                    || response.data.refreshToken;
 
         // Save new tokens
+        const currentRefreshToken = tokenManager.getRefreshToken();
         tokenManager.setTokens({
           accessToken,
-          refreshToken: newRefreshToken || refreshToken,
+          refreshToken: newRefreshToken || currentRefreshToken || "",
         });
 
         // Update default header
@@ -160,14 +163,16 @@ export function setupResponseInterceptor(
         originalRequest.headers.set(AUTH_HEADER, `${TOKEN_TYPE} ${accessToken}`);
 
         return axiosInstance(originalRequest);
-      } catch (refreshError) {
+      }
+      catch (refreshError) {
         // Token refresh failed
         processQueue(refreshError, null);
         tokenManager.clearTokens();
         onTokenRefreshFailed?.();
 
         return Promise.reject(refreshError);
-      } finally {
+      }
+      finally {
         isRefreshing = false;
       }
     },
@@ -180,7 +185,7 @@ export function setupResponseInterceptor(
 export function setupInterceptors(
   axiosInstance: AxiosInstance,
   options: {
-    onTokenRefreshFailed?: () => void;
+    onTokenRefreshFailed?: () => void
   } = {},
 ): void {
   setupRequestInterceptor(axiosInstance);
@@ -191,12 +196,11 @@ export function setupInterceptors(
  * Get token refresh status
  */
 export function getRefreshStatus(): {
-  isRefreshing: boolean;
-  queueLength: number;
+  isRefreshing: boolean
+  queueLength: number
 } {
   return {
     isRefreshing,
     queueLength: failedQueue.length,
   };
 }
-

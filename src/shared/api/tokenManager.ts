@@ -8,7 +8,7 @@
  * - Single point of access to tokens
  */
 
-import type { AuthTokens } from "./types";
+import type { AuthTokens } from "./types.ts";
 
 export const TOKEN_TYPE = "Bearer";
 export const ACCESS_TOKEN_KEY = "accessToken";
@@ -16,12 +16,17 @@ export const REFRESH_TOKEN_KEY = "refreshToken";
 export const TOKEN_EXPIRES_KEY = "tokenExpiresAt";
 
 interface TokenStorage {
-  getAccessToken(): string | null;
-  getRefreshToken(): string | null;
-  setTokens(tokens: AuthTokens): void;
-  clearTokens(): void;
-  getTokenExpiresAt(): number | null;
-  isTokenExpired(): boolean;
+  getAccessToken(): string | null
+
+  getRefreshToken(): string | null
+
+  setTokens(tokens: AuthTokens): void
+
+  clearTokens(): void
+
+  getTokenExpiresAt(): number | null
+
+  isTokenExpired(): boolean
 }
 
 /**
@@ -79,87 +84,87 @@ class TokenManager {
   }
 
   /**
-   * Get access token
-   */
+     * Get access token
+     */
   getAccessToken(): string | null {
     return this.storage.getAccessToken();
   }
 
   /**
-   * Get refresh token
-   */
+     * Get refresh token
+     */
   getRefreshToken(): string | null {
     return this.storage.getRefreshToken();
   }
 
   /**
-   * Save tokens
-   */
+     * Save tokens
+     */
   setTokens(tokens: AuthTokens): void {
     this.storage.setTokens(tokens);
   }
 
   /**
-   * Clear tokens
-   */
+     * Clear tokens
+     */
   clearTokens(): void {
     this.storage.clearTokens();
     this.refreshPromise = null;
   }
 
   /**
-   * Check if token is expired
-   */
+     * Check if token is expired
+     */
   isTokenExpired(): boolean {
     return this.storage.isTokenExpired();
   }
 
   /**
-   * Get token expiration time
-   */
+     * Get token expiration time
+     */
   getTokenExpiresAt(): number | null {
     return this.storage.getTokenExpiresAt();
   }
 
   /**
-   * Check if tokens exist
-   */
+     * Check if tokens exist
+     */
   hasTokens(): boolean {
     return !!(this.getAccessToken() && this.getRefreshToken());
   }
 
   /**
-   * Get Authorization header
-   */
+     * Get Authorization header
+     */
   getAuthHeader(): string | null {
     const token = this.getAccessToken();
     return token ? `${TOKEN_TYPE} ${token}` : null;
   }
 
   /**
-   * Set token refresh promise (to prevent race conditions)
-   */
+     * Set token refresh promise (to prevent race conditions)
+     */
   setRefreshPromise(promise: Promise<string | null>): void {
     this.refreshPromise = promise;
   }
 
   /**
-   * Get token refresh promise
-   */
+     * Get token refresh promise
+     */
   getRefreshPromise(): Promise<string | null> | null {
     return this.refreshPromise;
   }
 
   /**
-   * Clear token refresh promise
-   */
+     * Clear token refresh promise
+     */
   clearRefreshPromise(): void {
     this.refreshPromise = null;
   }
 
   /**
-   * Set storage (useful for tests)
-   */
+     * Set storage (useful for tests)
+     */
   setStorage(storage: TokenStorage): void {
     this.storage = storage;
   }
@@ -173,4 +178,3 @@ export { TokenManager, LocalStorageTokenStorage };
 
 // Export type for mocking
 export type { TokenStorage };
-

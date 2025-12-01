@@ -16,7 +16,11 @@
  * ```ts
  * const { data, loading, error, execute } = useApi<User[]>('/users', {
  *   immediate: true,
- *   onSuccess: (response) => console.log('Loaded', response.data.length, 'users')
+ *   onSuccess: (response) => {
+ *     console.log('Loaded', response.data.length, 'users')
+ *     console.log('Status:', response.status)
+ *     console.log('Headers:', response.headers)
+ *   }
  * })
  * ```
  *
@@ -47,8 +51,8 @@
  */
 
 import { useDebounceFn } from "@vueuse/core";
-import { AxiosResponse } from "axios";
-import { ref, onUnmounted, type Ref } from "vue";
+import type { AxiosResponse } from "axios";
+import { ref, type Ref, onUnmounted, getCurrentInstance } from "vue";
 
 import apiClient from "../api/client";
 import type {
@@ -80,6 +84,7 @@ export function useApi<T = unknown, D = unknown>(
     skipErrorNotification = false,
     retry = false,
     retryDelay = 1000,
+    disableAutoCleanup = false,
     ...axiosConfig
   } = options;
 
@@ -88,9 +93,10 @@ export function useApi<T = unknown, D = unknown>(
   const abortController = ref<AbortController | null>(null);
 
   /**
-   * Execute request
-   */
-  const executeRequest = async (config?: ApiRequestConfig<D>): Promise<T | null> => {
+     * Execute request
+     */
+  const executeRequest = async (config?: ApiRequestConfig<D>):
+  Promise<T | null> => {
     // Cancel previous request if exists
     if (abortController.value) {
       abortController.value.abort();
@@ -131,9 +137,12 @@ export function useApi<T = unknown, D = unknown>(
       }
 
       return response.data;
-    } catch (err: unknown) {
+    }
+    catch (err: unknown) {
       // Ignore cancelled requests
-      if ((err as { name?: string })?.name === "AbortError" || (err as { name?: string })?.name === "CanceledError") {
+      if ((err as { name?: string })?.name === "AbortError" || (err as {
+        name?: string
+      })?.name === "CanceledError") {
         return null;
       }
 
@@ -155,22 +164,23 @@ export function useApi<T = unknown, D = unknown>(
       }
 
       return null;
-    } finally {
+    }
+    finally {
       state.setLoading(false);
       onFinish?.();
     }
   };
 
   /**
-   * Execute with debouncing if specified
-   */
+     * Execute with debouncing if specified
+     */
   const execute = debounce > 0
     ? useDebounceFn(executeRequest, debounce)
     : executeRequest;
 
   /**
-   * Abort request
-   */
+     * Abort request
+     */
   const abort = (message?: string) => {
     if (abortController.value) {
       abortController.value.abort(message);
@@ -179,17 +189,20 @@ export function useApi<T = unknown, D = unknown>(
   };
 
   /**
-   * Reset state
-   */
+     * Reset state
+     */
   const reset = () => {
     abort();
     state.reset();
   };
 
-  // Automatic abort on unmount
-  onUnmounted(() => {
-    abort();
-  });
+  // Automatic cleanup on component unmount
+  // Disabled when called from stores/services via disableAutoCleanup option
+  if (!disableAutoCleanup) {
+    onUnmounted(() => {
+      abort();
+    });
+  }
 
   // Immediate execution
   if (immediate) {
@@ -242,7 +255,8 @@ async function retryRequest<T, D>(
 
   try {
     return await requestFn(config);
-  } catch {
+  }
+  catch {
     return retryRequest(requestFn, maxRetries, delay, config, currentRetry + 1);
   }
 }
@@ -328,3 +342,83 @@ export function useApiDelete<T = unknown>(
   return useApi<T>(url, { ...options, method: "DELETE" });
 }
 
+// ============================================================================
+// Store/Service Helpers (with automatic cleanup disabled)
+// ============================================================================
+
+/**
+ * useApi for Pinia stores and service functions (disables automatic cleanup)
+ *
+ * Use this when calling from:
+ * - Pinia stores
+ * - Service classes
+ * - Utility functions
+ * - Any non-component context
+ *
+ * @example
+ * ```ts
+ * // In Pinia store
+ * export const useUserStore = defineStore('user', () => {
+ *   const fetchUsers = () => {
+ *     const { execute } = useApiForStore<User[]>('/users')
+ *     return execute()
+ *   }
+ * })
+ * ```
+ */
+export function useApiForStore<T = unknown, D = unknown>(
+  url: string | Ref<string>,
+  options?: UseApiOptions<T, D>,
+): UseApiReturn<T, D> {
+  return useApi<T, D>(url, { ...options, disableAutoCleanup: true });
+}
+
+/**
+ * GET request for stores
+ */
+export function useApiGetForStore<T = unknown>(
+  url: string | Ref<string>,
+  options?: Omit<UseApiOptions<T>, "method">,
+): UseApiReturn<T> {
+  return useApi<T>(url, { ...options, method: "GET", disableAutoCleanup: true });
+}
+
+/**
+ * POST request for stores
+ */
+export function useApiPostForStore<T = unknown, D = unknown>(
+  url: string | Ref<string>,
+  options?: Omit<UseApiOptions<T, D>, "method">,
+): UseApiReturn<T, D> {
+  return useApi<T, D>(url, { ...options, method: "POST", disableAutoCleanup: true });
+}
+
+/**
+ * PUT request for stores
+ */
+export function useApiPutForStore<T = unknown, D = unknown>(
+  url: string | Ref<string>,
+  options?: Omit<UseApiOptions<T, D>, "method">,
+): UseApiReturn<T, D> {
+  return useApi<T, D>(url, { ...options, method: "PUT", disableAutoCleanup: true });
+}
+
+/**
+ * PATCH request for stores
+ */
+export function useApiPatchForStore<T = unknown, D = unknown>(
+  url: string | Ref<string>,
+  options?: Omit<UseApiOptions<T, D>, "method">,
+): UseApiReturn<T, D> {
+  return useApi<T, D>(url, { ...options, method: "PATCH", disableAutoCleanup: true });
+}
+
+/**
+ * DELETE request for stores
+ */
+export function useApiDeleteForStore<T = unknown>(
+  url: string | Ref<string>,
+  options?: Omit<UseApiOptions<T>, "method">,
+): UseApiReturn<T> {
+  return useApi<T>(url, { ...options, method: "DELETE", disableAutoCleanup: true });
+}

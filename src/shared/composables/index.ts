@@ -9,5 +9,11 @@ export {
   useApiPut,
   useApiPatch,
   useApiDelete,
+  // Store helpers
+  useApiForStore,
+  useApiGetForStore,
+  useApiPostForStore,
+  useApiPutForStore,
+  useApiPatchForStore,
+  useApiDeleteForStore,
 } from "./useApi";
-

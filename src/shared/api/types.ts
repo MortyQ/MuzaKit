@@ -11,20 +11,20 @@ import type { Ref } from "vue";
  * Base API response with typed data
  */
 export interface ApiResponse<T = unknown> {
-  data: T;
-  message?: string;
-  status: number;
+  data: T
+  message?: string
+  status: number
 }
 
 /**
  * API error with details
  */
 export interface ApiError {
-  message: string;
-  status: number;
-  code?: string;
-  errors?: Record<string, string[]>;
-  details?: unknown;
+  message: string
+  status: number
+  code?: string
+  errors?: Record<string, string[]>
+  details?: unknown
 }
 
 /**
@@ -32,17 +32,17 @@ export interface ApiError {
  */
 export interface ApiRequestConfig<D = unknown> extends AxiosRequestConfig<D> {
   /** Skip error toast notifications */
-  skipErrorNotification?: boolean;
+  skipErrorNotification?: boolean
   /** Skip success toast notifications */
-  skipSuccessNotification?: boolean;
+  skipSuccessNotification?: boolean
   /** Custom success message */
-  successMessage?: string;
+  successMessage?: string
   /** Skip authorization token */
-  skipAuth?: boolean;
+  skipAuth?: boolean
   /** Use retry logic */
-  retry?: boolean | number;
+  retry?: boolean | number
   /** Delay between retry attempts */
-  retryDelay?: number;
+  retryDelay?: number
 }
 
 /**
@@ -50,35 +50,38 @@ export interface ApiRequestConfig<D = unknown> extends AxiosRequestConfig<D> {
  */
 export interface ApiState<T = unknown> {
   /** Response data */
-  data: T | null;
+  data: T | null
   /** Loading flag */
-  loading: boolean;
+  loading: boolean
   /** Error */
-  error: ApiError | null;
+  error: ApiError | null
   /** HTTP status code */
-  statusCode: number | null;
+  statusCode: number | null
 }
 
 /**
  * Options for useApi composable
  */
-export interface UseApiOptions<T = unknown, D = unknown> extends ApiRequestConfig<D> {
+export interface UseApiOptions<T = unknown,
+  D = unknown> extends ApiRequestConfig<D> {
   /** Execute request immediately on creation */
-  immediate?: boolean;
-  /** Callback on successful request */
+  immediate?: boolean
+  /** Callback on successful request - receives full AxiosResponse with data, headers, status, etc. */
   onSuccess?: (response: AxiosResponse<T>) => void
   /** Callback on error */
-  onError?: (error: ApiError) => void;
+  onError?: (error: ApiError) => void
   /** Callback before request */
-  onBefore?: () => void;
+  onBefore?: () => void
   /** Callback after completion (success or error) */
-  onFinish?: () => void;
+  onFinish?: () => void
   /** Initial data */
-  initialData?: T;
+  initialData?: T
   /** Delay before request (debounce) */
-  debounce?: number;
+  debounce?: number
   /** Request timeout */
-  timeout?: number;
+  timeout?: number
+  /** Disable automatic cleanup on component unmount. Use when calling from stores/services */
+  disableAutoCleanup?: boolean
 }
 
 /**
@@ -93,56 +96,58 @@ export interface UseApiOptions<T = unknown, D = unknown> extends ApiRequestConfi
  */
 export interface UseApiReturn<T = unknown, D = unknown> {
   /** Reactive data */
-  data: Ref<T | null>;
+  data: Ref<T | null>
   /** Loading flag */
-  loading: Ref<boolean>;
+  loading: Ref<boolean>
   /** Error */
-  error: Ref<ApiError | null>;
+  error: Ref<ApiError | null>
   /** HTTP status code */
-  statusCode: Ref<number | null>;
+  statusCode: Ref<number | null>
   /** Full Axios response - includes headers, status, config (optional, for advanced use) */
-  response: Ref<AxiosResponse<T> | null>;
+  response: Ref<AxiosResponse<T> | null>
   /** Execute request */
-  execute: (config?: ApiRequestConfig<D>) => Promise<T | null>;
+  execute: (config?: ApiRequestConfig<D>) => Promise<T | null>
   /** Abort request */
-  abort: (message?: string) => void;
+  abort: (message?: string) => void
   /** Reset state */
-  reset: () => void;
+  reset: () => void
 }
 
 /**
  * Authorization tokens
  */
 export interface AuthTokens {
-  accessToken: string;
-  refreshToken: string;
-  expiresIn?: number;
+  accessToken: string
+  refreshToken: string
+  expiresIn?: number
 }
 
 /**
  * Token refresh response
  */
 export interface RefreshTokenResponse {
-  accessToken: string;
-  refreshToken?: string;
-  expiresIn?: number;
+  accessToken: string
+  refreshToken?: string
+  expiresIn?: number
+  access_token?: string
+  refresh_token?: string
 }
 
 /**
  * Token refresh request
  */
 export interface RefreshTokenRequest {
-  refreshToken: string;
+  refreshToken: string
 }
 
 /**
  * Generic typed Axios error
  */
 export type TypedAxiosError<T = unknown> = AxiosError<{
-  message?: string;
-  errors?: Record<string, string[]>;
-  code?: string;
-  data?: T;
+  message?: string
+  errors?: Record<string, string[]>
+  code?: string
+  data?: T
 }>;
 
 /**
@@ -170,12 +175,11 @@ export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
  */
 export interface RetryOptions {
   /** Number of attempts */
-  maxRetries?: number;
+  maxRetries?: number
   /** Delay between attempts (ms) */
-  retryDelay?: number;
+  retryDelay?: number
   /** Use exponential backoff */
-  exponentialBackoff?: boolean;
+  exponentialBackoff?: boolean
   /** Function to check if retry is needed */
-  shouldRetry?: (error: AxiosError) => boolean;
+  shouldRetry?: (error: AxiosError) => boolean
 }
-
