@@ -80,8 +80,8 @@ export interface UseApiOptions<T = unknown,
   debounce?: number
   /** Request timeout */
   timeout?: number
-  /** Disable automatic cleanup on component unmount. Use when calling from stores/services */
-  disableAutoCleanup?: boolean
+  /** Enable automatic cleanup on component unmount (default: true). Set to false for stores/services */
+  autoCleanup?: boolean
 }
 
 /**

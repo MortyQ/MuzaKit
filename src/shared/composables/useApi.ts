@@ -11,8 +11,9 @@
  * - Callbacks (onSuccess, onError, onBefore, onFinish)
  * - Type safety
  * - Full response access (headers, status, config)
+ * - Auto cleanup on unmount (can be disabled for stores)
  *
- * @example Basic usage (most common)
+ * @example Basic usage in components (most common)
  * ```ts
  * const { data, loading, error, execute } = useApi<User[]>('/users', {
  *   immediate: true,
@@ -20,6 +21,25 @@
  *     console.log('Loaded', response.data.length, 'users')
  *     console.log('Status:', response.status)
  *     console.log('Headers:', response.headers)
+ *   }
+ * })
+ * ```
+ *
+ * @example Usage in Pinia stores (disable auto cleanup)
+ * ```ts
+ * export const useUserStore = defineStore('user', () => {
+ *   const fetchUsers = async () => {
+ *     const { execute } = useApi<User[]>('/users', {
+ *       autoCleanup: false // Important! Prevents cleanup on component unmount
+ *     })
+ *     return execute()
+ *   }
+ *
+ *   const createUser = async (data: CreateUserDto) => {
+ *     const { execute } = useApiPost<User, CreateUserDto>('/users', {
+ *       autoCleanup: false
+ *     })
+ *     return execute({ data })
  *   }
  * })
  * ```
@@ -84,7 +104,7 @@ export function useApi<T = unknown, D = unknown>(
     skipErrorNotification = false,
     retry = false,
     retryDelay = 1000,
-    disableAutoCleanup = false,
+    autoCleanup = true,
     ...axiosConfig
   } = options;
 
@@ -197,8 +217,8 @@ export function useApi<T = unknown, D = unknown>(
   };
 
   // Automatic cleanup on component unmount
-  // Disabled when called from stores/services via disableAutoCleanup option
-  if (!disableAutoCleanup) {
+  // Can be disabled for stores/services via autoCleanup: false option
+  if (autoCleanup) {
     onUnmounted(() => {
       abort();
     });
@@ -342,83 +362,3 @@ export function useApiDelete<T = unknown>(
   return useApi<T>(url, { ...options, method: "DELETE" });
 }
 
-// ============================================================================
-// Store/Service Helpers (with automatic cleanup disabled)
-// ============================================================================
-
-/**
- * useApi for Pinia stores and service functions (disables automatic cleanup)
- *
- * Use this when calling from:
- * - Pinia stores
- * - Service classes
- * - Utility functions
- * - Any non-component context
- *
- * @example
- * ```ts
- * // In Pinia store
- * export const useUserStore = defineStore('user', () => {
- *   const fetchUsers = () => {
- *     const { execute } = useApiForStore<User[]>('/users')
- *     return execute()
- *   }
- * })
- * ```
- */
-export function useApiForStore<T = unknown, D = unknown>(
-  url: string | Ref<string>,
-  options?: UseApiOptions<T, D>,
-): UseApiReturn<T, D> {
-  return useApi<T, D>(url, { ...options, disableAutoCleanup: true });
-}
-
-/**
- * GET request for stores
- */
-export function useApiGetForStore<T = unknown>(
-  url: string | Ref<string>,
-  options?: Omit<UseApiOptions<T>, "method">,
-): UseApiReturn<T> {
-  return useApi<T>(url, { ...options, method: "GET", disableAutoCleanup: true });
-}
-
-/**
- * POST request for stores
- */
-export function useApiPostForStore<T = unknown, D = unknown>(
-  url: string | Ref<string>,
-  options?: Omit<UseApiOptions<T, D>, "method">,
-): UseApiReturn<T, D> {
-  return useApi<T, D>(url, { ...options, method: "POST", disableAutoCleanup: true });
-}
-
-/**
- * PUT request for stores
- */
-export function useApiPutForStore<T = unknown, D = unknown>(
-  url: string | Ref<string>,
-  options?: Omit<UseApiOptions<T, D>, "method">,
-): UseApiReturn<T, D> {
-  return useApi<T, D>(url, { ...options, method: "PUT", disableAutoCleanup: true });
-}
-
-/**
- * PATCH request for stores
- */
-export function useApiPatchForStore<T = unknown, D = unknown>(
-  url: string | Ref<string>,
-  options?: Omit<UseApiOptions<T, D>, "method">,
-): UseApiReturn<T, D> {
-  return useApi<T, D>(url, { ...options, method: "PATCH", disableAutoCleanup: true });
-}
-
-/**
- * DELETE request for stores
- */
-export function useApiDeleteForStore<T = unknown>(
-  url: string | Ref<string>,
-  options?: Omit<UseApiOptions<T>, "method">,
-): UseApiReturn<T> {
-  return useApi<T>(url, { ...options, method: "DELETE", disableAutoCleanup: true });
-}
