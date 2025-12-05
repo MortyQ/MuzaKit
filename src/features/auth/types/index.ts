@@ -17,14 +17,9 @@ export type UserRoleType = typeof UserRole[keyof typeof UserRole];
  * User permissions type
  */
 export type UserPermission =
-  | "users:read"
-  | "users:write"
-  | "users:delete"
-  | "posts:read"
-  | "posts:write"
-  | "posts:delete"
-  | "settings:read"
-  | "settings:write";
+    | "home:read"
+    | "dashboard:read"
+    | "about:read";
 
 /**
  * User interface

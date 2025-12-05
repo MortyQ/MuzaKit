@@ -3,6 +3,7 @@ import type { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 import type { RouteMeta } from "../types/types";
 
 import { useAuthStore } from "@/features/auth";
+import { UserRole, type UserPermission } from "@/features/auth/types";
 
 /**
  * Check if user is authenticated
@@ -44,33 +45,41 @@ export function isAuthenticated(): boolean {
 
 /**
  * Check if user has required permissions
+ * Checks if user has ANY of the required permissions (OR logic)
+ * Admins always have access regardless of permissions
  *
- * TODO: Implement with Pinia auth store (can be async if needed):
+ * @param required - Array of required permissions
+ * @returns true if user has at least one of the required permissions or is admin
  *
- * export async function hasPermissions(required: string[]): Promise<boolean> {
- *   const authStore = useAuthStore();
- *
- *   // Ensure user data is loaded
- *   if (!authStore.user) {
- *     await authStore.fetchUser(); // Calls getMe()
- *   }
- *
- *   // Check if user has ANY of the required permissions
- *   return required.some(p => authStore.permissions.includes(p));
- *
- *   // Or check if user has ALL permissions:
- *   // return required.every(p => authStore.permissions.includes(p));
- * }
+ * @example
+ * hasPermissions(['users:read', 'users:write']) // true if user has either permission or is admin
  */
-// eslint-disable-next-line no-unused-vars
-export function hasPermissions(_required: string[]): boolean {
-  // TODO: Implement actual permission check
-  // Example: get from Pinia auth store
-  // const authStore = useAuthStore();
-  // return _required.every(p => authStore.permissions.includes(p));
+export function hasPermissions(required: string[]): boolean {
+  if (!required || required.length === 0) {
+    return true; // No permissions required
+  }
 
-  console.warn("Permission check not implemented, allowing access");
-  return true;
+  const authStore = useAuthStore();
+
+  // If not authenticated, deny access
+  if (!authStore.isAuthenticated || !authStore.user) {
+    return false;
+  }
+
+  // Admins always have access to all routes
+  if (authStore.user?.role === UserRole.ADMIN) {
+    return true;
+  }
+
+  // Check if user has ANY of the required permissions
+  return required.some((permission) =>
+    authStore.hasPermission(permission as UserPermission),
+  );
+
+  // If you need ALL permissions instead, use:
+  // return required.every((permission) =>
+  //   authStore.hasPermission(permission as UserPermission),
+  // );
 }
 
 /**

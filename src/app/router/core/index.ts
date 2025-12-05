@@ -14,11 +14,12 @@ const coreRoutes: AppRouteRecordRaw[] = [
       title: "About",
       showInMenu: true,
       menuTitle: "About",
-      menuIcon: "mdi:information",
+      menuIcon: "lucide:info",
       menuBadge: "Old",
+      permissions: ["about:read"],
     },
   },
-  // Dashboard route
+  // Dashboard route (requires 'users:read' permission)
   {
     path: "/dashboard",
     name: RouteNames.Dashboard,
@@ -27,8 +28,9 @@ const coreRoutes: AppRouteRecordRaw[] = [
       title: "Dashboard",
       showInMenu: true,
       menuTitle: "Dashboard",
-      menuIcon: "mdi:view-dashboard",
+      menuIcon: "lucide:layout-dashboard",
       menuOrder: 2,
+      permissions: ["dashboard:read"],
     },
   },
 ];

@@ -2,6 +2,75 @@ import type { RouteRecordRaw } from "vue-router";
 
 import type { MenuItem, RouteMeta } from "../types/types";
 
+import { useAuthStore } from "@/features/auth/store/authStore";
+import { UserRole, type UserPermission } from "@/features/auth/types";
+// Get the type of auth store instance and export for reuse
+export type AuthStore = ReturnType<typeof useAuthStore>;
+
+/**
+ * Check if user has required permissions for a route
+ * NOTE: This function requires authStore to be passed as parameter
+ * @param permissions - Required permissions array
+ * @param authStore - Auth store instance
+ * @returns true if user has permissions or no permissions required
+ */
+export function hasRoutePermissions(
+  permissions: string[] | undefined,
+  authStore: AuthStore,
+): boolean {
+  // If no permissions required, allow access
+  if (!permissions || permissions.length === 0) {
+    return true;
+  }
+
+  // If user not authenticated, deny access
+  if (!authStore.isAuthenticated) {
+    return false;
+  }
+
+  // Admins always have access to all routes
+  if (authStore.user?.role === UserRole.ADMIN) {
+    return true;
+  }
+
+  // Check if user has ANY of the required permissions
+  // You can change this to hasAllPermissions if you need ALL permissions
+  return permissions.some((permission) =>
+    authStore.hasPermission(permission as UserPermission),
+  );
+}
+
+/**
+ * Filter routes based on user permissions
+ * Recursively filters children as well
+ * NOTE: This function requires authStore to be passed as parameter
+ * @param routes - Array of route records
+ * @param authStore - Auth store instance
+ * @returns Filtered routes that user has permission to access
+ */
+export function filterRoutesByPermissions(
+  routes: RouteRecordRaw[] | Array<RouteRecordRaw & { meta?: RouteMeta }>,
+  authStore: AuthStore,
+): Array<RouteRecordRaw & { meta?: RouteMeta }> {
+  return routes
+    .filter((route) => {
+      const meta = route.meta as RouteMeta | undefined;
+      return hasRoutePermissions(meta?.permissions, authStore);
+    })
+    .map((route) => {
+      // If route has children, filter them recursively
+      if (route.children && route.children.length > 0) {
+        const filteredChildren = filterRoutesByPermissions(route.children, authStore);
+
+        return {
+          ...route,
+          children: filteredChildren,
+        };
+      }
+      return route;
+    });
+}
+
 /**
  * Convert routes to menu items
  * @param routes - Array of route records

@@ -4,6 +4,7 @@ import { useRouter, useRoute } from "vue-router";
 
 
 import AnimatedBackground from "./AnimatedBackground.vue";
+import DevQuickLogin from "./DevQuickLogin.vue";
 import LoginForm from "./LoginForm.vue";
 import RegisterForm from "./RegisterForm.vue";
 
@@ -192,13 +193,11 @@ const handleForgotPassword = () => {
         </div>
       </VCard>
 
-      <!-- Trust Indicators -->
-      <div class="mt-8 text-center space-y-2">
-        <p class="text-xs text-secondaryText flex items-center justify-center gap-2">
-          <span>🔒</span>
-          <span>Your data is secure and encrypted</span>
-        </p>
-      </div>
+      <!-- Dev Quick Login (Easy to remove for production) -->
+      <DevQuickLogin
+        v-if="isLogin"
+        @login="handleLogin"
+      />
     </div>
   </div>
 </template>

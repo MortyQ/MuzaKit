@@ -17,18 +17,7 @@ const authRoutes: AppRouteRecordRaw[] = [
       showInMenu: false, // Don't show in sidebar
     },
   },
-  // Forbidden page
-  {
-    path: "/403",
-    name: "Forbidden",
-    component: () => import("@/pages/NotFound/index.vue"), // TODO: Create Forbidden page
-    meta: {
-      title: "403 Forbidden",
-      layout: "empty",
-      requiresAuth: false,
-      showInMenu: false,
-    },
-  },
+
 ];
 
 export default authRoutes;

@@ -2,13 +2,15 @@
 import { computed } from "vue";
 import { RouterView } from "vue-router";
 
-import { menuItems } from "@/app/router/modules";
+import { getMenuItems } from "@/app/router/modules";
 import { menuItemsToSidebarConfig } from "@/app/router/utils/adapters";
+import { useAuthStore } from "@/features/auth/store/authStore";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import { Sidebar, useSidebar } from "@/widgets/sidebar";
 import type { SidebarConfig } from "@/widgets/sidebar";
 
 const { isCollapsed, toggleMobile } = useSidebar();
+const authStore = useAuthStore();
 
 // Footer items - can add additional items here if needed
 const footerItems = computed(() => {
@@ -24,14 +26,17 @@ const footerItems = computed(() => {
 });
 
 // Auto-generated sidebar config from router
-const sidebarConfig = computed<SidebarConfig>(() =>
-  menuItemsToSidebarConfig(menuItems, {
+// Recomputes when user permissions change
+const sidebarConfig = computed<SidebarConfig>(() => {
+  // Pass authStore to filter menu items by permissions
+  // Computed automatically reacts to authStore.user changes
+  return menuItemsToSidebarConfig(getMenuItems(authStore), {
     brandName: "MuzaKit",
     footerItems: footerItems.value,
     showThemeToggle: true,
     showUserMenu: true,
-  }),
-);
+  });
+});
 
 // Computed content margin based on sidebar state
 const contentMargin = computed(() => ({

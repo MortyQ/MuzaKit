@@ -147,22 +147,6 @@ const handleSubmit = async () => {
         :disabled="loading"
         class="w-full !mt-4"
       />
-
-      <!-- Demo Login -->
-      <div class="text-center">
-        <button
-          type="button"
-          :disabled="loading"
-          class="text-xs text-secondaryText hover:text-mainText transition-colors"
-          @click="
-            formData.email = 'demo@example.com';
-            formData.password = 'password123';
-            handleSubmit();
-          "
-        >
-          Use demo account
-        </button>
-      </div>
     </form>
   </div>
 </template>
