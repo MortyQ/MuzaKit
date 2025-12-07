@@ -1,31 +1,24 @@
 <script setup lang="ts">
+import type { BaseValidation } from "@vuelidate/core";
 import DOMPurify from "dompurify";
 import debounceFunc from "lodash.debounce";
 import { ref, computed, useId, onUnmounted, useSlots, type Ref } from "vue";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
 
-type ValidationError = {
-  $message: string | Ref<string>;
-  [key: string]: any;
-};
-
-type Validation = {
+// Flexible validation type compatible with Vuelidate
+type ValidationProp = BaseValidation | {
   $error?: boolean;
-  $errors?: ValidationError[];
-  $dirty?: boolean;
-  $touch?: () => void;
-  [key: string]: any;
+  $errors?: Array<{ $message: string | Ref<string> }>;
 };
 
 type Props = {
   name?: string;
-  // eslint-disable-next-line vue/require-prop-types
   modelValue?: string | number;
   type?: string;
   disabled?: boolean;
   helperText?: string;
-  validation?: Validation;
+  validation?: ValidationProp;
   icon?: string;
   size?: "sm" | "md" | "lg";
   id?: string;
