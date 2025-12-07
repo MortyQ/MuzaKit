@@ -49,20 +49,27 @@ function processQueue(error: unknown, token: string | null = null): void {
 
 /**
  * Request Interceptor
- * Adds authorization token to each request
+ * Adds authorization token to each request based on authMode
  */
 export function setupRequestInterceptor(axiosInstance: AxiosInstance): void {
   axiosInstance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      // Check if we need to add token
-      const skipAuth = (config as InternalAxiosRequestConfig &
-                { skipAuth?: boolean }).skipAuth;
+      const extendedConfig = config as InternalAxiosRequestConfig & {
+        authMode?: "default" | "public" | "optional"
+      };
 
-      if (!skipAuth) {
-        const authHeader = tokenManager.getAuthHeader();
-        if (authHeader) {
-          config.headers.set(AUTH_HEADER, authHeader);
-        }
+      // Determine auth mode (default is 'default')
+      const authMode = extendedConfig.authMode || "default";
+
+      // For 'public' mode, never add auth header
+      if (authMode === "public") {
+        return config;
+      }
+
+      // For 'default' and 'optional' modes, add token if available
+      const authHeader = tokenManager.getAuthHeader();
+      if (authHeader) {
+        config.headers.set(AUTH_HEADER, authHeader);
       }
 
       return config;
@@ -86,12 +93,22 @@ export function setupResponseInterceptor(
     async (error: AxiosError) => {
       const originalRequest = error.config as InternalAxiosRequestConfig & {
         _retry?: boolean
-        skipAuth?: boolean
+        authMode?: "default" | "public" | "optional"
       };
 
       // If not 401 error or request was already retried, reject
       if (!originalRequest || error.response?.status !== 401
                 || originalRequest._retry) {
+        return Promise.reject(error);
+      }
+
+      // Determine auth mode (default is 'default')
+      const authMode = originalRequest.authMode || "default";
+
+      // If this is a public or optional endpoint, don't try to refresh token
+      // - 'public': endpoint doesn't require auth
+      // - 'optional': endpoint works without auth, 401 is expected
+      if (authMode === "public" || authMode === "optional") {
         return Promise.reject(error);
       }
 
@@ -135,9 +152,9 @@ export function setupResponseInterceptor(
           REFRESH_TOKEN_URL,
           {},
           {
-            skipAuth: true,
+            authMode: "public",
             withCredentials: true,
-          } as InternalAxiosRequestConfig & { skipAuth: boolean },
+          } as InternalAxiosRequestConfig & { authMode: "public" },
         );
 
         // Handle both snake_case (from API) and camelCase

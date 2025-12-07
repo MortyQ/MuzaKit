@@ -28,6 +28,15 @@ export interface ApiError {
 }
 
 /**
+ * Authentication mode for API requests
+ *
+ * @property 'default' - Standard authenticated request (will refresh token on 401)
+ * @property 'public' - Public endpoint (no auth header, no refresh on 401)
+ * @property 'optional' - Works with or without auth (adds token if available, no refresh on 401)
+ */
+export type AuthMode = "default" | "public" | "optional";
+
+/**
  * API request configuration with extended options
  */
 export interface ApiRequestConfig<D = unknown> extends AxiosRequestConfig<D> {
@@ -37,8 +46,15 @@ export interface ApiRequestConfig<D = unknown> extends AxiosRequestConfig<D> {
   skipSuccessNotification?: boolean
   /** Custom success message */
   successMessage?: string
-  /** Skip authorization token */
-  skipAuth?: boolean
+  /**
+   * Authentication mode
+   * - 'default': authenticated request, will refresh token on 401 (default)
+   * - 'public': public endpoint, no auth header, no refresh on 401
+   * - 'optional': adds auth if available, but no refresh on 401
+   *
+   * @default 'default'
+   */
+  authMode?: AuthMode
   /** Use retry logic */
   retry?: boolean | number
   /** Delay between retry attempts */
