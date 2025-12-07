@@ -26,7 +26,7 @@ export interface TabSelectedPayload {
 
 const props = withDefaults(defineProps<{
   tabs: ITab[]
-  loader?: boolean
+  loading?: boolean
   reset?: boolean
   useHash?: boolean // Enable/disable URL hash synchronization (default: true)
   /**
@@ -283,7 +283,7 @@ defineExpose({
     >
       <!-- Loading Skeleton -->
       <section
-        v-if="props.loader"
+        v-if="props.loading"
         class="flex gap-4 py-4"
         aria-busy="true"
       >
@@ -387,7 +387,7 @@ defineExpose({
 
     <!-- Tab Content -->
     <div
-      v-if="!props.loader"
+      v-if="!props.loading"
       role="tabpanel"
       :aria-labelledby="`tab-${currentTabId}`"
       class="flex-1 flex flex-col min-h-0"

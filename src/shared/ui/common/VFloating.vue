@@ -9,7 +9,7 @@ interface FloatingItem {
   value: string | number;
   icon?: string;
   disabled?: boolean;
-  loader?: boolean;
+  loading?: boolean;
   active?: boolean;
 }
 
@@ -218,11 +218,11 @@ const open = () => {
 };
 
 const handleItemClick = (item: FloatingItem) => {
-  if (item.disabled || item.loader) return;
+  if (item.disabled || item.loading) return;
 
   emit("select", item.value);
 
-  if (props.closeOnSelect && !item.loader) {
+  if (props.closeOnSelect && !item.loading) {
     close();
   }
 };
@@ -331,11 +331,11 @@ defineExpose({
               :key="item.value"
               class="v-floating-item"
               :class="{
-                'v-floating-item--loading': item.loader,
+                'v-floating-item--loading': item.loading,
                 'v-floating-item--active': item.active,
                 'v-floating-item--disabled': item.disabled,
               }"
-              :disabled="item.disabled || item.loader"
+              :disabled="item.disabled || item.loading"
               @click="handleItemClick(item)"
             >
               <slot
@@ -358,7 +358,7 @@ defineExpose({
                 :item="item"
               >
                 <span
-                  v-if="item.loader"
+                  v-if="item.loading"
                   class="v-floating-item-loading"
                 >
                   <VLoader size="small" />

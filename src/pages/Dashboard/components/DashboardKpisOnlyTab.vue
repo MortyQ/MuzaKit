@@ -255,7 +255,7 @@ onMounted(async () => {
         :metrics="comparison.metrics"
         :columns="2"
         icon="lucide:tags"
-        :loader="isLoading"
+        :loading="isLoading"
       />
     </div>
 
@@ -274,7 +274,7 @@ onMounted(async () => {
         :show-all-comparisons="showAllComparisons"
         :format="kpi.format"
         :reverse="kpi.reverse"
-        :loader="isLoading"
+        :loading="isLoading"
       />
     </div>
 
@@ -296,7 +296,7 @@ onMounted(async () => {
         :title="dashboard.title"
         :metrics="dashboard.metrics"
         icon="lucide:layout-dashboard"
-        :loader="isLoading"
+        :loading="isLoading"
       />
     </div>
   </div>

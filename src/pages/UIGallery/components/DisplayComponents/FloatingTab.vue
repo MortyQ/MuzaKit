@@ -10,7 +10,7 @@ interface LoadingItem {
   label: string;
   value: string;
   icon: string;
-  loader?: boolean;
+  loading?: boolean;
 }
 
 const selectedAction = ref<string | number | null>(null);
@@ -46,10 +46,10 @@ const handleLoadingAction = (value: string | number) => {
 
   const item = loadingItems.value.find((i) => i.value === value);
   if (item) {
-    item.loader = true;
+    item.loading = true;
 
     setTimeout(() => {
-      item.loader = false;
+      item.loading = false;
       loadingAction.value = null;
     }, 2000);
   }

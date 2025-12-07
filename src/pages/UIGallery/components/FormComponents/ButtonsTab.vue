@@ -40,7 +40,7 @@ import VButton from '@/shared/ui/common/VButton.vue';
 const advancedExample = `// With loading state
 <VButton
   text="Save"
-  :loader="isLoading"
+  :loading="isLoading"
   @click="handleSave"
 />
 
@@ -280,13 +280,13 @@ const advancedExample = `// With loading state
           <VButton
             text="Click to Load"
             variant="primary"
-            :loader="isLoading"
+            :loading="isLoading"
             @click="handleLoadingClick"
           />
           <VButton
             text="Always Loading"
             variant="positive"
-            :loader="true"
+            :loading="true"
           />
         </div>
       </section>

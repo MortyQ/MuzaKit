@@ -59,7 +59,7 @@ const exportFormats = computed(() => props.exportOptions?.formats || []);
 
 // Check if any format is loading
 const isAnyFormatLoading = computed(() => {
-  return exportFormats.value.some((format) => format.loader);
+  return exportFormats.value.some((format) => format.loading);
 });
 
 // Handlers
@@ -159,7 +159,7 @@ const handleSingleExport = () => {
               variant="primary"
               icon="mdi:download"
               text="Export"
-              :loader="isAnyFormatLoading"
+              :loading="isAnyFormatLoading"
             />
           </template>
 
@@ -172,7 +172,7 @@ const handleSingleExport = () => {
 
           <template #item-loader="{ item }">
             <VLoader
-              v-if="item.loader"
+              v-if="item.loading"
               variant="primary"
               size="small"
             />

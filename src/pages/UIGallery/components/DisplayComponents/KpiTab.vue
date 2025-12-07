@@ -214,7 +214,7 @@ const advancedExample = `// With multiple comparisons
   title="Loading..."
   :value="0"
   icon="lucide:loader"
-  :loader="true"
+  :loading="true"
 />
 
 // Different sizes
@@ -526,7 +526,7 @@ import VKpiMultiMetric from '@/shared/ui/kpis/VKpiMultiMetric.vue';
             icon="lucide:star"
             icon-color="primary"
             :format="{ unit: 'number' }"
-            :loader="true"
+            :loading="true"
           />
           <VKpiCard
             title="Success"
@@ -534,7 +534,7 @@ import VKpiMultiMetric from '@/shared/ui/kpis/VKpiMultiMetric.vue';
             icon="lucide:check"
             icon-color="success"
             :format="{ unit: 'number' }"
-            :loader="true"
+            :loading="true"
           />
           <VKpiCard
             title="Warning"
@@ -542,7 +542,7 @@ import VKpiMultiMetric from '@/shared/ui/kpis/VKpiMultiMetric.vue';
             icon="lucide:alert-triangle"
             icon-color="warning"
             :format="{ unit: 'number' }"
-            :loader="true"
+            :loading="true"
           />
           <VKpiCard
             title="Error"
@@ -550,7 +550,7 @@ import VKpiMultiMetric from '@/shared/ui/kpis/VKpiMultiMetric.vue';
             icon="lucide:x-circle"
             icon-color="error"
             :format="{ unit: 'number' }"
-            :loader="true"
+            :loading="true"
           />
         </div>
       </section>

@@ -14,14 +14,14 @@ interface Props {
   /** Enable glassmorphism effect */
   glassmorphism?: boolean
   /** Loading state */
-  loader?: boolean
+  loading?: boolean
   /** Animate value changes (default: true) */
   animate?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   glassmorphism: false,
-  loader: false,
+  loading: false,
   animate: true,
 });
 
@@ -70,12 +70,12 @@ const iconColorClass = () => {
     :class="{
       'bg-cardBg/50 backdrop-blur-sm': glassmorphism,
       'bg-cardBg': !glassmorphism,
-      'kpi-multi-metric--loading': loader,
+      'kpi-multi-metric--loading': loading,
     }"
   >
     <!-- Loading State Overlay -->
     <div
-      v-if="loader"
+      v-if="loading"
       class="kpi-multi-metric__loading"
     />
 

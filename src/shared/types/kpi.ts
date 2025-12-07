@@ -85,7 +85,7 @@ export interface VKpiCardProps {
   /** Show all comparisons or only the first one */
   showAllComparisons?: boolean;
   /** Loading state */
-  loader?: boolean;
+  loading?: boolean;
   /** Custom tooltip for the info icon */
   tooltip?: string;
   /** Reverse color logic (red for positive, green for negative) */

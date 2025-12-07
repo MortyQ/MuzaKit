@@ -143,7 +143,7 @@ const handleSubmit = async () => {
         type="submit"
         variant="primary"
         text="Sign In"
-        :loader="loading"
+        :loading="loading"
         :disabled="loading"
         class="w-full !mt-4"
       />

@@ -61,9 +61,9 @@ const searchQuery = ref("");
 
 // Export loading states
 const exportFormats = ref([
-  { label: "Export as CSV", value: "csv", icon: "mdi:file-delimited", loader: false },
-  { label: "Export as Excel", value: "excel", icon: "mdi:file-excel", loader: false },
-  { label: "Export as PDF", value: "pdf", icon: "mdi:file-pdf-box", loader: false },
+  { label: "Export as CSV", value: "csv", icon: "mdi:file-delimited", loading: false },
+  { label: "Export as Excel", value: "excel", icon: "mdi:file-excel", loading: false },
+  { label: "Export as PDF", value: "pdf", icon: "mdi:file-pdf-box", loading: false },
 ]);
 
 // Loading state
@@ -92,11 +92,11 @@ const handleExport = (format: string, selectedOnly?: boolean) => {
   // Find format and set loading
   const exportFormat = exportFormats.value.find((f) => f.value === format);
   if (exportFormat) {
-    exportFormat.loader = true;
+    exportFormat.loading = true;
 
     // Simulate export
     setTimeout(() => {
-      exportFormat.loader = false;
+      exportFormat.loading = false;
       alert(`Exported as ${format.toUpperCase()}`);
     }, 2000);
   }

@@ -11,7 +11,7 @@ const props = withDefaults(
     text?: string;
     type?: "button" | "submit" | "reset";
     disabled?: boolean;
-    loader?: boolean;
+    loading?: boolean;
     icon?: string;
     variant?: "default" | "primary" | "positive" | "negative" | "warning" | "link";
     to?: string | object;
@@ -61,18 +61,18 @@ const isRouterLink = computed(() => !!props.to);
           replace: props.replace,
           ...$attrs,
         }
-        : { type: props.type, disabled: props.disabled || props.loader, ...$attrs }
+        : { type: props.type, disabled: props.disabled || props.loading, ...$attrs }
     "
   >
     <span
-      v-if="$slots.iconLeft || props.loader || props.icon"
+      v-if="$slots.iconLeft || props.loading || props.icon"
       class="flex items-center justify-center"
     >
       <VIcon
-        v-if="props.loader"
+        v-if="props.loading"
         icon="lucid:loading"
         :size="24"
-        :loading="props.loader"
+        :loading="props.loading"
       />
       <template v-else>
         <slot name="iconLeft">

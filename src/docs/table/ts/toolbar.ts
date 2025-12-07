@@ -74,7 +74,7 @@ interface ExportFormat {
   label: string;            // Display label
   value: string;            // Format value (csv, excel, pdf)
   icon?: string;            // Optional icon
-  loader?: boolean;         // Loading state for this format
+  loading?: boolean;         // Loading state for this format
 }
 \`\`\`
 
@@ -117,21 +117,21 @@ const handleRefresh = () => {
 import { ref } from 'vue';
 
 const exportFormats = ref([
-  { label: 'CSV', value: 'csv', icon: 'mdi:file-delimited', loader: false },
-  { label: 'Excel', value: 'excel', icon: 'mdi:file-excel', loader: false },
-  { label: 'PDF', value: 'pdf', icon: 'mdi:file-pdf-box', loader: false },
+  { label: 'CSV', value: 'csv', icon: 'mdi:file-delimited', loading: false },
+  { label: 'Excel', value: 'excel', icon: 'mdi:file-excel', loading: false },
+  { label: 'PDF', value: 'pdf', icon: 'mdi:file-pdf-box', loading: false },
 ]);
 
 const handleExport = async (format, selectedOnly) => {
   const exportFormat = exportFormats.value.find(f => f.value === format);
   if (exportFormat) {
-    exportFormat.loader = true;
+    exportFormat.loading = true;
     
     try {
       // Perform export
       await exportData(format, selectedOnly);
     } finally {
-      exportFormat.loader = false;
+      exportFormat.loading = false;
     }
   }
 };

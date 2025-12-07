@@ -122,7 +122,7 @@ export interface ExportFormat {
   /**
    * Loading state for this format
    */
-  loader?: boolean;
+  loading?: boolean;
 }
 
 export interface ExportOptions {

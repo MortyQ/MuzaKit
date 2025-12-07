@@ -40,7 +40,7 @@ const meta = {
       control: "boolean",
       description: "Disable button interaction",
     },
-    loader: {
+    loading: {
       control: "boolean",
       description: "Show loading spinner",
     },
@@ -49,7 +49,7 @@ const meta = {
     variant: "primary",
     type: "button",
     disabled: false,
-    loader: false,
+    loading: false,
   },
 } satisfies Meta<typeof VButton>;
 

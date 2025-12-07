@@ -61,9 +61,9 @@ const accountStatusList = [
 ];
 
 const exportFormats = ref([
-  { label: "Export as CSV", value: "csv", icon: "mdi:file-delimited", loader: loaders.exportLoader },
-  { label: "Export as Excel", value: "excel", icon: "mdi:file-excel", loader: loaders.exportLoader },
-  { label: "Export as PDF", value: "pdf", icon: "mdi:file-pdf-box", loader: loaders.exportLoader },
+  { label: "Export as CSV", value: "csv", icon: "mdi:file-delimited", loading: loaders.exportLoader },
+  { label: "Export as Excel", value: "excel", icon: "mdi:file-excel", loading: loaders.exportLoader },
+  { label: "Export as PDF", value: "pdf", icon: "mdi:file-pdf-box", loading: loaders.exportLoader },
 ]);
 // Handlers
 

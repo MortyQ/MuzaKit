@@ -230,7 +230,7 @@ const handleSubmit = async () => {
         type="submit"
         variant="primary"
         text="Create Account"
-        :loader="loading"
+        :loading="loading"
         :disabled="loading"
         class="w-full"
       />
