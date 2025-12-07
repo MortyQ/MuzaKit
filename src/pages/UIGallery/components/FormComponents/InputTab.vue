@@ -8,9 +8,13 @@ import VInput from "@/shared/ui/common/VInput.vue";
 const textValue = ref("");
 const passwordValue = ref("");
 const searchValue = ref("");
+const emailValue = ref("");
+const usernameValue = ref("");
 const disabledValue = ref("Disabled");
 const textareaValue = ref("Multiline text");
-const emailValue = ref("");
+const debouncedValue = ref("");
+const loadingValue = ref("");
+
 const emailValidation = ref({
   $error: false,
   $errors: [] as { $message: string }[],
@@ -32,71 +36,6 @@ const validateEmail = (value: string) => {
       $errors: [{ $message: "Please enter a valid email address" }],
     };
 };
-
-const basicExample = `<script setup>
-import { ref } from 'vue';
-import VInput from '@/shared/ui/common/VInput.vue';
-
-const value = ref('');
-</` + `script>
-
-<template>
-  <VInput
-    v-model="value"
-    placeholder="Type here"
-  />
-</template>`;
-
-const advancedExample = `// Password input
-<VInput
-  v-model="password"
-  type="password"
-  placeholder="Password"
-/>
-
-// Email with validation
-<VInput
-  v-model="email"
-  type="email"
-  placeholder="Enter your email"
-  :validation="emailValidation"
-  @input="validateEmail(email)"
-/>
-
-// With helper text
-<VInput
-  v-model="username"
-  placeholder="Username"
-  helper-text="Choose a unique username between 3-20 characters"
-/>
-
-// With icon
-<VInput
-  v-model="search"
-  icon="mdi:search"
-  placeholder="Search..."
-/>
-
-// Disabled state
-<VInput
-  v-model="disabled"
-  disabled
-/>
-
-// Textarea mode
-<VInput
-  v-model="bio"
-  textarea
-  :rows="6"
-  placeholder="Write about yourself"
-/>
-
-// Debounced input
-<VInput
-  v-model="query"
-  :debounce="800"
-  placeholder="Debounced input"
-/>`;
 </script>
 <template>
   <div class="page-container gap-5">
@@ -115,8 +54,9 @@ const advancedExample = `// Password input
 
       <div class="info-content">
         <p class="info-description">
-          Flexible text input supporting password toggle, icons,
-          debounce, textarea mode, and validation helpers.
+          Versatile input component with
+          <strong>password toggle, validation support, icons, debounce,</strong>
+          and textarea mode. Built with DOMPurify sanitization and full Vuelidate compatibility.
         </p>
 
         <div class="features-grid">
@@ -132,7 +72,7 @@ const advancedExample = `// Password input
                 Multiple Types
               </h3>
               <p class="feature-description">
-                Text, password, textarea
+                Text, password, email, search, textarea
               </p>
             </div>
           </div>
@@ -140,16 +80,16 @@ const advancedExample = `// Password input
           <div class="feature-item">
             <div class="feature-icon-wrapper feature-icon-success">
               <VIcon
-                icon="lucide:search"
+                icon="lucide:shield-check"
                 :size="20"
               />
             </div>
             <div class="feature-content">
               <h3 class="feature-title">
-                Icons & Loading
+                Validation Support
               </h3>
               <p class="feature-description">
-                Left icons & spinner
+                Vuelidate compatible with error messages
               </p>
             </div>
           </div>
@@ -157,7 +97,7 @@ const advancedExample = `// Password input
           <div class="feature-item">
             <div class="feature-icon-wrapper feature-icon-warning">
               <VIcon
-                icon="lucide:watch"
+                icon="lucide:clock"
                 :size="20"
               />
             </div>
@@ -166,7 +106,7 @@ const advancedExample = `// Password input
                 Debounce
               </h3>
               <p class="feature-description">
-                Built-in delay emit
+                Built-in debounce with custom delay
               </p>
             </div>
           </div>
@@ -174,16 +114,16 @@ const advancedExample = `// Password input
           <div class="feature-item">
             <div class="feature-icon-wrapper feature-icon-info">
               <VIcon
-                icon="lucide:shield-check"
+                icon="lucide:shield"
                 :size="20"
               />
             </div>
             <div class="feature-content">
               <h3 class="feature-title">
-                Sanitized
+                XSS Protection
               </h3>
               <p class="feature-description">
-                DOMPurify applied
+                DOMPurify sanitization applied
               </p>
             </div>
           </div>
@@ -194,136 +134,423 @@ const advancedExample = `// Password input
             icon="lucide:info"
             :size="16"
           />
-          <span>Use :debounce="true" for default 800ms or pass a number for custom delay.</span>
+          <span>
+            All inputs are automatically sanitized with DOMPurify to prevent XSS attacks.
+          </span>
         </div>
       </div>
     </VCard>
 
-    <!-- Live Examples Section -->
+    <!-- Live Examples -->
     <VCard>
       <h3 class="section-title mb-6">
         🎮 Live Examples
       </h3>
 
-      <!-- Text -->
+      <!-- Basic Text Input -->
       <section class="examples-section">
         <h4 class="examples-subtitle">
-          Text
+          Basic Text Input
         </h4>
-        <VInput
-          v-model="textValue"
-          placeholder="Enter text"
-        />
+        <div class="max-w-md">
+          <VInput
+            v-model="textValue"
+            placeholder="Enter text..."
+          />
+        </div>
+        <div class="code-block mt-4">
+          <pre><code>&lt;VInput
+  v-model="textValue"
+  placeholder="Enter text..."
+/&gt;</code></pre>
+        </div>
       </section>
 
-      <!-- Password -->
+      <!-- Input Sizes -->
       <section class="examples-section">
         <h4 class="examples-subtitle">
-          Password
+          Input Sizes
         </h4>
-        <VInput
-          v-model="passwordValue"
-          type="password"
-          placeholder="Enter password"
-        />
+        <div class="flex flex-col gap-3 max-w-md">
+          <VInput
+            v-model="textValue"
+            size="sm"
+            placeholder="Small input"
+          />
+          <VInput
+            v-model="textValue"
+            size="md"
+            placeholder="Medium input (default)"
+          />
+          <VInput
+            v-model="textValue"
+            size="lg"
+            placeholder="Large input"
+          />
+        </div>
+        <div class="code-block mt-4">
+          <pre><code>&lt;VInput v-model="value" size="sm" placeholder="Small" /&gt;
+&lt;VInput v-model="value" size="md" placeholder="Medium" /&gt;
+&lt;VInput v-model="value" size="lg" placeholder="Large" /&gt;</code></pre>
+        </div>
       </section>
 
-      <!-- Email Validation -->
+      <!-- With Label and Helper Text -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          With Label & Helper Text
+        </h4>
+        <div class="max-w-md">
+          <VInput
+            v-model="usernameValue"
+            name="Username"
+            placeholder="Enter username"
+            helper-text="Choose a unique username between 3-20 characters"
+          />
+        </div>
+        <div class="code-block mt-4">
+          <pre><code>&lt;VInput
+  v-model="username"
+  name="Username"
+  placeholder="Enter username"
+  helper-text="Choose a unique username between 3-20 characters"
+/&gt;</code></pre>
+        </div>
+      </section>
+
+      <!-- Password with Toggle -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          Password with Toggle
+        </h4>
+        <div class="max-w-md">
+          <VInput
+            v-model="passwordValue"
+            name="Password"
+            type="password"
+            placeholder="Enter your password"
+          />
+        </div>
+        <div class="code-block mt-4">
+          <pre><code>&lt;VInput
+  v-model="password"
+  name="Password"
+  type="password"
+  placeholder="Enter your password"
+/&gt;</code></pre>
+        </div>
+      </section>
+
+      <!-- Email with Validation -->
       <section class="examples-section">
         <h4 class="examples-subtitle">
           Email with Validation
         </h4>
-        <VInput
-          v-model="emailValue"
-          type="email"
-          icon="mdi:email"
-          placeholder="Enter your email"
-          :validation="emailValidation"
-          @input="validateEmail(emailValue)"
-        />
+        <div class="max-w-md">
+          <VInput
+            v-model="emailValue"
+            name="Email Address"
+            type="email"
+            icon="mdi:email"
+            placeholder="Enter your email"
+            :validation="emailValidation"
+            @blur="validateEmail(emailValue)"
+          />
+        </div>
+        <div class="code-block mt-4">
+          <pre><code>&lt;VInput
+  v-model="email"
+  name="Email Address"
+  type="email"
+  icon="mdi:email"
+  placeholder="Enter your email"
+  :validation="emailValidation"
+  @blur="validateEmail(email)"
+/&gt;</code></pre>
+        </div>
       </section>
 
-      <!-- With Helper Text -->
+      <!-- With Icons -->
       <section class="examples-section">
         <h4 class="examples-subtitle">
-          With Helper Text
+          With Icons
         </h4>
-        <VInput
-          v-model="textValue"
-          placeholder="Username"
-          helper-text="Choose a unique username between 3-20 characters"
-        />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <VInput
+            v-model="searchValue"
+            icon="mdi:search"
+            placeholder="Search..."
+          />
+          <VInput
+            v-model="textValue"
+            icon="mdi:account"
+            placeholder="Username"
+          />
+          <VInput
+            v-model="textValue"
+            icon="mdi:phone"
+            placeholder="Phone number"
+          />
+          <VInput
+            v-model="loadingValue"
+            :loading="true"
+            placeholder="Loading state"
+          />
+        </div>
+        <div class="code-block mt-4">
+          <pre><code>&lt;VInput v-model="search" icon="mdi:search" placeholder="Search..." /&gt;
+&lt;VInput v-model="username" icon="mdi:account" placeholder="Username" /&gt;
+&lt;VInput v-model="value" :loading="true" placeholder="Loading..." /&gt;</code></pre>
+        </div>
       </section>
 
-      <!-- With Icon -->
+      <!-- Textarea Mode -->
       <section class="examples-section">
         <h4 class="examples-subtitle">
-          With Icon
+          Textarea Mode
         </h4>
-        <VInput
-          v-model="searchValue"
-          icon="mdi:search"
-          placeholder="Search..."
-        />
+        <div class="max-w-md">
+          <VInput
+            v-model="textareaValue"
+            name="Bio"
+            textarea
+            :rows="5"
+            placeholder="Tell us about yourself..."
+          />
+        </div>
+        <div class="code-block mt-4">
+          <pre><code>&lt;VInput
+  v-model="bio"
+  name="Bio"
+  textarea
+  :rows="5"
+  placeholder="Tell us about yourself..."
+/&gt;</code></pre>
+        </div>
       </section>
 
-      <!-- Disabled -->
+      <!-- Debounced Input -->
       <section class="examples-section">
         <h4 class="examples-subtitle">
-          Disabled
+          Debounced Input
         </h4>
-        <VInput
-          v-model="disabledValue"
-          disabled
-        />
+        <div class="max-w-md">
+          <VInput
+            v-model="debouncedValue"
+            name="Search Query"
+            icon="mdi:search"
+            :debounce="800"
+            placeholder="Type to search (800ms delay)..."
+          />
+          <p class="text-sm text-secondaryText mt-2">
+            Current value:
+            <code class="px-2 py-1 bg-base-200 rounded text-xs">
+              {{ debouncedValue || 'empty' }}
+            </code>
+          </p>
+        </div>
+        <div class="code-block mt-4">
+          <pre><code>&lt;VInput
+  v-model="query"
+  icon="mdi:search"
+  :debounce="800"
+  placeholder="Type to search..."
+/&gt;
+
+&lt;!-- Or use true for default 800ms --&gt;
+&lt;VInput v-model="query" :debounce="true" /&gt;</code></pre>
+        </div>
       </section>
 
-      <!-- Textarea -->
+      <!-- Disabled State -->
       <section class="examples-section">
         <h4 class="examples-subtitle">
-          Textarea
+          Disabled State
         </h4>
-        <VInput
-          v-model="textareaValue"
-          textarea
-          :rows="5"
-          placeholder="Multiline"
-        />
-      </section>
-
-      <!-- Debounced -->
-      <section class="examples-section">
-        <h4 class="examples-subtitle">
-          Debounced
-        </h4>
-        <VInput
-          v-model="searchValue"
-          debounce
-          placeholder="Debounced emit"
-        />
-        <code>
-          Current Value: {{ searchValue }}
-        </code>
+        <div class="max-w-md">
+          <VInput
+            v-model="disabledValue"
+            name="Disabled Input"
+            disabled
+            placeholder="This input is disabled"
+          />
+        </div>
+        <div class="code-block mt-4">
+          <pre><code>&lt;VInput
+  v-model="value"
+  disabled
+  placeholder="This input is disabled"
+/&gt;</code></pre>
+        </div>
       </section>
     </VCard>
 
-    <!-- Basic Usage -->
-    <VCard class="code-example-card">
-      <h3 class="code-title">
-        📝 Basic Usage
-      </h3>
-      <div class="code-block">
-        <pre><code>{{ basicExample }}</code></pre>
+    <!-- Key Features -->
+    <VCard>
+      <div class="info-header">
+        <VIcon
+          icon="lucide:sparkles"
+          :size="24"
+          class="info-icon"
+        />
+        <h2 class="info-title">
+          Key Features
+        </h2>
       </div>
-    </VCard>
 
-    <!-- Advanced Usage -->
-    <VCard class="code-example-card">
-      <h3 class="code-title">
-        🚀 Advanced Examples
-      </h3>
-      <div class="code-block">
-        <pre><code>{{ advancedExample }}</code></pre>
+      <div class="features-grid-compact">
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-primary">
+            <VIcon
+              icon="lucide:type"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Multiple Input Types
+            </h4>
+            <p class="feature-card-description">
+              Text, password, email, search, and textarea
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-success">
+            <VIcon
+              icon="lucide:eye"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Password Toggle
+            </h4>
+            <p class="feature-card-description">
+              Show/hide password with eye icon
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-warning">
+            <VIcon
+              icon="lucide:shield-check"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Validation Support
+            </h4>
+            <p class="feature-card-description">
+              Full Vuelidate compatibility with errors
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-info">
+            <VIcon
+              icon="lucide:search"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Icon Support
+            </h4>
+            <p class="feature-card-description">
+              Left icons and loading spinner
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-primary">
+            <VIcon
+              icon="lucide:clock"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Debounce
+            </h4>
+            <p class="feature-card-description">
+              Built-in debounce with custom delay
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-success">
+            <VIcon
+              icon="lucide:shield"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              XSS Protection
+            </h4>
+            <p class="feature-card-description">
+              DOMPurify sanitization on all inputs
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-warning">
+            <VIcon
+              icon="lucide:info"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Helper Text
+            </h4>
+            <p class="feature-card-description">
+              Support for helper and error messages
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-info">
+            <VIcon
+              icon="lucide:accessibility"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Accessible
+            </h4>
+            <p class="feature-card-description">
+              Proper labels and ARIA attributes
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon feature-icon-primary">
+            <VIcon
+              icon="lucide:maximize-2"
+              :size="18"
+            />
+          </div>
+          <div class="feature-card-content">
+            <h4 class="feature-card-title">
+              Flexible Sizing
+            </h4>
+            <p class="feature-card-description">
+              Small, medium, and large sizes
+            </p>
+          </div>
+        </div>
       </div>
     </VCard>
 
@@ -363,7 +590,7 @@ const advancedExample = `// Password input
               <td><code>type</code></td>
               <td><code>string</code></td>
               <td><code>"text"</code></td>
-              <td>Input type (text, email, password, etc.)</td>
+              <td>Input type (text, email, password, search, etc.)</td>
             </tr>
             <tr>
               <td><code>placeholder</code></td>
@@ -385,7 +612,7 @@ const advancedExample = `// Password input
             </tr>
             <tr>
               <td><code>validation</code></td>
-              <td><code>Validation</code></td>
+              <td><code>ValidationProp</code></td>
               <td><code>undefined</code></td>
               <td>Validation object (Vuelidate compatible)</td>
             </tr>
@@ -393,7 +620,7 @@ const advancedExample = `// Password input
               <td><code>icon</code></td>
               <td><code>string</code></td>
               <td><code>""</code></td>
-              <td>Left icon name</td>
+              <td>Left icon name (Iconify format)</td>
             </tr>
             <tr>
               <td><code>size</code></td>
@@ -405,52 +632,87 @@ const advancedExample = `// Password input
               <td><code>id</code></td>
               <td><code>string</code></td>
               <td><code>undefined</code></td>
-              <td>Input ID attribute</td>
+              <td>Custom input ID (auto-generated if not provided)</td>
             </tr>
             <tr>
               <td><code>debounce</code></td>
               <td><code>boolean | number</code></td>
               <td><code>false</code></td>
-              <td>Debounce delay (true = 800ms, number = custom)</td>
+              <td>Debounce delay (true = 800ms, number = custom ms)</td>
             </tr>
             <tr>
               <td><code>loading</code></td>
               <td><code>boolean</code></td>
               <td><code>false</code></td>
-              <td>Show loading spinner</td>
+              <td>Show loading spinner in icon position</td>
             </tr>
             <tr>
               <td><code>textarea</code></td>
               <td><code>boolean</code></td>
               <td><code>false</code></td>
-              <td>Use textarea mode</td>
+              <td>Use textarea element instead of input</td>
             </tr>
             <tr>
               <td><code>rows</code></td>
               <td><code>number</code></td>
               <td><code>4</code></td>
-              <td>Textarea rows (when textarea=true)</td>
+              <td>Textarea rows (only when textarea=true)</td>
             </tr>
           </tbody>
         </table>
       </div>
     </VCard>
 
-    <!-- Features Summary -->
+    <!-- Slots Documentation -->
     <VCard>
-      <h3 class="section-title mb-4">
-        ✨ Key Features
+      <h3 class="section-title">
+        Available Slots
       </h3>
-      <ul class="features-list">
-        <li>✅ Password toggle</li>
-        <li>✅ Email validation support</li>
-        <li>✅ Helper text & error messages</li>
-        <li>✅ Textarea mode</li>
-        <li>✅ Icon & loading support</li>
-        <li>✅ Debounced value emit</li>
-        <li>✅ Sanitized input (XSS protection)</li>
-        <li>✅ Disabled state</li>
-      </ul>
+
+      <div class="composable-section">
+        <ul class="composable-list">
+          <li>
+            <code>name</code> - Custom label content (overrides name prop)
+          </li>
+          <li>
+            <code>icon-left</code> - Custom left icon content
+          </li>
+          <li>
+            <code>icon-right</code> - Custom right icon/action (e.g., clear button)
+          </li>
+          <li>
+            <code>helper-text</code> - Custom helper text below input
+          </li>
+          <li>
+            <code>error-message</code> - Custom error message display
+          </li>
+        </ul>
+      </div>
+    </VCard>
+
+    <!-- Events Documentation -->
+    <VCard>
+      <h3 class="section-title">
+        Events
+      </h3>
+
+      <div class="composable-section">
+        <ul class="composable-list">
+          <li>
+            <code>@update:modelValue</code> -
+            Emitted when input value changes (with debounce if enabled)
+          </li>
+          <li>
+            <code>@focus</code> - Emitted when input receives focus
+          </li>
+          <li>
+            <code>@blur</code> - Emitted when input loses focus
+          </li>
+          <li>
+            <code>@input</code> - Native input event (not debounced)
+          </li>
+        </ul>
+      </div>
     </VCard>
   </div>
 </template>

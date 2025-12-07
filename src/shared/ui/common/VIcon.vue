@@ -32,6 +32,12 @@ const FallbackIcon: Component = {
  * Get icon component from icon map
  */
 const iconComponent = computed<Component>(() => {
+  // Show loading spinner first if loading is true
+  if (props.loading) {
+    return iconMap["lucide:loading"];
+  }
+
+  // Check if icon exists
   if (!hasIcon(props.icon)) {
     console.warn(
       `[VIcon] Icon "${props.icon}" not found. ` +
@@ -40,9 +46,6 @@ const iconComponent = computed<Component>(() => {
     return FallbackIcon;
   }
 
-  if(props.loading) {
-    return iconMap["lucid:loading"];
-  }
 
   return iconMap[props.icon];
 });

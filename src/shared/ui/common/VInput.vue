@@ -160,7 +160,7 @@ onUnmounted(() => {
       >
         <slot name="icon-left">
           <VIcon
-            v-if="leftIconName"
+            v-if="leftIconName || loading"
             :icon="leftIconName"
             :loading="loading"
             class="w-5 h-5 transition-colors"

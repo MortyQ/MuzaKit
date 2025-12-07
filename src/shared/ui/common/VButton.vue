@@ -70,7 +70,7 @@ const isRouterLink = computed(() => !!props.to);
     >
       <VIcon
         v-if="props.loading"
-        icon="lucid:loading"
+        icon="lucide:loading"
         :size="24"
         :loading="props.loading"
       />

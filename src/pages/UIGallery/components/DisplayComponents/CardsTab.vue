@@ -238,6 +238,94 @@ import VIcon from "@/shared/ui/common/VIcon.vue";
         </div>
       </section>
 
+      <!-- Border Radius -->
+      <section class="examples-section">
+        <h4 class="examples-subtitle">
+          Border Radius Options
+        </h4>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <VCard
+            radius="none"
+            title="No Radius"
+          >
+            <p class="text-secondaryText">
+              Sharp corners (0px)
+            </p>
+          </VCard>
+
+          <VCard
+            radius="sm"
+            title="Small"
+          >
+            <p class="text-secondaryText">
+              Subtle rounding (2px)
+            </p>
+          </VCard>
+
+          <VCard
+            radius="md"
+            title="Medium (Default)"
+          >
+            <p class="text-secondaryText">
+              Standard rounding (6px)
+            </p>
+          </VCard>
+
+          <VCard
+            radius="lg"
+            title="Large"
+          >
+            <p class="text-secondaryText">
+              Pronounced rounding (8px)
+            </p>
+          </VCard>
+
+          <VCard
+            radius="xl"
+            title="Extra Large"
+          >
+            <p class="text-secondaryText">
+              Very rounded (12px)
+            </p>
+          </VCard>
+
+          <VCard
+            radius="full"
+            title="Full"
+          >
+            <p class="text-secondaryText">
+              Pill shape (9999px)
+            </p>
+          </VCard>
+        </div>
+
+        <div class="code-block mt-4">
+          <pre><code>&lt;VCard radius="none" title="No Radius"&gt;
+  Sharp corners
+&lt;/VCard&gt;
+
+&lt;VCard radius="sm" title="Small"&gt;
+  Subtle rounding
+&lt;/VCard&gt;
+
+&lt;VCard radius="md" title="Medium (Default)"&gt;
+  Standard rounding
+&lt;/VCard&gt;
+
+&lt;VCard radius="lg" title="Large"&gt;
+  Pronounced rounding
+&lt;/VCard&gt;
+
+&lt;VCard radius="xl" title="Extra Large"&gt;
+  Very rounded
+&lt;/VCard&gt;
+
+&lt;VCard radius="full" title="Full"&gt;
+  Pill shape
+&lt;/VCard&gt;</code></pre>
+        </div>
+      </section>
+
       <!-- With Header -->
       <section class="examples-section">
         <h4 class="examples-subtitle">
