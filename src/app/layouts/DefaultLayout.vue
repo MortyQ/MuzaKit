@@ -5,6 +5,7 @@ import { RouterView } from "vue-router";
 import { getMenuItems } from "@/app/router/modules";
 import { menuItemsToSidebarConfig } from "@/app/router/utils/adapters";
 import { useAuthStore } from "@/features/auth/store/authStore";
+import VButton from "@/shared/ui/common/VButton.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import { Sidebar, useSidebar } from "@/widgets/sidebar";
 import type { SidebarConfig } from "@/widgets/sidebar";
@@ -48,18 +49,20 @@ const contentMargin = computed(() => ({
 <template>
   <div
     id="app"
-    class="flex min-h-screen bg-mainBg text-mainText"
+    class="flex min-h-screen bg-mainBg text-mainText overflow-x-hidden"
   >
     <!-- Sidebar -->
     <Sidebar :config="sidebarConfig" />
 
     <!-- Main Content Area -->
     <div
-      class="flex-1 flex flex-col min-h-screen transition-all duration-300"
+      class="flex-1 flex flex-col min-h-screen transition-all duration-300 overflow-x-hidden"
       :class="contentMargin"
     >
       <!-- Top Header with Mobile Menu Toggle -->
-      <header class="bg-base-100 shadow-sm border-b border-base-300 flex-shrink-0 lg:hidden">
+      <header
+        class="bg-base-100 shadow-sm border-b border-base-300 flex-shrink-0 lg:hidden"
+      >
         <div class="flex items-center justify-between h-16 px-4">
           <button
             type="button"
@@ -80,20 +83,29 @@ const contentMargin = computed(() => ({
       </header>
 
       <!-- Main Content -->
-      <main
-        class="flex-1 w-full flex flex-col max-w-[calc(100vw-0.5rem)]"
-        :class="{
-          'lg:max-w-[calc(100vw-7rem)]': isCollapsed,
-          'lg:max-w-[calc(100vw-17rem)]': !isCollapsed,
-        }"
-      >
-        <div
-          class="w-full flex-1 py-4 px-2 sm:px-4 lg:px-6 flex flex-col"
-        >
+      <main class="flex-1 flex flex-col overflow-x-hidden">
+        <div class="flex-1 py-4 px-4 sm:px-6 flex flex-col min-w-0">
+          <!-- Page Header -->
+          <div class="flex justify-between items-center mb-4 gap-4">
+            <h1
+              class="text-3xl font-bold text-mainText text-gradient-animated flex-shrink-0"
+            >
+              Dashboard
+            </h1>
+            <div class="flex items-center gap-3">
+              <div
+                id="default-header-filters"
+                class="contents"
+              />
+              <VButton text="Global Filters" />
+            </div>
+          </div>
+
+          <!-- Page Content -->
           <RouterView v-slot="{ Component }">
             <component
               :is="Component"
-              class="flex-1"
+              class="flex-1 min-w-0"
             />
           </RouterView>
         </div>
