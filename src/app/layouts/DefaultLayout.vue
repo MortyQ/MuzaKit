@@ -93,7 +93,7 @@ const contentMargin = computed(() => ({
         <div class="flex-1 py-4 px-4 sm:px-6 flex flex-col min-w-0">
           <!-- Page Header -->
           <header
-            class="flex justify-between items-center mb-4 gap-4 pb-4
+            class="flex justify-between items-center min-h-16 mb-4 gap-4 pb-4
           border-b border-base-300"
           >
             <h1
@@ -101,7 +101,7 @@ const contentMargin = computed(() => ({
             >
               {{ route.meta.title || "" }}
             </h1>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 flex-shrink-0">
               <div
                 id="default-header-filters"
                 class="contents"
