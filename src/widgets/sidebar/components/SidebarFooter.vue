@@ -26,7 +26,7 @@ const { isCollapsed } = useSidebar();
 
 <template>
   <div
-    class="sidebar-footer border-t border-base-300 mt-auto"
+    class="sidebar-footer mt-auto"
     :class="{ 'px-2 py-3': isCollapsed, 'px-3 py-4': !isCollapsed }"
   >
     <!-- User Menu -->

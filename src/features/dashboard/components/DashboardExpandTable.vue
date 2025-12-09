@@ -105,6 +105,7 @@ const exportFunc = (format: string) => {
     :pagination="pagination"
     :loading="serverLoading"
     height="50vh"
+    :row-height="73"
     :toolbar="{
       enabled: true,
       title: 'Dashboard Table',

@@ -26,7 +26,10 @@ const handleClose = () => {
 </script>
 
 <template>
-  <div class="sidebar-header flex items-center justify-between p-4 border-b border-base-300">
+  <div
+    class="sidebar-header flex items-center p-4"
+    :class="isCollapsed ? 'justify-center' : 'justify-between'"
+  >
     <!-- Logo & Brand (visible when expanded) -->
     <Transition
       enter-active-class="transition-opacity duration-200"

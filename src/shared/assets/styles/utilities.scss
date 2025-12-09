@@ -294,6 +294,46 @@
   .will-change-transform {
     will-change: transform;
   }
+
+  /* ═════════════════════════════════════════
+     SHADOW EFFECTS
+     ═════════════════════════════════════════ */
+
+  /**
+   * Glass elevated shadow - from glass card hover state
+   * Multi-layered shadow for prominent elevation effect
+   */
+  .shadow-glass-elevated {
+    box-shadow:
+      0 1px 3px 0 rgba(31, 38, 135, 0.15),
+      0 10px 24px -4px rgba(31, 38, 135, 0.12),
+      0 16px 40px -8px rgba(31, 38, 135, 0.10);
+
+    [data-theme="dark"] & {
+      box-shadow:
+        0 1px 3px 0 rgba(100, 150, 255, 0.20),
+        0 10px 24px -4px rgba(100, 150, 255, 0.16),
+        0 16px 40px -8px rgba(100, 150, 255, 0.12);
+    }
+  }
+
+  /**
+   * Glass soft shadow - gentle shadow for large wrappers
+   * Subtle multi-layered shadow with reduced opacity for containers
+   */
+  .shadow-glass-soft {
+    box-shadow:
+      0 1px 2px 0 rgba(31, 38, 135, 0.06),
+      0 4px 12px -2px rgba(31, 38, 135, 0.05),
+      0 8px 24px -4px rgba(31, 38, 135, 0.04);
+
+    [data-theme="dark"] & {
+      box-shadow:
+        0 1px 2px 0 rgba(100, 150, 255, 0.08),
+        0 4px 12px -2px rgba(100, 150, 255, 0.06),
+        0 8px 24px -4px rgba(100, 150, 255, 0.05);
+    }
+  }
 }
 
 /* ═════════════════════════════════════════

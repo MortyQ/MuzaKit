@@ -242,6 +242,7 @@ const exportFunc = (format: string) => {
       expand-mode="controlled"
       :pagination="pagination"
       :loading="serverLoading"
+      :row-height="73"
       :toolbar="{
         enabled: true,
         title: 'Expandable Table',

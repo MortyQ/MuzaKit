@@ -65,6 +65,32 @@
 }
 
 // ════════════════════════════════════════════════════════════════
+// FLAT SIDEBAR STYLE - Transparent sidebar blending with background
+// ════════════════════════════════════════════════════════════════
+
+.sidebar-flat {
+  // Remove all decorative elements
+  background: transparent !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+
+  // Remove the gradient border
+  &::before {
+    display: none;
+  }
+}
+
+// Dark mode flat sidebar - also transparent
+[data-theme="dark"] {
+  .sidebar-flat {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
 // MOBILE SIDEBAR - Full height without rounded corners
 // ════════════════════════════════════════════════════════════════
 

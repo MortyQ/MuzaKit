@@ -20,9 +20,9 @@ const { isCollapsed } = useSidebar();
   <div>
     <!-- Desktop Sidebar - shown on lg+ screens -->
     <aside
-      class="sidebar fixed top-0 left-0 h-screen glass
+      class="sidebar sidebar-flat fixed top-0 left-0 h-screen
              flex flex-col transition-all duration-300 ease-in-out z-40
-             border-r border-base-300/50 hidden lg:flex"
+             hidden lg:flex"
       :class="{
         'w-64': !isCollapsed,
         'w-20': isCollapsed,

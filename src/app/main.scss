@@ -28,6 +28,7 @@
   body {
     scrollbar-width: thin;
     scrollbar-color: rgb(203 213 225 / 0.3) transparent;
+    @apply bg-mainBg;
   }
 
   .dark html,

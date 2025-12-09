@@ -54,14 +54,15 @@ const contentMargin = computed(() => ({
 <template>
   <div
     id="app"
-    class="flex min-h-screen bg-mainBg text-mainText overflow-x-hidden"
+    class="flex min-h-screen bg-mainBg text-mainText overflow-x-hidden p-4"
   >
     <!-- Sidebar -->
     <Sidebar :config="sidebarConfig" />
 
     <!-- Main Content Area -->
     <div
-      class="flex-1 flex flex-col min-h-screen transition-all duration-300 overflow-x-hidden"
+      class="flex-1 flex flex-col transition-all duration-300
+      overflow-x-hidden bg-cardBg rounded-xl shadow-glass-soft"
       :class="contentMargin"
     >
       <!-- Top Header with Mobile Menu Toggle -->
@@ -91,9 +92,12 @@ const contentMargin = computed(() => ({
       <main class="flex-1 flex flex-col overflow-x-hidden">
         <div class="flex-1 py-4 px-4 sm:px-6 flex flex-col min-w-0">
           <!-- Page Header -->
-          <div class="flex justify-between items-center mb-4 gap-4">
+          <header
+            class="flex justify-between items-center mb-4 gap-4 pb-4
+          border-b border-base-300"
+          >
             <h1
-              class="text-3xl font-bold text-mainText text-gradient-animated flex-shrink-0"
+              class="text-3xl font-bold text-mainText flex-shrink-0"
             >
               {{ route.meta.title || "" }}
             </h1>
@@ -109,7 +113,7 @@ const contentMargin = computed(() => ({
               />
               <GlobalFilterFeature />
             </div>
-          </div>
+          </header>
 
           <!-- Page Content -->
           <RouterView v-slot="{ Component }">
