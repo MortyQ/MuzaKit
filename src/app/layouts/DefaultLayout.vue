@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { RouterView } from "vue-router";
+import { RouterView, useRoute } from "vue-router";
 
 import { getMenuItems } from "@/app/router/modules";
 import { menuItemsToSidebarConfig } from "@/app/router/utils/adapters";
 import { useAuthStore } from "@/features/auth/store/authStore";
+import { useModal } from "@/shared/composables";
 import VButton from "@/shared/ui/common/VButton.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
+import GlobalFilterFeature from "@/widgets/filters/GlobalFilterFeature.vue";
 import { Sidebar, useSidebar } from "@/widgets/sidebar";
 import type { SidebarConfig } from "@/widgets/sidebar";
 
-const { isCollapsed, toggleMobile } = useSidebar();
+const { open } = useModal("global-filter");
+
+const route = useRoute();
 const authStore = useAuthStore();
+const { isCollapsed, toggleMobile } = useSidebar();
 
 // Footer items - can add additional items here if needed
 const footerItems = computed(() => {
@@ -90,14 +95,19 @@ const contentMargin = computed(() => ({
             <h1
               class="text-3xl font-bold text-mainText text-gradient-animated flex-shrink-0"
             >
-              Dashboard
+              {{ route.meta.title || "" }}
             </h1>
             <div class="flex items-center gap-3">
               <div
                 id="default-header-filters"
                 class="contents"
               />
-              <VButton text="Global Filters" />
+              <VButton
+                icon="lucide:sliders-horizontal"
+                aria-label="Global Filters"
+                @click="open"
+              />
+              <GlobalFilterFeature />
             </div>
           </div>
 

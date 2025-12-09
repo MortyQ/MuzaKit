@@ -168,44 +168,23 @@ onUnmounted(() => {
         </slot>
       </div>
 
-      <!-- Input Field -->
-      <input
-        v-if="!textarea"
+      <!-- Input / Textarea Field -->
+      <component
+        :is="textarea ? 'textarea' : 'input'"
         :id="inputId"
         ref="inputRef"
         v-model="internalValue"
-        :type="currentInputType"
+        :type="textarea ? undefined : currentInputType"
+        :rows="textarea ? rows : undefined"
         class="v-input"
         :class="[
-          sizeClasses,
+          textarea ? 'v-input-textarea' : sizeClasses,
           {
             'v-input-with-left-icon': showLeftIcon,
             'v-input-with-right-icon': showRightIcon,
             'v-input-error': validation?.$error,
             'v-input-disabled': disabled,
-            'cursor-pointer': type === 'date',
-          },
-        ]"
-        v-bind="$attrs"
-        :disabled="disabled"
-        @focus="isFocused = true"
-        @blur="isFocused = false"
-      >
-
-      <!-- Textarea Field -->
-      <textarea
-        v-else
-        :id="inputId"
-        ref="inputRef"
-        v-model="internalValue"
-        :rows="rows"
-        class="v-input v-input-textarea"
-        :class="[
-          {
-            'v-input-with-left-icon': showLeftIcon,
-            'v-input-with-right-icon': showRightIcon,
-            'v-input-error': validation?.$error,
-            'v-input-disabled': disabled,
+            'cursor-pointer': type === 'date' && !textarea,
           },
         ]"
         v-bind="$attrs"
