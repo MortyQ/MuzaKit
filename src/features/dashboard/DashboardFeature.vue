@@ -5,11 +5,12 @@ import DashboardKpis from "@/features/dashboard/components/DashboardKpis.vue";
 </script>
 
 <template>
-  <div class="page-container gap-4">
-    <!-- KPI Cards Grid -->
-    <DashboardKpis
-      :loading="false"
-    />
-    <DashboardExpandTable />
+  <div class="page-container grid grid-cols-12 auto-rows-min gap-2">
+    <div class="col-span-full">
+      <DashboardKpis
+        :loading="false"
+      />
+    </div>
+    <DashboardExpandTable class="col-span-full" />
   </div>
 </template>

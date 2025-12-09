@@ -14,10 +14,9 @@
 
   transition: none; // Disable transition during normal operation
 
-  // Performance optimizations for smooth scrolling
-  // Enables GPU acceleration and creates a new compositing layer
-  transform: translateZ(0);
-  will-change: scroll-position;
+  // CRITICAL: NO transform here - it conflicts with virtualization
+  // and causes layout shifts when table is partially visible
+  // The scroll container handles GPU acceleration instead
 
   // State during column resize
   &.is-resizing {

@@ -855,7 +855,7 @@ onUnmounted(() => {
         ref="scrollContainerRef"
         class="table-scroll-container table-scrollbar-styled"
         :class="{ 'table-scroll-container--loading': loading }"
-        :style="{ height: tableHeight }"
+        :style="{ height: tableHeight, overscrollBehavior: 'contain' }"
       >
         <!-- Grid container -->
         <div
