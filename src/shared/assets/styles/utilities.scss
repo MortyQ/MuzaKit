@@ -1,48 +1,56 @@
 /**
- * 🎨 Glassmorphism & Gradient Utilities
+ * 🎨 Glassmorphism & Gradient Utilities (PERFORMANCE OPTIMIZED)
  *
- * Modern UI effects: blur backgrounds, gradients, glass effects
+ * Uses "Fake Glass" technique: High opacity + borders instead of costly backdrop-filter.
  * Usage: @apply glass; or class="glass"
  */
 
 @layer utilities {
   /* ═════════════════════════════════════════
-     GLASSMORPHISM EFFECTS
+     FAKE GLASSMORPHISM (60 FPS SCROLL)
      ═════════════════════════════════════════ */
 
   /**
-   * Light glass effect - for light mode
+   * Light glass effect
+   * High opacity (95%) mimics frosted glass without calculation overhead
    */
   .glass-light {
-    @apply bg-base-100/80 backdrop-blur-md border border-base-300/50;
+    @apply bg-base-100/95 border border-base-300/50;
+    transform: translateZ(0); /* Hardware acceleration */
     box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
   }
 
   /**
-   * Dark glass effect - for dark mode
+   * Dark glass effect
    */
   .glass-dark {
-    @apply bg-base-200/80 backdrop-blur-md border border-base-300/50;
+    @apply bg-base-200/95 border border-base-300/30;
+    transform: translateZ(0);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
 
   /**
    * Auto glass - adapts to theme
+   * This is your main utility. Optimized for scroll performance.
    */
   .glass {
-    @apply bg-base-100/80 backdrop-blur-md border border-base-300/50;
+    @apply bg-base-100/95 border border-base-300/50;
+    transform: translateZ(0);
     box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
 
     [data-theme="dark"] & {
+      @apply bg-base-100/95 border-base-300/20;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
   }
 
   /**
    * Strong glass - more opaque
+   * Used for heavy cards.
    */
   .glass-strong {
-    @apply bg-base-100/90 backdrop-blur-lg border border-base-300;
+    @apply bg-base-100/95 border border-base-300;
+    transform: translateZ(0);
     box-shadow: 0 12px 40px rgba(31, 38, 135, 0.12);
 
     [data-theme="dark"] & {
@@ -51,10 +59,12 @@
   }
 
   /**
-   * Subtle glass - very transparent
+   * Subtle glass
+   * Slightly more transparent, use sparingly on scrollable areas.
    */
   .glass-subtle {
-    @apply bg-base-100/60 backdrop-blur-sm border border-base-300/30;
+    @apply bg-base-100/90 border border-base-300/30;
+    /* No backdrop-filter to ensure speed */
     box-shadow: 0 4px 24px rgba(31, 38, 135, 0.06);
 
     [data-theme="dark"] & {
@@ -63,12 +73,9 @@
   }
 
   /* ═════════════════════════════════════════
-     GRADIENT OVERLAYS
+     GRADIENT OVERLAYS (UNCHANGED)
      ═════════════════════════════════════════ */
 
-  /**
-   * Blue gradient overlay - subtle
-   */
   .gradient-overlay {
     @apply relative;
 
@@ -80,9 +87,6 @@
     }
   }
 
-  /**
-   * Strong gradient overlay
-   */
   .gradient-overlay-strong {
     @apply relative;
 
@@ -94,57 +98,45 @@
     }
   }
 
-  /**
-   * Gradient border effect
-   */
   .gradient-border {
     @apply relative bg-clip-padding;
     border: 2px solid transparent;
     background-image:
-      linear-gradient(rgb(var(--color-base-100)), rgb(var(--color-base-100))),
-      linear-gradient(135deg, #87CEEB, #4A90E2, #00008B);
+            linear-gradient(rgb(var(--color-base-100)), rgb(var(--color-base-100))),
+            linear-gradient(135deg, #87CEEB, #4A90E2, #00008B);
     background-origin: border-box;
     background-clip: padding-box, border-box;
 
     [data-theme="dark"] & {
       background-image:
-        linear-gradient(rgb(var(--color-base-100)), rgb(var(--color-base-100))),
-        linear-gradient(135deg, #38bdf8, #0284c7, #082f49);
+              linear-gradient(rgb(var(--color-base-100)), rgb(var(--color-base-100))),
+              linear-gradient(135deg, #38bdf8, #0284c7, #082f49);
     }
   }
 
   /* ═════════════════════════════════════════
-     GRADIENT TEXT
+     GRADIENT TEXT (UNCHANGED)
      ═════════════════════════════════════════ */
 
-  /**
-   * Blue gradient text effect
-   */
   .text-gradient-blue {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(135deg, #87CEEB 0%, #4A90E2 50%, #00008B 100%);
   }
 
-  /**
-   * Subtle gradient text
-   */
   .text-gradient-subtle {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
   }
 
-  /**
-   * Animated gradient text
-   */
   .text-gradient-animated {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(
-      90deg,
-      #87CEEB 0%,
-      #4A90E2 25%,
-      #00008B 50%,
-      #4A90E2 75%,
-      #87CEEB 100%
+                    90deg,
+                    #87CEEB 0%,
+                    #4A90E2 25%,
+                    #00008B 50%,
+                    #4A90E2 75%,
+                    #87CEEB 100%
     );
     background-size: 200% auto;
     animation: gradient-shift 3s linear infinite;
@@ -163,68 +155,59 @@
      CARD EFFECTS
      ═════════════════════════════════════════ */
 
-  /**
-   * Glass card - combines multiple effects
-   */
   .card-glass {
     @apply glass rounded-xl p-6;
   }
 
-  /**
-   * Gradient card background
-   */
   .card-gradient {
     @apply relative overflow-hidden rounded-xl p-6;
     background: linear-gradient(135deg, #87CEEB 0%, #4A90E2 50%, #00008B 100%);
-
+    /* Removed expensive blur on ::before, just use opacity */
     &::before {
       content: '';
       @apply absolute inset-0 opacity-90;
       background: inherit;
-      filter: blur(40px);
     }
-
-    /* Ensure text is visible */
     color: white;
   }
 
-  /**
-   * Elevated glass card with shadow
-   */
   .card-glass-elevated {
     @apply glass-strong rounded-xl p-6;
     box-shadow:
-      0 4px 16px rgba(31, 38, 135, 0.1),
-      0 8px 32px rgba(31, 38, 135, 0.08);
+            0 4px 16px rgba(31, 38, 135, 0.1),
+            0 8px 32px rgba(31, 38, 135, 0.08);
 
     [data-theme="dark"] & {
       box-shadow:
-        0 4px 16px rgba(0, 0, 0, 0.3),
-        0 8px 32px rgba(0, 0, 0, 0.2);
+              0 4px 16px rgba(0, 0, 0, 0.3),
+              0 8px 32px rgba(0, 0, 0, 0.2);
     }
   }
 
   /* ═════════════════════════════════════════
-     BACKDROP EFFECTS
+     BACKDROP EFFECTS (EXCEPTIONS)
      ═════════════════════════════════════════ */
 
   /**
-   * Modal/Dialog backdrop with blur
+   * Modal/Dialog backdrop
+   * KEPT BLUR: Because modals don't scroll, they are safe.
    */
   .backdrop-blur-modal {
-    @apply backdrop-blur-md backdrop-saturate-150;
-    backdrop-filter: blur(12px) brightness(0.95) saturate(1.5);
+    @apply backdrop-blur-sm backdrop-saturate-150;
+    backdrop-filter: blur(8px) brightness(0.95);
 
     [data-theme="dark"] & {
-      backdrop-filter: blur(12px) brightness(0.5) saturate(1.5);
+      backdrop-filter: blur(8px) brightness(0.5);
     }
   }
 
   /**
    * Sidebar backdrop
+   * REDUCED BLUR: Sidebars might be over scrollable content.
    */
   .backdrop-blur-sidebar {
     @apply backdrop-blur-sm;
+    /* blur(4px) is much cheaper than blur(12px) */
     backdrop-filter: blur(4px) brightness(0.98);
 
     [data-theme="dark"] & {
@@ -233,12 +216,9 @@
   }
 
   /* ═════════════════════════════════════════
-     SHINE/SHIMMER EFFECTS
+     SHINE/SHIMMER EFFECTS (UNCHANGED)
      ═════════════════════════════════════════ */
 
-  /**
-   * Shimmer loading effect
-   */
   .shimmer {
     @apply relative overflow-hidden;
 
@@ -246,10 +226,10 @@
       content: '';
       @apply absolute inset-0;
       background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.3) 50%,
-        transparent 100%
+                      90deg,
+                      transparent 0%,
+                      rgba(255, 255, 255, 0.3) 50%,
+                      transparent 100%
       );
       animation: shimmer 2s infinite;
     }
@@ -264,16 +244,13 @@
     }
   }
 
-  /**
-   * Glow effect on hover
-   */
   .glow-on-hover {
     @apply transition-all duration-300;
 
     &:hover {
       box-shadow:
-        0 0 20px rgba(14, 165, 233, 0.4),
-        0 0 40px rgba(14, 165, 233, 0.2);
+              0 0 20px rgba(14, 165, 233, 0.4),
+              0 0 40px rgba(14, 165, 233, 0.2);
     }
   }
 
@@ -281,76 +258,54 @@
      PERFORMANCE OPTIMIZATION
      ═════════════════════════════════════════ */
 
-  /**
-   * Hardware-accelerated blur
-   */
   .will-change-blur {
     will-change: backdrop-filter;
   }
 
-  /**
-   * Hardware-accelerated transform
-   */
   .will-change-transform {
     will-change: transform;
   }
 
   /* ═════════════════════════════════════════
-     SHADOW EFFECTS
+     SHADOW EFFECTS (UNCHANGED)
      ═════════════════════════════════════════ */
 
-  /**
-   * Glass elevated shadow - from glass card hover state
-   * Multi-layered shadow for prominent elevation effect
-   */
   .shadow-glass-elevated {
     box-shadow:
-      0 1px 3px 0 rgba(31, 38, 135, 0.15),
-      0 10px 24px -4px rgba(31, 38, 135, 0.12),
-      0 16px 40px -8px rgba(31, 38, 135, 0.10);
+            0 1px 3px 0 rgba(31, 38, 135, 0.15),
+            0 10px 24px -4px rgba(31, 38, 135, 0.12),
+            0 16px 40px -8px rgba(31, 38, 135, 0.10);
 
     [data-theme="dark"] & {
       box-shadow:
-        0 1px 3px 0 rgba(100, 150, 255, 0.20),
-        0 10px 24px -4px rgba(100, 150, 255, 0.16),
-        0 16px 40px -8px rgba(100, 150, 255, 0.12);
+              0 1px 3px 0 rgba(100, 150, 255, 0.20),
+              0 10px 24px -4px rgba(100, 150, 255, 0.16),
+              0 16px 40px -8px rgba(100, 150, 255, 0.12);
     }
   }
 
-  /**
-   * Glass soft shadow - gentle shadow for large wrappers
-   * Subtle multi-layered shadow with reduced opacity for containers
-   */
   .shadow-glass-soft {
     box-shadow:
-      0 1px 2px 0 rgba(31, 38, 135, 0.06),
-      0 4px 12px -2px rgba(31, 38, 135, 0.05),
-      0 8px 24px -4px rgba(31, 38, 135, 0.04);
+            0 1px 2px 0 rgba(31, 38, 135, 0.06),
+            0 4px 12px -2px rgba(31, 38, 135, 0.05),
+            0 8px 24px -4px rgba(31, 38, 135, 0.04);
 
     [data-theme="dark"] & {
       box-shadow:
-        0 1px 2px 0 rgba(100, 150, 255, 0.08),
-        0 4px 12px -2px rgba(100, 150, 255, 0.06),
-        0 8px 24px -4px rgba(100, 150, 255, 0.05);
+              0 1px 2px 0 rgba(100, 150, 255, 0.08),
+              0 4px 12px -2px rgba(100, 150, 255, 0.06),
+              0 8px 24px -4px rgba(100, 150, 255, 0.05);
     }
   }
 }
 
-/* ═════════════════════════════════════════
-   COMPONENT-SPECIFIC UTILITIES
-   ═════════════════════════════════════════ */
-
 @layer components {
-  /**
-   * CRM Dashboard Card
-   */
+  /* ... keep your component layer unchanged ... */
   .crm-card {
+    /* Uses .glass-strong which is now optimized */
     @apply glass-strong rounded-xl p-6 hover:shadow-xl transition-all duration-300;
   }
 
-  /**
-   * Stat Card with gradient
-   */
   .stat-card {
     @apply relative overflow-hidden rounded-xl p-6;
     @apply bg-white dark:bg-neutral-800;
@@ -363,17 +318,14 @@
     }
   }
 
-  /**
-   * Hero Section Background
-   */
   .hero-gradient {
     @apply relative;
     background: linear-gradient(135deg, #87CEEB 0%, #4A90E2 50%, #00008B 100%);
 
     &::before {
       content: '';
-      @apply absolute inset-0 bg-white/10 backdrop-blur-3xl;
+      @apply absolute inset-0 bg-white/10;
+      /* Removed heavy blur on hero background too */
     }
   }
 }
-
