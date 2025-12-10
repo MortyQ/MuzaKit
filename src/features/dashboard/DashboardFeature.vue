@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import DashboardEChartMix from "@/features/dashboard/components/DashboardEChartMix.vue";
+import DashboardEChartRadial from "@/features/dashboard/components/DashboardEChartRadial.vue";
 import DashboardExpandTable from "@/features/dashboard/components/DashboardExpandTable.vue";
 import DashboardKpis from "@/features/dashboard/components/DashboardKpis.vue";
 
@@ -11,6 +13,8 @@ import DashboardKpis from "@/features/dashboard/components/DashboardKpis.vue";
         :loading="false"
       />
     </div>
-    <DashboardExpandTable class="col-span-full" />
+    <DashboardEChartMix class="col-span-full xl:col-span-8" />
+    <DashboardEChartRadial class="col-span-full xl:col-span-4" />
+    <DashboardExpandTable class="col-span-full xl:col-span-full" />
   </div>
 </template>
