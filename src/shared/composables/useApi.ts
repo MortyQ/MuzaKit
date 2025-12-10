@@ -11,7 +11,7 @@
  * - Callbacks (onSuccess, onError, onBefore, onFinish)
  * - Type safety
  * - Full response access (headers, status, config)
- * - Auto cleanup on unmount (can be disabled for stores)
+ * - Auto cleanup on unmount (automatically detected for components vs stores)
  *
  * @example Basic usage in components (most common)
  * ```ts
@@ -25,20 +25,18 @@
  * })
  * ```
  *
- * @example Usage in Pinia stores (disable auto cleanup)
+ * @example Usage in Pinia stores (automatic cleanup detection)
  * ```ts
  * export const useUserStore = defineStore('user', () => {
  *   const fetchUsers = async () => {
- *     const { execute } = useApi<User[]>('/users', {
- *       autoCleanup: false // Important! Prevents cleanup on component unmount
- *     })
+ *     // No autoCleanup needed! Automatically detects we're in a store (no component scope)
+ *     const { execute } = useApi<User[]>('/users')
  *     return execute()
  *   }
  *
  *   const createUser = async (data: CreateUserDto) => {
- *     const { execute } = useApiPost<User, CreateUserDto>('/users', {
- *       autoCleanup: false
- *     })
+ *     // Works perfectly in stores without any special configuration
+ *     const { execute } = useApiPost<User, CreateUserDto>('/users')
  *     return execute({ data })
  *   }
  * })
@@ -99,7 +97,7 @@
 
 import { useDebounceFn } from "@vueuse/core";
 import type { AxiosResponse } from "axios";
-import { ref, type Ref, onUnmounted } from "vue";
+import { ref, type Ref, onUnmounted, getCurrentScope } from "vue";
 
 import apiClient from "../api/client";
 import type {
@@ -131,10 +129,13 @@ export function useApi<T = unknown, D = unknown>(
     skipErrorNotification = false,
     retry = false,
     retryDelay = 1000,
-    autoCleanup = true,
     authMode = "default",
     ...axiosConfig
   } = options;
+
+  // Detect if we're inside a component scope (has lifecycle)
+  // If true - cleanup automatically, if false (store/service) - skip cleanup
+  const hasActiveScope = getCurrentScope() !== undefined;
 
   // State
   const state = useApiState<T>(initialData as T | null);
@@ -246,8 +247,9 @@ export function useApi<T = unknown, D = unknown>(
   };
 
   // Automatic cleanup on component unmount
-  // Can be disabled for stores/services via autoCleanup: false option
-  if (autoCleanup) {
+  // Only register if we're inside a component scope (has active Vue instance)
+  // Stores/services won't have active scope, so cleanup won't be registered
+  if (hasActiveScope) {
     onUnmounted(() => {
       abort();
     });

@@ -26,9 +26,10 @@ use([
 ]);
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const revenueData = [28000, 32000, 29000, 35000, 31000, 38000,
-  42000, 39000, 45000, 48000, 44000, 52000];
-const lostRevenueData = [5000, 4500, 6000, 4000, 5500, 4200, 3800, 4600, 3500, 3200, 4100, 2800];
+const revenueData = [8_500_000, 12_300_000, 9_800_000, 14_200_000, 11_500_000, 15_800_000,
+  17_200_000, 13_900_000, 18_500_000, 19_800_000, 16_400_000, 20_200_000];
+const lostRevenueData = [2_100_000, 1_850_000, 2_400_000, 1_600_000, 2_200_000, 1_700_000,
+  1_500_000, 1_900_000, 1_400_000, 1_300_000, 1_650_000, 1_100_000];
 const buyBoxData = [82, 85, 80, 88, 84, 90, 92, 88, 93, 94, 91, 95];
 
 const option = computed(() => ({
@@ -48,6 +49,16 @@ const option = computed(() => ({
     borderWidth: 1,
     textStyle: {
       color: "#1f2937",
+    },
+    formatter: (params: any) => {
+      let result = `<strong>${params[0].axisValue}</strong><br/>`;
+      params.forEach((param: any) => {
+        const value = param.seriesName === "Buy Box"
+          ? `${param.value}%`
+          : `$${(param.value / 1_000_000).toFixed(2)}M`;
+        result += `${param.marker} ${param.seriesName}: ${value}<br/>`;
+      });
+      return result;
     },
   },
   legend: {
@@ -103,7 +114,7 @@ const option = computed(() => ({
       axisLabel: {
         color: "#6b7280",
         fontSize: 12,
-        formatter: "${value}",
+        formatter: (value: number) => `$${(value / 1_000_000).toFixed(1)}M`,
       },
       axisLine: {
         lineStyle: {

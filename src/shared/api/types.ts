@@ -96,8 +96,6 @@ export interface UseApiOptions<T = unknown,
   debounce?: number
   /** Request timeout */
   timeout?: number
-  /** Enable automatic cleanup on component unmount (default: true). Set to false for stores/services */
-  autoCleanup?: boolean
 }
 
 /**

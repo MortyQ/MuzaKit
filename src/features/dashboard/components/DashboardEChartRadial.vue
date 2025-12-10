@@ -23,11 +23,11 @@ use([
 ]);
 
 const ratingsData = [
-  { rating: 1, count: 10, color: "#991b1b" }, // Dark Red
-  { rating: 2, count: 20, color: "#ef4444" }, // Red
-  { rating: 3, count: 45, color: "#f59e0b" }, // Orange
-  { rating: 4, count: 85, color: "#3b82f6" }, // Blue
-  { rating: 5, count: 120, color: "#10b981" }, // Green
+  { rating: 1, count: 21_500, color: "#991b1b" }, // Dark Red
+  { rating: 2, count: 18_300, color: "#ef4444" }, // Red
+  { rating: 3, count: 35_700, color: "#f59e0b" }, // Orange
+  { rating: 4, count: 67_800, color: "#3b82f6" }, // Blue
+  { rating: 5, count: 98_400, color: "#10b981" }, // Green
 ];
 
 const totalCount = ratingsData.reduce((sum, item) => sum + item.count, 0);
@@ -62,7 +62,7 @@ const option = computed(() => ({
       const rating = parseInt(name.split(" ")[0]);
       const item = ratingsWithPercentage.find((r) => r.rating === rating);
       if (!item) return "";
-      return `<strong>${item.rating} ⭐</strong><br/>Count: ${item.count}<br/>Percentage: ${item.percentage}%`;
+      return `<strong>${item.rating} ⭐</strong><br/>Count: ${item.count.toLocaleString()}<br/>Percentage: ${item.percentage}%`;
     },
     backgroundColor: "rgba(255, 255, 255, 0.95)",
     borderColor: "#e5e7eb",
@@ -84,7 +84,7 @@ const option = computed(() => ({
     formatter: (name: string) => {
       const rating = parseInt(name.split(" ")[0]);
       const item = ratingsWithPercentage.find((r) => r.rating === rating);
-      return item ? `${item.rating} (${item.count})` : name;
+      return item ? `${item.rating} (${item.count.toLocaleString()})` : name;
     },
   },
   series: [
