@@ -2,7 +2,7 @@
 import type { BaseValidation } from "@vuelidate/core";
 import DOMPurify from "dompurify";
 import debounceFunc from "lodash.debounce";
-import { ref, computed, useId, onUnmounted, useSlots, type Ref } from "vue";
+import { ref, computed, useId, onUnmounted, useSlots, watch, type Ref } from "vue";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
 
@@ -50,7 +50,7 @@ const props = withDefaults(defineProps<Props>(), {
 const inputId = computed(() => props.id || `v-input-${useId()}`);
 
 const emit = defineEmits<{
-  "update:modelValue": [value: string]
+  "update:modelValue": [value: string | number]
 }>();
 
 const slots = useSlots();
@@ -59,13 +59,16 @@ const isShowPassword = ref(false);
 const isFocused = ref(false);
 const inputRef = ref<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
+// Local state for the input value
+const localValue = ref<string | number>(props.modelValue ?? "");
+
 // Debounce logic
 const debounceDelay = computed(() => {
   if (typeof props.debounce === "number") return props.debounce;
   return props.debounce ? 800 : 0;
 });
 
-const debouncedEmitUpdate = debounceFunc((value: string) => {
+const debouncedEmitUpdate = debounceFunc((value: string | number) => {
   emit("update:modelValue", value);
 }, debounceDelay.value);
 
@@ -106,21 +109,43 @@ const leftIconName = computed(() => {
   return "";
 });
 
-const internalValue = computed({
-  get: () => props.modelValue ?? "",
-  set: (value: string) => {
-    const sanitizedValue = DOMPurify.sanitize(value, { ALLOWED_TAGS: [] });
-
-    if (debounceDelay.value > 0) {
-      debouncedEmitUpdate(sanitizedValue);
-    } else {
-      emit("update:modelValue", sanitizedValue);
-    }
-  },
-});
-
 // Computed properties
 const isSearchType = computed(() => props.type === "search");
+
+// Handle input changes
+const handleInput = (event: Event) => {
+  const target = event.target as HTMLInputElement | HTMLTextAreaElement;
+  let value: string | number = target.value;
+
+  // Sanitize the value
+  const sanitizedValue = DOMPurify.sanitize(value, { ALLOWED_TAGS: [] });
+
+  // Update local value immediately for smooth typing
+  localValue.value = sanitizedValue;
+
+  // Convert to number if input type is number
+  let finalValue: string | number = sanitizedValue;
+  if (props.type === "number" && sanitizedValue !== "") {
+    const numValue = Number(sanitizedValue);
+    if (!isNaN(numValue)) {
+      finalValue = numValue;
+    }
+  }
+
+  // Emit update (debounced or immediate)
+  if (debounceDelay.value > 0) {
+    debouncedEmitUpdate(finalValue);
+  } else {
+    emit("update:modelValue", finalValue);
+  }
+};
+
+// Sync local value when parent prop changes externally
+watch(() => props.modelValue, (newValue) => {
+  if (newValue !== localValue.value) {
+    localValue.value = newValue ?? "";
+  }
+});
 
 // Cleanup debounce on unmount
 onUnmounted(() => {
@@ -172,10 +197,14 @@ onUnmounted(() => {
       <component
         :is="textarea ? 'textarea' : 'input'"
         :id="inputId"
+        :key="`${textarea ? 'textarea' : 'input'}-${inputId}`"
         ref="inputRef"
-        v-model="internalValue"
-        :type="textarea ? undefined : currentInputType"
-        :rows="textarea ? rows : undefined"
+        :value="localValue"
+        v-bind="{
+          ...$attrs,
+          type: textarea ? undefined : currentInputType,
+          rows: textarea ? rows : undefined,
+        }"
         class="v-input"
         :class="[
           textarea ? 'v-input-textarea' : sizeClasses,
@@ -187,8 +216,8 @@ onUnmounted(() => {
             'cursor-pointer': type === 'date' && !textarea,
           },
         ]"
-        v-bind="$attrs"
         :disabled="disabled"
+        @input="handleInput"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />

@@ -21,6 +21,11 @@ const mode = ref<AuthMode>("login");
 const isLoading = ref(false);
 const error = ref("");
 
+const authPages = {
+  login: LoginForm,
+  register: RegisterForm,
+};
+
 const isLogin = computed(() => mode.value === "login");
 
 const toggleMode = () => {
@@ -49,59 +54,6 @@ const handleLogin = async (data: {
     isLoading.value = false;
   }
 };
-
-const handleRegister = async (data: {
-  name: string;
-  email: string;
-  password: string;
-  terms: boolean;
-}) => {
-  error.value = "";
-  isLoading.value = true;
-
-  try {
-    // TODO: Implement register API call
-    // For now, just show success and switch to login
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Mock success
-    mode.value = "login";
-    error.value = "";
-
-    // You can add a success toast here
-    console.log("Registration successful", data);
-  } catch (err) {
-    error.value = "Registration failed. Please try again.";
-    console.error("Register error:", err);
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const handleSocialLogin = async (provider: "google" | "github") => {
-  error.value = "";
-  isLoading.value = true;
-
-  try {
-    // TODO: Implement social login
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log("Social login with", provider);
-
-    // Mock success
-    router.push("/");
-  } catch (err) {
-    error.value = `Failed to sign in with ${provider}`;
-    console.error("Social login error:", err);
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const handleForgotPassword = () => {
-  // TODO: Implement forgot password flow
-  console.log("Forgot password clicked");
-  alert("Forgot password functionality will be implemented");
-};
 </script>
 
 <template>
@@ -113,7 +65,6 @@ const handleForgotPassword = () => {
 
     <!-- Auth Card -->
     <div class="w-full max-w-md relative z-10">
-      <!-- Glassmorphism Card -->
       <VCard
         variant="elevated"
         padding="md"
@@ -153,30 +104,7 @@ const handleForgotPassword = () => {
         <!-- Forms -->
         <div class="space-y-4">
           <!-- Login Form -->
-          <Transition
-            name="fade-slide"
-            mode="out-in"
-          >
-            <LoginForm
-              v-if="isLogin"
-              :loading="isLoading"
-              :error="error"
-              @submit="handleLogin"
-              @social-login="handleSocialLogin"
-              @forgot-password="handleForgotPassword"
-            />
-
-            <!-- Register Form -->
-            <RegisterForm
-              v-else
-              :loading="isLoading"
-              :error="error"
-              @submit="handleRegister"
-              @social-login="handleSocialLogin"
-            />
-          </Transition>
-
-          <!-- Toggle Mode -->
+          <component :is="authPages[mode]" />
           <div class="text-center pt-3 border-t border-cardBorder">
             <p class="text-sm text-secondaryText">
               {{ isLogin ? "Don't have an account?" : "Already have an account?" }}
@@ -201,22 +129,3 @@ const handleForgotPassword = () => {
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Fade Slide Transition */
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: all 0.3s ease-out;
-}
-
-.fade-slide-enter-from {
-  opacity: 0;
-  transform: translateX(20px);
-}
-
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateX(-20px);
-}
-</style>
-

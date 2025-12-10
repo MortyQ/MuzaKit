@@ -16,12 +16,6 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const emit = defineEmits<{
-  submit: [{ email: string; password: string; remember: boolean }];
-  socialLogin: [provider: "google" | "github"];
-  forgotPassword: [];
-}>();
-
 const formData = reactive({
   email: "",
   password: "",
@@ -46,11 +40,7 @@ const handleSubmit = async () => {
 
   if (!isValid || props.loading) return;
 
-  emit("submit", {
-    email: formData.email,
-    password: formData.password,
-    remember: formData.remember,
-  });
+  console.log("SUBMIT", formData);
 };
 </script>
 
@@ -59,8 +49,6 @@ const handleSubmit = async () => {
     <!-- Social Login -->
     <SocialLogin
       :loading="loading"
-      @google="emit('socialLogin', 'google')"
-      @github="emit('socialLogin', 'github')"
     />
 
     <!-- Divider -->
@@ -132,7 +120,6 @@ const handleSubmit = async () => {
           type="button"
           :disabled="loading"
           class="text-xs font-medium text-primary hover:text-primary-dark transition-colors"
-          @click="emit('forgotPassword')"
         >
           Forgot password?
         </button>
