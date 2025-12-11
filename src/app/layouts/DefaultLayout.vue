@@ -5,14 +5,11 @@ import { RouterView, useRoute } from "vue-router";
 import { getMenuItems } from "@/app/router/modules";
 import { menuItemsToSidebarConfig } from "@/app/router/utils/adapters";
 import { useAuthStore } from "@/features/auth/store/authStore";
-import { useModal } from "@/shared/composables";
-import VButton from "@/shared/ui/common/VButton.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import GlobalFilterFeature from "@/widgets/filters/GlobalFilterFeature.vue";
+import HeaderFilters from "@/widgets/filters/HeaderFilters.vue";
 import { Sidebar, useSidebar } from "@/widgets/sidebar";
 import type { SidebarConfig } from "@/widgets/sidebar";
 
-const { open } = useModal("global-filter");
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -101,18 +98,7 @@ const contentMargin = computed(() => ({
             >
               {{ route.meta.title || "" }}
             </h1>
-            <div class="flex items-center gap-3 flex-shrink-0">
-              <div
-                id="default-header-filters"
-                class="contents"
-              />
-              <VButton
-                icon="lucide:sliders-horizontal"
-                aria-label="Global Filters"
-                @click="open"
-              />
-              <GlobalFilterFeature />
-            </div>
+            <HeaderFilters />
           </header>
 
           <!-- Page Content -->
