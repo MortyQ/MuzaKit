@@ -27,7 +27,7 @@ const DashboardExpandTable = defineAsyncComponent({
 <template>
   <div class="page-container grid grid-cols-12 auto-rows-min gap-2">
     <div class="col-span-full">
-      <DashboardKpis :loading="false" />
+      <DashboardKpis />
     </div>
 
     <DashboardEChartMix class="col-span-full xl:col-span-8" />
