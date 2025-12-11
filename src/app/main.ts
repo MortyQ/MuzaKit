@@ -6,6 +6,7 @@ import router from "./router";
 
 import { setupApiClient } from "@/shared/api";
 
+import "@/shared/assets/styles/fonts.css";
 import "./main.scss";
 
 // Create Vue app instance

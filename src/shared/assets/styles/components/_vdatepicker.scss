@@ -1,0 +1,343 @@
+/*
+ * VDatepicker Component Styles
+ *
+ * Custom styling that matches the design system
+ * Maps @vuepic/vue-datepicker CSS variables to Tailwind theme
+ */
+.dp--preset-dates {
+  @apply min-w-[140px] w-full;
+}
+
+@layer components {
+  .v-datepicker-wrapper {
+    @apply w-full flex flex-col gap-1.5 rounded-lg shadow-sm;
+  }
+
+  .v-datepicker-label {
+    @apply text-sm font-medium text-mainText mb-0.5 transition-colors;
+  }
+
+
+
+  .v-datepicker-helper-text {
+    @apply text-xs text-secondaryText mt-0.5 transition-colors;
+  }
+
+  .v-datepicker-error-message {
+    @apply text-xs text-error font-medium mt-0.5;
+  }
+
+  /* Icon styling */
+  .v-datepicker-icon,
+  .v-datepicker-clear-icon,
+  .v-datepicker-arrow-icon,
+  .v-datepicker-clock-icon,
+  .v-datepicker-calendar-icon {
+    @apply w-5 h-5 text-secondaryText transition-colors;
+  }
+
+  .v-datepicker-clear-icon:hover,
+  .v-datepicker-arrow-icon:hover {
+    @apply text-primary cursor-pointer;
+  }
+
+  /* Error transitions */
+  .error-slide-enter-active,
+  .error-slide-leave-active {
+    transition: all 0.3s ease;
+  }
+
+  .error-slide-enter-from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  .error-slide-leave-to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  /* Main datepicker container with default MD size variables */
+  .v-datepicker {
+    --dp-font-family: inherit;
+    --dp-border-radius: 0.5rem; /* rounded-lg */
+    --dp-cell-border-radius: 0.375rem; /* rounded-md */
+    --dp-month-year-row-height: 2.25rem;
+    --dp-month-year-row-button-size: 2.25rem;
+    --dp-button-icon-height: 1.25rem;
+    --dp-cell-size: 2.25rem;
+    --dp-cell-padding: 0.25rem;
+    --dp-common-padding: 0.75rem;
+    --dp-preview-font-size: 0.5rem;
+    --dp-time-font-size: 0.875rem;
+
+    /* Default MD size variables */
+    --dp-font-size: 1rem; /* text-base */
+    --dp-input-padding: 0.625rem 2.75rem; /* Achieves 44px height (h-11) */
+    --dp-input-icon-padding: 2.75rem;
+    --dp-button-height: 2.75rem;
+
+    /* Light theme colors */
+    --dp-background-color: theme("colors.inputBg");
+    --dp-text-color: theme("colors.mainText");
+    --dp-hover-color: theme("colors.primary-50");
+    --dp-hover-text-color: theme("colors.primary-700");
+    --dp-hover-icon-color: theme("colors.primary-600");
+    --dp-primary-color: theme("colors.primary-500");
+    --dp-primary-disabled-color: theme("colors.primary-200");
+    --dp-primary-text-color: #ffffff;
+    --dp-secondary-color: theme("colors.neutral-400");
+    --dp-border-color: theme("colors.cardBorder");
+    --dp-menu-border-color: theme("colors.cardBorder");
+    --dp-border-color-hover: theme("colors.primary-500");
+    --dp-border-color-focus: theme("colors.primary-500");
+    --dp-disabled-color: theme("colors.neutral-200");
+    --dp-disabled-color-text: theme("colors.neutral-400");
+    --dp-scroll-bar-background: theme("colors.neutral-100");
+    --dp-scroll-bar-color: theme("colors.neutral-300");
+    --dp-success-color: theme("colors.success-500");
+    --dp-success-color-disabled: theme("colors.success-200");
+    --dp-icon-color: theme("colors.secondaryText");
+    --dp-danger-color: theme("colors.error-500");
+    --dp-marker-color: theme("colors.error-500");
+    --dp-tooltip-color: theme("colors.neutral-700");
+    --dp-highlight-color: theme("colors.primary-100");
+    --dp-range-between-dates-background-color: theme("colors.primary-50");
+    --dp-range-between-dates-text-color: theme("colors.primary-700");
+    --dp-range-between-border-color: theme("colors.primary-200");
+
+    @apply w-full;
+  }
+
+  /* Size variants - Override CSS variables in wrapper scope */
+
+  /* Small size (h-9 = 36px) */
+  .v-datepicker--sm .v-datepicker {
+    --dp-font-size: 0.875rem; /* text-sm */
+    --dp-input-padding: 0.4375rem 2.5rem 0.4375rem 2.25rem; /* Achieves 36px height */
+    --dp-input-icon-padding: 2.25rem;
+    --dp-button-height: 2.25rem;
+  }
+
+  /* Small size without clear icon - reduce right padding */
+  .v-datepicker--sm .v-datepicker-no-clear {
+    --dp-input-padding: 0.4375rem 0.75rem 0.4375rem 2.25rem; /* top right bottom left */
+  }
+
+  .v-datepicker--sm {
+    .dp__input_icon svg,
+    .dp__clear_icon svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  /* Medium size (h-11 = 44px) - Already defined in base .v-datepicker */
+  .v-datepicker--md .v-datepicker {
+    /* Explicitly set MD variables for clarity (matches base) */
+    --dp-font-size: 1rem; /* text-base */
+    --dp-input-padding: 0.625rem 2.75rem 0.625rem 2.25rem;
+    --dp-input-icon-padding: 2.25rem;
+    --dp-button-height: 2.75rem;
+  }
+
+  /* Medium size without clear icon - reduce right padding */
+  .v-datepicker--md .v-datepicker-no-clear {
+    --dp-input-padding: 0.625rem 0.75rem 0.625rem 2.25rem; /* top right bottom left */
+  }
+
+  .v-datepicker--md {
+    .dp__input_icon svg,
+    .dp__clear_icon svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+
+  /* Large size (h-12 = 48px) */
+  .v-datepicker--lg .v-datepicker {
+    --dp-font-size: 1.125rem; /* text-lg */
+    --dp-input-padding: 0.6875rem 3rem; /* Achieves 48px height with text-lg line-height */
+    --dp-input-icon-padding: 3rem;
+    --dp-button-height: 3rem;
+  }
+
+  /* Large size without clear icon - reduce right padding */
+  .v-datepicker--lg .v-datepicker-no-clear {
+    --dp-input-padding: 0.6875rem 0.875rem 0.6875rem 3rem; /* top right bottom left */
+  }
+
+  .v-datepicker--lg {
+    .dp__input_icon svg,
+    .dp__clear_icon svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  /* Dark theme overrides */
+  .dark .v-datepicker,
+  .v-datepicker.dp__theme_dark {
+    --dp-background-color: theme("colors.neutral-800");
+    --dp-text-color: theme("colors.neutral-100");
+    --dp-hover-color: theme("colors.primary-900");
+    --dp-hover-text-color: theme("colors.primary-200");
+    --dp-hover-icon-color: theme("colors.primary-400");
+    --dp-primary-color: theme("colors.primary-500");
+    --dp-primary-disabled-color: theme("colors.primary-800");
+    --dp-primary-text-color: theme("colors.neutral-900");
+    --dp-secondary-color: theme("colors.neutral-500");
+    --dp-border-color: theme("colors.neutral-700");
+    --dp-menu-border-color: theme("colors.neutral-700");
+    --dp-border-color-hover: theme("colors.primary-500");
+    --dp-border-color-focus: theme("colors.primary-500");
+    --dp-disabled-color: theme("colors.neutral-700");
+    --dp-disabled-color-text: theme("colors.neutral-500");
+    --dp-scroll-bar-background: theme("colors.neutral-800");
+    --dp-scroll-bar-color: theme("colors.neutral-600");
+    --dp-icon-color: theme("colors.neutral-400");
+    --dp-danger-color: theme("colors.error-400");
+    --dp-marker-color: theme("colors.error-400");
+    --dp-tooltip-color: theme("colors.neutral-200");
+    --dp-highlight-color: theme("colors.primary-800");
+    --dp-range-between-dates-background-color: theme("colors.primary-900");
+    --dp-range-between-dates-text-color: theme("colors.primary-200");
+    --dp-range-between-border-color: theme("colors.primary-700");
+  }
+
+  /* Input styling - Clean wrapper-based approach */
+  .v-datepicker-wrapper :deep(.dp__input) {
+    @apply w-full bg-inputBg text-mainText border-0;
+    font-family: inherit;
+    transition: all 0.2s ease-in-out;
+
+    &::placeholder {
+      @apply text-secondaryText;
+    }
+
+    &:focus {
+      @apply outline-none;
+    }
+
+    &:disabled {
+      @apply opacity-50 cursor-not-allowed bg-base-200;
+    }
+  }
+
+  /* Menu/Dropdown styling */
+  .v-datepicker-menu {
+    @apply shadow-xl border border-cardBorder rounded-lg overflow-hidden;
+  }
+
+  /* Calendar styling */
+  .v-datepicker-calendar {
+    @apply font-sans;
+  }
+
+
+  /* Input container and icon positioning - Clean approach */
+  .v-datepicker-wrapper :deep(.dp__input_wrap) {
+    @apply relative;
+  }
+
+  .v-datepicker-wrapper :deep(.dp__input) {
+    @apply pl-9 pr-11;
+  }
+
+  .v-datepicker-wrapper :deep(.dp__input_icon) {
+    @apply absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none;
+  }
+
+  .v-datepicker-wrapper :deep(.dp__clear_icon) {
+    @apply absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer;
+  }
+
+  /* Today button styling */
+  .v-datepicker-wrapper :deep(.dp__today) {
+    @apply border border-primary text-primary hover:bg-primary hover:text-white
+      transition-colors duration-200;
+  }
+
+  /* Selected date range styling */
+  .v-datepicker-wrapper :deep(.dp__range_start),
+  .v-datepicker-wrapper :deep(.dp__range_end) {
+    @apply bg-primary text-white;
+  }
+
+  .v-datepicker-wrapper :deep(.dp__range_between) {
+    @apply bg-primary-50 text-primary-700;
+  }
+
+  .dark .v-datepicker-wrapper :deep(.dp__range_between) {
+    @apply bg-primary-900 text-primary-200;
+  }
+
+  /* Action buttons (Now, Today, Cancel, Select) */
+  .v-datepicker-wrapper :deep(.dp__action_button) {
+    @apply rounded-lg px-4 py-2 font-medium transition-all duration-200;
+  }
+
+  .v-datepicker-wrapper :deep(.dp__action_select),
+  .v-datepicker-wrapper :deep(.dp__selection_preview) {
+    @apply bg-primary text-white hover:bg-primary-600;
+  }
+
+  .v-datepicker-wrapper :deep(.dp__action_cancel) {
+    @apply border border-cardBorder text-mainText hover:bg-base-200;
+  }
+
+  /* Time picker styling */
+  .v-datepicker-wrapper :deep(.dp__time_input) {
+    @apply border border-cardBorder rounded-lg;
+  }
+
+  /* Month/Year picker */
+  .v-datepicker-wrapper :deep(.dp__overlay_cell_active) {
+    @apply bg-primary text-white;
+  }
+
+  .v-datepicker-wrapper :deep(.dp__overlay_cell:hover) {
+    @apply bg-primary-50 text-primary-700;
+  }
+
+  .dark .v-datepicker-wrapper :deep(.dp__overlay_cell:hover) {
+    @apply bg-primary-900 text-primary-200;
+  }
+
+  /* Disabled state */
+  .v-datepicker-disabled :deep(.dp__input) {
+    @apply bg-base-200 text-secondaryText cursor-not-allowed;
+  }
+
+  /* Focus state enhancement */
+  .v-datepicker-wrapper :deep(.dp__input:focus) {
+    @apply outline-none ring-2;
+  }
+
+  /* Arrow buttons in calendar header */
+  .v-datepicker-wrapper :deep(.dp__arrow_top),
+  .v-datepicker-wrapper :deep(.dp__arrow_bottom) {
+    @apply text-secondaryText hover:text-primary transition-colors;
+  }
+
+  /* Week numbers */
+  .v-datepicker-wrapper :deep(.dp__calendar_header_item),
+  .v-datepicker-wrapper :deep(.dp__week_num) {
+    @apply text-secondaryText font-medium text-xs;
+  }
+
+  /* Month/Year select buttons */
+  .v-datepicker-wrapper :deep(.dp__month_year_select) {
+    @apply hover:bg-base-200 rounded-lg transition-colors;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .v-datepicker {
+      --dp-cell-size: 2rem;
+      --dp-font-size: 0.8125rem;
+      --dp-common-padding: 0.5rem;
+    }
+  }
+}
+
