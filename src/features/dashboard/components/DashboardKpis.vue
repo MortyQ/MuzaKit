@@ -160,16 +160,22 @@ const kpiData = ref<any[]>(realKpiData.map(kpi => ({
 
 const showAllComparisons = ref(false);
 
-// Simulate data loading from server
+/**
+ * Performance Fix: Removed artificial 2-second delay
+ * - Previous: await new Promise(resolve => setTimeout(resolve, 2000))
+ * - Impact: Was adding +2s to FCP/LCP metrics
+ * - Now: Data loads immediately, animations still trigger naturally
+ */
 onMounted(async () => {
-  // Simulate 2 second delay for server response
-  await new Promise(resolve => setTimeout(resolve, 2000));
-
-  // Load real data after delay - this will trigger animations from 0 to real values
+  // Load real data immediately - animations will still trigger from 0 to real values
   kpiData.value = realKpiData;
 
-  // Hide loader
+  // Hide loader immediately (or add minimal delay for smoother UX if needed)
   isLoading.value = false;
+
+  // Optional: If you need to simulate API call, use real API instead:
+  // const response = await fetch('/api/kpis');
+  // kpiData.value = await response.json();
 });
 </script>
 
