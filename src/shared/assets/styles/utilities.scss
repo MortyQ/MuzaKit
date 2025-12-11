@@ -15,7 +15,9 @@
    * High opacity (95%) mimics frosted glass without calculation overhead
    */
   .glass-light {
-    @apply bg-base-100/95 border border-base-300/50;
+    @apply bg-base-100 border border-base-300;
+    background-color: rgb(var(--color-base-100) / 0.95);
+    border-color: rgb(var(--color-base-300) / 0.5);
     transform: translateZ(0); /* Hardware acceleration */
     box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
   }
@@ -24,7 +26,9 @@
    * Dark glass effect
    */
   .glass-dark {
-    @apply bg-base-200/95 border border-base-300/30;
+    @apply bg-base-200 border border-base-300;
+    background-color: rgb(var(--color-base-200) / 0.95);
+    border-color: rgb(var(--color-base-300) / 0.3);
     transform: translateZ(0);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
@@ -34,12 +38,15 @@
    * This is your main utility. Optimized for scroll performance.
    */
   .glass {
-    @apply bg-base-100/95 border border-base-300/50;
+    @apply bg-base-100 border border-base-300;
+    background-color: rgb(var(--color-base-100) / 0.95);
+    border-color: rgb(var(--color-base-300) / 0.5);
     transform: translateZ(0);
     box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
 
     [data-theme="dark"] & {
-      @apply bg-base-100/95 border-base-300/20;
+      background-color: rgb(var(--color-base-100) / 0.95);
+      border-color: rgb(var(--color-base-300) / 0.2);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
   }
@@ -49,7 +56,8 @@
    * Used for heavy cards.
    */
   .glass-strong {
-    @apply bg-base-100/95 border border-base-300;
+    @apply bg-base-100 border border-base-300;
+    background-color: rgb(var(--color-base-100) / 0.95);
     transform: translateZ(0);
     box-shadow: 0 12px 40px rgba(31, 38, 135, 0.12);
 
@@ -63,7 +71,9 @@
    * Slightly more transparent, use sparingly on scrollable areas.
    */
   .glass-subtle {
-    @apply bg-base-100/90 border border-base-300/30;
+    @apply bg-base-100 border border-base-300;
+    background-color: rgb(var(--color-base-100) / 0.9);
+    border-color: rgb(var(--color-base-300) / 0.3);
     /* No backdrop-filter to ensure speed */
     box-shadow: 0 4px 24px rgba(31, 38, 135, 0.06);
 

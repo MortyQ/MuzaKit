@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['GT America Standard', 'Inter', 'system-ui', 'sans-serif'],
       },
       spacing: {
         18: '4.5rem',
