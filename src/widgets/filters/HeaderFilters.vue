@@ -1,12 +1,11 @@
 <script setup lang="ts">
-
 import { useModal } from "@/shared/composables";
 import VButton from "@/shared/ui/common/VButton.vue";
+import ComparisonDatePicker from "@/widgets/filters/ComparisonDatePicker.vue";
 import GlobalFilterFeature from "@/widgets/filters/GlobalFilterFeature.vue";
 import MainDatePicker from "@/widgets/filters/MainDatePicker.vue";
 
 const { open } = useModal("global-filter");
-
 </script>
 
 <template>
@@ -16,6 +15,7 @@ const { open } = useModal("global-filter");
       class="contents"
     />
     <MainDatePicker />
+    <ComparisonDatePicker />
     <VButton
       icon="lucide:sliders-horizontal"
       aria-label="Global Filters"

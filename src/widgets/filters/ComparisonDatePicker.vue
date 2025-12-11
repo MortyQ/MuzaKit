@@ -7,19 +7,18 @@ import { useGlobalFiltersStore } from "@/shared/stores";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import { VDatepicker } from "@/shared/ui/date-picker";
 
-
 // Use date presets composable
-const { presetDates } = useDatePresets();
+const { comparisonPresetDates } = useDatePresets();
 
 // Use global filters store
 const filtersStore = useGlobalFiltersStore();
 
 // Create computed with getter/setter for v-model binding
 const dateRange = computed({
-  get: () => filtersStore.mainDateRange as [Date, Date],
+  get: () => filtersStore.comparisonDateRange as [Date, Date],
   set: (value: [Date, Date] | Date[]) => {
     if (value.length === 2) {
-      filtersStore.setMainDateRange([value[0], value[1]]);
+      filtersStore.setComparisonDateRange([value[0], value[1]]);
     }
   },
 });
@@ -33,7 +32,7 @@ const dateRange = computed({
     :enable-time-picker="false"
     :time-config="{ enableTimePicker: false }"
     :input-attrs="{ alwaysClearable: false }"
-    :preset-dates="presetDates"
+    :preset-dates="comparisonPresetDates"
     class="min-w-[230px]"
   >
     <template #clear-icon />
@@ -44,7 +43,7 @@ const dateRange = computed({
             icon="lucide:calendar"
             size="16"
           />
-          <span>Main Date Range</span>
+          <span>Comparison Date Range</span>
         </div>
         <div class="mt-1 text-xs font-medium text-secondaryText">
           Latest Available Date: December 09, 2025
@@ -57,3 +56,4 @@ const dateRange = computed({
 <style scoped lang="scss">
 
 </style>
+

@@ -5,7 +5,7 @@
  * Maps @vuepic/vue-datepicker CSS variables to Tailwind theme
  */
 .dp--preset-dates {
-  @apply min-w-[140px];
+  @apply min-w-[140px] w-full;
 }
 
 @layer components {

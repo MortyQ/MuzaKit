@@ -49,6 +49,19 @@ export function useDatePresets() {
   };
 
   /**
+   * Get default comparison date range
+   * Range: 180 days ago to 91 days ago (previous 90-day period)
+   * Returns native Date objects for UTC-mode VueDatePicker
+   */
+  const getDefaultComparisonDateRange = (): [Date, Date] => {
+    const today = getStartOfToday();
+    const startDate = today.minus({ days: 180 });
+    const endDate = today.minus({ days: 91 });
+
+    return [startDate.toJSDate(), endDate.toJSDate()];
+  };
+
+  /**
    * Computed preset dates for quick selection
    * All dates are calculated relative to UTC "Today"
    * Reduced to most popular and essential ranges
@@ -105,6 +118,35 @@ export function useDatePresets() {
   });
 
   /**
+   * Computed preset dates for comparison date picker
+   * Implements "Prior" period logic for comparison analysis
+   */
+  const comparisonPresetDates = computed(() => {
+    const today = getStartOfToday();
+
+    return [
+      // 2 Weeks Ago (full week range)
+      {
+        label: "2 Weeks Ago",
+        value: [
+          getStartOfWeek(today.minus({ weeks: 2 }))
+            .toJSDate(),
+          getEndOfWeek(today.minus({ weeks: 2 })).toJSDate(),
+        ],
+      },
+      {
+        label: "Prior Month to Date",
+        value: [today.minus({ months: 1 }).startOf("month").toJSDate(), today.minus({ months: 1 }).toJSDate()],
+      },
+
+      {
+        label: "Prior Year to Date",
+        value: [today.minus({ years: 1 }).startOf("year").toJSDate(), today.minus({ years: 1 }).toJSDate()],
+      },
+    ];
+  });
+
+  /**
    * Helper to convert Date to UTC DateTime
    */
   const toUTCDateTime = (date: Date): DateTime => {
@@ -122,7 +164,9 @@ export function useDatePresets() {
 
   return {
     getDefaultDateRange,
+    getDefaultComparisonDateRange,
     presetDates,
+    comparisonPresetDates,
     toUTCDateTime,
     formatDateRange,
   };
