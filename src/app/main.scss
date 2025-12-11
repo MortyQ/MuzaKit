@@ -1,9 +1,6 @@
-/* Import custom fonts */
-@use "../shared/assets/styles/fonts.css";
 @use "../shared/assets/styles/customComponents";
 @use "../shared/assets/styles/utilities"; // new utilities (gradients, glass, etc.)
 //@use "../shared/assets/styles/legacy-aliases"; // optional backward compatibility layer (remove after migration)
-
 
 /* Import Tailwind directives */
 @tailwind base;

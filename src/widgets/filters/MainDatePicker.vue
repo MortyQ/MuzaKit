@@ -3,6 +3,7 @@ import { ref } from "vue";
 
 import { useDatePresets } from "./useDatePresets";
 
+import VIcon from "@/shared/ui/common/VIcon.vue";
 import { VDatepicker } from "@/shared/ui/date-picker";
 
 
@@ -26,13 +27,17 @@ const date = ref(getDefaultDateRange());
   >
     <template #clear-icon />
     <template #top-extra>
-      <div class="flex flex-col gap-1">
-        <span>
-          Main Date Range
-        </span>
-        <span>
-          Latest Available Date December 09, 2025
-        </span>
+      <div class="pb-3 mb-3 border-b border-cardBorder">
+        <div class="flex items-center gap-2 text-base font-semibold text-mainText">
+          <VIcon
+            icon="lucide:calendar"
+            size="16"
+          />
+          <span>Main Date Range</span>
+        </div>
+        <div class="mt-1 text-xs font-medium text-secondaryText">
+          Latest Available Date: December 09, 2025
+        </div>
       </div>
     </template>
   </VDatepicker>

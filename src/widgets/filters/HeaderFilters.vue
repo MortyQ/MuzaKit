@@ -3,7 +3,7 @@
 import { useModal } from "@/shared/composables";
 import VButton from "@/shared/ui/common/VButton.vue";
 import GlobalFilterFeature from "@/widgets/filters/GlobalFilterFeature.vue";
-import PrimaryDatePicker from "@/widgets/filters/PrimaryDatePicker.vue";
+import MainDatePicker from "@/widgets/filters/MainDatePicker.vue";
 
 const { open } = useModal("global-filter");
 
@@ -15,7 +15,7 @@ const { open } = useModal("global-filter");
       id="default-header-filters"
       class="contents"
     />
-    <PrimaryDatePicker />
+    <MainDatePicker />
     <VButton
       icon="lucide:sliders-horizontal"
       aria-label="Global Filters"
@@ -25,7 +25,3 @@ const { open } = useModal("global-filter");
     <GlobalFilterFeature />
   </div>
 </template>
-
-<style scoped lang="scss">
-
-</style>
