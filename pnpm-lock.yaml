@@ -11,9 +11,6 @@ importers:
       '@tanstack/vue-virtual':
         specifier: ^3.13.12
         version: 3.13.12(vue@3.5.25(typescript@5.9.2))
-      '@types/luxon':
-        specifier: ^3.7.1
-        version: 3.7.1
       '@vuelidate/core':
         specifier: ^2.0.3
         version: 2.0.3(vue@3.5.25(typescript@5.9.2))
@@ -99,6 +96,9 @@ importers:
       '@types/lodash.debounce':
         specifier: ^4.0.9
         version: 4.0.9
+      '@types/luxon':
+        specifier: ^3.7.1
+        version: 3.7.1
       '@types/node':
         specifier: ^24.2.1
         version: 24.2.1

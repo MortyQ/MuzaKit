@@ -6,20 +6,6 @@ import "@vuepic/vue-datepicker/dist/main.css";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
 
-/**
- * VDatepicker - Modern wrapper for @vuepic/vue-datepicker v12+
- *
- * Uses Vue 3.5+ defineModel and fallthrough attributes ($attrs) for maximum
- * flexibility and forward compatibility with library updates.
- *
- * Supports slot passthrough - parent can override any VueDatePicker slot.
- *
- * Only wrapper-specific UI props are defined here. All datepicker-specific
- * props (range, format, minDate, etc.) are passed through via $attrs.
- */
-
-// Disable attribute inheritance on root element (wrapper div)
-// This allows $attrs to fall through to VueDatePicker component
 defineOptions({
   inheritAttrs: false,
 });
@@ -92,7 +78,8 @@ const props = withDefaults(defineProps<Props>(), {
       v-model="model"
       v-bind="$attrs"
       :auto-apply="props.autoApply"
-      :clearable="props.clearable"
+      :timezone="'UTC'"
+      :week-start="0"
       :class="[
         'v-datepicker',
         {

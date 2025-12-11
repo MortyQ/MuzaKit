@@ -4,6 +4,9 @@
  * Custom styling that matches the design system
  * Maps @vuepic/vue-datepicker CSS variables to Tailwind theme
  */
+.dp--preset-dates {
+  @apply min-w-[140px];
+}
 
 @layer components {
   .v-datepicker-wrapper {
@@ -13,6 +16,8 @@
   .v-datepicker-label {
     @apply text-sm font-medium text-mainText mb-0.5 transition-colors;
   }
+
+
 
   .v-datepicker-helper-text {
     @apply text-xs text-secondaryText mt-0.5 transition-colors;
@@ -109,9 +114,14 @@
   /* Small size (h-9 = 36px) */
   .v-datepicker--sm .v-datepicker {
     --dp-font-size: 0.875rem; /* text-sm */
-    --dp-input-padding: 0.4375rem 2.5rem; /* Achieves 36px height with text-sm line-height */
-    --dp-input-icon-padding: 2.5rem;
+    --dp-input-padding: 0.4375rem 2.5rem 0.4375rem 2.25rem; /* Achieves 36px height */
+    --dp-input-icon-padding: 2.25rem;
     --dp-button-height: 2.25rem;
+  }
+
+  /* Small size without clear icon - reduce right padding */
+  .v-datepicker--sm .v-datepicker-no-clear {
+    --dp-input-padding: 0.4375rem 0.75rem 0.4375rem 2.25rem; /* top right bottom left */
   }
 
   .v-datepicker--sm {
@@ -126,9 +136,14 @@
   .v-datepicker--md .v-datepicker {
     /* Explicitly set MD variables for clarity (matches base) */
     --dp-font-size: 1rem; /* text-base */
-    --dp-input-padding: 0.625rem 2.75rem;
-    --dp-input-icon-padding: 2.75rem;
+    --dp-input-padding: 0.625rem 2.75rem 0.625rem 2.25rem;
+    --dp-input-icon-padding: 2.25rem;
     --dp-button-height: 2.75rem;
+  }
+
+  /* Medium size without clear icon - reduce right padding */
+  .v-datepicker--md .v-datepicker-no-clear {
+    --dp-input-padding: 0.625rem 0.75rem 0.625rem 2.25rem; /* top right bottom left */
   }
 
   .v-datepicker--md {
@@ -145,6 +160,11 @@
     --dp-input-padding: 0.6875rem 3rem; /* Achieves 48px height with text-lg line-height */
     --dp-input-icon-padding: 3rem;
     --dp-button-height: 3rem;
+  }
+
+  /* Large size without clear icon - reduce right padding */
+  .v-datepicker--lg .v-datepicker-no-clear {
+    --dp-input-padding: 0.6875rem 0.875rem 0.6875rem 3rem; /* top right bottom left */
   }
 
   .v-datepicker--lg {
@@ -214,22 +234,18 @@
     @apply font-sans;
   }
 
+
   /* Input container and icon positioning - Clean approach */
   .v-datepicker-wrapper :deep(.dp__input_wrap) {
     @apply relative;
   }
 
   .v-datepicker-wrapper :deep(.dp__input) {
-    @apply pl-11 pr-11;
-  }
-
-  /* Remove right padding when clearable is disabled */
-  .v-datepicker-no-clear :deep(.dp__input) {
-    @apply pr-3;
+    @apply pl-9 pr-11;
   }
 
   .v-datepicker-wrapper :deep(.dp__input_icon) {
-    @apply absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none;
+    @apply absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none;
   }
 
   .v-datepicker-wrapper :deep(.dp__clear_icon) {
