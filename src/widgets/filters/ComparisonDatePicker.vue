@@ -34,13 +34,14 @@ const dateRange = computed({
     :input-attrs="{ alwaysClearable: false }"
     :preset-dates="comparisonPresetDates"
     class="min-w-[230px]"
+    icon="lucide:git-compare"
   >
     <template #clear-icon />
     <template #top-extra>
       <div class="pb-3 mb-3 border-b border-cardBorder">
         <div class="flex items-center gap-2 text-base font-semibold text-mainText">
           <VIcon
-            icon="lucide:calendar"
+            icon="lucide:git-compare"
             size="16"
           />
           <span>Comparison Date Range</span>

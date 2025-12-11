@@ -353,6 +353,7 @@ export const iconMap: Record<string, Component> = {
   "lucide:mail": defineAsyncComponent(() => import("~icons/lucide/mail")),
   "lucide:lock": defineAsyncComponent(() => import("~icons/lucide/lock")),
   "lucide:keyboard": defineAsyncComponent(() => import("~icons/lucide/keyboard")),
+  "lucide:git-compare": defineAsyncComponent(() => import("~icons/lucide/git-compare")),
 };
 
 /**
