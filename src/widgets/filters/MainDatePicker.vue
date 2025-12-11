@@ -7,7 +7,6 @@ import { useGlobalFiltersStore } from "@/shared/stores";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import { VDatepicker } from "@/shared/ui/date-picker";
 
-
 // Use date presets composable
 const { presetDates } = useDatePresets();
 
@@ -53,7 +52,3 @@ const dateRange = computed({
     </template>
   </VDatepicker>
 </template>
-
-<style scoped lang="scss">
-
-</style>

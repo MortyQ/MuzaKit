@@ -2,7 +2,7 @@
 import { useModal } from "@/shared/composables";
 import VButton from "@/shared/ui/common/VButton.vue";
 import ComparisonDatePicker from "@/widgets/filters/ComparisonDatePicker.vue";
-import GlobalFilterFeature from "@/widgets/filters/GlobalFilterFeature.vue";
+import GlobalFilterSidebar from "@/widgets/filters/GlobalFilterSidebar.vue";
 import MainDatePicker from "@/widgets/filters/MainDatePicker.vue";
 
 const { open } = useModal("global-filter");
@@ -22,6 +22,6 @@ const { open } = useModal("global-filter");
       class="min-w-[40px]"
       @click="open"
     />
-    <GlobalFilterFeature />
+    <GlobalFilterSidebar />
   </div>
 </template>

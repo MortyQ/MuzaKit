@@ -52,8 +52,3 @@ const dateRange = computed({
     </template>
   </VDatepicker>
 </template>
-
-<style scoped lang="scss">
-
-</style>
-
