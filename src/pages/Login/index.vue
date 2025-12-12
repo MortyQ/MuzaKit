@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { AuthForm } from "@/features/auth";
+import AuthFeature from "@/features/auth/AuthFeature.vue";
 </script>
 
 <template>
-  <AuthForm />
+  <AuthFeature />
 </template>
 

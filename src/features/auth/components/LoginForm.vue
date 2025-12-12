@@ -3,24 +3,20 @@ import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength, helpers } from "@vuelidate/validators";
 import { computed, reactive } from "vue";
 
-import SocialLogin from "./SocialLogin.vue";
-
+import { useAuthStore } from "@/features/auth";
 import VButton from "@/shared/ui/common/VButton.vue";
 import VCheckbox from "@/shared/ui/common/VCheckbox.vue";
 import VInput from "@/shared/ui/common/VInput.vue";
 
-interface Props {
-  loading?: boolean;
-  error?: string;
-}
-
-const props = defineProps<Props>();
+const authStore = useAuthStore();
 
 const formData = reactive({
   email: "",
   password: "",
   remember: false,
 });
+
+
 
 const rules = computed(() => ({
   email: {
@@ -38,19 +34,14 @@ const v$ = useVuelidate(rules, formData);
 const handleSubmit = async () => {
   const isValid = await v$.value.$validate();
 
-  if (!isValid || props.loading) return;
+  if (!isValid) return;
+  await authStore.login(formData.email, formData.password);
 
-  console.log("SUBMIT", formData);
 };
 </script>
 
 <template>
   <div class="space-y-3">
-    <!-- Social Login -->
-    <SocialLogin
-      :loading="loading"
-    />
-
     <!-- Divider -->
     <div class="relative py-1">
       <div class="absolute inset-0 flex items-center">
@@ -63,12 +54,12 @@ const handleSubmit = async () => {
 
     <!-- Error Message -->
     <div
-      v-if="error"
+      v-if="authStore.loginError"
       class="p-2 rounded-lg bg-lightNegative border border-negative/20 animate-shake"
     >
       <p class="text-xs text-negative font-medium flex items-center gap-2">
         <span>⚠️</span>
-        {{ error }}
+        {{ authStore.loginError.message }}
       </p>
     </div>
 
@@ -87,7 +78,7 @@ const handleSubmit = async () => {
           placeholder="Enter your email"
           icon="mdi:email-outline"
           size="sm"
-          :disabled="loading"
+          :disabled="authStore.loginLoading"
           autocomplete="email"
           :validation="v$.email"
         />
@@ -102,7 +93,7 @@ const handleSubmit = async () => {
           placeholder="Enter your password"
           icon="mdi:lock-outline"
           size="sm"
-          :disabled="loading"
+          :disabled="authStore.loginLoading"
           autocomplete="current-password"
           :validation="v$.password"
         />
@@ -113,12 +104,12 @@ const handleSubmit = async () => {
         <VCheckbox
           v-model="formData.remember"
           label="Remember me"
-          :disabled="loading"
+          :disabled="authStore.loginLoading"
         />
 
         <button
           type="button"
-          :disabled="loading"
+          :disabled="authStore.loginLoading"
           class="text-xs font-medium text-primary hover:text-primary-dark transition-colors"
         >
           Forgot password?
@@ -130,8 +121,7 @@ const handleSubmit = async () => {
         type="submit"
         variant="primary"
         text="Sign In"
-        :loading="loading"
-        :disabled="loading"
+        :loading="authStore.loginLoading || authStore.initLoading"
         class="w-full !mt-4"
       />
     </form>

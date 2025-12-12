@@ -2,9 +2,6 @@ import type { AppRouteRecordRaw } from "../types/types";
 
 import { RouteNames } from "@/app/router/types/names";
 
-/**
- * Core application routes
- */
 const coreRoutes: AppRouteRecordRaw[] = [
   {
     path: "/about",
@@ -16,10 +13,9 @@ const coreRoutes: AppRouteRecordRaw[] = [
       menuTitle: "About",
       menuIcon: "lucide:info",
       menuBadge: "Old",
-      permissions: ["about:read"],
+      permissions: ["create:listtt"],
     },
   },
-  // Dashboard route (requires 'users:read' permission)
   {
     path: "/dashboard",
     name: RouteNames.Dashboard,
@@ -30,7 +26,7 @@ const coreRoutes: AppRouteRecordRaw[] = [
       menuTitle: "Dashboard",
       menuIcon: "lucide:layout-dashboard",
       menuOrder: 2,
-      permissions: ["dashboard:read"],
+      permissions: ["read:list"],
     },
   },
 ];

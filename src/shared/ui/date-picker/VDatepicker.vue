@@ -46,6 +46,7 @@ type Props = {
   /** Auto apply selection (no confirm button) */
   autoApply?: boolean;
   clearable?: boolean;
+  width?: string;
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -56,6 +57,7 @@ const props = withDefaults(defineProps<Props>(), {
   icon: "lucide:calendar",
   autoApply: true,
   clearable: false,
+  width: "100%",
 });
 </script>
 
@@ -64,6 +66,7 @@ const props = withDefaults(defineProps<Props>(), {
   <div
     class="v-datepicker-wrapper"
     :class="`v-datepicker--${size}`"
+    :style="{ width: props.width }"
   >
     <!-- Label -->
     <label

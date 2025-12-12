@@ -33,7 +33,7 @@ const dateRange = computed({
     :time-config="{ enableTimePicker: false }"
     :input-attrs="{ alwaysClearable: false }"
     :preset-dates="comparisonPresetDates"
-    class="min-w-[230px]"
+    width="230px"
     icon="lucide:git-compare"
   >
     <template #clear-icon />

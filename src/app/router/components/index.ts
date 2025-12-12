@@ -15,6 +15,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
       menuTitle: "Components",
       menuIcon: "mdi:hammer",
       isMenuParent: true,
+      permissions: ["read:list"],
     },
     children: [
       {

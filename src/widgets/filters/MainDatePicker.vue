@@ -33,7 +33,7 @@ const dateRange = computed({
     :time-config="{ enableTimePicker: false }"
     :input-attrs="{ alwaysClearable: false }"
     :preset-dates="presetDates"
-    class="min-w-[230px]"
+    width="230px"
   >
     <template #clear-icon />
     <template #top-extra>

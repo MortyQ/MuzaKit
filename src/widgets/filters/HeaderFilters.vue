@@ -9,17 +9,17 @@ const { open } = useModal("global-filter");
 </script>
 
 <template>
-  <div class="flex items-center gap-3 flex-shrink-0">
+  <div class="flex flex-wrap items-center gap-3">
     <div
       id="default-header-filters"
       class="contents"
     />
-    <MainDatePicker />
-    <ComparisonDatePicker />
+    <MainDatePicker class="flex-shrink-0" />
+    <ComparisonDatePicker class="flex-shrink-0" />
     <VButton
       icon="lucide:sliders-horizontal"
       aria-label="Global Filters"
-      class="min-w-[40px]"
+      class="flex-shrink-0"
       @click="open"
     />
     <GlobalFilterSidebar />

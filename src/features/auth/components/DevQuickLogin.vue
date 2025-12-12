@@ -19,10 +19,10 @@ const emit = defineEmits<{
   login: [data: LoginData];
 }>();
 
-const quickLogin = (email: string) => {
+const quickLogin = () => {
   emit("login", {
-    email,
-    password: "123", // Mock password
+    email: "ametie123@gmail.com",
+    password: "Password123!", // Mock password
     remember: false,
   });
 };
@@ -50,7 +50,7 @@ const quickLogin = (email: string) => {
         type="button"
         class="w-full flex items-center gap-3 p-2.5 rounded-lg bg-primary/10
         hover:bg-primary/20 border border-primary/30 transition-all group"
-        @click="quickLogin('admin@example.com')"
+        @click="quickLogin"
       >
         <div class="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
           <span class="text-sm">👑</span>
@@ -73,7 +73,7 @@ const quickLogin = (email: string) => {
         type="button"
         class="w-full flex items-center gap-3 p-2.5 rounded-lg bg-accent/10
         hover:bg-accent/20 border border-accent/30 transition-all group"
-        @click="quickLogin('user@example.com')"
+        @click="quickLogin"
       >
         <div class="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center">
           <span class="text-sm">👤</span>

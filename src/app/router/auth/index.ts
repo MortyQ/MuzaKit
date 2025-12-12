@@ -1,9 +1,7 @@
 import type { AppRouteRecordRaw } from "../types/types";
 
-/**
- * Authentication routes (login, register, etc.)
- * These routes should be public (requiresAuth: false)
- */
+import { guestGuard } from "@/app/router/utils/guards";
+
 const authRoutes: AppRouteRecordRaw[] = [
   {
     path: "/login",
@@ -11,11 +9,12 @@ const authRoutes: AppRouteRecordRaw[] = [
     component: () => import("@/pages/Login/index.vue"),
     meta: {
       title: "Login",
-      layout: "empty", // No sidebar/header
-      requiresAuth: false, // Public page
+      layout: "auth",
+      requiresAuth: false,
       menuIcon: "mdi:login",
-      showInMenu: false, // Don't show in sidebar
+      showInMenu: false,
     },
+    beforeEnter: guestGuard,
   },
 
 ];

@@ -50,7 +50,7 @@ const contentMargin = computed(() => ({
 
 <template>
   <div
-    id="app"
+    v-if="authStore.user"
     class="flex min-h-screen bg-mainBg text-mainText overflow-x-hidden p-4"
   >
     <!-- Sidebar -->
@@ -90,8 +90,8 @@ const contentMargin = computed(() => ({
         <div class="flex-1 py-4 px-4 sm:px-6 flex flex-col min-w-0">
           <!-- Page Header -->
           <header
-            class="flex justify-between items-center min-h-16 mb-4 gap-4 pb-4
-          border-b border-base-300"
+            class="min-h-16 mb-4 pb-4 xl:justify-between
+          border-b border-base-300 flex flex-wrap items-center gap-3"
           >
             <h1
               class="text-3xl font-bold text-mainText flex-shrink-0"
