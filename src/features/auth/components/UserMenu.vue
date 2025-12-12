@@ -17,7 +17,7 @@ withDefaults(defineProps<Props>(), {
 });
 
 const authStore = useAuthStore();
-const { user, userDisplayName, isLoading } = storeToRefs(authStore);
+const { user, userDisplayName, initLoading } = storeToRefs(authStore);
 const { logout } = authStore;
 
 const handleLogout = async () => {
@@ -94,7 +94,7 @@ const handleMenuSelect = (value: string | number) => {
 
           <!-- Loading Skeleton -->
           <div
-            v-if="!compact && isLoading"
+            v-if="!compact && initLoading"
             class="flex flex-col gap-1 min-w-0"
           >
             <div class="h-3 bg-base-300 rounded animate-pulse w-20" />
