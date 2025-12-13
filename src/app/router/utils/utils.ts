@@ -12,11 +12,13 @@ export type AuthStore = ReturnType<typeof useAuthStore>;
  * NOTE: This function requires authStore to be passed as parameter
  * @param permissions - Required permissions array
  * @param authStore - Auth store instance
+ * @param isMenuParent - If true, requires ANY permission (OR logic), otherwise requires ALL (AND logic)
  * @returns true if user has permissions or no permissions required
  */
 export function hasRoutePermissions(
   permissions: string[] | undefined,
   authStore: AuthStore,
+  isMenuParent = false,
 ): boolean {
   // If no permissions required, allow access
   if (!permissions || permissions.length === 0) {
@@ -33,10 +35,18 @@ export function hasRoutePermissions(
     return true;
   }
 
-  // Check if user has ALL of the required permissions
-  return permissions.every((permission) =>
-    authStore.hasPermission(permission as UserPermission),
-  );
+  // For menu parents: user needs ANY of the permissions (OR logic)
+  // For regular routes: user needs ALL permissions (AND logic)
+  if (isMenuParent) {
+    return permissions.some((permission) =>
+      authStore.hasPermission(permission as UserPermission),
+    );
+  }
+  else {
+    return permissions.every((permission) =>
+      authStore.hasPermission(permission as UserPermission),
+    );
+  }
 }
 
 /**
@@ -54,7 +64,8 @@ export function filterRoutesByPermissions(
   return routes
     .filter((route) => {
       const meta = route.meta as RouteMeta | undefined;
-      return hasRoutePermissions(meta?.permissions, authStore);
+      // Pass isMenuParent flag to use OR logic for parent menu items
+      return hasRoutePermissions(meta?.permissions, authStore, meta?.isMenuParent);
     })
     .map((route) => {
       // If route has children, filter them recursively
