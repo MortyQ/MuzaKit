@@ -51,7 +51,7 @@ interface RequestPayload {
 \`\`\`vue
 <script setup lang="ts">
 import { ref } from "vue";
-import Table from "@/widgets/table/Table.vue";
+import Table from "@/widgets/table/VTable.vue";
 import type { RequestPayload } from "@/widgets/table/types";
 
 const data = ref([]);

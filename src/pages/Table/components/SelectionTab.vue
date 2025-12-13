@@ -4,7 +4,7 @@ import { ref } from "vue";
 import VCard from "@/shared/ui/common/VCard.vue";
 import VCheckbox from "@/shared/ui/common/VCheckbox.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import Table from "@/widgets/table/Table.vue";
+import Table from "@/widgets/table/VTable.vue";
 import type { Column, ExpandableRow, MultiSelectConfig } from "@/widgets/table/types";
 import { mockDataExpandable, mockDataExpandableTotalRow } from "@/widgets/table/utils/mockData";
 

@@ -2,7 +2,7 @@
 import { reactive, ref } from "vue";
 
 import VMultiSelect from "@/shared/ui/common/VMultiSelect.vue";
-import Table from "@/widgets/table/Table.vue";
+import Table from "@/widgets/table/VTable.vue";
 import { Column, type RequestPayload } from "@/widgets/table/types";
 import { mockDataExpandable, mockDataExpandableTotalRow } from "@/widgets/table/utils/mockData";
 

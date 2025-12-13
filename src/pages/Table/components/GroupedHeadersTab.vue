@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import Table from "@/widgets/table/Table.vue";
+import Table from "@/widgets/table/VTable.vue";
 import TableToolbar from "@/widgets/table/components/TableToolbar.vue";
 import type { Column } from "@/widgets/table/types";
 import { mockDataExpandable, mockDataUsersTotalRow } from "@/widgets/table/utils/mockData";

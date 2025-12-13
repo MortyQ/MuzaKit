@@ -6,7 +6,7 @@ import type { AccordionItem } from "@/shared/ui/common/VAccordion.vue";
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import { formatCurrency } from "@/shared/utils";
-import Table from "@/widgets/table/Table.vue";
+import Table from "@/widgets/table/VTable.vue";
 import type { Column } from "@/widgets/table/types";
 
 // Sample data for formatters demo

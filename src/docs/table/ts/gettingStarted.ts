@@ -28,7 +28,7 @@ Enterprise-grade data table component with advanced features for modern web appl
 
 \`\`\`vue
 <script setup lang="ts">
-import Table from "@/widgets/table/Table.vue";
+import Table from "@/widgets/table/VTable.vue";
 import type { Column } from "@/widgets/table/types";
 
 const columns: Column[] = [
