@@ -33,9 +33,8 @@ export function hasRoutePermissions(
     return true;
   }
 
-  // Check if user has ANY of the required permissions
-  // You can change this to hasAllPermissions if you need ALL permissions
-  return permissions.some((permission) =>
+  // Check if user has ALL of the required permissions
+  return permissions.every((permission) =>
     authStore.hasPermission(permission as UserPermission),
   );
 }
@@ -146,4 +145,3 @@ export function generateSidebarConfig(routes: RouteRecordRaw[]) {
     groups: menuItems.filter((item) => item.children && item.children.length > 0),
   };
 }
-

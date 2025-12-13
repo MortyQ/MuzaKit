@@ -7,8 +7,8 @@ import { menuItemsToSidebarConfig } from "@/app/router/utils/adapters";
 import { useAuthStore } from "@/features/auth/store/authStore";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import HeaderFilters from "@/widgets/filters/HeaderFilters.vue";
-import { Sidebar, useSidebar } from "@/widgets/sidebar";
-import type { SidebarConfig } from "@/widgets/sidebar";
+import { Sidebar, useSidebar } from "@/widgets/navigationSidebar";
+import type { SidebarConfig } from "@/widgets/navigationSidebar";
 
 
 const route = useRoute();

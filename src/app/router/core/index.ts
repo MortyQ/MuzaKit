@@ -26,7 +26,7 @@ const coreRoutes: AppRouteRecordRaw[] = [
       menuTitle: "Dashboard",
       menuIcon: "lucide:layout-dashboard",
       menuOrder: 2,
-      permissions: ["read:list"],
+      permissions: ["create:list"],
     },
   },
 ];

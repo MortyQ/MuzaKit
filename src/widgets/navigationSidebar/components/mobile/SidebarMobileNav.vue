@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SidebarMobileNavItem from "./SidebarMobileNavItem.vue";
 
-import type { SidebarNavItem } from "@/widgets/sidebar/types";
+import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
 
 interface Props {
   /** Navigation items */

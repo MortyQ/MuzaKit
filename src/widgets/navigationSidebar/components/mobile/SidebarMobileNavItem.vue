@@ -2,13 +2,9 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 
-import SidebarMenuFlyout from "./SidebarMenuFlyout.vue";
-
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import VTag from "@/shared/ui/common/VTag.vue";
-import VTooltip from "@/shared/ui/common/VTooltip.vue";
-import { useSidebar } from "@/widgets/sidebar/composables/useSidebar";
-import type { SidebarNavItem } from "@/widgets/sidebar/types";
+import { useSidebar } from "@/widgets/navigationSidebar/composables/useSidebar";
+import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
 
 interface Props {
   /** Navigation item */
@@ -22,7 +18,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const route = useRoute();
-const { isCollapsed, isExpanded, toggleExpanded, closeMobile } = useSidebar();
+const { isExpanded, toggleExpanded, closeMobile } = useSidebar();
 
 // Check if item has children
 const hasChildren = computed(() => {
@@ -96,19 +92,13 @@ const handleClick = () => {
   }
 };
 
-
 // Item classes
 const itemClasses = computed(() => {
   const baseClasses = [
     "flex items-center gap-3 py-2.5 px-4 rounded-lg transition-all duration-200 cursor-pointer group",
     "outline-none focus:outline-none focus-visible:outline-none",
-    "relative", // For accent bar positioning
+    "relative w-full",
   ];
-
-  // Add w-full only when sidebar is expanded (prevents icon shifting on collapse)
-  if (!isCollapsed.value) {
-    baseClasses.push("w-full");
-  }
 
   // Active state
   if (isActive.value) {
@@ -126,70 +116,15 @@ const itemClasses = computed(() => {
     baseClasses.push("opacity-50 cursor-not-allowed");
   }
 
-  // Collapsed state
-  if (isCollapsed.value) {
-    baseClasses.push("justify-center");
-  }
-
   return baseClasses;
 });
 </script>
 
 <template>
-  <div class="sidebar-nav-item">
-    <!-- Item Button/Link with Flyout Menu (collapsed state with children) -->
-    <SidebarMenuFlyout
-      v-if="isCollapsed && hasChildren && !item.disabled"
-      :item="item"
-    >
-      <component
-        :is="'button'"
-        :type="'button'"
-        :class="itemClasses"
-        :aria-label="item.label"
-        :disabled="item.disabled"
-        @click="handleClick"
-      >
-        <!-- Icon -->
-        <VIcon
-          v-if="item.icon"
-          :icon="item.icon"
-          :size="20"
-          class="flex-shrink-0"
-        />
-      </component>
-    </SidebarMenuFlyout>
-
-    <!-- Item Button/Link with Tooltip (collapsed state without children) -->
-    <VTooltip
-      v-else-if="isCollapsed && !item.disabled"
-      :text="item.label"
-      placement="right"
-      :delay="200"
-    >
-      <component
-        :is="!item.to ? 'button' : 'router-link'"
-        :to="item.to"
-        :type="!item.to ? 'button' : undefined"
-        :class="itemClasses"
-        :aria-label="item.label"
-        :disabled="item.disabled"
-        @click="handleClick"
-      >
-        <!-- Icon -->
-        <VIcon
-          v-if="item.icon"
-          :icon="item.icon"
-          :size="20"
-          class="flex-shrink-0"
-        />
-      </component>
-    </VTooltip>
-
-    <!-- Expanded state or disabled items -->
+  <div class="sidebar-mobile-nav-item">
+    <!-- Item Button/Link -->
     <component
       :is="hasChildren || !item.to ? 'button' : 'router-link'"
-      v-else
       :to="!hasChildren && item.to ? item.to : undefined"
       :type="hasChildren || !item.to ? 'button' : undefined"
       :class="itemClasses"
@@ -206,34 +141,23 @@ const itemClasses = computed(() => {
         class="flex-shrink-0"
       />
 
-      <!-- Label (hidden when collapsed) -->
-      <Transition
-        enter-active-class="transition-opacity duration-200"
-        enter-from-class="opacity-0"
-        enter-to-class="opacity-100"
-        leave-active-class="transition-opacity duration-150"
-        leave-from-class="opacity-100"
-        leave-to-class="opacity-0"
-      >
-        <span
-          v-if="!isCollapsed"
-          class="flex-1 text-left truncate text-sm"
-        >
-          {{ item.label }}
-        </span>
-      </Transition>
+      <!-- Label -->
+      <span class="flex-1 text-left truncate text-sm">
+        {{ item.label }}
+      </span>
 
       <!-- Badge -->
-      <VTag
-        v-if="item.badge && !isCollapsed"
-        :label="item.badge as string"
-        variant="soft"
-        color="primary"
-      />
+      <span
+        v-if="item.badge"
+        class="flex-shrink-0 px-2 py-0.5 text-xs font-semibold
+         rounded-full bg-primary/20 text-primary"
+      >
+        {{ item.badge }}
+      </span>
 
       <!-- Expand/Collapse Icon (for parent items) -->
       <VIcon
-        v-if="hasChildren && !isCollapsed"
+        v-if="hasChildren"
         :icon="isItemExpanded ? 'mdi:chevron-up' : 'mdi:chevron-down'"
         :size="16"
         class="flex-shrink-0 transition-transform duration-200"
@@ -241,48 +165,53 @@ const itemClasses = computed(() => {
     </component>
 
     <!-- Children (Nested Navigation) -->
-    <div
-      v-if="hasChildren && !isCollapsed"
-      class="children-wrapper"
-      :class="{ 'is-expanded': isItemExpanded }"
+    <Transition
+      enter-active-class="transition-all duration-200 ease-out"
+      enter-from-class="opacity-0 max-h-0"
+      enter-to-class="opacity-100 max-h-screen"
+      leave-active-class="transition-all duration-200 ease-in"
+      leave-from-class="opacity-100 max-h-screen"
+      leave-to-class="opacity-0 max-h-0"
     >
-      <div class="children-content">
-        <SidebarNavItem
-          v-for="(child, index) in item.children"
+      <div
+        v-if="hasChildren && isItemExpanded"
+        class="mt-1 space-y-1 overflow-hidden"
+      >
+        <SidebarMobileNavItem
+          v-for="child in item.children"
           :key="child.id"
           :item="child"
           :level="level + 1"
-          :style="{ transitionDelay: isItemExpanded ? `${index * 30}ms` : '0ms' }"
         />
       </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
 <style scoped>
 /* Remove all default focus/active/visited states */
-.sidebar-nav-item button,
-.sidebar-nav-item a {
+.sidebar-mobile-nav-item button,
+.sidebar-mobile-nav-item a {
   outline: none !important;
   box-shadow: none !important;
 }
 
 /* Focus indicator with background and left accent bar */
-.sidebar-nav-item button:focus-visible,
-.sidebar-nav-item a:focus-visible {
+.sidebar-mobile-nav-item button:focus-visible,
+.sidebar-mobile-nav-item a:focus-visible {
   outline: none !important;
   box-shadow: none !important;
   background-color: rgba(0, 0, 0, 0.05) !important;
 }
 
-.sidebar-nav-item button:focus-visible:hover,
-.sidebar-nav-item a:focus-visible:hover {
+.sidebar-mobile-nav-item button:focus-visible:hover,
+.sidebar-mobile-nav-item a:focus-visible:hover {
   background-color: rgba(0, 0, 0, 0.08) !important;
 }
 
 /* Left accent bar on focus */
-.sidebar-nav-item button:focus-visible::before,
-.sidebar-nav-item a:focus-visible::before {
+.sidebar-mobile-nav-item button:focus-visible::before,
+.sidebar-mobile-nav-item a:focus-visible::before {
   content: '';
   position: absolute;
   left: 0;
@@ -306,42 +235,10 @@ const itemClasses = computed(() => {
 }
 
 /* Remove router-link active states */
-.sidebar-nav-item a.router-link-active:focus,
-.sidebar-nav-item a.router-link-exact-active:focus {
+.sidebar-mobile-nav-item a.router-link-active:focus,
+.sidebar-mobile-nav-item a.router-link-exact-active:focus {
   outline: none !important;
   box-shadow: none !important;
 }
-
-/* Grid-based smooth expand/collapse animation for children */
-.children-wrapper {
-  display: grid;
-  grid-template-rows: 0fr;
-  overflow: hidden;
-  transition: grid-template-rows 300ms ease-out;
-  will-change: grid-template-rows;
-}
-
-.children-wrapper.is-expanded {
-  grid-template-rows: 1fr;
-}
-
-.children-content {
-  min-height: 0;
-  margin-top: 0.25rem;
-  /* Force GPU acceleration */
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-.children-content > * {
-  opacity: 0;
-  transform: translateY(-5px);
-  transition: opacity 300ms ease-out, transform 300ms ease-out;
-  will-change: opacity, transform;
-}
-
-.children-wrapper.is-expanded .children-content > * {
-  opacity: 1;
-  transform: translateY(0);
-}
 </style>
+

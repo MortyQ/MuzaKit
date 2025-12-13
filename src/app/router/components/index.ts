@@ -28,6 +28,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           menuIcon: "mdi:palette",
           isMenuParent: true,
           menuOrder: 3,
+          permissions: ["read:list"],
         },
         children: [
           {
@@ -38,6 +39,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
               title: "Overview",
               menuTitle: "Overview",
               menuIcon: "lucide:home",
+              permissions: ["read:list"],
             },
           },
           {
@@ -48,6 +50,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
               title: "Feedback",
               menuTitle: "Feedback",
               menuIcon: "lucide:message-square",
+              permissions: ["read:list"],
             },
           },
           {
@@ -58,6 +61,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
               title: "Forms",
               menuTitle: "Forms",
               menuIcon: "lucide:clipboard-list",
+              permissions: ["read:list"],
             },
           },
           {
@@ -68,6 +72,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
               title: "Display",
               menuTitle: "Display",
               menuIcon: "lucide:layout",
+              permissions: ["read:list"],
             },
           },
           {
@@ -79,6 +84,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
               menuTitle: "Layout",
               menuIcon: "lucide:layout-grid",
               menuBadge: "Soon",
+              permissions: ["read:list"],
             },
           },
         ],
@@ -92,6 +98,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           menuTitle: "Table",
           menuIcon: "mdi:table",
           isMenuParent: true,
+          permissions: ["read:list"],
         },
         children: [
           {
@@ -102,6 +109,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
               title: "Examples",
               menuTitle: "Examples",
               menuIcon: "mdi:list",
+              permissions: ["read:list"],
             },
           },
           {
@@ -112,6 +120,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
               title: "Documentation",
               menuTitle: "Documentation",
               menuIcon: "mdi:document",
+              permissions: ["read:list"],
             },
           },
         ],

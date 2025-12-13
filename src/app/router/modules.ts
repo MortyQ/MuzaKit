@@ -16,6 +16,16 @@ const modules: Array<AppRouteRecordRaw> = [
   // Home route (public)
   {
     path: "/",
+    name: "Root",
+    component: () => import("@/pages/NotFound/index.vue"), // Fallback, should not be used
+    meta: {
+      title: "Home",
+      showInMenu: false,
+      isRootRedirect: true, // Special flag to always trigger redirect
+    },
+  },
+  {
+    path: "/home",
     name: "Home",
     component: () => import("@/pages/Home/index.vue"),
     meta: {
@@ -27,6 +37,7 @@ const modules: Array<AppRouteRecordRaw> = [
       permissions: ["home:read"],
     },
   },
+
   // 404 page with explicit path (public)
   {
     path: "/not-found",
@@ -51,8 +62,8 @@ const modules: Array<AppRouteRecordRaw> = [
     },
   },
   // Feature routes
-  ...componentRoutes,
   ...coreRoutes,
+  ...componentRoutes,
   ...authRoutes,
   // Catch-all route (must be last!)
   {

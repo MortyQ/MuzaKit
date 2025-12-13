@@ -1,14 +1,14 @@
 import type { MenuItem } from "@/app/router/types/types";
-import type { SidebarNavItem } from "@/widgets/sidebar/types";
+import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
 
 /**
  * Options for converting MenuItems to SidebarConfig
  */
 export interface SidebarConfigOptions {
-  brandName?: string;
-  footerItems?: MenuItem[];
-  showThemeToggle?: boolean;
-  showUserMenu?: boolean;
+  brandName?: string
+  footerItems?: MenuItem[]
+  showThemeToggle?: boolean
+  showUserMenu?: boolean
 }
 
 /**
@@ -46,4 +46,3 @@ export function menuItemsToSidebarConfig(
     showUserMenu: options?.showUserMenu ?? true,
   };
 }
-

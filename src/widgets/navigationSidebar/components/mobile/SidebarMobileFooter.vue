@@ -1,40 +1,32 @@
 <script setup lang="ts">
-import SidebarNavItemComponent from "./SidebarNavItem.vue";
+import SidebarMobileNavItem from "./SidebarMobileNavItem.vue";
 
 import { UserMenu } from "@/features/auth";
 import { ThemeToggle } from "@/features/theme";
-import { useSidebar } from "@/widgets/sidebar/composables/useSidebar";
-import type { SidebarNavItem } from "@/widgets/sidebar/types";
+import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
 
 interface Props {
-  /** Footer navigation items (e.g., Settings) */
+  /** Footer items */
   items?: SidebarNavItem[];
   /** Show theme toggle */
   showThemeToggle?: boolean;
   /** Show user menu */
   showUserMenu?: boolean;
 }
-
 withDefaults(defineProps<Props>(), {
   items: () => [],
   showThemeToggle: true,
   showUserMenu: true,
 });
-
-const { isCollapsed } = useSidebar();
 </script>
-
 <template>
-  <div
-    class="sidebar-footer mt-auto"
-    :class="{ 'px-2 py-3': isCollapsed, 'px-3 py-4': !isCollapsed }"
-  >
+  <div class="sidebar-mobile-footer border-t border-base-300/50 px-3 py-4">
     <!-- User Menu -->
     <div
       v-if="showUserMenu"
       class="mb-3"
     >
-      <UserMenu :compact="isCollapsed" />
+      <UserMenu class="w-full" />
     </div>
 
     <!-- Theme Toggle -->
@@ -43,24 +35,21 @@ const { isCollapsed } = useSidebar();
       class="mb-3"
     >
       <ThemeToggle
-        :show-label="!isCollapsed"
-        :compact="isCollapsed"
-        :class="!isCollapsed ? 'w-full' : ''"
+        show-label
+        class="w-full"
       />
     </div>
 
     <!-- Footer Navigation Items -->
     <div
-      v-if="items.length > 0"
+      v-if="items && items.length > 0"
       class="space-y-1"
     >
-      <SidebarNavItemComponent
+      <SidebarMobileNavItem
         v-for="item in items"
         :key="item.id"
         :item="item"
-        :level="0"
       />
     </div>
   </div>
 </template>
-

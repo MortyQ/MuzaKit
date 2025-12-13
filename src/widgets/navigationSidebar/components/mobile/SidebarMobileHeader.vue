@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import { useSidebar } from "@/widgets/sidebar/composables/useSidebar";
+import { useSidebar } from "@/widgets/navigationSidebar/composables/useSidebar";
 
 interface Props {
   /** Logo URL or path */
