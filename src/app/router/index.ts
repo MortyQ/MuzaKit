@@ -32,20 +32,4 @@ router.beforeEach(async (to, from, next) => {
   await authGuard(to, from, next);
 });
 
-// Global navigation error handler
-router.onError((error, to, from) => {
-  console.error("[Router Error]", {
-    error: error.message,
-    to: to.fullPath,
-    from: from.fullPath,
-  });
-
-  // Handle chunk loading errors (lazy loading failures)
-  if (error.message.includes("Failed to fetch dynamically imported module")
-        || error.message.includes("Loading chunk")) {
-    // Reload the page to get fresh assets
-    window.location.reload();
-  }
-});
-
 export default router;
