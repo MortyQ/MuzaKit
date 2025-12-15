@@ -3,16 +3,38 @@
   align-items: center;
   gap: 4px;
   flex-shrink: 0;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: color-mix(in srgb, theme('colors.primary') 8%, transparent 92%);
+
+    .sort-icon:not(.sort-icon--active) {
+      opacity: 0.6;
+      color: theme('colors.primary');
+    }
+  }
+
+  &:active {
+    background-color: color-mix(in srgb, theme('colors.primary') 15%, transparent 85%);
+  }
 }
 
 .sort-icon {
   opacity: 0.3;
-  transition: opacity 0.2s ease;
-  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  color: theme('colors.secondaryText');
 
   &--active {
     opacity: 1;
-    color: var(--color-primary);
+    color: theme('colors.primary');
+    filter: drop-shadow(0 0 4px color-mix(in srgb, theme('colors.primary') 40%, transparent 60%));
+
+    // Add subtle background highlight for better visibility
+    background-color: color-mix(in srgb, theme('colors.primary') 10%, transparent 90%);
+    border-radius: 4px;
+    padding: 2px;
   }
 }
 

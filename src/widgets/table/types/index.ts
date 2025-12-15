@@ -30,6 +30,23 @@ export interface ColumnFormatOptions {
   formatter?: (value: unknown, row?: Record<string, unknown>) => string | number
 }
 
+// Cell context for cellClass and cellStyle functions
+// Provides named parameters for better developer experience
+export interface CellContext<T = Record<string, unknown>> {
+  value: unknown        // Cell value
+  row: T                // Full row data
+  rowIndex: number      // Row index in current view
+}
+
+// Header context for onHeaderClick callback
+// Provides information about the clicked header
+// Note: Column type is used here but defined below - TypeScript allows this for interfaces
+export interface HeaderContext {
+  column: Column        // Column definition (full access to all column properties)
+  columnKey: string     // Column key (shorthand for column.key)
+  event: MouseEvent     // Native click event for advanced use cases
+}
+
 export interface Column {
   key: string           // Key from data object
   label: string         // Header text
@@ -48,24 +65,19 @@ export interface Column {
   format?: ColumnFormatOptions
 
   // Custom cell styling (best practice from TanStack Table, AG-Grid)
-  // Function receives: value, row, rowIndex
+  // Function receives: CellContext with { value, row, rowIndex }
   // Returns: class string or style object
-  cellClass?: <T = Record<string, unknown>>(
-  // eslint-disable-next-line no-unused-vars
-    value: unknown,
-  // eslint-disable-next-line no-unused-vars
-    row: T,
-  // eslint-disable-next-line no-unused-vars
-    rowIndex: number,
-  ) => string | undefined
+  // Example: cellClass: ({ value, rowIndex }) => value > 100 ? 'text-green-500' : undefined
+  cellClass?: <T = Record<string, unknown>>(context: CellContext<T>) => string | undefined
   cellStyle?: <T = Record<string, unknown>>(
+    context: CellContext<T>) => Record<string, string> | undefined
+
+  // Header click callback
+  // Function receives: HeaderContext with { column, columnKey, event }
+  // Use cases: custom sorting, filtering, column actions, analytics tracking
+  // Example: onHeaderClick: ({ columnKey, event }) => { console.log('Clicked:', columnKey); }
   // eslint-disable-next-line no-unused-vars
-    value: unknown,
-  // eslint-disable-next-line no-unused-vars
-    row: T,
-  // eslint-disable-next-line no-unused-vars
-    rowIndex: number,
-  ) => Record<string, string> | undefined
+  onHeaderClick?: (context: HeaderContext) => void
 }
 
 export interface HeaderCell {

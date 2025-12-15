@@ -29,7 +29,7 @@ const columnsRegular: Column[] = [
     align: "center",
     width:"100px",
     // Heatmap with background color
-    cellStyle: (value) => {
+    cellStyle: ({ value }) => {
       const num = Number(value);
       if (isNaN(num)) return {};
 
@@ -391,7 +391,7 @@ const rowClassName = (row: ExpandableRow): string =&gt; {
     key: "age",
     label: "Age",
     align: "center",
-    cellStyle: (value) =&gt; {
+    cellStyle: ({ value }) =&gt; {
       const num = Number(value);
       if (isNaN(num)) return {};
 
@@ -1084,7 +1084,7 @@ const columns: Column[] = [
     key: "performance",
     label: "Rating",
     align: "center",
-    cellStyle: (value) =&gt; {
+    cellStyle: ({ value }) =&gt; {
       const num = Number(value);
       if (num &gt;= 4.5) return {
         backgroundColor: "#22c55e",

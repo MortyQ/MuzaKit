@@ -591,7 +591,7 @@ const getCellMetadata = (
 
   // Custom cellClass from column definition (best practice)
   if (column.cellClass) {
-    const customClass = column.cellClass(row[column.key], row, rowIndex);
+    const customClass = column.cellClass({ value: row[column.key], row, rowIndex });
     if (customClass) {
       cssClass = cssClass ? `${cssClass} ${customClass}` : customClass;
     }
@@ -599,7 +599,7 @@ const getCellMetadata = (
 
   // Custom cellStyle from column definition (best practice)
   const customStyle = column.cellStyle
-    ? column.cellStyle(row[column.key], row, rowIndex)
+    ? column.cellStyle({ value: row[column.key], row, rowIndex })
     : undefined;
 
   // Title for non-interactive cells

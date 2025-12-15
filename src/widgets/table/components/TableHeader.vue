@@ -49,6 +49,19 @@ const handleSortClick = (event: MouseEvent) => {
   }
 };
 
+const handleHeaderLabelClick = (event: MouseEvent) => {
+  // Call custom header click callback if provided
+  // This is separate from sort click - only triggers when clicking the label area
+  if (props.column.onHeaderClick) {
+    event.stopPropagation(); // Prevent event bubbling
+    props.column.onHeaderClick({
+      column: props.column,
+      columnKey: props.columnKey,
+      event,
+    });
+  }
+};
+
 const handleResizeStart = (event: MouseEvent) => {
   emit("resize-start", props.columnKey, event);
 };
@@ -74,19 +87,40 @@ const handleSortKeyDown = (event: KeyboardEvent) => {
       'table-header-cell--center': align === 'center',
       'table-header-cell--right': align === 'right',
       'table-header-cell--sortable': column.sortable,
+      'table-header-cell--clickable': column.onHeaderClick,
     }"
   >
     <div class="table-header-content">
-      <!-- Slot for custom header content -->
-      <slot
-        :column="column"
-        :is-sorted="isSorted"
-        :sort-order="sortOrder"
+      <!-- Clickable label wrapper - only triggers onHeaderClick when clicking the label area -->
+      <div
+        class="table-header-label-wrapper"
+        :class="{ 'table-header-label-wrapper--clickable': column.onHeaderClick }"
+        @click="handleHeaderLabelClick"
       >
-        <span class="table-header-label">{{ label }}</span>
-      </slot>
+        <!-- Slot for custom header content -->
+        <slot
+          :column="column"
+          :is-sorted="isSorted"
+          :sort-order="sortOrder"
+        >
+          <span class="table-header-label">{{ label }}</span>
+        </slot>
 
-      <!-- Sort indicator - clickable only this part -->
+        <!-- Click indicator - shows when onHeaderClick is provided -->
+        <div
+          v-if="column.onHeaderClick"
+          class="table-header-click-indicator"
+          :title="`Click to interact with ${label}`"
+        >
+          <VIcon
+            icon="lucide:mouse-pointer-click"
+            :size="14"
+            class="click-indicator-icon"
+          />
+        </div>
+      </div>
+
+      <!-- Sort indicator - separate clickable area -->
       <div
         v-if="column.sortable"
         class="table-header-sort"

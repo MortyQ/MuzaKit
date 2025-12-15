@@ -23,7 +23,11 @@ const loaders = reactive({
 
 const columnsExpandable: Column[] = [
   { key: "name", label: "Name", width:"150px", sortable: true  },
-  { key: "count", label: "Count",width:"100px" },
+  { key: "count", label: "Count",width:"150px",  sortable: true,
+    onHeaderClick: ({ column }) => {
+      console.log("CLICKED HEADER", column);
+    },
+  },
   { key: "salary", label: "Salary", format: { currency: true }, width:"150px",  sortable: true },
   { key: "email", label: "Email", width:"150px"  },
   { key: "phone", label: "Phone", width:"150px",  sortable: true },

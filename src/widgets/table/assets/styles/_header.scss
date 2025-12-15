@@ -215,6 +215,38 @@
     }
   }
 
+  // Clickable header cell - minimal styling, actual interaction is on label wrapper
+  &--clickable {
+    // Subtle visual indicator in default state - bottom border accent
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        color-mix(in srgb, theme('colors.primary') 30%, transparent 70%) 50%,
+        transparent 100%
+      );
+      opacity: 0.4;
+      transition: opacity 0.2s ease;
+    }
+
+    // Add subtle pulsing animation hint (optional, can be disabled if too much)
+    @media (prefers-reduced-motion: no-preference) {
+      &::before {
+        animation: subtle-pulse 3s ease-in-out infinite;
+      }
+    }
+
+    &:hover::before {
+      opacity: 0.8;
+    }
+  }
+
   &--sorted {
     background: linear-gradient(
       to bottom,
@@ -243,6 +275,52 @@
   min-width: 0;
   padding-right: 8px; // space for resize handle
   height: 100%; // Full height to contain resize handle
+}
+
+// Label wrapper - can be clickable
+.table-header-label-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex: 1;
+  min-width: 0;
+  transition: all 0.2s ease;
+
+  // Clickable variant - interactive area for onHeaderClick
+  &--clickable {
+    cursor: pointer;
+    user-select: none;
+    padding: 0.25rem 0.5rem;
+    margin: -0.25rem -0.5rem;
+    border-radius: 4px;
+
+    &:hover {
+      background: linear-gradient(
+        to bottom,
+        color-mix(in srgb, theme('colors.cardBg') 92%, theme('colors.primary') 8%),
+        color-mix(in srgb, theme('colors.cardBg') 96%, theme('colors.primary') 4%)
+      );
+
+      .table-header-label {
+        color: theme('colors.primary');
+        font-weight: $table-font-weight-bold;
+      }
+
+      .table-header-click-indicator {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+    }
+
+    &:active {
+      background: linear-gradient(
+        to bottom,
+        color-mix(in srgb, theme('colors.cardBg') 88%, theme('colors.primary') 12%),
+        color-mix(in srgb, theme('colors.cardBg') 94%, theme('colors.primary') 6%)
+      );
+      transform: translateY(1px);
+    }
+  }
 }
 
 .table-header-label {
@@ -314,3 +392,30 @@
   gap: 4px;
   flex-shrink: 0;
 }
+
+// Click indicator for clickable headers (can coexist with sort icon)
+.table-header-click-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+
+  .click-indicator-icon {
+    color: theme('colors.primary');
+  }
+
+  // Enhanced visibility is handled by label wrapper hover state
+}
+
+// Animation for clickable header hint
+@keyframes subtle-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
