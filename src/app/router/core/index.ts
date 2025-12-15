@@ -5,7 +5,7 @@ import { RouteNames } from "@/app/router/types/names";
 const coreRoutes: AppRouteRecordRaw[] = [
   {
     path: "/about",
-    name: RouteNames.About,
+    name: RouteNames.ABOUT,
     component: () => import("@/pages/About/index.vue"),
     meta: {
       title: "About",
@@ -18,7 +18,7 @@ const coreRoutes: AppRouteRecordRaw[] = [
   },
   {
     path: "/dashboard",
-    name: RouteNames.Dashboard,
+    name: RouteNames.DASHBOARD,
     component: () => import("@/pages/Dashboard/index.vue"),
     meta: {
       title: "Dashboard",

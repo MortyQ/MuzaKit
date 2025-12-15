@@ -29,7 +29,7 @@ export interface RouteMeta {
   requiresAuth?: boolean
 
   /** Required permissions (only checked if authenticated) */
-  permissions?: string[]
+  permissions?: readonly string[] | string[]
 
   /** Redirect path if not authenticated */
   authRedirect?: string

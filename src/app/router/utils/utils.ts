@@ -1,52 +1,32 @@
 import type { RouteRecordRaw } from "vue-router";
 
+import { hasAnyPermission, hasPermissions } from "./guards";
 import type { MenuItem, RouteMeta } from "../types/types";
 
+
 import { useAuthStore } from "@/features/auth/store/authStore";
-import { UserRole, type UserPermission } from "@/features/auth/types";
+
 // Get the type of auth store instance and export for reuse
 export type AuthStore = ReturnType<typeof useAuthStore>;
 
 /**
  * Check if user has required permissions for a route
- * NOTE: This function requires authStore to be passed as parameter
+ * Uses guards.ts as single source of truth for permission logic
  * @param permissions - Required permissions array
  * @param authStore - Auth store instance
  * @param isMenuParent - If true, requires ANY permission (OR logic), otherwise requires ALL (AND logic)
  * @returns true if user has permissions or no permissions required
  */
 export function hasRoutePermissions(
-  permissions: string[] | undefined,
+  permissions: readonly string[] | string[] | undefined,
   authStore: AuthStore,
   isMenuParent = false,
 ): boolean {
-  // If no permissions required, allow access
-  if (!permissions || permissions.length === 0) {
-    return true;
-  }
-
-  // If user not authenticated, deny access
-  if (!authStore.isAuthenticated) {
-    return false;
-  }
-
-  // Admins always have access to all routes
-  if (authStore.user?.role === UserRole.ADMIN) {
-    return true;
-  }
-
-  // For menu parents: user needs ANY of the permissions (OR logic)
-  // For regular routes: user needs ALL permissions (AND logic)
+  // Delegate to guards.ts functions for single source of truth
   if (isMenuParent) {
-    return permissions.some((permission) =>
-      authStore.hasPermission(permission as UserPermission),
-    );
+    return hasAnyPermission(permissions, authStore);
   }
-  else {
-    return permissions.every((permission) =>
-      authStore.hasPermission(permission as UserPermission),
-    );
-  }
+  return hasPermissions(permissions, authStore);
 }
 
 /**

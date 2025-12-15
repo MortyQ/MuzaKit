@@ -17,11 +17,10 @@ const modules: Array<AppRouteRecordRaw> = [
   {
     path: "/",
     name: "Root",
-    component: () => import("@/pages/NotFound/index.vue"), // Fallback, should not be used
     meta: {
       title: "Home",
       showInMenu: false,
-      isRootRedirect: true, // Special flag to always trigger redirect
+      isRootRedirect: true, // Special flag to trigger smart redirect in guard
     },
   },
   {
@@ -29,7 +28,7 @@ const modules: Array<AppRouteRecordRaw> = [
     name: "Home",
     component: () => import("@/pages/Home/index.vue"),
     meta: {
-      title: RouteNames.Home,
+      title: RouteNames.HOME,
       showInMenu: true,
       menuTitle: "Home",
       menuIcon: "mdi:home",
@@ -41,7 +40,7 @@ const modules: Array<AppRouteRecordRaw> = [
   // 404 page with explicit path (public)
   {
     path: "/not-found",
-    name: RouteNames.NotFound,
+    name: RouteNames.NOT_FOUND,
     component: () => import("@/pages/NotFound/index.vue"),
     meta: {
       title: "404 Not Found",
