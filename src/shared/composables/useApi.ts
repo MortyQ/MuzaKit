@@ -6,6 +6,7 @@
  * Features:
  * - Automatic state management (loading, error, data)
  * - Request cancellation via AbortController
+ * - Global abort on filter changes (useGlobalAbort option)
  * - Retry logic
  * - Debouncing
  * - Callbacks (onSuccess, onError, onBefore, onFinish)
@@ -22,6 +23,14 @@
  *     console.log('Status:', response.status)
  *     console.log('Headers:', response.headers)
  *   }
+ * })
+ * ```
+ *
+ * @example With global abort (cancels on filter change)
+ * ```ts
+ * const { data, loading, execute } = useApi<User[]>('/users', {
+ *   useGlobalAbort: true, // Request will be cancelled when global filters change
+ *   immediate: true
  * })
  * ```
  *
@@ -109,6 +118,7 @@ import type {
 
 import { handleApiError } from "@/shared/api";
 import { useApiState } from "@/shared/api/composables";
+import { useAbortController } from "@/shared/composables/useAbortController";
 
 /**
  * Main composable for API requests
@@ -130,6 +140,7 @@ export function useApi<T = unknown, D = unknown>(
     retry = false,
     retryDelay = 1000,
     authMode = "default",
+    useGlobalAbort = false,
     ...axiosConfig
   } = options;
 
@@ -141,6 +152,9 @@ export function useApi<T = unknown, D = unknown>(
   const state = useApiState<T>(initialData as T | null);
   const abortController = ref<AbortController | null>(null);
 
+  // Global abort controller (for filter changes)
+  const globalAbort = useGlobalAbort ? useAbortController() : null;
+
   /**
      * Execute request
      */
@@ -151,8 +165,18 @@ export function useApi<T = unknown, D = unknown>(
       abortController.value.abort();
     }
 
-    // Create new AbortController
+    // Create new AbortController for this request
     abortController.value = new AbortController();
+
+    // If using global abort, listen to global signal and abort local controller
+    let globalAbortHandler: (() => void) | null = null;
+    if (globalAbort) {
+      const globalSignal = globalAbort.getSignal();
+      globalAbortHandler = () => {
+        abortController.value?.abort();
+      };
+      globalSignal.addEventListener("abort", globalAbortHandler);
+    }
 
     // Before callback
     onBefore?.();
@@ -163,10 +187,16 @@ export function useApi<T = unknown, D = unknown>(
 
     try {
       const requestUrl = typeof url === "string" ? url : url.value;
+
+      // Always use local signal - it will be aborted by:
+      // 1. Local abort() call (manual or onUnmounted)
+      // 2. Global filter change (via globalAbortHandler)
+      const signal = abortController.value.signal;
+
       const mergedConfig: ApiRequestConfig<D> = {
         ...axiosConfig,
         ...config,
-        signal: abortController.value.signal,
+        signal,
         authMode: config?.authMode || authMode,
       };
 
@@ -216,6 +246,12 @@ export function useApi<T = unknown, D = unknown>(
       return null;
     }
     finally {
+      // Cleanup global abort handler
+      if (globalAbortHandler && globalAbort) {
+        const globalSignal = globalAbort.getSignal();
+        globalSignal.removeEventListener("abort", globalAbortHandler);
+      }
+
       state.setLoading(false);
       onFinish?.();
     }
@@ -230,8 +266,10 @@ export function useApi<T = unknown, D = unknown>(
 
   /**
      * Abort request
+     * Works with both local and global abort controllers
      */
   const abort = (message?: string) => {
+    // Abort local controller if exists
     if (abortController.value) {
       abortController.value.abort(message);
       abortController.value = null;
@@ -392,4 +430,3 @@ export function useApiDelete<T = unknown>(
 ): UseApiReturn<T> {
   return useApi<T>(url, { ...options, method: "DELETE" });
 }
-

@@ -96,6 +96,12 @@ export interface UseApiOptions<T = unknown,
   debounce?: number
   /** Request timeout */
   timeout?: number
+  /**
+     * Use global abort controller from filters
+     * When global filters change, this request will be automatically cancelled
+     * @default false
+     */
+  useGlobalAbort?: boolean
 }
 
 /**
