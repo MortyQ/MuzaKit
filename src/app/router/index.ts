@@ -27,7 +27,7 @@ setRouterForGuards(router);
 router.beforeEach(async (to, from, next) => {
   // Set page title
   const title = (to.meta as { title?: string }).title;
-  document.title = title ? `${title} | SO Insights` : "SO Insights";
+  document.title = title ? `${title} | MuzaKit` : "MuzaKit";
 
   await authGuard(to, from, next);
 });

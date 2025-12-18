@@ -12,11 +12,10 @@ import { formatCurrency } from "@/shared/utils/formatters";
 export const formatKpiValue = (
   value: number | string,
   formatOptions?: {
-    unit?: KpiUnit;
-    decimals?: boolean | number;
-    multiply?: number;
-    // eslint-disable-next-line no-unused-vars
-    formatter?: (val: number | string) => string;
+    unit?: KpiUnit
+    decimals?: boolean | number
+    multiply?: number
+    formatter?: (val: number | string) => string
   },
 ): string => {
   const {
@@ -56,14 +55,15 @@ export const formatKpiValue = (
       if (decimalPlaces > 0) {
         return numValue.toFixed(decimalPlaces);
       }
-      return Math.round(numValue).toLocaleString("en-US");
+      return Math.round(numValue).toString();
 
     case "number":
     default:
-      if (decimalPlaces > 0) {
-        return numValue.toFixed(decimalPlaces);
-      }
-      return Math.round(numValue).toLocaleString("en-US");
+      // Always use toLocaleString for thousand separators (commas)
+      return numValue.toLocaleString("en-US", {
+        minimumFractionDigits: decimalPlaces,
+        maximumFractionDigits: decimalPlaces,
+      });
   }
 };
 
@@ -73,8 +73,8 @@ export const formatKpiValue = (
 export const formatComparisonValue = (
   value: number,
   formatOptions?: {
-    unit?: KpiUnit;
-    decimals?: boolean | number;
+    unit?: KpiUnit
+    decimals?: boolean | number
   },
 ): string => {
   const { unit = "number", decimals = false } = formatOptions || {};
@@ -88,11 +88,11 @@ export const formatComparisonValue = (
     });
   }
 
-  if (decimalPlaces > 0) {
-    return absValue.toFixed(decimalPlaces);
-  }
-
-  return Math.round(absValue).toLocaleString("en-US");
+  // Always use toLocaleString for thousand separators (commas)
+  return absValue.toLocaleString("en-US", {
+    minimumFractionDigits: decimalPlaces,
+    maximumFractionDigits: decimalPlaces,
+  });
 };
 
 /**
@@ -135,8 +135,8 @@ export const getComparisonClasses = (
   difference: number,
   reverse = false,
 ): {
-  textColor: string;
-  iconColor: string;
+  textColor: string
+  iconColor: string
 } => {
   const isPositive = isComparisonPositive(difference);
 
@@ -146,7 +146,8 @@ export const getComparisonClasses = (
       textColor: isPositive ? "text-success-500" : "text-error-500",
       iconColor: isPositive ? "text-success-500" : "text-error-500",
     };
-  } else {
+  }
+  else {
     // Reversed: positive = red, negative = green
     return {
       textColor: isPositive ? "text-error-500" : "text-success-500",
@@ -170,7 +171,8 @@ export const getComparisonColor = (
 
   if (!reverse) {
     return isPositive ? successColor : errorColor;
-  } else {
+  }
+  else {
     return isPositive ? errorColor : successColor;
   }
 };
@@ -182,7 +184,6 @@ export const animateValue = (
   startValue: number,
   endValue: number,
   duration: number,
-  // eslint-disable-next-line no-unused-vars
   onUpdate: (value: number) => void,
 ): void => {
   const startTime = Date.now();
@@ -204,4 +205,3 @@ export const animateValue = (
 
   update();
 };
-

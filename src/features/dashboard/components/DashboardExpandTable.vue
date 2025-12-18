@@ -34,7 +34,7 @@ const columnsExpandable: Column[] = [
   { key: "position", label: "Position",width:"150px"  },
   { key: "status", label: "Status",width:"150px"  },
   { key: "performance", label: "Rating", width:"150px",  sortable: true },
-  { key: "accountStatus", label: "Account Status", width: "200px", interactive: true },
+  { key: "accountStatus", label: "Account Status", width: "200px" },
   { key: "startDate", label: "Start Date", format: { date: "long" }, width:"150px"  },
   { key: "projects", label: "Projects",width:"150px"  },
   { key: "location", label: "Location",width:"150px"  },
