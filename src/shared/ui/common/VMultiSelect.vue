@@ -74,14 +74,13 @@ const handleSearchChange = (query: string) => {
 // Floating dropdown logic (teleport to body)
 const msRef = ref<InstanceType<typeof Multiselect> | null>(null);
 let dropdownEl: HTMLElement | null = null;
-// eslint-disable-next-line vue/no-dupe-keys
-let placeholder: Comment | null = null;
+let placeholderNode: Comment | null = null;
 let originalParent: HTMLElement | null = null;
 
 const updatePosition = () => {
   if (!dropdownEl || !msRef.value) return;
 
-  const trigger = msRef.value.$el?.querySelector(".multiselect__tags") as HTMLElement;
+  const trigger = (msRef.value as any).$el?.querySelector(".multiselect__tags") as HTMLElement;
   if (!trigger) return;
 
   const rect = trigger.getBoundingClientRect();
@@ -111,14 +110,14 @@ const enableFloating = () => {
   if (!props.teleportToBody) return;
 
   nextTick(() => {
-    dropdownEl = msRef.value?.$el?.querySelector(".multiselect__content-wrapper");
+    dropdownEl = (msRef.value as any)?.$el?.querySelector(".multiselect__content-wrapper");
     if (!dropdownEl) return;
 
     // Teleport to body
-    if (!placeholder) {
+    if (!placeholderNode) {
       originalParent = dropdownEl.parentElement;
-      placeholder = document.createComment("v-multiselect-anchor");
-      originalParent?.replaceChild(placeholder, dropdownEl);
+      placeholderNode = document.createComment("v-multiselect-anchor");
+      originalParent?.replaceChild(placeholderNode, dropdownEl);
       document.body.appendChild(dropdownEl);
     }
 
@@ -140,11 +139,11 @@ const disableFloating = () => {
   dropdownEl.removeAttribute("style");
 
   // Return to original position
-  if (placeholder && originalParent) {
-    originalParent.replaceChild(dropdownEl, placeholder);
+  if (placeholderNode && originalParent) {
+    originalParent.replaceChild(dropdownEl, placeholderNode);
   }
 
-  placeholder = null;
+  placeholderNode = null;
   originalParent = null;
   dropdownEl = null;
 };
@@ -280,6 +279,10 @@ onBeforeUnmount(() => disableFloating());
 
     .multiselect__option.multiselect__option--selected {
       @apply bg-primary text-white font-medium;
+
+      &, & * {
+        color: white !important;
+      }
     }
 
     .multiselect__option.multiselect__option--selected.multiselect__option--highlight {
@@ -431,6 +434,10 @@ onBeforeUnmount(() => disableFloating());
 
 .multiselect__content-wrapper.v-ms-floating .multiselect__option.multiselect__option--selected {
   @apply bg-primary text-white font-medium;
+
+  &, & * {
+    color: white !important;
+  }
 }
 
 .multiselect__content-wrapper.v-ms-floating
