@@ -1,17 +1,17 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed, type Component } from "vue";
 
 import { iconMap, hasIcon } from "@/shared/config/icons";
 
 interface Props {
   /** Icon name in format "collection:name" (e.g., "mdi:home", "heroicons:user-solid") */
-  icon: string;
+  icon: string
   /** Icon size in pixels (default: 24) */
-  size?: string | number;
+  size?: string | number
   /** Icon color (default: currentColor) */
-  color?: string;
+  color?: string
   /** Additional CSS class */
-  class?: string;
+  class?: string
   loading?: boolean
 }
 
@@ -22,10 +22,24 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 /**
+ * Check if color is a Tailwind class (starts with 'text-') or CSS color value
+ */
+const isTailwindClass = computed(() => {
+  return props.color.startsWith("text-");
+});
+
+/**
+ * Get the color class if it's a Tailwind class
+ */
+const colorClass = computed(() => {
+  return isTailwindClass.value ? props.color : "";
+});
+
+/**
  * Fallback component for missing or failed icon imports
  */
 const FallbackIcon: Component = {
-  template: '<span style="font-family: monospace; font-weight: bold; color: #ef4444;">?</span>',
+  template: "<span style=\"font-family: monospace; font-weight: bold; color: #ef4444;\">?</span>",
 };
 
 /**
@@ -40,12 +54,11 @@ const iconComponent = computed<Component>(() => {
   // Check if icon exists
   if (!hasIcon(props.icon)) {
     console.warn(
-      `[VIcon] Icon "${props.icon}" not found. ` +
-      `Add it to src/config/icons.ts or check the icon name format.`,
+      `[VIcon] Icon "${props.icon}" not found. `
+        + `Add it to src/config/icons.ts or check the icon name format.`,
     );
     return FallbackIcon;
   }
-
 
   return iconMap[props.icon];
 });
@@ -56,7 +69,7 @@ const iconComponent = computed<Component>(() => {
 const iconStyles = computed(() => ({
   width: typeof props.size === "number" ? `${props.size}px` : props.size,
   height: typeof props.size === "number" ? `${props.size}px` : props.size,
-  color: props.color,
+  color: isTailwindClass.value ? undefined : props.color,
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
@@ -66,8 +79,8 @@ const iconStyles = computed(() => ({
 
 <template>
   <span
+    :class="[{ 'animate-spin': props.loading }, colorClass, props.class]"
     :style="iconStyles"
-    :class="[{ 'animate-spin': props.loading }, props.class]"
     class="v-icon"
   >
     <component :is="iconComponent" />

@@ -85,8 +85,7 @@ interface TableProps {
   sort?: SortConfig                       // Sorting configuration
   sortState?: SortItem[]                  // v-model:sort-state
   pagination?: PaginationConfig           // Pagination configuration
-  toolbar?: ToolbarConfig                 // Toolbar configuration
-  exportOptions?: ExportOptions           // Export options
+  toolbar?: ToolbarConfig                 // Toolbar configuration (includes export)
   search?: string                         // v-model:search
 }
 \`\`\`

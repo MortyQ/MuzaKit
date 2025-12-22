@@ -34,7 +34,6 @@ const props = withDefaults(defineProps<TableProps>(), {
   expandMode: "auto",
   sort: () => ({ type: "server", multiple: true }),
   toolbar: undefined,
-  exportOptions: undefined,
   search: "",
 });
 
@@ -776,7 +775,6 @@ onUnmounted(() => {
         v-else-if="toolbar?.enabled"
         v-model:search="searchModel"
         :config="toolbar"
-        :export-options="exportOptions"
         @refresh="handleToolbarRefresh"
         @reset-sort="handleToolbarResetSort"
         @export="handleToolbarExport"

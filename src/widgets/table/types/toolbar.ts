@@ -47,11 +47,51 @@ export interface ToolbarConfig {
     resetSort?: boolean | "default" | "custom";
 
     /**
-     * Export functionality
-     * 'single' - one export button
-     * 'multi' - dropdown with multiple export options
+     * Export functionality configuration
+     * - false: Export hidden
+     * - 'single': Quick shorthand for single export button (uses 'csv' format)
+     * - 'multi': Quick shorthand for multi export dropdown (requires formats in export config object)
+     * - object: Full configuration with mode, formats, etc.
+     *
+     * @example
+     * // Quick single export
+     * export: 'single'
+     *
+     * @example
+     * // Multi export with formats
+     * export: {
+     *   mode: 'multi',
+     *   formats: [
+     *     { label: 'CSV', value: 'csv', icon: 'mdi:file-delimited' },
+     *     { label: 'Excel', value: 'xlsx', icon: 'mdi:file-excel' }
+     *   ],
+     *   selectedOnly: false
+     * }
      */
-    export?: "single" | "multi";
+    export?: false | "single" | "multi" | {
+      /**
+       * Export mode
+       * - 'single': One export button (default format: csv)
+       * - 'multi': Dropdown with multiple export options
+       */
+      mode: "single" | "multi";
+
+      /**
+       * Available export formats (required for 'multi' mode)
+       */
+      formats?: ExportFormat[];
+
+      /**
+       * Export only selected rows
+       * @default false
+       */
+      selectedOnly?: boolean;
+
+      /**
+       * Global loading state for all exports
+       */
+      loading?: boolean;
+    };
 
     /**
      * Column setup button configuration
@@ -125,20 +165,3 @@ export interface ExportFormat {
   loading?: boolean;
 }
 
-export interface ExportOptions {
-  /**
-   * Available export formats
-   */
-  formats?: ExportFormat[];
-
-  /**
-   * Export only selected rows
-   * @default false
-   */
-  selectedOnly?: boolean;
-
-  /**
-   * Global loading state for all exports
-   */
-  loading?: boolean;
-}

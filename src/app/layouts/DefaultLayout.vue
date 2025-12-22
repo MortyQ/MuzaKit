@@ -50,7 +50,6 @@ const contentMargin = computed(() => ({
 
 <template>
   <div
-    v-if="authStore.user"
     class="flex min-h-screen bg-mainBg text-mainText overflow-x-hidden p-4"
   >
     <!-- Sidebar -->

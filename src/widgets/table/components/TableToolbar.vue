@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import type { ExportOptions, ToolbarConfig } from "../types/toolbar";
+import type { ToolbarConfig } from "../types/toolbar";
 
 import VButton from "@/shared/ui/common/VButton.vue";
 import VFloating from "@/shared/ui/common/VFloating.vue";
@@ -12,7 +12,6 @@ import VLoader from "@/shared/ui/common/VLoader.vue";
 
 interface Props {
   config?: ToolbarConfig;
-  exportOptions?: ExportOptions;
   search?: string;
 }
 
@@ -29,7 +28,6 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
   config: undefined,
-  exportOptions: undefined,
   search: "",
 });
 
@@ -51,16 +49,50 @@ const searchConfig = computed(() => {
   return props.config.search;
 });
 
+// Export configuration from toolbar.actions.export
+const exportConfig = computed(() => {
+  const exportAction = props.config?.actions?.export;
+
+  // Disabled
+  if (!exportAction || !exportAction) {
+    return null;
+  }
+
+  // Full object configuration
+  if (typeof exportAction === "object") {
+    return {
+      mode: exportAction.mode,
+      formats: exportAction.formats || [],
+      selectedOnly: exportAction.selectedOnly ?? false,
+      loading: exportAction.loading ?? false,
+    };
+  }
+
+  // Shorthand: 'single' or 'multi' string
+  return {
+    mode: exportAction,
+    formats: [],
+    selectedOnly: false,
+    loading: false,
+  };
+});
+
+// Check if export is enabled
+const isExportEnabled = computed(() => exportConfig.value !== null);
+
 // Check if export is loading
-const isExportLoading = computed(() => props.exportOptions?.loading || false);
+const isExportLoading = computed(() => exportConfig.value?.loading || false);
 
 // Get export formats
-const exportFormats = computed(() => props.exportOptions?.formats || []);
+const exportFormats = computed(() => exportConfig.value?.formats || []);
 
 // Check if any format is loading
 const isAnyFormatLoading = computed(() => {
   return exportFormats.value.some((format) => format.loading);
 });
+
+// Export mode
+const exportMode = computed(() => exportConfig.value?.mode);
 
 // Handlers
 const handleRefresh = () => {
@@ -72,12 +104,12 @@ const handleResetSort = () => {
 };
 
 const handleExport = (value: string | number) => {
-  emit("export", String(value), props.exportOptions?.selectedOnly);
+  emit("export", String(value), exportConfig.value?.selectedOnly);
 };
 
 const handleSingleExport = () => {
   // Default format for single export
-  emit("export", "csv", props.exportOptions?.selectedOnly);
+  emit("export", "csv", exportConfig.value?.selectedOnly);
 };
 </script>
 
@@ -138,7 +170,7 @@ const handleSingleExport = () => {
 
         <!-- Single Export button -->
         <VButton
-          v-if="config?.actions?.export === 'single'"
+          v-if="isExportEnabled && exportMode === 'single'"
           variant="primary"
           icon="mdi:download"
           text="Export"
@@ -149,7 +181,7 @@ const handleSingleExport = () => {
 
         <!-- Multi Export dropdown -->
         <VFloating
-          v-if="config?.actions?.export === 'multi'"
+          v-if="isExportEnabled && exportMode === 'multi'"
           :items="exportFormats"
           placement="bottom-right"
           @select="handleExport"
