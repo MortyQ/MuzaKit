@@ -1,19 +1,19 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed, ref } from "vue";
 
 interface Props {
   /** Tooltip text */
-  text: string;
+  text: string
   /** Placement of tooltip */
-  placement?: "top" | "bottom" | "left" | "right";
+  placement?: "top" | "bottom" | "left" | "right"
   /** Delay before showing tooltip (ms) */
-  delay?: number;
+  delay?: number
   /** Disabled state */
-  disabled?: boolean;
+  disabled?: boolean
   /** Custom class for tooltip content */
-  tooltipClass?: string;
+  tooltipClass?: string
   /** Custom class for wrapper element */
-  wrapperClass?: string;
+  wrapperClass?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -100,10 +100,10 @@ const tooltipTransform = computed(() => {
   <div
     ref="triggerRef"
     :class="['relative inline-block cursor-pointer', wrapperClass]"
+    @blur="hideTooltip"
+    @focus="showTooltip"
     @mouseenter="showTooltip"
     @mouseleave="hideTooltip"
-    @focus="showTooltip"
-    @blur="hideTooltip"
   >
     <!-- Trigger Element -->
     <slot />
@@ -120,17 +120,17 @@ const tooltipTransform = computed(() => {
       >
         <div
           v-if="isVisible && text"
-          class="fixed z-[100] pointer-events-none"
+          :class="tooltipTransform"
           :style="{
             top: `${tooltipPosition.top}px`,
             left: `${tooltipPosition.left}px`,
           }"
-          :class="tooltipTransform"
+          class="fixed z-[100] pointer-events-none"
         >
           <!-- Tooltip Content -->
           <div
             :class="[
-              'bg-neutral/90 text-white text-sm font-medium ' +
+              'bg-base-100/90 text-mainText text-sm font-medium ' +
                 'px-3 py-1.5 rounded-lg shadow-lg max-w-[200px] break-words',
               tooltipClass,
             ]"
@@ -142,4 +142,3 @@ const tooltipTransform = computed(() => {
     </Teleport>
   </div>
 </template>
-

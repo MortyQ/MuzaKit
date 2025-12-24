@@ -81,14 +81,14 @@ const CURRENCY_SYMBOLS: Record<string, string> = {
  */
 export const formatCurrency = (
   value: number | unknown,
-  options: string | { code: string; decimals?: number } = "USD",
+  options: string | { code?: string, decimals?: number } = "USD",
 ): string => {
   if (isNil(value)) return "";
 
   const numValue = Number(value);
   if (isNaN(numValue)) return String(value);
 
-  const code = typeof options === "string" ? options : options.code;
+  const code = typeof options === "string" ? options : (options.code ?? "USD");
   const decimals = typeof options === "object" ? options.decimals : undefined;
 
   // Get symbol or use code
@@ -109,8 +109,8 @@ export const formatCurrency = (
 
 export const formatBoolean = (
   value: unknown,
-  options?: { trueText?: string; falseText?: string; colored?: boolean },
-): { text: string; class?: string } => {
+  options?: { trueText?: string, falseText?: string, colored?: boolean },
+): { text: string, class?: string } => {
   const boolValue = Boolean(value);
   const trueText = options?.trueText ?? "Yes";
   const falseText = options?.falseText ?? "No";
@@ -129,7 +129,7 @@ export const formatBoolean = (
 
 export const formatPercentage = (
   value: unknown,
-  options?: boolean | { decimals?: number; multiplier?: boolean },
+  options?: boolean | { decimals?: number, multiplier?: boolean },
 ): string => {
   const numValue = Number(value);
   if (isNaN(numValue)) return String(value);
@@ -141,12 +141,18 @@ export const formatPercentage = (
   // If false, assume value is already in percentage (15 -> 15%)
   const percentValue = multiplier ? numValue * 100 : numValue;
 
-  return `${percentValue.toFixed(decimals)}%`;
+  // Use toLocaleString for thousand separators (e.g., 7,479%)
+  const formatted = percentValue.toLocaleString("en-US", {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
+
+  return `${formatted}%`;
 };
 
 export const formatNumber = (
   value: unknown,
-  options?: string | { type?: string; decimals?: number },
+  options?: string | { type?: string, decimals?: number },
 ): string => {
   const numValue = Number(value);
   if (isNaN(numValue)) return String(value);
@@ -177,7 +183,7 @@ export const formatNumber = (
 
 export const formatDate = (
   value: unknown,
-  options?: string | { format?: string; locale?: string },
+  options?: string | { format?: string, locale?: string },
 ): string => {
   if (!value) return "";
 

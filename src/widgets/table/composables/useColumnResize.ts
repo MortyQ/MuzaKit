@@ -4,11 +4,10 @@ import type { Column, ResizeState } from "../types";
 
 const MIN_COLUMN_WIDTH = 85; // minimum column width in px
 const DEFAULT_MIN_WIDTH = 100; // default min width for flex columns
-const DEFAULT_COLUMN_WIDTH = 150; // default width for columns without flex or width
+const DEFAULT_COLUMN_WIDTH = 150; // default width for columns (resizable)
 
 export function useColumnResize(columns: Ref<Column[]>) {
   // Store ONLY manually resized column widths (in px)
-  // Only applies to columns with width (not flex)
   const resizedWidths = ref<Map<string, number>>(new Map());
 
   // Resizing state
@@ -20,9 +19,10 @@ export function useColumnResize(columns: Ref<Column[]>) {
   });
 
   // Check if column is resizable
-  // Simple rule: width = resizable, no width = not resizable
+  // width: "flex" = not resizable (flexible width)
+  // width: undefined or "150px" etc = resizable
   const isColumnResizable = (column: Column): boolean => {
-    return !!column.width;
+    return column.width !== "flex";
   };
 
   // Get column style for grid-template-columns
@@ -33,13 +33,18 @@ export function useColumnResize(columns: Ref<Column[]>) {
       return `${resizedWidth}px`;
     }
 
-    // Priority 2: Column has explicit width - fixed and resizable
+    // Priority 2: Column has width: "flex" - flexible, not resizable
+    if (column.width === "flex") {
+      return `minmax(${DEFAULT_MIN_WIDTH}px, 1fr)`;
+    }
+
+    // Priority 3: Column has explicit width - use it
     if (column.width) {
       return column.width;
     }
 
-    // Priority 3: Default - flexible column (flex: 1)
-    return `minmax(${DEFAULT_MIN_WIDTH}px, 1fr)`;
+    // Priority 4: Default - 150px, resizable
+    return `${DEFAULT_COLUMN_WIDTH}px`;
   };
 
   // Grid template columns
@@ -62,7 +67,7 @@ export function useColumnResize(columns: Ref<Column[]>) {
     // Find the column
     const column = columns.value.find((col) => col.key === columnKey);
     if (!column || !isColumnResizable(column)) {
-      return; // Don't resize flex or non-resizable columns
+      return; // Don't resize flex columns
     }
 
     // Get current width
@@ -72,17 +77,21 @@ export function useColumnResize(columns: Ref<Column[]>) {
     if (existingResizedWidth !== undefined) {
       // Column was already resized - use stored value
       currentWidth = existingResizedWidth;
-    } else {
-      // First time resizing - get from DOM or parse from width
-      if (column.width?.endsWith("px")) {
-        currentWidth = parseInt(column.width, 10);
-      } else {
-        // Get actual width from DOM
-        const headerCell = (event.target as HTMLElement).closest('[role="columnheader"]');
-        currentWidth = headerCell
-          ? (headerCell as HTMLElement).offsetWidth
-          : DEFAULT_COLUMN_WIDTH;
-      }
+    }
+    else if (column.width && column.width !== "flex" && column.width.endsWith("px")) {
+      // Column has explicit px width
+      currentWidth = parseInt(column.width, 10);
+    }
+    else if (!column.width) {
+      // No width specified - use default
+      currentWidth = DEFAULT_COLUMN_WIDTH;
+    }
+    else {
+      // Get actual width from DOM (fallback)
+      const headerCell = (event.target as HTMLElement).closest("[role=\"columnheader\"]");
+      currentWidth = headerCell
+        ? (headerCell as HTMLElement).offsetWidth
+        : DEFAULT_COLUMN_WIDTH;
     }
 
     resizeState.value = {
@@ -156,9 +165,20 @@ export function useColumnResize(columns: Ref<Column[]>) {
     }
 
     const column = columns.value.find((col) => col.key === columnKey);
-    if (!column) return `minmax(${DEFAULT_MIN_WIDTH}px, 1fr)`;
+    if (!column) return DEFAULT_COLUMN_WIDTH;
 
-    return column.width || `minmax(${DEFAULT_MIN_WIDTH}px, 1fr)`;
+    // Flex column - return minmax
+    if (column.width === "flex") {
+      return `minmax(${DEFAULT_MIN_WIDTH}px, 1fr)`;
+    }
+
+    // Explicit width
+    if (column.width) {
+      return column.width;
+    }
+
+    // Default
+    return DEFAULT_COLUMN_WIDTH;
   };
 
   return {
@@ -173,4 +193,3 @@ export function useColumnResize(columns: Ref<Column[]>) {
     resetWidths,
   };
 }
-

@@ -15,7 +15,7 @@ import {
  */
 
 // Type for formatted cell value
-export type FormattedCellValue = string | number | { text: string; class?: string };
+export type FormattedCellValue = string | number | { text: string, class?: string };
 
 /**
  * Main formatter function - applies formatting based on column configuration
@@ -40,9 +40,9 @@ export const formatCellValue = (
   }
 
   // 2. Currency
-  if (format.currency !== undefined) {
+  if (format.currency !== undefined && format.currency !== false) {
     const currencyOption = format.currency === true ? "USD" : format.currency;
-    return formatCurrency(value, currencyOption as string | { code: string; decimals?: number });
+    return formatCurrency(value, currencyOption);
   }
 
   // 3. Percentage
@@ -89,4 +89,3 @@ export const useTableFormatters = () => {
     formatFileSize,
   };
 };
-

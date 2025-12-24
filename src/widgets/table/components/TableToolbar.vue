@@ -150,73 +150,72 @@ const handleSingleExport = () => {
 
     <!-- Right section - Actions -->
     <div class="toolbar-split-right">
-      <slot name="actions">
-        <!-- Refresh button -->
-        <VButton
-          v-if="config?.actions?.refresh"
-          variant="default"
-          icon="mdi:refresh"
-          @click="handleRefresh"
-        />
+      <slot name="actions" />
+      <!-- Refresh button -->
+      <VButton
+        v-if="config?.actions?.refresh"
+        variant="default"
+        icon="mdi:refresh"
+        @click="handleRefresh"
+      />
 
-        <!-- Reset sort button -->
-        <VButton
-          v-if="config?.actions?.resetSort"
-          variant="default"
-          icon="mdi:sort-variant-remove"
-          text="Reset Sort"
-          @click="handleResetSort"
-        />
+      <!-- Reset sort button -->
+      <VButton
+        v-if="config?.actions?.resetSort"
+        variant="default"
+        icon="mdi:sort-variant-remove"
+        text="Reset Sort"
+        @click="handleResetSort"
+      />
 
-        <!-- Single Export button -->
-        <VButton
-          v-if="isExportEnabled && exportMode === 'single'"
-          variant="primary"
-          icon="mdi:download"
-          text="Export"
-          :loading="isExportLoading"
-          :disabled="isExportLoading"
-          @click="handleSingleExport"
-        />
+      <!-- Single Export button -->
+      <VButton
+        v-if="isExportEnabled && exportMode === 'single'"
+        variant="primary"
+        icon="mdi:download"
+        text="Export"
+        :loading="isExportLoading"
+        :disabled="isExportLoading"
+        @click="handleSingleExport"
+      />
 
-        <!-- Multi Export dropdown -->
-        <VFloating
-          v-if="isExportEnabled && exportMode === 'multi'"
-          :items="exportFormats"
-          placement="bottom-right"
-          @select="handleExport"
-        >
-          <template #trigger>
-            <VButton
-              variant="primary"
-              icon="mdi:download"
-              text="Export"
-              :loading="isAnyFormatLoading"
-            />
-          </template>
+      <!-- Multi Export dropdown -->
+      <VFloating
+        v-if="isExportEnabled && exportMode === 'multi'"
+        :items="exportFormats"
+        placement="bottom-right"
+        @select="handleExport"
+      >
+        <template #trigger>
+          <VButton
+            variant="primary"
+            icon="mdi:download"
+            text="Export"
+            :loading="isAnyFormatLoading"
+          />
+        </template>
 
-          <template #icon="{ icon }">
-            <VIcon
-              :icon="icon"
-              size="small"
-            />
-          </template>
+        <template #icon="{ icon }">
+          <VIcon
+            :icon="icon"
+            size="small"
+          />
+        </template>
 
-          <template #item-loader="{ item }">
-            <VLoader
-              v-if="item.loading"
-              variant="primary"
-              size="small"
-            />
-          </template>
-        </VFloating>
+        <template #item-loader="{ item }">
+          <VLoader
+            v-if="item.loading"
+            variant="primary"
+            size="small"
+          />
+        </template>
+      </VFloating>
 
-        <!-- Column Setup slot -->
-        <slot
-          v-if="config?.actions?.columnSetup"
-          name="column-setup"
-        />
-      </slot>
+      <!-- Column Setup slot -->
+      <slot
+        v-if="config?.actions?.columnSetup"
+        name="column-setup"
+      />
     </div>
   </div>
 </template>

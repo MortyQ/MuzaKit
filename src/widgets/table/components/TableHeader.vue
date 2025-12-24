@@ -1,9 +1,10 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed, inject, type Slot } from "vue";
 
 import type { Column, SortOrder } from "../types";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
+import VTooltip from "@/shared/ui/common/VTooltip.vue";
 
 // Inject slots from Table.vue (avoid prop drilling)
 const tableSlots = inject<{ headerCellCustomAction?: Slot }>("tableSlots", {});
@@ -13,10 +14,10 @@ interface Props {
   label: string
   align?: "left" | "center" | "right"
   columnKey: string
-  resizable?: boolean  // Whether column can be resized
+  resizable?: boolean // Whether column can be resized
   isSorted?: boolean
   sortOrder?: SortOrder | null
-  sortIndex?: number  // For multi-sort indicator (0, 1, 2...)
+  sortIndex?: number // For multi-sort indicator (0, 1, 2...)
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -81,7 +82,6 @@ const handleSortKeyDown = (event: KeyboardEvent) => {
 
 <template>
   <div
-    class="table-header-cell"
     :class="{
       'table-header-cell--left': align === 'left',
       'table-header-cell--center': align === 'center',
@@ -89,12 +89,13 @@ const handleSortKeyDown = (event: KeyboardEvent) => {
       'table-header-cell--sortable': column.sortable,
       'table-header-cell--clickable': column.onHeaderClick,
     }"
+    class="table-header-cell"
   >
     <div class="table-header-content">
       <!-- Clickable label wrapper - only triggers onHeaderClick when clicking the label area -->
       <div
-        class="table-header-label-wrapper"
         :class="{ 'table-header-label-wrapper--clickable': column.onHeaderClick }"
+        class="table-header-label-wrapper"
         @click="handleHeaderLabelClick"
       >
         <!-- Slot for custom header content -->
@@ -106,16 +107,30 @@ const handleSortKeyDown = (event: KeyboardEvent) => {
           <span class="table-header-label">{{ label }}</span>
         </slot>
 
+        <!-- Info Tooltip -->
+        <VTooltip
+          v-if="column.tooltip"
+          :text="column.tooltip"
+          placement="top"
+          tooltip-class="bg-cardBg opacity-1 w-[300px]"
+        >
+          <VIcon
+            :size="14"
+            class="table-header-info-icon"
+            icon="lucide:info"
+          />
+        </VTooltip>
+
         <!-- Click indicator - shows when onHeaderClick is provided -->
         <div
           v-if="column.onHeaderClick"
-          class="table-header-click-indicator"
           :title="`Click to interact with ${label}`"
+          class="table-header-click-indicator"
         >
           <VIcon
-            icon="lucide:mouse-pointer-click"
             :size="14"
             class="click-indicator-icon"
+            icon="lucide:mouse-pointer-click"
           />
         </div>
       </div>
@@ -123,16 +138,16 @@ const handleSortKeyDown = (event: KeyboardEvent) => {
       <!-- Sort indicator - separate clickable area -->
       <div
         v-if="column.sortable"
+        :aria-label="`Sort by ${label}`"
+        :tabindex="0"
         class="table-header-sort"
         role="button"
-        :tabindex="0"
-        :aria-label="`Sort by ${label}`"
         @click="handleSortClick"
         @keydown="handleSortKeyDown"
       >
         <VIcon
-          :icon="sortIcon"
           :class="iconClass"
+          :icon="sortIcon"
           :size="16"
         />
       </div>
@@ -163,3 +178,17 @@ const handleSortKeyDown = (event: KeyboardEvent) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.table-header-info-icon {
+  color: #9ca3af;
+  cursor: help;
+  flex-shrink: 0;
+  margin-left: 4px;
+  transition: color 0.15s ease;
+}
+
+.table-header-info-icon:hover {
+  color: #3b82f6;
+}
+</style>

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref, computed, watch, onUnmounted, useSlots, provide, type Component } from "vue";
 
 import TableCell from "./components/TableCell.vue";
@@ -119,10 +119,10 @@ const columnSetupEnabledBasic = computed(() => {
 });
 
 const columnSetupConfig = computed<{
-  key?: string;
-  type?: "indexedDB" | "localStorage" | "sessionStorage";
-  allowReorder?: boolean;
-  initialVisible?: string[];
+  key?: string
+  type?: "indexedDB" | "localStorage" | "sessionStorage"
+  allowReorder?: boolean
+  initialVisible?: string[]
 }>(() => {
   const setup = props.toolbar?.actions?.columnSetup;
 
@@ -153,7 +153,7 @@ const loadColumnsFromStorage = async (): Promise<Column[] | null> => {
   const config = columnSetupConfig.value as any; // object variant
 
   const hasStorageKey = !!config.key;
-  let loaded: { visible: string[]; order: string[] } | null = null;
+  let loaded: { visible: string[], order: string[] } | null = null;
 
   if (hasStorageKey) {
     try {
@@ -163,9 +163,10 @@ const loadColumnsFromStorage = async (): Promise<Column[] | null> => {
       }
       // Load from storage (IndexedDB by default)
       loaded = await tableStorage.getTableConfig<
-        { visible: string[]; order: string[] }
+        { visible: string[], order: string[] }
       >(config.key);
-    } catch (e) {
+    }
+    catch (e) {
       console.warn("Failed to load stored column setup", e);
     }
   }
@@ -174,13 +175,13 @@ const loadColumnsFromStorage = async (): Promise<Column[] | null> => {
   // If we have a persisted state – build columns from it
   if (loaded) {
     const flatten = (cols: Column[]): Column[] =>
-      cols.flatMap(c => (c.children && c.children.length ? flatten(c.children) : [c]));
+      cols.flatMap((c) => (c.children && c.children.length ? flatten(c.children) : [c]));
     const flat = flatten(props.columns);
-    const map = new Map(flat.map(c => [c.key, c]));
+    const map = new Map(flat.map((c) => [c.key, c]));
     const result: Column[] = [];
     const savedFixed = (loaded as any).fixed as Record<string, "left" | "right"> | undefined;
 
-    loaded.order.forEach(key => {
+    loaded.order.forEach((key) => {
       if (loaded!.visible.includes(key)) {
         const col = map.get(key);
         if (col) {
@@ -194,7 +195,7 @@ const loadColumnsFromStorage = async (): Promise<Column[] | null> => {
     });
     // Fallback: if for some reason result empty but visible list not empty, build from visible list
     if (!result.length && loaded.visible.length) {
-      loaded.visible.forEach(key => {
+      loaded.visible.forEach((key) => {
         const col = map.get(key);
         if (col) {
           result.push({
@@ -211,7 +212,7 @@ const loadColumnsFromStorage = async (): Promise<Column[] | null> => {
   const initial = Array.isArray(config.initialVisible) ? config.initialVisible : null;
   if (initial) {
     // Preserve original column order; ignore unknown keys
-    const filtered = props.columns.filter(c => initial.includes(c.key));
+    const filtered = props.columns.filter((c) => initial.includes(c.key));
     // If initialVisible is an empty array => return empty to hide all columns explicitly.
     if (initial.length === 0) return [];
     return filtered.length ? filtered : null; // null => fall back to all columns if none matched
@@ -226,7 +227,7 @@ const visibleColumns = ref<Column[] | null>(null);
 const columnSetupPopoverRef = ref<{ close: () => void } | null>(null);
 
 // Load columns from storage asynchronously
-loadColumnsFromStorage().then(columns => {
+loadColumnsFromStorage().then((columns) => {
   if (columns !== null) {
     visibleColumns.value = columns;
   }
@@ -248,7 +249,6 @@ const effectiveColumns = computed(() => {
   // If column setup is enabled but not yet initialized, use props.columns temporarily
   return visibleColumns.value ?? props.columns;
 });
-
 
 // Total row visibility - simply check for presence
 const shouldShowTotal = computed(() => props.totalRow !== undefined);
@@ -310,7 +310,8 @@ watch(resizedWidths, () => {
     const resizedWidth = resizedWidths.value.get(col.key);
     if (resizedWidth !== undefined) {
       newWidths.set(col.key, resizedWidth);
-    } else if (col.width?.endsWith("px")) {
+    }
+    else if (col.width?.endsWith("px")) {
       newWidths.set(col.key, parseInt(col.width, 10));
     }
     // For flex columns, we don't add to the map
@@ -326,7 +327,6 @@ const {
   isLastLeftFixed,
   isFirstRightFixed,
 } = useFixedColumns(columnsForFixed, columnWidths);
-
 
 // Table height - simple calculation based on prop
 const tableHeight = computed(() => {
@@ -376,11 +376,11 @@ const getCellValue = (value: unknown, column: Column, row: Record<string, unknow
   const formatted = formatCellValue(value, column, row);
   // If it's an object with text property, return the text for display
   if (
-    formatted &&
-    typeof formatted === "object" &&
-    !Array.isArray(formatted) &&
-    "text" in formatted &&
-    typeof (formatted as any).text !== "undefined"
+    formatted
+      && typeof formatted === "object"
+      && !Array.isArray(formatted)
+      && "text" in formatted
+      && typeof (formatted as any).text !== "undefined"
   ) {
     return (formatted as { text: string }).text;
   }
@@ -395,11 +395,11 @@ const getCellClass = (value: unknown, column: Column, row: Record<string, unknow
   const formatted = formatCellValue(value, column, row);
   // If it's an object with class property, return the class
   if (
-    formatted &&
-    typeof formatted === "object" &&
-    !Array.isArray(formatted) &&
-    "class" in formatted &&
-    typeof (formatted as any).class === "string"
+    formatted
+      && typeof formatted === "object"
+      && !Array.isArray(formatted)
+      && "class" in formatted
+      && typeof (formatted as any).class === "string"
   ) {
     return (formatted as { class: string }).class;
   }
@@ -412,24 +412,44 @@ const handleSortClick = (column: Column) => {
 };
 
 // Use sorted data for frontend, original data for server
+// PERFORMANCE: Auto-generate id for rows without id (needed for expandable logic)
 const dataToDisplay = computed(() => {
-  return props.sort?.type === "front" ? sortedData.value : props.data;
+  const source = props.sort?.type === "front" ? sortedData.value : props.data;
+
+  // Add id to rows that don't have one (recursive for children)
+  const ensureIds = (rows: ExpandableRow[], prefix = ""): ExpandableRow[] => {
+    return rows.map((row, index) => {
+      const id = row.id ?? `${prefix}row-${index}`;
+      const children = row.children?.length
+        ? ensureIds(row.children, `${id}-`)
+        : row.children;
+
+      // Only create new object if we need to add id or process children
+      if (row.id !== undefined && children === row.children) {
+        return row;
+      }
+
+      return { ...row, id, children };
+    });
+  };
+
+  return ensureIds(source as ExpandableRow[]);
 });
 
 // Automatic expandable detection by presence of children
 const isExpandable = computed(() =>
-  dataToDisplay.value.some(row => row.children && row.children.length > 0),
+  dataToDisplay.value.some((row) => row.children && row.children.length > 0),
 );
 
-// Expandable logic (if there are children)
+// Expandable logic - always create, but only use when data has children
 const dataRef = computed(() => dataToDisplay.value);
-const expandableLogic = isExpandable.value
-  ? useExpandableTable(dataRef)
-  : null;
+const expandableLogic = useExpandableTable(dataRef);
 
 // Data for rendering (with flatten if expandable, otherwise regular)
 const displayData = computed(() => {
-  return expandableLogic ? expandableLogic.flattenedData.value : dataToDisplay.value;
+  return isExpandable.value
+    ? expandableLogic.flattenedData.value
+    : dataToDisplay.value;
 });
 
 // Multi-select logic
@@ -496,7 +516,7 @@ const handlePaginationChange = ({ page, pageSize }: { page: number, pageSize: nu
 };
 
 const handleToggleRow = (id: string | number, row: ExpandableRow, column: Column) => {
-  if (!expandableLogic) return;
+  if (!isExpandable.value) return;
 
   if (props.expandMode === "controlled") {
     // Controlled mode: emit event with callback, parent controls expansion
@@ -506,13 +526,15 @@ const handleToggleRow = (id: string | number, row: ExpandableRow, column: Column
       callback: () => expandableLogic.toggleRow(id),
       expanded: isRowExpanded(row as Record<string, unknown>),
     });
-  } else {
+  }
+  else {
     // Auto mode (default): toggle immediately, emit for notification
     expandableLogic.toggleRow(id);
     emit("expand-click", {
       row,
       column,
-      callback: () => {}, // Already toggled, callback is no-op
+      callback: () => {
+      }, // Already toggled, callback is no-op
       expanded: !isRowExpanded(row as Record<string, unknown>), // New state after toggle
     });
   }
@@ -540,12 +562,12 @@ const hasRowChildren = (row: Record<string, unknown>): boolean => {
 // Uses WeakMap for aggressive caching - calculated once per row
 
 interface CellMetadata {
-  formattedValue: unknown;
-  cssClass: string | undefined;
-  titleText: string | undefined;
-  indentStyle: { paddingLeft: string } | null;
-  customStyle: Record<string, string> | undefined;
-  isExpandable: boolean;
+  formattedValue: unknown
+  cssClass: string | undefined
+  titleText: string | undefined
+  indentStyle: { paddingLeft: string } | null
+  customStyle: Record<string, string> | undefined
+  isExpandable: boolean
 }
 
 const cellMetadataCache = new WeakMap<Record<string, unknown>, Map<string, CellMetadata>>();
@@ -579,10 +601,10 @@ const getCellMetadata = (
   let cssClass: string | undefined;
 
   if (
-    formatted &&
-    typeof formatted === "object" &&
-    !Array.isArray(formatted) &&
-    "text" in formatted
+    formatted
+      && typeof formatted === "object"
+      && !Array.isArray(formatted)
+      && "text" in formatted
   ) {
     formattedValue = (formatted as any).text;
     cssClass = (formatted as any).class;
@@ -611,7 +633,7 @@ const getCellMetadata = (
     : null;
 
   // Check if row is expandable (only for first column)
-  const isExpandable = colIndex === 0 && expandableLogic
+  const isExpandableRow = colIndex === 0 && isExpandable.value
     ? expandableLogic.isExpandable(row as ExpandableRow)
     : false;
 
@@ -621,7 +643,7 @@ const getCellMetadata = (
     titleText,
     indentStyle,
     customStyle,
-    isExpandable,
+    isExpandable: isExpandableRow,
   };
 
   // Cache it with the same key
@@ -706,7 +728,8 @@ const getColumnClasses = (column: Column) => {
     // Add direction class for fixed
     if (fixedDirection === "left") {
       classes.push("table-fixed-left");
-    } else if (fixedDirection === "right") {
+    }
+    else if (fixedDirection === "right") {
       classes.push("table-fixed-right");
     }
 
@@ -756,8 +779,8 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="table-wrapper"
     :class="{ 'table-wrapper--with-toolbar': toolbarEnabled }"
+    class="table-wrapper"
   >
     <!-- Toolbar section -->
     <div
@@ -775,9 +798,9 @@ onUnmounted(() => {
         v-else-if="toolbar?.enabled"
         v-model:search="searchModel"
         :config="toolbar"
+        @export="handleToolbarExport"
         @refresh="handleToolbarRefresh"
         @reset-sort="handleToolbarResetSort"
-        @export="handleToolbarExport"
       >
         <!-- Forward slots to TableToolbar -->
         <template
@@ -806,14 +829,14 @@ onUnmounted(() => {
         >
           <VFloating
             ref="columnSetupPopoverRef"
-            placement="bottom-right"
             :offset="8"
+            placement="bottom-right"
             unstyled
           >
             <template #trigger>
               <VButton
-                variant="default"
                 icon="lucide:table-2"
+                variant="default"
               />
             </template>
 
@@ -821,8 +844,8 @@ onUnmounted(() => {
               <TableColumnSetup
                 :columns="columns"
                 :config="columnSetupConfig"
-                @update:visible-columns="handleVisibleColumnsUpdate"
                 @close="handleColumnSetupClose"
+                @update:visible-columns="handleVisibleColumnsUpdate"
               />
             </template>
           </VFloating>
@@ -851,23 +874,23 @@ onUnmounted(() => {
       <!-- Scroll container -->
       <div
         ref="scrollContainerRef"
-        class="table-scroll-container table-scrollbar-styled"
         :class="{ 'table-scroll-container--loading': loading }"
         :style="{ height: tableHeight, overscrollBehavior: 'contain' }"
+        class="table-scroll-container table-scrollbar-styled"
       >
         <!-- Grid container -->
         <div
-          class="table-grid"
           :class="{ 'is-resizing': isResizing }"
           :style="gridStyles"
+          class="table-grid"
         >
           <component
             :is="headerComponent"
             :columns="headerColumnsData"
             :get-column-classes="getColumnClasses"
             :get-fixed-styles="getFixedStyles"
-            :get-group-width="getGroupWidth"
             :get-group-fixed-styles="getGroupFixedStyles"
+            :get-group-width="getGroupWidth"
             :get-sort-state="getSortState"
             :is-column-resizable="isColumnResizable"
             @resize-start="startResize"
@@ -929,12 +952,12 @@ onUnmounted(() => {
             <TableCheckboxCell
               v-if="selection.isEnabled.value"
               :checked="selection.isRowSelected(item.row.id as string | number)"
+              :class="getRowClasses(item.row, item.index)"
+              :data-custom-row="getRowClasses(item.row, item.index) ? 'true' : undefined"
               :disabled="!selection.isRowSelectable(item.row as ExpandableRow)"
               :indeterminate="selection.isDependentMode.value &&
                 hasRowChildren(item.row) &&
                 selection.getParentCheckboxState(item.row as any) === 'indeterminate'"
-              :class="getRowClasses(item.row, item.index)"
-              :data-custom-row="getRowClasses(item.row, item.index) ? 'true' : undefined"
               @toggle="selection.toggleRow(item.row as any)"
             />
 
@@ -943,21 +966,21 @@ onUnmounted(() => {
               v-for="(column, colIndex) in columnsForData"
               :key="`${item.key}-${column.key}`"
               :align="column.align"
-              :depth="(item.row.depth as number) || 0"
               :class="[
                 getColumnClasses(column),
                 getCellMetadata(item.row, column, colIndex, item.index).cssClass,
                 getRowClasses(item.row, item.index)
               ]"
+              :data-custom-row="getRowClasses(item.row, item.index) ? 'true' : undefined"
+              :depth="(item.row.depth as number) || 0"
               :style="{
                 ...getFixedStyles(column),
                 ...getCellMetadata(item.row, column, colIndex, item.index).customStyle
               }"
-              :data-custom-row="getRowClasses(item.row, item.index) ? 'true' : undefined"
             >
               <div
-                class="table-cell-content"
                 :style="getCellMetadata(item.row, column, colIndex, item.index).indentStyle"
+                class="table-cell-content"
               >
                 <!-- Expand button only for first column -->
                 <button
@@ -974,16 +997,16 @@ onUnmounted(() => {
 
                 <!-- Column content (universal for all) -->
                 <div
-                  class="table-cell-text"
                   :class="{ 'table-cell-text--truncate': !column.interactive }"
+                  class="table-cell-text"
                 >
                   <slot
-                    :name="`cell-${column.key}`"
-                    :value="item.row[column.key]"
-                    :row="item.row"
                     :column="column"
-                    :index="item.index"
                     :depth="item.row.depth || 0"
+                    :index="item.index"
+                    :name="`cell-${column.key}`"
+                    :row="item.row"
+                    :value="item.row[column.key]"
                   >
                     <!-- Default rendering with formatter -->
                     <span
@@ -1018,9 +1041,9 @@ onUnmounted(() => {
               v-for="(column, colIndex) in columnsForData"
               :key="`total-${column.key}`"
               :align="column.align"
-              class="table-total-cell"
               :class="getColumnClasses(column)"
               :style="getFixedStyles(column)"
+              class="table-total-cell"
             >
               <div class="table-total-content">
                 <!-- Spacer instead of expand button for first column -->
@@ -1031,13 +1054,13 @@ onUnmounted(() => {
 
                 <!-- Total cell content -->
                 <div
-                  class="table-total-text"
                   :class="{ 'table-total-text--truncate': !column.interactive }"
+                  class="table-total-text"
                 >
                   <slot
+                    :column="column"
                     :name="`total-cell-${column.key}`"
                     :value="totalRow[column.key]"
-                    :column="column"
                   >
                     <!-- Default rendering with formatter -->
                     <span
@@ -1060,12 +1083,12 @@ onUnmounted(() => {
     <!-- Pagination (only for server-side) -->
     <TablePagination
       v-if="pagination"
+      :loading="loading"
       :page="pagination.page"
       :page-size="pagination.pageSize"
-      :total="pagination.total"
       :page-size-options="pagination.pageSizeOptions || [10, 25, 50, 100]"
-      :show-size-changer="pagination.showSizeChanger !== false"
-      :loading="loading"
+      :show-size-changer="pagination.showSizeChanger"
+      :total="pagination.total"
       @page-change="handlePaginationChange"
     />
   </div>

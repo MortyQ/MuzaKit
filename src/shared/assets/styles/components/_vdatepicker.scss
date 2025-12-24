@@ -8,6 +8,27 @@
   @apply min-w-[140px] w-full;
 }
 
+.dp__menu_content_wrapper {
+  @apply bg-cardBg rounded-md text-mainText;
+}
+
+.dp__btn, .dp--preset-range, .dp__calendar_header_item,
+.dp__cell_inner, .dp__pointer .dp--future {
+  @apply text-mainText
+}
+
+.dp__range_between {
+  @apply text-secondaryText
+}
+
+.dp__range_end, .dp__range_start {
+  @apply text-white
+}
+
+.dp__today {
+  @apply text-primary border-[1px] border-primary;
+}
+
 @layer components {
   .v-datepicker-wrapper {
     @apply w-full flex flex-col gap-1.5 rounded-lg shadow-sm;
@@ -16,7 +37,6 @@
   .v-datepicker-label {
     @apply text-sm font-medium text-mainText mb-0.5 transition-colors;
   }
-
 
 
   .v-datepicker-helper-text {
@@ -110,7 +130,6 @@
   }
 
   /* Size variants - Override CSS variables in wrapper scope */
-
   /* Small size (h-9 = 36px) */
   .v-datepicker--sm .v-datepicker {
     --dp-font-size: 0.875rem; /* text-sm */
@@ -255,7 +274,7 @@
   /* Today button styling */
   .v-datepicker-wrapper :deep(.dp__today) {
     @apply border border-primary text-primary hover:bg-primary hover:text-white
-      transition-colors duration-200;
+    transition-colors duration-200;
   }
 
   /* Selected date range styling */

@@ -230,7 +230,7 @@ onBeforeUnmount(() => disableFloating());
     box-shadow: none !important;
 
     .multiselect__tags {
-      @apply bg-base-100 border border-base-300 rounded-lg shadow-sm
+      @apply bg-inputBg border border-base-300 rounded-lg shadow-sm
       text-neutral transition-all duration-200 min-h-[44px] px-3 py-2;
       &:hover {
         @apply border-primary;
