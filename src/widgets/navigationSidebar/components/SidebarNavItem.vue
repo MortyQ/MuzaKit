@@ -1,9 +1,10 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed } from "vue";
-import { useRoute } from "vue-router";
+import { RouteLocationRaw, useRoute, useRouter } from "vue-router";
 
 import SidebarMenuFlyout from "./SidebarMenuFlyout.vue";
 
+import { prefetchRoute } from "@/app/router/utils/prefetch";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VTag from "@/shared/ui/common/VTag.vue";
 import VTooltip from "@/shared/ui/common/VTooltip.vue";
@@ -12,9 +13,9 @@ import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
 
 interface Props {
   /** Navigation item */
-  item: SidebarNavItem;
+  item: SidebarNavItem
   /** Current nesting level (for indentation) */
-  level?: number;
+  level?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -22,6 +23,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const route = useRoute();
+const router = useRouter();
 const { isCollapsed, isExpanded, toggleExpanded, closeMobile } = useSidebar();
 
 // Check if item has children
@@ -76,6 +78,12 @@ const hasActiveChild = computed((): boolean => {
   return checkChildren(props.item.children!);
 });
 
+const handleMouseEnter = () => {
+  if (hasChildren.value || props.item.disabled || !props.item.to) return;
+
+  prefetchRoute(router, props.item.to as RouteLocationRaw);
+};
+
 // Handle click
 const handleClick = () => {
   if (props.item.disabled) return;
@@ -90,12 +98,12 @@ const handleClick = () => {
   // If item has children, toggle expansion
   if (hasChildren.value) {
     toggleExpanded(props.item.id);
-  } else {
+  }
+  else {
     // Close mobile menu when navigating
     closeMobile();
   }
 };
-
 
 // Item classes
 const itemClasses = computed(() => {
@@ -113,10 +121,12 @@ const itemClasses = computed(() => {
   // Active state
   if (isActive.value) {
     baseClasses.push("bg-primary/10 text-primary font-medium sidebar-item-active");
-  } else if (hasActiveChild.value && hasChildren.value) {
+  }
+  else if (hasActiveChild.value && hasChildren.value) {
     // Parent with active child
     baseClasses.push("text-primary/80 hover:bg-base-200/50");
-  } else {
+  }
+  else {
     // Default state
     baseClasses.push("text-neutral/70 hover:bg-base-200 hover:text-neutral");
   }
@@ -144,10 +154,10 @@ const itemClasses = computed(() => {
     >
       <component
         :is="'button'"
-        :type="'button'"
-        :class="itemClasses"
         :aria-label="item.label"
+        :class="itemClasses"
         :disabled="item.disabled"
+        :type="'button'"
         @click="handleClick"
       >
         <!-- Icon -->
@@ -163,18 +173,19 @@ const itemClasses = computed(() => {
     <!-- Item Button/Link with Tooltip (collapsed state without children) -->
     <VTooltip
       v-else-if="isCollapsed && !item.disabled"
+      :delay="200"
       :text="item.label"
       placement="right"
-      :delay="200"
     >
       <component
         :is="!item.to ? 'button' : 'router-link'"
+        :aria-label="item.label"
+        :class="itemClasses"
+        :disabled="item.disabled"
         :to="item.to"
         :type="!item.to ? 'button' : undefined"
-        :class="itemClasses"
-        :aria-label="item.label"
-        :disabled="item.disabled"
         @click="handleClick"
+        @mouseenter="handleMouseEnter"
       >
         <!-- Icon -->
         <VIcon
@@ -190,13 +201,14 @@ const itemClasses = computed(() => {
     <component
       :is="hasChildren || !item.to ? 'button' : 'router-link'"
       v-else
+      :aria-expanded="hasChildren ? isItemExpanded : undefined"
+      :aria-label="item.label"
+      :class="itemClasses"
+      :disabled="item.disabled"
       :to="!hasChildren && item.to ? item.to : undefined"
       :type="hasChildren || !item.to ? 'button' : undefined"
-      :class="itemClasses"
-      :aria-label="item.label"
-      :aria-expanded="hasChildren ? isItemExpanded : undefined"
-      :disabled="item.disabled"
       @click="handleClick"
+      @mouseenter="handleMouseEnter"
     >
       <!-- Icon -->
       <VIcon
@@ -227,8 +239,8 @@ const itemClasses = computed(() => {
       <VTag
         v-if="item.badge && !isCollapsed"
         :label="item.badge as string"
-        variant="soft"
         color="primary"
+        variant="soft"
       />
 
       <!-- Expand/Collapse Icon (for parent items) -->
@@ -243,8 +255,8 @@ const itemClasses = computed(() => {
     <!-- Children (Nested Navigation) -->
     <div
       v-if="hasChildren && !isCollapsed"
-      class="children-wrapper"
       :class="{ 'is-expanded': isItemExpanded }"
+      class="children-wrapper"
     >
       <div class="children-content">
         <SidebarNavItem

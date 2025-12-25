@@ -41,6 +41,9 @@ importers:
       luxon:
         specifier: ^3.7.2
         version: 3.7.2
+      nprogress:
+        specifier: ^0.2.0
+        version: 0.2.0
       pinia:
         specifier: ^3.0.4
         version: 3.0.4(typescript@5.9.2)(vue@3.5.25(typescript@5.9.2))
@@ -102,6 +105,9 @@ importers:
       '@types/node':
         specifier: ^24.2.1
         version: 24.2.1
+      '@types/nprogress':
+        specifier: ^0.2.3
+        version: 0.2.3
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.15.0
         version: 8.46.2(@typescript-eslint/parser@8.46.2(eslint@8.57.1)(typescript@5.9.2))(eslint@8.57.1)(typescript@5.9.2)
@@ -894,6 +900,9 @@ packages:
 
   '@types/node@24.2.1':
     resolution: {integrity: sha512-DRh5K+ka5eJic8CjH7td8QpYEV6Zo10gfRkjHCO3weqZHWDtAaSTFtl4+VMqOJ4N5jcuhZ9/l+yy8rVgw7BQeQ==}
+
+  '@types/nprogress@0.2.3':
+    resolution: {integrity: sha512-k7kRA033QNtC+gLc4VPlfnue58CM1iQLgn1IMAU8VPHGOj7oIHPp9UlhedEnD/Gl8evoCjwkZjlBORtZ3JByUA==}
 
   '@types/react@19.2.7':
     resolution: {integrity: sha512-MWtvHrGZLFttgeEj28VXHxpmwYbor/ATPYbBfSFZEIRK0ecCFLl2Qo55z52Hss+UV9CRN7trSeq1zbgx7YDWWg==}
@@ -2428,6 +2437,9 @@ packages:
     resolution: {integrity: sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==}
     engines: {node: '>=0.10.0'}
 
+  nprogress@0.2.0:
+    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
+
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
 
@@ -3381,8 +3393,8 @@ packages:
   vue-component-type-helpers@2.2.12:
     resolution: {integrity: sha512-YbGqHZ5/eW4SnkPNR44mKVc6ZKQoRs/Rux1sxC6rdwXb4qpbOSYfDr9DsTHolOTGmIKgM9j141mZbBeg05R1pw==}
 
-  vue-component-type-helpers@3.1.8:
-    resolution: {integrity: sha512-oaowlmEM6BaYY+8o+9D9cuzxpWQWHqHTMKakMxXu0E+UCIOMTljyIPO15jcnaCwJtZu/zWDotK7mOIHvWD9mcw==}
+  vue-component-type-helpers@3.2.1:
+    resolution: {integrity: sha512-gKV7XOkQl4urSuLHNY1tnVQf7wVgtb/mKbRyxSLWGZUY9RK7aDPhBenTjm+i8ZFe0zC2PZeHMPtOZXZfyaFOzQ==}
 
   vue-demi@0.13.11:
     resolution: {integrity: sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==}
@@ -4079,7 +4091,7 @@ snapshots:
       storybook: 10.1.1(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       type-fest: 2.19.0
       vue: 3.5.25(typescript@5.9.2)
-      vue-component-type-helpers: 3.1.8
+      vue-component-type-helpers: 3.2.1
 
   '@stylistic/eslint-plugin@5.2.3(eslint@8.57.1)':
     dependencies:
@@ -4160,6 +4172,8 @@ snapshots:
   '@types/node@24.2.1':
     dependencies:
       undici-types: 7.10.0
+
+  '@types/nprogress@0.2.3': {}
 
   '@types/react@19.2.7':
     dependencies:
@@ -5929,6 +5943,8 @@ snapshots:
 
   normalize-range@0.1.2: {}
 
+  nprogress@0.2.0: {}
+
   nth-check@2.1.1:
     dependencies:
       boolbase: 1.0.0
@@ -6930,7 +6946,7 @@ snapshots:
 
   vue-component-type-helpers@2.2.12: {}
 
-  vue-component-type-helpers@3.1.8: {}
+  vue-component-type-helpers@3.2.1: {}
 
   vue-demi@0.13.11(vue@3.5.25(typescript@5.9.2)):
     dependencies:

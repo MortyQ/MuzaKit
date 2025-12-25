@@ -2,6 +2,7 @@
 import { computed } from "vue";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
+import { formatNumber } from "@/shared/utils";
 
 interface Props {
   page: number               // Current page (1-based)
@@ -118,7 +119,7 @@ const isNextDisabled = computed(() => props.loading || props.page >= totalPages.
         {{ currentRangeStart }}–{{ currentRangeEnd }}
       </span>
       of
-      <span class="table-pagination-info-highlight">{{ total }}</span>
+      <span class="table-pagination-info-highlight">{{ formatNumber(total) }}</span>
     </div>
 
     <!-- Center: Page controls -->
