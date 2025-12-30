@@ -140,16 +140,20 @@ export function useApi<T = unknown, D = unknown>(
     retry = false,
     retryDelay = 1000,
     authMode = "default",
-    useGlobalAbort = false,
+    useGlobalAbort = true,
+    initialLoading = false,
     ...axiosConfig
   } = options;
 
+  const startLoading = initialLoading ?? immediate;
   // Detect if we're inside a component scope (has lifecycle)
   // If true - cleanup automatically, if false (store/service) - skip cleanup
   const hasActiveScope = getCurrentScope() !== undefined;
 
   // State
-  const state = useApiState<T>(initialData as T | null);
+  const state = useApiState<T>(initialData as T | null, {
+    initialLoading: startLoading,
+  });
   const abortController = ref<AbortController | null>(null);
 
   // Global abort controller (for filter changes)
@@ -160,6 +164,8 @@ export function useApi<T = unknown, D = unknown>(
      */
   const executeRequest = async (config?: ApiRequestConfig<D>):
   Promise<T | null> => {
+    const requestUrl = typeof url === "string" ? url : url.value;
+
     // Cancel previous request if exists
     if (abortController.value) {
       abortController.value.abort();
@@ -168,14 +174,31 @@ export function useApi<T = unknown, D = unknown>(
     // Create new AbortController for this request
     abortController.value = new AbortController();
 
+    // Track if this request was cancelled (to avoid resetting loading state)
+    let wasCancelled = false;
+
     // If using global abort, listen to global signal and abort local controller
     let globalAbortHandler: (() => void) | null = null;
+    let subscribedSignal: AbortSignal | null = null;
+    let subscribedAbortCount: number | null = null;
     if (globalAbort) {
       const globalSignal = globalAbort.getSignal();
-      globalAbortHandler = () => {
-        abortController.value?.abort();
-      };
-      globalSignal.addEventListener("abort", globalAbortHandler);
+
+      // Only subscribe if signal is not already aborted
+      // (if it's aborted, this request was triggered AFTER the abort, so it should proceed)
+      if (!globalSignal.aborted) {
+        subscribedSignal = globalSignal;
+        subscribedAbortCount = globalAbort.abortCount.value;
+
+        globalAbortHandler = () => {
+          // Only abort if this is still the same abort cycle
+          // (prevents aborting new requests that started after filter change)
+          if (globalAbort.abortCount.value === subscribedAbortCount) {
+            abortController.value?.abort();
+          }
+        };
+        globalSignal.addEventListener("abort", globalAbortHandler);
+      }
     }
 
     // Before callback
@@ -186,8 +209,6 @@ export function useApi<T = unknown, D = unknown>(
     state.setError(null);
 
     try {
-      const requestUrl = typeof url === "string" ? url : url.value;
-
       // Always use local signal - it will be aborted by:
       // 1. Local abort() call (manual or onUnmounted)
       // 2. Global filter change (via globalAbortHandler)
@@ -219,10 +240,11 @@ export function useApi<T = unknown, D = unknown>(
       return response.data;
     }
     catch (err: unknown) {
-      // Ignore cancelled requests
+      // Ignore cancelled requests - don't reset loading state
       if ((err as { name?: string })?.name === "AbortError" || (err as {
         name?: string
       })?.name === "CanceledError") {
+        wasCancelled = true;
         return null;
       }
 
@@ -246,14 +268,16 @@ export function useApi<T = unknown, D = unknown>(
       return null;
     }
     finally {
-      // Cleanup global abort handler
-      if (globalAbortHandler && globalAbort) {
-        const globalSignal = globalAbort.getSignal();
-        globalSignal.removeEventListener("abort", globalAbortHandler);
+      // Cleanup global abort handler from the signal we subscribed to
+      if (globalAbortHandler && subscribedSignal) {
+        subscribedSignal.removeEventListener("abort", globalAbortHandler);
       }
 
-      state.setLoading(false);
-      onFinish?.();
+      // Don't reset loading if request was cancelled (new request is in progress)
+      if (!wasCancelled) {
+        state.setLoading(false);
+        onFinish?.();
+      }
     }
   };
 

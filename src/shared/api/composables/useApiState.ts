@@ -22,25 +22,25 @@ import type { ApiState, ApiError } from "../types";
 
 export interface UseApiStateReturn<T = unknown> {
   /** Response data */
-  data: Ref<T | null>;
+  data: Ref<T | null>
   /** Loading flag - true while request is in progress */
-  loading: Ref<boolean>;
+  loading: Ref<boolean>
   /** Error object - null if no error */
-  error: Ref<ApiError | null>;
+  error: Ref<ApiError | null>
   /** HTTP status code - useful for handling specific codes (404, 403, etc) */
-  statusCode: Ref<number | null>;
+  statusCode: Ref<number | null>
   /** Full Axios response - includes headers, status, config, etc (optional, for advanced use cases) */
-  response: Ref<AxiosResponse<T> | null>;
+  response: Ref<AxiosResponse<T> | null>
   /** Set data and clear error */
-  setData: (newData: T | null, fullResponse?: AxiosResponse<T> | null) => void;
+  setData: (newData: T | null, fullResponse?: AxiosResponse<T> | null) => void
   /** Set error */
-  setError: (newError: ApiError | null) => void;
+  setError: (newError: ApiError | null) => void
   /** Set loading state */
-  setLoading: (isLoading: boolean) => void;
+  setLoading: (isLoading: boolean) => void
   /** Set HTTP status code */
-  setStatusCode: (code: number | null) => void;
+  setStatusCode: (code: number | null) => void
   /** Reset to initial state */
-  reset: () => void;
+  reset: () => void
 }
 
 /**
@@ -79,10 +79,18 @@ export interface UseApiStateReturn<T = unknown> {
  * }
  * ```
  */
-export function useApiState<T = unknown>(initialData: T | null = null): UseApiStateReturn<T> {
+export interface UseApiStateOptions {
+  initialLoading?: boolean
+}
+
+export function useApiState<T = unknown>(
+  initialData: T | null = null,
+  options: UseApiStateOptions = {},
+): UseApiStateReturn<T> {
+  const { initialLoading = false } = options;
   // State - simple and explicit
   const data = ref<T | null>(initialData) as Ref<T | null>;
-  const loading = ref(false);
+  const loading = ref(initialLoading);
   const error = ref<ApiError | null>(null);
   const statusCode = ref<number | null>(null);
   const response = ref<AxiosResponse<T> | null>(null) as Ref<AxiosResponse<T> | null>;
@@ -141,4 +149,3 @@ export function createInitialApiState<T = unknown>(initialData: T | null = null)
     statusCode: null,
   };
 }
-

@@ -102,6 +102,7 @@ export interface UseApiOptions<T = unknown,
      * @default false
      */
   useGlobalAbort?: boolean
+  initialLoading?: boolean
 }
 
 /**

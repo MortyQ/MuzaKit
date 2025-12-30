@@ -1,24 +1,26 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed } from "vue";
-import { useRoute } from "vue-router";
+import { RouteLocationRaw, useRoute, useRouter } from "vue-router";
 
 import { flyoutItemClasses } from "./SidebarMenuFlyout.styles";
 
+import { prefetchRoute } from "@/app/router/utils/prefetch";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
 
 interface Props {
   /** Child item to display */
-  item: SidebarNavItem & { level: number };
+  item: SidebarNavItem & { level: number }
 }
 
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  click: [item: SidebarNavItem];
+  click: [item: SidebarNavItem]
 }>();
 
 const route = useRoute();
+const router = useRouter();
 
 // Check if item is active (current route)
 const isActive = computed(() => {
@@ -53,6 +55,12 @@ const itemClasses = computed(() => {
   return classes;
 });
 
+const handleMouseEnter = () => {
+  if (props.item.disabled || !props.item.to) return;
+
+  prefetchRoute(router, props.item.to as RouteLocationRaw);
+};
+
 const handleClick = () => {
   if (!props.item.disabled) {
     emit("click", props.item);
@@ -63,16 +71,17 @@ const handleClick = () => {
 <template>
   <router-link
     v-if="item.to"
-    :to="item.to as any"
     :class="itemClasses"
     :style="{ paddingLeft: `${12 + item.level * 16}px` }"
+    :to="item.to as any"
     @click="handleClick"
+    @mouseenter="handleMouseEnter"
   >
     <VIcon
       v-if="item.icon"
+      :class="flyoutItemClasses.icon"
       :icon="item.icon"
       :size="16"
-      :class="flyoutItemClasses.icon"
     />
     <span :class="flyoutItemClasses.label">{{ item.label }}</span>
     <span
@@ -83,4 +92,3 @@ const handleClick = () => {
     </span>
   </router-link>
 </template>
-
