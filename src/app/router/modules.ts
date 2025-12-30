@@ -36,17 +36,6 @@ const modules: Array<AppRouteRecordRaw> = [
     },
   },
 
-  // 404 page with explicit path (public)
-  {
-    path: "/not-found",
-    name: RouteNames.NOT_FOUND,
-    component: () => import("@/pages/NotFound/index.vue"),
-    meta: {
-      title: "404 Not Found",
-      showInMenu: false,
-      requiresAuth: false, // Public page
-    },
-  },
   // 403 Forbidden page (public)
   {
     path: "/403",
@@ -56,7 +45,6 @@ const modules: Array<AppRouteRecordRaw> = [
       title: "403 Forbidden",
       layout: "empty",
       showInMenu: false,
-      requiresAuth: false,
     },
   },
   // Feature routes
@@ -65,8 +53,10 @@ const modules: Array<AppRouteRecordRaw> = [
   ...authRoutes,
   {
     path: "/:pathMatch(.*)*",
-    redirect: "/not-found",
+    name: RouteNames.NOT_FOUND,
+    component: () => import("@/pages/NotFound/index.vue"),
     meta: {
+      title: "404 Not Found",
       showInMenu: false,
     },
   },

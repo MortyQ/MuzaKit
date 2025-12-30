@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, watch, type Component } from "vue";
+import { computed, watch, type Component, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import AuthLayout from "./AuthLayout.vue";
@@ -9,6 +9,7 @@ import EmptyLayout from "./EmptyLayout.vue";
 import { useAuthStore } from "@/features/auth/store/authStore";
 import { useThemeStore } from "@/features/theme";
 import { useGlobalFiltersStore } from "@/shared/stores";
+import VLoader from "@/shared/ui/common/VLoader.vue";
 
 const layouts: Record<string, Component> = {
   default: DefaultLayout,
@@ -21,6 +22,14 @@ const router = useRouter();
 const themeStore = useThemeStore();
 const authStore = useAuthStore();
 const globalFiltersStore = useGlobalFiltersStore();
+
+// Track router readiness to prevent layout flash
+const isRouterReady = ref(false);
+
+// Wait for router to be ready before rendering
+router.isReady().then(() => {
+  isRouterReady.value = true;
+});
 
 // Initialize theme immediately (synchronous)
 themeStore.initTheme();
@@ -40,11 +49,22 @@ watch(() => authStore.user, async () => {
 
 // Dynamically resolve layout from route meta
 const layout = computed(() => {
+  // Don't render anything until router is ready
+  if (!isRouterReady.value) return null;
   const layoutName = (route.meta?.layout as string) || "default";
   return layouts[layoutName] || layouts.default;
 });
 </script>
 
 <template>
-  <component :is="layout" />
+  <component
+    :is="layout"
+    v-if="layout"
+  />
+  <div
+    v-else
+    class="w-full min-h-screen flex justify-center items-center"
+  >
+    <VLoader />
+  </div>
 </template>

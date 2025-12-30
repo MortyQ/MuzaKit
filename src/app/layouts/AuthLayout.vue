@@ -9,7 +9,7 @@ import ThemeToggle from "@/features/theme/components/ThemeToggle.vue";
     <!-- Auth Layout - Centered content without navigation -->
     <div class="w-full max-w-md">
       <!-- Theme Toggle in corner -->
-      <div class="absolute top-4 right-4">
+      <div class="absolute top-4 right-4 z-[20]">
         <ThemeToggle />
       </div>
 

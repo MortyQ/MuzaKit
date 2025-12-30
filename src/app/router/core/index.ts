@@ -9,7 +9,6 @@ const coreRoutes: AppRouteRecordRaw[] = [
     component: () => import("@/pages/About/index.vue"),
     meta: {
       title: "About",
-      showInMenu: true,
       menuTitle: "About",
       menuIcon: "lucide:info",
       menuBadge: "Old",
@@ -22,7 +21,6 @@ const coreRoutes: AppRouteRecordRaw[] = [
     component: () => import("@/pages/Dashboard/index.vue"),
     meta: {
       title: "Dashboard",
-      showInMenu: true,
       menuTitle: "Dashboard",
       menuIcon: "lucide:layout-dashboard",
       menuOrder: 2,
