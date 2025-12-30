@@ -8,11 +8,10 @@ export type LayoutType = "default" | "auth" | "empty";
  */
 declare module "vue-router" {
   interface RouteMeta {
-    title?: string;
-    layout?: LayoutType;
-    requiresAuth?: boolean;
+    title?: string
+    layout?: LayoutType
+    requiresAuth?: boolean
   }
 }
 
 export {};
-

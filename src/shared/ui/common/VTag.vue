@@ -3,40 +3,40 @@ import { computed } from "vue";
 
 import VIcon from "./VIcon.vue";
 
-export type TagVariant =
-  | "solid"
-  | "soft"
-  | "outline"
-  | "ghost";
+export type TagVariant
+  = | "solid"
+    | "soft"
+    | "outline"
+    | "ghost";
 
-export type TagColor =
-  | "primary"
-  | "success"
-  | "warning"
-  | "error"
-  | "info"
-  | "neutral"
-  | "gray";
+export type TagColor
+  = | "primary"
+    | "success"
+    | "warning"
+    | "error"
+    | "info"
+    | "neutral"
+    | "gray";
 
 export type TagSize = "xs" | "sm" | "md" | "lg";
 
 interface Props {
   /** Text content of the tag */
-  label?: string;
+  label?: string
   /** Visual variant */
-  variant?: TagVariant;
+  variant?: TagVariant
   /** Color scheme */
-  color?: TagColor;
+  color?: TagColor
   /** Size variant */
-  size?: TagSize;
+  size?: TagSize
   /** Icon to display (lucide format) */
-  icon?: string;
+  icon?: string
   /** Icon position */
-  iconPosition?: "left" | "right";
+  iconPosition?: "left" | "right"
   /** Make tag rounded/pill shaped */
-  rounded?: boolean;
+  rounded?: boolean
   /** Custom class */
-  class?: string;
+  class?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -96,4 +96,3 @@ const roundedClass = computed(() => props.rounded ? "vtag--rounded" : "vtag--squ
     />
   </span>
 </template>
-

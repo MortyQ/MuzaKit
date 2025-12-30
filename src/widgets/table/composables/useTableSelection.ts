@@ -8,11 +8,11 @@ import type {
 } from "@/widgets/table/types";
 
 interface UseTableSelectionOptions {
-  config: Ref<MultiSelectConfig | undefined>;
-  flattenedData: Ref<FlattenedRow[]>;
-  selectedRows: Ref<ExpandableRow[]>;
-  // eslint-disable-next-line no-unused-vars
-  onSelectionChange: (selected: ExpandableRow[]) => void;
+  config: Ref<MultiSelectConfig | undefined>
+  flattenedData: Ref<FlattenedRow[]>
+  selectedRows: Ref<ExpandableRow[]>
+
+  onSelectionChange: (selected: ExpandableRow[]) => void
 }
 
 export function useTableSelection(options: UseTableSelectionOptions) {
@@ -167,7 +167,8 @@ export function useTableSelection(options: UseTableSelectionOptions) {
           : getAllChildrenIds(row);
         childrenIds.forEach((id) => newSelectedIds.delete(id));
       }
-    } else {
+    }
+    else {
       // Select row
       newSelectedIds.add(row.id);
 
@@ -191,7 +192,8 @@ export function useTableSelection(options: UseTableSelectionOptions) {
 
         if (allSiblingsSelected) {
           newSelectedIds.add(parent.id);
-        } else {
+        }
+        else {
           newSelectedIds.delete(parent.id);
         }
       }
@@ -239,7 +241,8 @@ export function useTableSelection(options: UseTableSelectionOptions) {
       selectableRows.forEach((row) => {
         newSelectedIds.delete(row.id);
       });
-    } else {
+    }
+    else {
       // Select all
       selectableRows.forEach((row) => {
         newSelectedIds.add(row.id);
@@ -271,7 +274,7 @@ export function useTableSelection(options: UseTableSelectionOptions) {
     // Get original data from flattenedData to maintain structure
     const originalData = flattenedData.value.map((row) => {
       // Remove flattened-specific properties
-      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { depth, parentId, hasChildren, isExpanded, ...originalRow } = row;
       return originalRow as ExpandableRow;
     });
@@ -316,4 +319,3 @@ export function useTableSelection(options: UseTableSelectionOptions) {
     selectRows,
   };
 }
-

@@ -40,7 +40,8 @@ export const useThemeStore = defineStore("theme", () => {
   const updateDocumentTheme = (theme: ResolvedTheme) => {
     if (theme === "dark") {
       document.documentElement.setAttribute("data-theme", "dark");
-    } else {
+    }
+    else {
       document.documentElement.removeAttribute("data-theme");
     }
   };
@@ -61,10 +62,12 @@ export const useThemeStore = defineStore("theme", () => {
    */
   const toggleTheme = () => {
     // Cycle through: light -> dark -> auto -> light
-    const newMode: ThemeMode =
-      themeMode.value === "light" ? "dark" :
-        themeMode.value === "dark" ? "auto" :
-          "light";
+    const newMode: ThemeMode
+      = themeMode.value === "light"
+        ? "dark"
+        : themeMode.value === "dark"
+          ? "auto"
+          : "light";
     setThemeMode(newMode);
   };
 

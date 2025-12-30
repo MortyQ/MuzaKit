@@ -8,11 +8,11 @@ import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
 
 interface Props {
   /** Footer navigation items (e.g., Settings) */
-  items?: SidebarNavItem[];
+  items?: SidebarNavItem[]
   /** Show theme toggle */
-  showThemeToggle?: boolean;
+  showThemeToggle?: boolean
   /** Show user menu */
-  showUserMenu?: boolean;
+  showUserMenu?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
@@ -63,4 +63,3 @@ const { isCollapsed } = useSidebar();
     </div>
   </div>
 </template>
-

@@ -17,4 +17,3 @@ export interface VKpiMultiMetric {
 export type VKpiMultiMetricIconColor = "primary" | "success" | "warning" | "error" | "info" | "neutral";
 
 export type VKpiMultiMetricColumns = 1 | 2 | 3 | 4 | 5 | "auto";
-

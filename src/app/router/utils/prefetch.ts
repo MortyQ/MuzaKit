@@ -2,7 +2,6 @@ import type { Router, RouteLocationRaw } from "vue-router";
 
 const prefetchedComponents = new Set();
 
-// eslint-disable-next-line require-await
 export async function prefetchRoute(router: Router, to: RouteLocationRaw): Promise<void> {
   try {
     const resolved = router.resolve(to);

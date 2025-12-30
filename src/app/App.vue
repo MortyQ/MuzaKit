@@ -7,4 +7,3 @@ import VToaster from "@/shared/ui/common/VToaster.vue";
   <MasterLayout />
   <VToaster />
 </template>
-

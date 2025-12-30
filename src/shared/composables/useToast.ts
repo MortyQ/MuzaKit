@@ -36,11 +36,11 @@ export const useToast = () => {
   const promise = <T>(
     promise: Promise<T>,
     options: {
-      loading: string;
-      // eslint-disable-next-line no-unused-vars
-      success: string | ((data: T) => string);
-      // eslint-disable-next-line no-unused-vars
-      error: string | ((error: Error) => string);
+      loading: string
+
+      success: string | ((data: T) => string)
+
+      error: string | ((error: Error) => string)
     },
   ) => {
     return toast.promise(promise, options);
@@ -64,4 +64,3 @@ export const useToast = () => {
     dismiss,
   };
 };
-

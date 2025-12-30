@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import Table from "@/widgets/table/VTable.vue";
 import TableToolbar from "@/widgets/table/components/TableToolbar.vue";
 import { Column } from "@/widgets/table/types";
 import { mockDataUsers, mockDataUsersTotalRow } from "@/widgets/table/utils/mockData";
+import Table from "@/widgets/table/VTable.vue";
 
 const columnsGood: Column[] = [
   { key: "id", label: "ID", width: "80px", align: "center", fixed: "left" },
@@ -28,7 +28,7 @@ const columnsBad: Column[] = [
   { key: "id", label: "ID", width: "80px", align: "center", fixed: "left" },
   { key: "age", label: "Age", width: "100px", align: "center" }, // Normal between fixed
   { key: "name", label: "Name", width: "200px" }, // Another fixed after normal
-  { key: "email", label: "Email", width: "250px",  fixed: "left" },
+  { key: "email", label: "Email", width: "250px", fixed: "left" },
   { key: "phone", label: "Phone", width: "150px" },
   { key: "position", label: "Position", width: "150px" },
   { key: "status", label: "Status", width: "150px" },
@@ -207,4 +207,3 @@ const columnsBad: Column[] = [
 <style scoped lang="scss">
 @use "@/shared/assets/styles/shared-info-card-styles.scss";
 </style>
-

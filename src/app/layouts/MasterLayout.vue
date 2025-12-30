@@ -30,4 +30,3 @@ const layout = computed(() => {
 <template>
   <component :is="layout" />
 </template>
-

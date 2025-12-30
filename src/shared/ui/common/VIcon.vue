@@ -55,7 +55,7 @@ const iconComponent = computed<Component>(() => {
   if (!hasIcon(props.icon)) {
     console.warn(
       `[VIcon] Icon "${props.icon}" not found. `
-        + `Add it to src/config/icons.ts or check the icon name format.`,
+      + `Add it to src/config/icons.ts or check the icon name format.`,
     );
     return FallbackIcon;
   }

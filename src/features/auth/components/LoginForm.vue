@@ -16,8 +16,6 @@ const formData = reactive({
   remember: false,
 });
 
-
-
 const rules = computed(() => ({
   email: {
     required: helpers.withMessage("Email is required", required),
@@ -36,7 +34,6 @@ const handleSubmit = async () => {
 
   if (!isValid) return;
   await authStore.login(formData.email, formData.password);
-
 };
 </script>
 
@@ -139,4 +136,3 @@ const handleSubmit = async () => {
   animation: shake 0.4s ease-in-out;
 }
 </style>
-

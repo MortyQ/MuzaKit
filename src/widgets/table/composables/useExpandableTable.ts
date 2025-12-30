@@ -20,8 +20,8 @@ export function useExpandableTable(data: Ref<ExpandableRow[]>) {
     ) => {
       rows.forEach((row) => {
         const hasChildren = Boolean(
-          row.children?.length ||
-          (row.expandable && row.expandedContent),
+          row.children?.length
+          || (row.expandable && row.expandedContent),
         );
         const isExpanded = expandedRows.value.has(row.id);
 
@@ -51,7 +51,8 @@ export function useExpandableTable(data: Ref<ExpandableRow[]>) {
   const toggleRow = (id: string | number) => {
     if (expandedRows.value.has(id)) {
       expandedRows.value.delete(id);
-    } else {
+    }
+    else {
       expandedRows.value.add(id);
     }
     // Trigger reactivity
@@ -94,12 +95,11 @@ export function useExpandableTable(data: Ref<ExpandableRow[]>) {
   };
 
   return {
-    flattenedData,      // For passing to virtualizer
-    expandedRows,       // For UI indicators
-    toggleRow,          // For click handlers
+    flattenedData, // For passing to virtualizer
+    expandedRows, // For UI indicators
+    toggleRow, // For click handlers
     expandAll,
     collapseAll,
     isExpandable,
   };
 }
-

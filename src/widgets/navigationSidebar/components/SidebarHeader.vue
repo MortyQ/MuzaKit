@@ -5,11 +5,11 @@ import VIcon from "@/shared/ui/common/VIcon.vue";
 
 interface Props {
   /** Brand logo URL */
-  logo?: string;
+  logo?: string
   /** Brand name */
-  brandName?: string;
+  brandName?: string
   /** Show close button (for mobile) */
-  showClose?: boolean;
+  showClose?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
@@ -100,4 +100,3 @@ const handleClose = () => {
   min-height: 65px;
 }
 </style>
-

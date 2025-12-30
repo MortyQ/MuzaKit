@@ -9,31 +9,31 @@ import VCheckbox from "@/shared/ui/common/VCheckbox.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 
 interface ColumnSetupItem {
-  key: string;
-  label: string;
-  visible: boolean;
-  order: number;
-  fixed?: "left" | "right";
+  key: string
+  label: string
+  visible: boolean
+  order: number
+  fixed?: "left" | "right"
 }
 
 interface ColumnSetupConfig {
-  enabled?: boolean;
-  key?: string;
-  type?: "indexedDB" | "localStorage" | "sessionStorage";
-  allowReorder?: boolean;
-  initialVisible?: string[];
+  enabled?: boolean
+  key?: string
+  type?: "indexedDB" | "localStorage" | "sessionStorage"
+  allowReorder?: boolean
+  initialVisible?: string[]
 }
 
 interface Props {
-  columns: Column[];
-  config?: ColumnSetupConfig;
+  columns: Column[]
+  config?: ColumnSetupConfig
 }
 
 interface Emits {
-  // eslint-disable-next-line no-unused-vars
-  (e: "update:visible-columns", columns: Column[]): void;
-  // eslint-disable-next-line no-unused-vars
-  (e: "close"): void;
+
+  (e: "update:visible-columns", columns: Column[]): void
+
+  (e: "close"): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -43,7 +43,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<Emits>();
 
 // Load saved state from storage (async)
-const loadFromStorage = async (): Promise<{ visible: string[]; order: string[]; fixed?: Record<string, "left" | "right"> } | null> => {
+const loadFromStorage = async (): Promise<{ visible: string[], order: string[], fixed?: Record<string, "left" | "right"> } | null> => {
   if (!props.config?.key) return null;
 
   try {
@@ -53,13 +53,14 @@ const loadFromStorage = async (): Promise<{ visible: string[]; order: string[]; 
     }
 
     const saved = await tableStorage.getTableConfig<{
-      visible: string[];
-      order: string[];
-      fixed?: Record<string, "left" | "right">;
+      visible: string[]
+      order: string[]
+      fixed?: Record<string, "left" | "right">
     }>(props.config.key);
 
     return saved;
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Failed to load column setup from storage:", error);
     return null;
   }
@@ -85,7 +86,8 @@ const saveToStorage = async (setupItems: ColumnSetupItem[]) => {
     };
 
     await tableStorage.setTableConfig(props.config.key, state);
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Failed to save column setup to storage:", error);
   }
 };
@@ -101,7 +103,7 @@ const flattenColumns = (columns: Column[]): Column[] => {
 };
 
 // Create setup items from columns
-const createSetupItems = (savedState?: { visible: string[]; order: string[]; fixed?: Record<string, "left" | "right"> } | null): ColumnSetupItem[] => {
+const createSetupItems = (savedState?: { visible: string[], order: string[], fixed?: Record<string, "left" | "right"> } | null): ColumnSetupItem[] => {
   const flatCols = flattenColumns(props.columns);
 
   // If we have saved state, use it
@@ -374,7 +376,8 @@ const toggleFixed = (index: number) => {
   // Toggle fixed state
   if (item.fixed === "left") {
     item.fixed = undefined;
-  } else {
+  }
+  else {
     item.fixed = "left";
   }
 };
@@ -394,7 +397,8 @@ const handleReset = async () => {
   if (props.config?.key) {
     try {
       await tableStorage.deleteTableConfig(props.config.key);
-    } catch (error) {
+    }
+    catch (error) {
       console.error("Failed to clear storage:", error);
     }
   }
@@ -788,4 +792,3 @@ const handleReset = async () => {
   }
 }
 </style>
-

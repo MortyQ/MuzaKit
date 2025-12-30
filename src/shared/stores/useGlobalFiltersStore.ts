@@ -179,4 +179,3 @@ export const useGlobalFiltersStore = defineStore("globalFilters", () => {
     resetToDefaults,
   };
 });
-

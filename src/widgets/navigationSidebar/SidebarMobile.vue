@@ -9,7 +9,7 @@ import type { SidebarConfig } from "./types";
 
 interface Props {
   /** Sidebar configuration */
-  config: SidebarConfig;
+  config: SidebarConfig
 }
 
 defineProps<Props>();
@@ -87,4 +87,3 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 @use './assets/styles/sidebar.scss';
 </style>
-

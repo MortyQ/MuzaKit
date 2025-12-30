@@ -2,14 +2,14 @@
 import VIcon from "@/shared/ui/common/VIcon.vue";
 
 interface Props {
-  loading?: boolean;
+  loading?: boolean
 }
 
 defineProps<Props>();
 
 const emit = defineEmits<{
-  google: [];
-  github: [];
+  google: []
+  github: []
 }>();
 </script>
 
@@ -67,4 +67,3 @@ button:last-child:hover {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
 }
 </style>
-

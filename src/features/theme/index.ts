@@ -20,4 +20,3 @@ export { default as ThemeToggle } from "./components/ThemeToggle.vue";
 export { useThemeStore } from "./composables/useTheme";
 export type { ThemeMode, ResolvedTheme } from "./composables/useTheme";
 export { createThemes } from "./utils/createThemes";
-

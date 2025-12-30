@@ -18,11 +18,11 @@ interface UseTableSortOptions<T = Record<string, unknown>> {
   // For frontend sorting
   data?: Ref<T[]>
   // Callbacks
-  // eslint-disable-next-line no-unused-vars
+
   onRequest?: (payload: RequestPayload) => void
-  // eslint-disable-next-line no-unused-vars
+
   onSort?: (payload: FrontSortPayload) => void
-  // eslint-disable-next-line no-unused-vars
+
   onUpdateSortState?: (sortState: SortItem[]) => void
 }
 
@@ -119,10 +119,10 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
 
     // Compare numbers
     if (
-      typeof numA === "number" &&
-      typeof numB === "number" &&
-      !Number.isNaN(numA) &&
-      !Number.isNaN(numB)
+      typeof numA === "number"
+      && typeof numB === "number"
+      && !Number.isNaN(numA)
+      && !Number.isNaN(numB)
     ) {
       return order === "asc" ? numA - numB : numB - numA;
     }
@@ -133,7 +133,8 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
 
     if (order === "asc") {
       return strA.localeCompare(strB, undefined, { numeric: true });
-    } else {
+    }
+    else {
       return strB.localeCompare(strA, undefined, { numeric: true });
     }
   };
@@ -223,20 +224,24 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
       if (nextOrder === null) {
         // Remove from sort (triple-click reset)
         newSortState = internalSortState.value.filter((item) => item.column !== columnKey);
-      } else if (currentSort.isSorted) {
+      }
+      else if (currentSort.isSorted) {
         // Update existing sort order (asc -> desc or desc -> none)
         newSortState = internalSortState.value.map((item) =>
           item.column === columnKey ? { column: columnKey, order: nextOrder } : item,
         );
-      } else {
+      }
+      else {
         // Add new sort column
         newSortState = [...internalSortState.value, { column: columnKey, order: nextOrder }];
       }
-    } else {
+    }
+    else {
       // Single sort mode
       if (nextOrder === null) {
         newSortState = [];
-      } else {
+      }
+      else {
         newSortState = [{ column: columnKey, order: nextOrder }];
       }
     }
@@ -261,7 +266,8 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
           });
         }
       }
-    } else {
+    }
+    else {
       // Server sort - emit @request event
       // Only include page/pageSize if they are provided (pagination enabled)
       const payload: RequestPayload = {

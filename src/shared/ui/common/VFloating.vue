@@ -5,36 +5,36 @@ import VLoader from "@/shared/ui/common/VLoader.vue";
 
 // Types
 interface FloatingItem {
-  label: string;
-  value: string | number;
-  icon?: string;
-  disabled?: boolean;
-  loading?: boolean;
-  active?: boolean;
+  label: string
+  value: string | number
+  icon?: string
+  disabled?: boolean
+  loading?: boolean
+  active?: boolean
 }
 
 type Placement = "bottom-left" | "bottom-right" | "top-left" | "top-right";
 
 interface Props {
   // Common props
-  placement?: Placement;
-  teleport?: boolean;
-  closeOnClickOutside?: boolean;
-  offset?: number; // gap between trigger & floating (default 8)
+  placement?: Placement
+  teleport?: boolean
+  closeOnClickOutside?: boolean
+  offset?: number // gap between trigger & floating (default 8)
 
   // Dropdown-specific props
-  items?: FloatingItem[];
-  disabled?: boolean;
-  closeOnSelect?: boolean;
+  items?: FloatingItem[]
+  disabled?: boolean
+  closeOnSelect?: boolean
 
   // Styling
-  unstyled?: boolean; // Remove default styles for custom content
-  contentClass?: string; // Additional classes for content wrapper
+  unstyled?: boolean // Remove default styles for custom content
+  contentClass?: string // Additional classes for content wrapper
 }
 
 interface Emits {
-  // eslint-disable-next-line no-unused-vars
-  (e: "select", value: string | number): void;
+
+  (e: "select", value: string | number): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -144,14 +144,15 @@ const updatePosition = () => {
     const width = floatingRef.value.offsetWidth;
     const height = floatingRef.value.offsetHeight;
 
-    const [vert, horiz] = props.placement.split("-") as ["top"|"bottom", "left"|"right"];
+    const [vert, horiz] = props.placement.split("-") as ["top" | "bottom", "left" | "right"];
     const gap = props.offset;
 
     // Calculate vertical position
     let top: number;
     if (vert === "bottom") {
       top = triggerRect.bottom + gap;
-    } else {
+    }
+    else {
       top = triggerRect.top - height - gap;
     }
 
@@ -159,14 +160,16 @@ const updatePosition = () => {
     let left: number;
     if (horiz === "left") {
       left = triggerRect.left;
-    } else {
+    }
+    else {
       left = triggerRect.right - width;
     }
 
     floatingPosition.value.top = top;
     floatingPosition.value.left = left;
     floatingPosition.value.right = undefined as any;
-  } else {
+  }
+  else {
     // Non-teleport mode: use relative positioning (simpler, no calculations needed)
     // Position is handled by CSS - just mark as positioned
     floatingPosition.value.top = 0;
@@ -189,7 +192,8 @@ const toggle = () => {
         initAutoUpdate();
       }
     });
-  } else {
+  }
+  else {
     teardownAutoUpdate();
   }
 };
@@ -236,9 +240,9 @@ const handleKeyDown = (e: KeyboardEvent) => {
 const handleClickOutside = (event: MouseEvent) => {
   if (!props.closeOnClickOutside || !isOpen.value) return;
   const target = event.target as Node;
-  if (triggerRef.value && floatingRef.value &&
-      !triggerRef.value.contains(target) &&
-      !floatingRef.value.contains(target)) {
+  if (triggerRef.value && floatingRef.value
+    && !triggerRef.value.contains(target)
+    && !floatingRef.value.contains(target)) {
     close();
   }
 };

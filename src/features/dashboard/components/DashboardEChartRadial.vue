@@ -37,8 +37,8 @@ const ratingsWithPercentage = ratingsData.map((item) => ({
 }));
 
 const averageRating = (
-  ratingsData.reduce((sum, item) => sum + item.rating * item.count, 0) /
-  totalCount
+  ratingsData.reduce((sum, item) => sum + item.rating * item.count, 0)
+  / totalCount
 ).toFixed(2);
 
 const option = computed(() => ({

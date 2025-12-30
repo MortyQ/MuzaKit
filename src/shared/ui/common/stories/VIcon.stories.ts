@@ -9,7 +9,7 @@ const meta = {
   argTypes: {
     icon: {
       control: "text",
-      description: 'Icon identifier (e.g., "lucide:heart", "mdi:home")',
+      description: "Icon identifier (e.g., \"lucide:heart\", \"mdi:home\")",
     },
     size: {
       control: "number",
@@ -160,4 +160,3 @@ export const IconShowcase: Story = {
     `,
   }),
 };
-

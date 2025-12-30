@@ -30,20 +30,21 @@ const toggleMode = () => {
 };
 
 const handleLogin = async (data: {
-  email: string;
-  password: string;
-  remember: boolean;
+  email: string
+  password: string
+  remember: boolean
 }) => {
   error.value = "";
   isLoading.value = true;
 
   try {
     await authStore.login(data.email, data.password);
-
-  } catch (err) {
+  }
+  catch (err) {
     error.value = "Invalid credentials. Please try again.";
     console.error("Login error:", err);
-  } finally {
+  }
+  finally {
     isLoading.value = false;
   }
 };

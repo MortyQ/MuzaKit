@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref, watch, nextTick, onBeforeUnmount, computed } from "vue";
+import { onMounted, ref, watch, nextTick, onBeforeUnmount, computed, Component } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import VButton from "@/shared/ui/common/VButton.vue";
@@ -16,6 +16,7 @@ export type ITab = {
   icon?: string
   styles?: string
   activeByDefault?: boolean
+  component?: Component
 };
 
 export interface TabSelectedPayload {
@@ -91,12 +92,14 @@ const selectTab = (tabId: number | string, updateRoute = true) => {
       callback: completeTabSwitch,
       tab,
     });
-  } else {
+  }
+  else {
     // Auto mode (default): switch immediately, emit for notification
     completeTabSwitch();
     emits("tabSelected", {
       tabId,
-      callback: () => {}, // Already switched, callback is no-op
+      callback: () => {
+      }, // Already switched, callback is no-op
       tab,
     });
   }
@@ -132,7 +135,8 @@ onMounted(() => {
   completeInitialTabSwitch();
   emits("tabSelected", {
     tabId: currentTabId.value,
-    callback: () => {}, // Already initialized, callback is no-op
+    callback: () => {
+    }, // Already initialized, callback is no-op
     tab: initialTab,
   });
 });
@@ -199,7 +203,8 @@ const calculateVisibleTabs = () => {
     if (accumulatedWidth + tabWidth <= availableWidth) {
       accumulatedWidth += tabWidth;
       splitIndex = i + 1;
-    } else {
+    }
+    else {
       break;
     }
   }
@@ -284,8 +289,8 @@ defineExpose({
       <!-- Loading Skeleton -->
       <section
         v-if="props.loading"
-        class="flex gap-4 py-4"
         aria-busy="true"
+        class="flex gap-4 py-4"
       >
         <div
           v-for="item in props.tabs.length"
@@ -303,24 +308,15 @@ defineExpose({
           class="flex overflow-x-auto scrollbar-hide scroll-smooth flex-1"
         >
           <nav
-            role="tablist"
-            class="flex"
             aria-label="Tabs navigation"
+            class="flex"
+            role="tablist"
           >
             <button
               v-for="tab in visibleTabs"
               :key="tab.id"
-              type="button"
-              role="tab"
-              :data-tab-id="tab.id"
-              :aria-selected="isTabActive(tab.id)"
               :aria-disabled="tab.disabled"
-              :tabindex="tab.disabled ? -1 : 0"
-              class="tab-button relative flex items-center
-              justify-center gap-2 px-5 py-3.5 text-sm font-medium
-              whitespace-nowrap transition-all duration-200 ease-in-out border-b-2 -mb-px
-              focus:outline-none focus-visible:bg-primary/10 focus-visible:ring-2
-              focus-visible:ring-primary/20 focus-visible:ring-inset"
+              :aria-selected="isTabActive(tab.id)"
               :class="[
                 {
                   'text-primary border-primary': isTabActive(tab.id),
@@ -331,6 +327,15 @@ defineExpose({
                 },
                 tab.styles,
               ]"
+              :data-tab-id="tab.id"
+              :tabindex="tab.disabled ? -1 : 0"
+              class="tab-button relative flex items-center
+              justify-center gap-2 px-5 py-3.5 text-sm font-medium
+              whitespace-nowrap transition-all duration-200 ease-in-out border-b-2 -mb-px
+              focus:outline-none focus-visible:bg-primary/10 focus-visible:ring-2
+              focus-visible:ring-primary/20 focus-visible:ring-inset"
+              role="tab"
+              type="button"
               @click="selectTab(tab.id)"
               @keydown.enter="selectTab(tab.id)"
               @keydown.space.prevent="selectTab(tab.id)"
@@ -342,12 +347,12 @@ defineExpose({
               />
               <VIcon
                 v-else
-                :icon="tab.icon"
                 :class="
                   isTabActive(tab.id)
                     ? 'w-5 h-5 transition-transform duration-200 scale-110'
                     : 'w-5 h-5 transition-transform duration-200'
                 "
+                :icon="tab.icon"
               />
 
               <!-- Tab Label -->
@@ -379,8 +384,8 @@ defineExpose({
         class="flex-shrink-0 ml-4"
       >
         <slot
-          name="tabs-right"
           :current-tab-id="currentTabId"
+          name="tabs-right"
         />
       </div>
     </div>
@@ -388,9 +393,9 @@ defineExpose({
     <!-- Tab Content -->
     <div
       v-if="!props.loading"
-      role="tabpanel"
       :aria-labelledby="`tab-${currentTabId}`"
       class="flex-1 flex flex-col min-h-0"
+      role="tabpanel"
     >
       <div class="flex-1 pt-4">
         <slot :name="`${currentTabId}`" />

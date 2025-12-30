@@ -1,25 +1,26 @@
 <script setup lang="ts">
 import type { Column, HeaderCell } from "../types";
+
 import TableHeader from "./TableHeader.vue";
 import TableHeaderGroup from "./TableHeaderGroup.vue";
 
 interface Props {
-  columns: HeaderCell[][]  // Multi-level header structure
-  // eslint-disable-next-line no-unused-vars
+  columns: HeaderCell[][] // Multi-level header structure
+
   getColumnClasses: (_column: Column) => string[]
-  // eslint-disable-next-line no-unused-vars
+
   getFixedStyles: (_column: Column) => Record<string, string>
-  // eslint-disable-next-line no-unused-vars
+
   getGroupWidth: (_column: Column) => number
-  // eslint-disable-next-line no-unused-vars
+
   getGroupFixedStyles: (_column: Column) => Record<string, string>
-  // eslint-disable-next-line no-unused-vars
+
   getSortState: (_columnKey: string) => {
     isSorted: boolean
     order: "asc" | "desc" | null
     index: number
   }
-  // eslint-disable-next-line no-unused-vars
+
   isColumnResizable: (_column: Column) => boolean
 }
 const props = defineProps<Props>();

@@ -41,7 +41,7 @@ const apiClient = createApiClient();
 let isInterceptorsSetup = false;
 
 export function setupApiClient(options: {
-  onTokenRefreshFailed?: () => void;
+  onTokenRefreshFailed?: () => void
 } = {}): void {
   if (isInterceptorsSetup) {
     return;

@@ -3,14 +3,14 @@ import VCheckbox from "@/shared/ui/common/VCheckbox.vue";
 import type { CheckboxState } from "@/widgets/table/types";
 
 interface Props {
-  state: CheckboxState;
-  disabled?: boolean;
+  state: CheckboxState
+  disabled?: boolean
 }
 
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  toggle: [];
+  toggle: []
 }>();
 
 const handleToggle = () => {
@@ -57,4 +57,3 @@ const handleToggle = () => {
   z-index: 4;
 }
 </style>
-

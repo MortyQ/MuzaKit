@@ -3,17 +3,17 @@ import { computed } from "vue";
 
 interface Props {
   /** User name for initials fallback */
-  name?: string;
+  name?: string
   /** Avatar image URL */
-  avatar?: string;
+  avatar?: string
   /** Size preset */
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  size?: "xs" | "sm" | "md" | "lg" | "xl"
   /** Custom size in pixels */
-  customSize?: number;
+  customSize?: number
   /** Show online status indicator */
-  online?: boolean;
+  online?: boolean
   /** Alt text for avatar */
-  alt?: string;
+  alt?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -136,4 +136,3 @@ const hasAvatar = computed(() => !!props.avatar);
   -moz-osx-font-smoothing: grayscale;
 }
 </style>
-

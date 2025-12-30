@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import Table from "@/widgets/table/VTable.vue";
 import TableToolbar from "@/widgets/table/components/TableToolbar.vue";
 import type { Column } from "@/widgets/table/types";
 import { mockDataExpandable, mockDataUsersTotalRow } from "@/widgets/table/utils/mockData";
+import Table from "@/widgets/table/VTable.vue";
 
 // Columns with grouped headers (AG-Grid style)
 const columnsGrouped: Column[] = [
@@ -16,7 +16,7 @@ const columnsGrouped: Column[] = [
     children: [
       { key: "id", label: "ID", width: "80px", align: "center", fixed: "left" },
       { key: "name", label: "Full Name", width: "200px", fixed: "left" },
-      { key: "age", label: "Age", width: "100px", align: "left",  fixed: "left" },
+      { key: "age", label: "Age", width: "100px", align: "left", fixed: "left" },
     ],
   },
   { key: "startDate", label: "Start Date", width: "130px" },

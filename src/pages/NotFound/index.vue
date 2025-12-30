@@ -7,7 +7,8 @@ function goBack() {
   // Go back in history, or to home if no history
   if (window.history.length > 1) {
     router.go(-1);
-  } else {
+  }
+  else {
     router.push("/");
   }
 }

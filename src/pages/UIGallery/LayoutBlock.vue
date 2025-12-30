@@ -33,4 +33,3 @@ import VIcon from "@/shared/ui/common/VIcon.vue";
     </VCard>
   </div>
 </template>
-

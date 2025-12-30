@@ -304,4 +304,3 @@ const handleCustomResetSort = () => {
 4. **Provide clear titles** - Help users understand the table's purpose
 5. **Use appropriate export formats** - Match your data type and user needs
 `;
-

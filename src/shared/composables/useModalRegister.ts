@@ -1,9 +1,9 @@
 import { computed, ref } from "vue";
 
 export interface Modal {
-  id: string;
-  isOpen: boolean;
-  zIndex: number;
+  id: string
+  isOpen: boolean
+  zIndex: number
 }
 
 const modals = ref<Map<string, Modal>>(new Map());
@@ -64,7 +64,8 @@ export const useModalRegisterer = () => {
     if (modal) {
       if (modal.isOpen) {
         close(id);
-      } else {
+      }
+      else {
         open(id);
       }
     }

@@ -4,7 +4,7 @@ import { computed } from "vue";
 import VSwitch from "@/shared/ui/common/VSwitch.vue";
 
 interface Props {
-  modelValue?: boolean;
+  modelValue?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  "update:modelValue": [value: boolean];
+  "update:modelValue": [value: boolean]
 }>();
 
 const showDetailed = computed({
@@ -37,4 +37,3 @@ const showDetailed = computed({
     </div>
   </div>
 </template>
-

@@ -6,7 +6,7 @@ import VIcon from "@/shared/ui/common/VIcon.vue";
 // Code examples
 const basicExample = `<script setup>
 import VIcon from '@/shared/ui/common/VIcon.vue';
-</` + `script>
+  </` + `script>
 
 <template>
   <!-- Basic usage -->
@@ -293,7 +293,6 @@ const actionButtons = [
         </div>
       </section>
     </VCard>
-
 
     <!-- Basic Usage -->
     <VCard class="code-example-card">

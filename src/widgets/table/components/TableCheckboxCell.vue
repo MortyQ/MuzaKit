@@ -2,15 +2,15 @@
 import VCheckbox from "@/shared/ui/common/VCheckbox.vue";
 
 interface Props {
-  checked: boolean;
-  indeterminate?: boolean;
-  disabled?: boolean;
+  checked: boolean
+  indeterminate?: boolean
+  disabled?: boolean
 }
 
 defineProps<Props>();
 
 const emit = defineEmits<{
-  toggle: [];
+  toggle: []
 }>();
 
 const handleToggle = () => {
@@ -41,4 +41,3 @@ const handleToggle = () => {
   border-right: 1px solid theme('colors.cardBorder');
 }
 </style>
-

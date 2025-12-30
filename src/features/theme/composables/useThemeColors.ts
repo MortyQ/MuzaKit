@@ -3,29 +3,29 @@ import { computed } from "vue";
 import { useThemeStore } from "./useTheme";
 
 export interface ThemeColors {
-  primary: string;
-  primaryHover: string;
-  primaryActive: string;
-  primarySubtle: string;
-  success: string;
-  warning: string;
-  error: string;
-  info: string;
-  bgBase: string;
-  bgElevated: string;
-  bgSubtle: string;
-  textPrimary: string;
-  textSecondary: string;
-  borderDefault: string;
-  borderStrong: string;
+  primary: string
+  primaryHover: string
+  primaryActive: string
+  primarySubtle: string
+  success: string
+  warning: string
+  error: string
+  info: string
+  bgBase: string
+  bgElevated: string
+  bgSubtle: string
+  textPrimary: string
+  textSecondary: string
+  borderDefault: string
+  borderStrong: string
 }
 
 export interface ThemeGradients {
-  blue: string;
-  blueSubtle: string;
-  blueDark: string;
-  radialBlue: string;
-  mesh: string;
+  blue: string
+  blueSubtle: string
+  blueDark: string
+  radialBlue: string
+  mesh: string
 }
 
 export const useThemeColors = () => {

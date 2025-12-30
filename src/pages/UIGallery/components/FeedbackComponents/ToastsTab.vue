@@ -19,7 +19,7 @@ toast.success('Success!', 'Operation completed successfully');
 toast.error('Error!', 'Something went wrong');
 toast.warning('Warning!', 'Please be careful');
 toast.info('Info', 'Here is some information');
-</` + `script>
+  </` + `script>
 
 <template>
   <button @click="toast.success('Done!')">
@@ -85,7 +85,8 @@ const showPromise = () => {
     setTimeout(() => {
       if (Math.random() > 0.5) {
         resolve({ data: "Success data" });
-      } else {
+      }
+      else {
         reject(new Error("Failed to load"));
       }
       isLoadingPromise.value = false;

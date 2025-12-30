@@ -623,4 +623,3 @@ const steps = [
     </VDrawer>
   </div>
 </template>
-

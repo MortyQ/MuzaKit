@@ -191,4 +191,3 @@ const rowClassName = (row: ExpandableRow, index: number): string => {
 - [Getting Started](./GETTING_STARTED.md)
 - [Flex Columns](./FLEX_COLUMNS.md)
 `;
-

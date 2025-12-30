@@ -4,27 +4,27 @@
  */
 export interface SidebarNavItem {
   /** Unique identifier */
-  id: string;
+  id: string
   /** Display label */
-  label: string;
+  label: string
   /** Icon name (e.g., "mdi:home") */
-  icon: string;
+  icon: string
   /** Route path or name (optional for parent items) */
-  to?: string | { name: string; params?: Record<string, unknown> };
+  to?: string | { name: string, params?: Record<string, unknown> }
   /** Click handler (alternative to navigation) */
-  onClick?: () => void;
+  onClick?: () => void
   /** Child navigation items (creates collapsible menu) */
-  children?: SidebarNavItem[];
+  children?: SidebarNavItem[]
   /** Disabled state */
-  disabled?: boolean;
+  disabled?: boolean
   /** Badge text or count */
-  badge?: string | number;
+  badge?: string | number
   /** External link */
-  external?: boolean;
+  external?: boolean
   /** Hide in navigation */
-  hidden?: boolean;
+  hidden?: boolean
   /** Custom metadata */
-  meta?: Record<string, unknown>;
+  meta?: Record<string, unknown>
 }
 
 /**
@@ -32,17 +32,17 @@ export interface SidebarNavItem {
  */
 export interface SidebarConfig {
   /** Brand logo URL or component */
-  logo?: string;
+  logo?: string
   /** Brand name */
-  brandName?: string;
+  brandName?: string
   /** Navigation items */
-  items: SidebarNavItem[];
+  items: SidebarNavItem[]
   /** Footer items (e.g., Settings, Profile) */
-  footerItems?: SidebarNavItem[];
+  footerItems?: SidebarNavItem[]
   /** Show theme toggle in footer (default: true) */
-  showThemeToggle?: boolean;
+  showThemeToggle?: boolean
   /** Show user menu in footer (default: true) */
-  showUserMenu?: boolean;
+  showUserMenu?: boolean
 }
 
 /**
@@ -50,10 +50,9 @@ export interface SidebarConfig {
  */
 export interface SidebarState {
   /** Is sidebar collapsed */
-  isCollapsed: boolean;
+  isCollapsed: boolean
   /** Is mobile menu open */
-  isMobileOpen: boolean;
+  isMobileOpen: boolean
   /** Currently expanded parent IDs */
-  expandedItems: Set<string>;
+  expandedItems: Set<string>
 }
-

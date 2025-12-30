@@ -18,11 +18,11 @@ import { useToast } from "@/shared/composables/useToast";
  */
 export interface ErrorHandlerOptions {
   /** Show toast notification */
-  showToast?: boolean;
+  showToast?: boolean
   /** Custom message */
-  customMessage?: string;
+  customMessage?: string
   /** Log to console */
-  logToConsole?: boolean;
+  logToConsole?: boolean
 }
 
 /**
@@ -41,11 +41,11 @@ export function parseAxiosError(error: AxiosError | TypedAxiosError): ApiError {
   const { data, status } = error.response;
 
   // Try to extract message from different response formats
-  const message =
-    (data as Record<string, unknown>)?.message as string ||
-    (data as Record<string, unknown>)?.error as string ||
-    error.message ||
-    getDefaultErrorMessage(status);
+  const message
+    = (data as Record<string, unknown>)?.message as string
+      || (data as Record<string, unknown>)?.error as string
+      || error.message
+      || getDefaultErrorMessage(status);
 
   return {
     message,
@@ -116,7 +116,8 @@ export class ErrorHandler {
       if (apiError.errors && Object.keys(apiError.errors).length > 0) {
         const firstError = Object.values(apiError.errors)[0][0];
         toast.error(firstError || message);
-      } else {
+      }
+      else {
         toast.error(message);
       }
     }
@@ -191,4 +192,3 @@ export function handleApiError(
 
   return ErrorHandler.fromError(error);
 }
-

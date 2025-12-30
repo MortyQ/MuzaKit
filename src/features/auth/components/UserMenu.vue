@@ -9,7 +9,7 @@ import VIcon from "@/shared/ui/common/VIcon.vue";
 
 interface Props {
   /** Compact mode (smaller size) */
-  compact?: boolean;
+  compact?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
@@ -299,5 +299,3 @@ const handleMenuSelect = (value: string | number) => {
   }
 }
 </style>
-
-

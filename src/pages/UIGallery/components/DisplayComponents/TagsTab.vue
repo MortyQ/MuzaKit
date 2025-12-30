@@ -874,4 +874,3 @@ import VTag from "@/shared/ui/common/VTag.vue";
 <style scoped lang="scss">
 @use "@/shared/assets/styles/shared-info-card-styles.scss";
 </style>
-

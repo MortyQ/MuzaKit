@@ -3,8 +3,8 @@ import { ref } from "vue";
 
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import Table from "@/widgets/table/VTable.vue";
 import type { Column, RequestPayload, SortItem } from "@/widgets/table/types";
+import Table from "@/widgets/table/VTable.vue";
 
 // Generate large dataset for realistic pagination
 const generateLargeDataset = (count: number) => {
@@ -372,4 +372,3 @@ handleServerRequest3({ page: 1, pageSize: 15, sort: [] });
 <style scoped lang="scss">
 @use "@/shared/assets/styles/shared-info-card-styles.scss";
 </style>
-

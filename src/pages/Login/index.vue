@@ -5,4 +5,3 @@ import AuthFeature from "@/features/auth/AuthFeature.vue";
 <template>
   <AuthFeature />
 </template>
-

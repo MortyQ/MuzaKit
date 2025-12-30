@@ -10,7 +10,6 @@ import HeaderFilters from "@/widgets/filters/HeaderFilters.vue";
 import { Sidebar, useSidebar } from "@/widgets/navigationSidebar";
 import type { SidebarConfig } from "@/widgets/navigationSidebar";
 
-
 const route = useRoute();
 const authStore = useAuthStore();
 const { isCollapsed, toggleMobile } = useSidebar();
@@ -18,11 +17,11 @@ const { isCollapsed, toggleMobile } = useSidebar();
 // Footer items - can add additional items here if needed
 const footerItems = computed(() => {
   const items: Array<{
-    id: string;
-    label: string;
-    icon: string;
-    to?: { name: string };
-    onClick?: () => void;
+    id: string
+    label: string
+    icon: string
+    to?: { name: string }
+    onClick?: () => void
   }> = [];
 
   return items;

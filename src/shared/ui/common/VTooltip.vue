@@ -4,6 +4,8 @@ import { computed, ref } from "vue";
 interface Props {
   /** Tooltip text */
   text: string
+  /** Render `text` as HTML (dangerous without sanitizing) */
+  allowHtml?: boolean
   /** Placement of tooltip */
   placement?: "top" | "bottom" | "left" | "right"
   /** Delay before showing tooltip (ms) */
@@ -17,6 +19,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  allowHtml: false,
   placement: "right",
   delay: 300,
   disabled: false,
@@ -131,11 +134,15 @@ const tooltipTransform = computed(() => {
           <div
             :class="[
               'bg-base-100/90 text-mainText text-sm font-medium ' +
-                'px-3 py-1.5 rounded-lg shadow-lg max-w-[200px] break-words',
+                'px-3 py-1.5 rounded-lg shadow-lg break-words w-fit min-w-[200px]',
               tooltipClass,
             ]"
           >
-            {{ text }}
+            <span
+              v-if="props.allowHtml"
+              v-html="text"
+            />
+            <span v-else>{{ text }}</span>
           </div>
         </div>
       </Transition>

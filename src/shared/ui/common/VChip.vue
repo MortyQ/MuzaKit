@@ -8,55 +8,55 @@ import VTag, { type TagColor } from "@/shared/ui/common/VTag.vue";
 
 export type ChipVariant = "filled" | "outlined" | "soft";
 
-export type ChipColor =
-  | "default"
-  | "primary"
-  | "secondary"
-  | "success"
-  | "warning"
-  | "error"
-  | "info"
-  | "neutral";
+export type ChipColor
+  = | "default"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning"
+    | "error"
+    | "info"
+    | "neutral";
 
 export type ChipSize = "sm" | "md" | "lg";
 
 interface Props {
   /** Label text of the chip */
-  label?: string;
+  label?: string
   /** Visual variant */
-  variant?: ChipVariant;
+  variant?: ChipVariant
   /** Color scheme */
-  color?: ChipColor;
+  color?: ChipColor
   /** Color to use when active (only applies when color="default") */
-  selectedColor?: Exclude<ChipColor, "default">;
+  selectedColor?: Exclude<ChipColor, "default">
   /** Size variant */
-  size?: ChipSize;
+  size?: ChipSize
   /** Icon to display (iconify format) */
-  icon?: string;
+  icon?: string
   /** Show close/delete button */
-  closable?: boolean;
+  closable?: boolean
   /** Active/selected state */
-  active?: boolean;
+  active?: boolean
   /** Disabled state */
-  disabled?: boolean;
+  disabled?: boolean
   /** Custom badge text (e.g., "Category", "New") */
-  badge?: string;
+  badge?: string
   /** Badge color theme */
-  badgeColor?: TagColor;
+  badgeColor?: TagColor
   /** Custom class */
-  class?: string;
+  class?: string
   /** Value for v-model (unique identifier for this chip) */
-  value?: any;
+  value?: any
   /** Model value for v-model */
-  modelValue?: any;
+  modelValue?: any
   /** Multiple selection mode (for array modelValue) */
-  multiple?: boolean;
+  multiple?: boolean
   /**
    * Custom comparison function for complex values (objects)
    * If not provided, uses JSON.stringify for objects, === for primitives
    */
-  // eslint-disable-next-line no-unused-vars
-  valueComparator?: (a: any, b: any) => boolean;
+
+  valueComparator?: (a: any, b: any) => boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -79,9 +79,9 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  click: [event: MouseEvent];
-  close: [event: MouseEvent];
-  "update:modelValue": [value: SelectValue];
+  click: [event: MouseEvent]
+  close: [event: MouseEvent]
+  "update:modelValue": [value: SelectValue]
 }>();
 
 // Helper function to compare values (supports primitives and objects)
@@ -99,7 +99,8 @@ const isEqual = <T = VModelValue>(a: T, b: T): boolean => {
   if (typeof a === "object" && typeof b === "object") {
     try {
       return JSON.stringify(a) === JSON.stringify(b);
-    } catch {
+    }
+    catch {
       return false;
     }
   }
@@ -116,7 +117,8 @@ const isSelected = computed(() => {
       // Multiple mode: check if value is in array using isEqual
       return Array.isArray(props.modelValue)
         && props.modelValue.some((v) => isEqual(v, props.value));
-    } else {
+    }
+    else {
       // Single mode: check if value equals modelValue using isEqual
       return isEqual(props.modelValue, props.value);
     }
@@ -172,16 +174,19 @@ const handleClick = (event: MouseEvent) => {
           // Remove from array
           const newValue = currentValue.filter((v) => !isEqual(v, props.value));
           emit("update:modelValue", newValue);
-        } else {
+        }
+        else {
           // Add to array
           emit("update:modelValue", [...currentValue, props.value]);
         }
-      } else {
+      }
+      else {
         // Single selection mode: toggle value
         if (isEqual(props.modelValue, props.value)) {
           // Deselect if already selected
           emit("update:modelValue", null);
-        } else {
+        }
+        else {
           // Select new value
           emit("update:modelValue", props.value);
         }

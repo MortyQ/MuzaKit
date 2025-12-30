@@ -34,15 +34,14 @@ export type ValueComparator<T = VModelValue> = (a: T, b: T) => boolean;
  */
 export interface VModelSelectProps<T = VModelValue> {
   /** Value for v-model (unique identifier for this item) */
-  value?: T;
+  value?: T
   /** Model value for v-model */
-  modelValue?: SelectValue<T>;
+  modelValue?: SelectValue<T>
   /** Multiple selection mode (for array modelValue) */
-  multiple?: boolean;
+  multiple?: boolean
   /**
    * Custom comparison function for complex values (objects)
    * If not provided, uses deep equality comparison
    */
-  valueComparator?: ValueComparator<T>;
+  valueComparator?: ValueComparator<T>
 }
-

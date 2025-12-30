@@ -10,15 +10,15 @@ import VCheckbox from "@/shared/ui/common/VCheckbox.vue";
 import VInput from "@/shared/ui/common/VInput.vue";
 
 interface Props {
-  loading?: boolean;
-  error?: string;
+  loading?: boolean
+  error?: string
 }
 
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  submit: [{ name: string; email: string; password: string; terms: boolean }];
-  socialLogin: [provider: "google" | "github"];
+  submit: [{ name: string, email: string, password: string, terms: boolean }]
+  socialLogin: [provider: "google" | "github"]
 }>();
 
 const formData = reactive({
@@ -249,4 +249,3 @@ const handleSubmit = async () => {
   animation: shake 0.4s ease-in-out;
 }
 </style>
-

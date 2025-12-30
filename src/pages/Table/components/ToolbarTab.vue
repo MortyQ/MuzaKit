@@ -5,8 +5,8 @@ import VAccordion from "@/shared/ui/common/VAccordion.vue";
 import type { AccordionItem } from "@/shared/ui/common/VAccordion.vue";
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import Table from "@/widgets/table/VTable.vue";
 import type { Column } from "@/widgets/table/types";
+import Table from "@/widgets/table/VTable.vue";
 
 // Sample data
 const toolbarData = ref([
@@ -277,7 +277,6 @@ const codeExample = `<Table
         </div>
       </div>
     </VCard>
-
 
     <!-- Code Example -->
     <VCard class="code-example-card">

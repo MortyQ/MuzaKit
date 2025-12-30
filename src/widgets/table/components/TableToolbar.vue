@@ -9,21 +9,20 @@ import VIcon from "@/shared/ui/common/VIcon.vue";
 import VInput from "@/shared/ui/common/VInput.vue";
 import VLoader from "@/shared/ui/common/VLoader.vue";
 
-
 interface Props {
-  config?: ToolbarConfig;
-  search?: string;
+  config?: ToolbarConfig
+  search?: string
 }
 
 interface Emits {
-  // eslint-disable-next-line no-unused-vars
-  (e: "update:search", value: string): void;
-  // eslint-disable-next-line no-unused-vars
-  (e: "refresh"): void;
-  // eslint-disable-next-line no-unused-vars
-  (e: "reset-sort"): void;
-  // eslint-disable-next-line no-unused-vars
-  (e: "export", format: string, selectedOnly?: boolean): void;
+
+  (e: "update:search", value: string): void
+
+  (e: "refresh"): void
+
+  (e: "reset-sort"): void
+
+  (e: "export", format: string, selectedOnly?: boolean): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -38,7 +37,6 @@ const searchModel = computed({
   get: () => props.search,
   set: (value: string) => emit("update:search", value),
 });
-
 
 // Search configuration
 const searchConfig = computed(() => {

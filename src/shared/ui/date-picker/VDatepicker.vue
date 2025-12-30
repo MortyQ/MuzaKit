@@ -31,22 +31,22 @@ const excludedSlots = [
  */
 type Props = {
   /** Label for the datepicker (wrapper UI) */
-  name?: string;
+  name?: string
   /** Helper text below input (wrapper UI) */
-  helperText?: string;
+  helperText?: string
   /** Validation object (Vuelidate compatible) - wrapper UI */
   validation?: {
-    $error?: boolean;
-    $errors?: Array<{ $message: string }>;
-  };
+    $error?: boolean
+    $errors?: Array<{ $message: string }>
+  }
   /** Size variant (wrapper UI: sm/md/lg) */
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg"
   /** Icon to display (wrapper UI) */
-  icon?: string;
+  icon?: string
   /** Auto apply selection (no confirm button) */
-  autoApply?: boolean;
-  clearable?: boolean;
-  width?: string;
+  autoApply?: boolean
+  clearable?: boolean
+  width?: string
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -60,7 +60,6 @@ const props = withDefaults(defineProps<Props>(), {
   width: "100%",
 });
 </script>
-
 
 <template>
   <div
@@ -279,8 +278,3 @@ const props = withDefaults(defineProps<Props>(), {
     </transition>
   </div>
 </template>
-
-
-
-
-

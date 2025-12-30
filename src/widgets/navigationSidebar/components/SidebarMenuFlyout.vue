@@ -13,7 +13,7 @@ import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
 
 interface Props {
   /** Parent item with children */
-  item: SidebarNavItem;
+  item: SidebarNavItem
 }
 
 const props = defineProps<Props>();
@@ -48,7 +48,8 @@ const checkPosition = () => {
       right: viewportWidth - buttonRect.left + 8,
       left: 0,
     };
-  } else {
+  }
+  else {
     // Show on right side
     showOnLeft.value = false;
     menuPosition.value = {
@@ -216,5 +217,3 @@ const handleLinkClick = (child: SidebarNavItem) => {
     </Teleport>
   </div>
 </template>
-
-

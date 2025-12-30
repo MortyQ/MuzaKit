@@ -3,7 +3,6 @@ import { computed, onUnmounted, type Ref } from "vue";
 
 import { VirtualTableOptions } from "@/widgets/table/types";
 
-
 export function useVirtualTable(
   scrollContainerRef: Ref<HTMLElement | null>,
   data: Ref<Record<string, unknown>[]>,
@@ -11,7 +10,7 @@ export function useVirtualTable(
 ) {
   const {
     estimateSize = 50,
-    overscan = 2,  // Reduced from 5 to 2 for better performance
+    overscan = 2, // Reduced from 5 to 2 for better performance
     measureElement = false,
   } = options;
 

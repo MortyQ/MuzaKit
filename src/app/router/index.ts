@@ -5,7 +5,6 @@ import modules from "@/app/router/modules"; // Import layout types for TypeScrip
 import { authGuard, setRouterForGuards } from "@/app/router/utils/guards";
 import { progress } from "@/shared/lib/browser/progress";
 
-
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL || "/"),
   routes: modules,

@@ -4,14 +4,14 @@ import { computed, useAttrs, useId } from "vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 
 interface Props {
-  modelValue?: boolean;
-  disabled?: boolean;
-  trueIcon?: string;
-  falseIcon?: string;
-  trueLabel?: string;
-  falseLabel?: string;
-  color?: string;
-  id?: string;
+  modelValue?: boolean
+  disabled?: boolean
+  trueIcon?: string
+  falseIcon?: string
+  trueLabel?: string
+  falseLabel?: string
+  color?: string
+  id?: string
 }
 
 const props = defineProps<Props>();

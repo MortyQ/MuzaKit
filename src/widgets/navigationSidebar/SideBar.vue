@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import SidebarMobile from "./SidebarMobile.vue";
 import SidebarFooter from "./components/SidebarFooter.vue";
 import SidebarHeader from "./components/SidebarHeader.vue";
 import SidebarNav from "./components/SidebarNav.vue";
 import { useSidebar } from "./composables/useSidebar";
+import SidebarMobile from "./SidebarMobile.vue";
 import type { SidebarConfig } from "./types";
 
 interface Props {
   /** Sidebar configuration */
-  config: SidebarConfig;
+  config: SidebarConfig
 }
 
 defineProps<Props>();
@@ -56,4 +56,3 @@ const { isCollapsed } = useSidebar();
 <style lang="scss">
 @use './assets/styles/sidebar.scss';
 </style>
-

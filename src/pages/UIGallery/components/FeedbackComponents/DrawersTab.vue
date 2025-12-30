@@ -17,7 +17,7 @@ import { useModal } from '@/shared/composables/useModal';
 import VDrawer from '@/shared/ui/common/VDrawer.vue';
 
 const { open } = useModal('my-drawer');
-</` + `script>
+  </` + `script>
 
 <template>
   <button @click="open">Open Drawer</button>
@@ -555,4 +555,3 @@ const advancedExample = `<VDrawer
   margin-top: 0.5rem;
 }
 </style>
-

@@ -689,4 +689,3 @@ const items = [
   @apply text-sm text-secondaryText;
 }
 </style>
-

@@ -4,23 +4,23 @@ import type { Column } from "../types";
 import tableStorage, { type StorageType } from "../utils/storage";
 
 export interface ColumnSetupItem {
-  key: string;
-  label: string;
-  visible: boolean;
-  order: number;
-  fixed?: "left" | "right";
-  children?: ColumnSetupItem[]; // Support for grouped columns
+  key: string
+  label: string
+  visible: boolean
+  order: number
+  fixed?: "left" | "right"
+  children?: ColumnSetupItem[] // Support for grouped columns
 }
 
 export interface ColumnSetupConfig {
-  columns: Column[];
-  initialVisible?: string[]; // Keys of initially visible columns
-  // eslint-disable-next-line no-unused-vars
-  onUpdate?: (visibleColumns: Column[]) => void; // eslint-disable-line no-unused-vars
+  columns: Column[]
+  initialVisible?: string[] // Keys of initially visible columns
+
+  onUpdate?: (visibleColumns: Column[]) => void
   storage?: {
-    key: string;
-    type?: StorageType; // Now supports: 'indexedDB' | 'localStorage' | 'sessionStorage'
-  };
+    key: string
+    type?: StorageType // Now supports: 'indexedDB' | 'localStorage' | 'sessionStorage'
+  }
 }
 
 /**
@@ -35,16 +35,17 @@ export function useColumnSetup(config: ColumnSetupConfig) {
   }
 
   // Load saved state from storage (async)
-  const loadFromStorage = async (): Promise<{ visible: string[]; order: string[] } | null> => {
+  const loadFromStorage = async (): Promise<{ visible: string[], order: string[] } | null> => {
     if (!config.storage) return null;
 
     try {
       const saved = await tableStorage.getTableConfig<{
-        visible: string[];
-        order: string[];
+        visible: string[]
+        order: string[]
       }>(config.storage.key);
       return saved;
-    } catch (error) {
+    }
+    catch (error) {
       console.error("Failed to load column setup from storage:", error);
       return null;
     }
@@ -60,7 +61,8 @@ export function useColumnSetup(config: ColumnSetupConfig) {
         order: items.map((item) => item.key),
       };
       await tableStorage.setTableConfig(config.storage.key, state);
-    } catch (error) {
+    }
+    catch (error) {
       console.error("Failed to save column setup to storage:", error);
     }
   };
@@ -78,7 +80,7 @@ export function useColumnSetup(config: ColumnSetupConfig) {
   // Create setup items from columns
   const createSetupItems = (
     columns: Column[],
-    savedState?: { visible: string[]; order: string[] } | null,
+    savedState?: { visible: string[], order: string[] } | null,
   ): ColumnSetupItem[] => {
     const flatCols = flattenColumns(columns);
 
@@ -200,7 +202,8 @@ export function useColumnSetup(config: ColumnSetupConfig) {
     if (config.storage) {
       try {
         await tableStorage.deleteTableConfig(config.storage.key);
-      } catch (error) {
+      }
+      catch (error) {
         console.error("Failed to clear storage:", error);
       }
     }
@@ -246,4 +249,3 @@ export function useColumnSetup(config: ColumnSetupConfig) {
     hideAll,
   };
 }
-

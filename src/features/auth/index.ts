@@ -13,4 +13,3 @@ export { mockGetMe, mockLogin, mockLogout } from "./api/mockApi";
 
 // Re-export UserAvatar from shared
 export { default as UserAvatar } from "@/shared/ui/common/UserAvatar.vue";
-

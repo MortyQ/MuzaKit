@@ -4,7 +4,6 @@ import type {
   FrontSortPayload, PaginationConfig, ToolbarConfig,
 } from "@/widgets/table/types/index";
 
-// eslint-disable-next-line no-unused-vars
 export type RowClassNameFunction = (row: ExpandableRow, index: number) => string;
 
 export type TableProps = {

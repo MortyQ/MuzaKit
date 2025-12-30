@@ -17,7 +17,6 @@ export const useAuthStore = defineStore("auth", () => {
   const isInitialized = ref(false);
   const error = ref<string | null>(null);
 
-
   // Computed
   const isAuthenticated = computed(() => !!user.value);
 
@@ -73,7 +72,6 @@ export const useAuthStore = defineStore("auth", () => {
     await execute();
   };
 
-
   const { loading: loginLoading, error: loginError, execute: loginExecute } = useApiPost<AuthTokens>("/auth/login", {
     onSuccess: ({ data }) => {
       tokenManager.setTokens(data);
@@ -91,7 +89,6 @@ export const useAuthStore = defineStore("auth", () => {
     });
   };
 
-
   /**
    * Logout user
    */
@@ -100,9 +97,11 @@ export const useAuthStore = defineStore("auth", () => {
 
     try {
       await mockLogout();
-    } catch (err) {
+    }
+    catch (err) {
       console.error("Logout error:", err);
-    } finally {
+    }
+    finally {
       localStorage.removeItem("accessToken");
       user.value = null;
       isLoading.value = false;
@@ -123,12 +122,14 @@ export const useAuthStore = defineStore("auth", () => {
 
     try {
       user.value = await mockGetMe();
-    } catch (err) {
+    }
+    catch (err) {
       console.error("Failed to refresh user:", err);
       error.value = err instanceof Error ? err.message : "Failed to refresh";
       // On refresh failure, logout user
       await logout();
-    } finally {
+    }
+    finally {
       isLoading.value = false;
     }
   };
@@ -158,4 +159,3 @@ export const useAuthStore = defineStore("auth", () => {
     hasAllPermissions,
   };
 });
-

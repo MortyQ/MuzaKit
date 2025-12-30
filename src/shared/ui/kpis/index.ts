@@ -14,4 +14,3 @@ export type {
   VKpiMultiMetricIconColor,
   VKpiMultiMetricColumns,
 } from "./types/VKpiMultiMetric.types";
-

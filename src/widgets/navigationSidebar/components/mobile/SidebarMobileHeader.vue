@@ -4,9 +4,9 @@ import { useSidebar } from "@/widgets/navigationSidebar/composables/useSidebar";
 
 interface Props {
   /** Logo URL or path */
-  logo?: string;
+  logo?: string
   /** Brand name */
-  brandName?: string;
+  brandName?: string
 }
 
 withDefaults(defineProps<Props>(), {
@@ -59,4 +59,3 @@ const { closeMobile } = useSidebar();
   min-height: 65px;
 }
 </style>
-

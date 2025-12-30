@@ -167,7 +167,7 @@ const campaignMetrics = {
 // Code examples
 const basicExample = `<script setup>
 import VKpiCard from '@/shared/ui/kpis/VKpiCard.vue';
-</` + `script>
+  </` + `script>
 
 <template>
   <VKpiCard
@@ -251,7 +251,7 @@ const comparisonExample = `// Standalone comparison component
 
 const multiMetricExample = `<script setup>
 import VKpiMultiMetric from '@/shared/ui/kpis/VKpiMultiMetric.vue';
-</` + `script>
+  </` + `script>
 
 <template>
   <!-- Basic usage with 3 metrics -->
@@ -1150,4 +1150,3 @@ import VKpiMultiMetric from '@/shared/ui/kpis/VKpiMultiMetric.vue';
   @apply text-sm text-secondaryText;
 }
 </style>
-

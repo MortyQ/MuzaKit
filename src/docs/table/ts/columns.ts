@@ -242,4 +242,3 @@ All flexible columns have a built-in minimum width of 100px:
 
 Our API is closest to **AG-Grid** - the most popular table library!
 `;
-

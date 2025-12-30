@@ -15,49 +15,48 @@ export interface MultiSelectConfig {
    * Enable multi-select mode
    * @default false
    */
-  enabled: boolean;
+  enabled: boolean
 
   /**
    * Selection mode for hierarchical data
    * @default 'independent'
    */
-  selectionMode?: SelectionMode;
+  selectionMode?: SelectionMode
 
   /**
    * Automatically select all children when parent is selected
    * Only works when selectionMode is 'dependent'
    * @default true
    */
-  selectChildren?: boolean;
+  selectChildren?: boolean
 
   /**
    * Automatically select parent when all children are selected
    * Only works when selectionMode is 'dependent'
    * @default true
    */
-  selectParent?: boolean;
+  selectParent?: boolean
 
   /**
    * Show checkbox in table header to select/deselect all visible rows
    * @default true
    */
-  showHeaderCheckbox?: boolean;
+  showHeaderCheckbox?: boolean
 
   /**
    * Custom function to determine if a row can be selected
    */
-  // eslint-disable-next-line no-unused-vars
-  isRowSelectable?: (row: ExpandableRow) => boolean;
+
+  isRowSelectable?: (row: ExpandableRow) => boolean
 
   /**
    * Select only visible rows (considering expand/collapse state)
    * @default true
    */
-  selectOnlyVisible?: boolean;
+  selectOnlyVisible?: boolean
 }
 
 /**
  * Checkbox state for header or parent rows
  */
 export type CheckboxState = "checked" | "unchecked" | "indeterminate";
-

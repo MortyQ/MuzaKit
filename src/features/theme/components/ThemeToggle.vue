@@ -7,9 +7,9 @@ import { useThemeStore } from "@/features/theme/composables/useTheme";
 
 interface Props {
   /** Show label next to icon */
-  showLabel?: boolean;
+  showLabel?: boolean
   /** Compact mode (smaller size) */
-  compact?: boolean;
+  compact?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
@@ -171,4 +171,3 @@ const themeTooltip = computed(() => {
   @apply focus:ring-offset-2 focus:ring-offset-base-100;
 }
 </style>
-

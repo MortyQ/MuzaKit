@@ -10,13 +10,13 @@
  */
 
 interface LoginData {
-  email: string;
-  password: string;
-  remember: boolean;
+  email: string
+  password: string
+  remember: boolean
 }
 
 const emit = defineEmits<{
-  login: [data: LoginData];
+  login: [data: LoginData]
 }>();
 
 const quickLogin = () => {
@@ -101,4 +101,3 @@ const quickLogin = () => {
     </div>
   </div>
 </template>
-

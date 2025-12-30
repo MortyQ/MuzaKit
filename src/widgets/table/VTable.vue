@@ -377,10 +377,10 @@ const getCellValue = (value: unknown, column: Column, row: Record<string, unknow
   // If it's an object with text property, return the text for display
   if (
     formatted
-      && typeof formatted === "object"
-      && !Array.isArray(formatted)
-      && "text" in formatted
-      && typeof (formatted as any).text !== "undefined"
+    && typeof formatted === "object"
+    && !Array.isArray(formatted)
+    && "text" in formatted
+    && typeof (formatted as any).text !== "undefined"
   ) {
     return (formatted as { text: string }).text;
   }
@@ -396,10 +396,10 @@ const getCellClass = (value: unknown, column: Column, row: Record<string, unknow
   // If it's an object with class property, return the class
   if (
     formatted
-      && typeof formatted === "object"
-      && !Array.isArray(formatted)
-      && "class" in formatted
-      && typeof (formatted as any).class === "string"
+    && typeof formatted === "object"
+    && !Array.isArray(formatted)
+    && "class" in formatted
+    && typeof (formatted as any).class === "string"
   ) {
     return (formatted as { class: string }).class;
   }
@@ -602,9 +602,9 @@ const getCellMetadata = (
 
   if (
     formatted
-      && typeof formatted === "object"
-      && !Array.isArray(formatted)
-      && "text" in formatted
+    && typeof formatted === "object"
+    && !Array.isArray(formatted)
+    && "text" in formatted
   ) {
     formattedValue = (formatted as any).text;
     cssClass = (formatted as any).class;

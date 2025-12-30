@@ -98,7 +98,7 @@ export function setupResponseInterceptor(
 
       // If not 401 error or request was already retried, reject
       if (!originalRequest || error.response?.status !== 401
-                || originalRequest._retry) {
+        || originalRequest._retry) {
         return Promise.reject(error);
       }
 
@@ -159,9 +159,9 @@ export function setupResponseInterceptor(
 
         // Handle both snake_case (from API) and camelCase
         const accessToken = (response.data as Omit<RefreshTokenResponse, "accessToken">)?.access_token
-                    || response.data.accessToken;
+          || response.data.accessToken;
         const newRefreshToken = (response.data as Omit<RefreshTokenResponse, "accessToken">)?.refresh_token
-                    || response.data.refreshToken;
+          || response.data.refreshToken;
 
         // Save new tokens
         const currentRefreshToken = tokenManager.getRefreshToken();

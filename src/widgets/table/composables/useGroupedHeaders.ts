@@ -60,7 +60,8 @@ export function useGroupedHeaders(
         if (col.children && col.children.length > 0) {
           // Has children - go deeper
           traverse(col.children);
-        } else {
+        }
+        else {
           // Leaf column - add to flat list
           flat.push(col);
         }
@@ -159,7 +160,8 @@ export function useGroupedHeaders(
             level: currentLevel,
           });
         }
-      } else {
+      }
+      else {
         // Group column
         if (currentLevel === targetLevel) {
           // Group header on its level
@@ -212,7 +214,6 @@ export function useGroupedHeaders(
       levels.push(buildHeaderLevel(columns.value, level, 0, maxDepth));
     }
 
-
     return levels;
   });
 
@@ -243,12 +244,11 @@ export function useGroupedHeaders(
   };
 
   return {
-    hasGroups,          // Boolean - do we have grouped headers?
-    flatColumns,        // Flat list of leaf columns for data rows
-    headerLevels,       // Array of header rows (one per level)
-    getGroupWidth,      // Calculate width of group dynamically
-    getColspan,         // Get colspan for any column
-    isGroupFixed,       // Check if group should be sticky
+    hasGroups, // Boolean - do we have grouped headers?
+    flatColumns, // Flat list of leaf columns for data rows
+    headerLevels, // Array of header rows (one per level)
+    getGroupWidth, // Calculate width of group dynamically
+    getColspan, // Get colspan for any column
+    isGroupFixed, // Check if group should be sticky
   };
 }
-

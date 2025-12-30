@@ -19,7 +19,7 @@ import { ref } from 'vue';
 import VCheckbox from '@/shared/ui/common/VCheckbox.vue';
 
 const isChecked = ref(false);
-</` + `script>
+  </` + `script>
 
 <template>
   <!-- Simple checkbox -->
@@ -445,4 +445,3 @@ const options = ['Option 1', 'Option 2', 'Option 3'];
   @apply text-sm text-secondaryText;
 }
 </style>
-

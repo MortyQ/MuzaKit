@@ -6,27 +6,27 @@ import VIcon from "@/shared/ui/common/VIcon.vue";
 export type AccordionVariant = "default" | "outlined" | "inset" | "popout";
 
 export type AccordionItem = {
-  id: string | number;
-  title: string;
-  subtitle?: string;
-  content?: string;
-  disabled?: boolean;
-  icon?: string;
+  id: string | number
+  title: string
+  subtitle?: string
+  content?: string
+  disabled?: boolean
+  icon?: string
 };
 
 type AccordionProps = {
-  items?: AccordionItem[];
-  modelValue?: (string | number)[];
-  multiple?: boolean;
-  variant?: AccordionVariant;
-  disabled?: boolean;
-  flat?: boolean;
-  accordion?: boolean; // true = only one can be open at a time
+  items?: AccordionItem[]
+  modelValue?: (string | number)[]
+  multiple?: boolean
+  variant?: AccordionVariant
+  disabled?: boolean
+  flat?: boolean
+  accordion?: boolean // true = only one can be open at a time
 };
 
 type AccordionEmits = {
-  "update:modelValue": [value: (string | number)[]];
-  change: [openItems: (string | number)[]];
+  "update:modelValue": [value: (string | number)[]]
+  change: [openItems: (string | number)[]]
 };
 
 const props = withDefaults(defineProps<AccordionProps>(), {
@@ -79,7 +79,7 @@ const toggleItem = (itemId: string | number, disabled?: boolean) => {
     // Multiple mode: can open multiple items
     if (isCurrentlyOpen) {
       // Close this item
-      openItems.value = openItems.value.filter(id => id !== itemId);
+      openItems.value = openItems.value.filter((id) => id !== itemId);
     }
     else {
       // Open this item

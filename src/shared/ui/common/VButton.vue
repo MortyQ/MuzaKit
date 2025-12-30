@@ -8,14 +8,14 @@ const slots = defineSlots();
 
 const props = withDefaults(
   defineProps<{
-    text?: string;
-    type?: "button" | "submit" | "reset";
-    disabled?: boolean;
-    loading?: boolean;
-    icon?: string;
-    variant?: "default" | "primary" | "positive" | "negative" | "warning" | "link";
-    to?: string | object;
-    replace?: boolean;
+    text?: string
+    type?: "button" | "submit" | "reset"
+    disabled?: boolean
+    loading?: boolean
+    icon?: string
+    variant?: "default" | "primary" | "positive" | "negative" | "warning" | "link"
+    to?: string | object
+    replace?: boolean
   }>(),
   {
     type: "button",
@@ -23,7 +23,7 @@ const props = withDefaults(
     replace: false,
     icon: undefined,
     to: undefined,
-    text:"",
+    text: "",
   },
 );
 

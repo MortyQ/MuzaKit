@@ -5,7 +5,7 @@ import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
 
 interface Props {
   /** Navigation items */
-  items: SidebarNavItem[];
+  items: SidebarNavItem[]
 }
 
 defineProps<Props>();
@@ -23,4 +23,3 @@ defineProps<Props>();
     />
   </nav>
 </template>
-

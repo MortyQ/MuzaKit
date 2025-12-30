@@ -8,9 +8,9 @@ import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
 
 interface Props {
   /** Navigation item */
-  item: SidebarNavItem;
+  item: SidebarNavItem
   /** Current nesting level (for indentation) */
-  level?: number;
+  level?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -86,7 +86,8 @@ const handleClick = () => {
   // If item has children, toggle expansion
   if (hasChildren.value) {
     toggleExpanded(props.item.id);
-  } else {
+  }
+  else {
     // Close mobile menu when navigating
     closeMobile();
   }
@@ -103,10 +104,12 @@ const itemClasses = computed(() => {
   // Active state
   if (isActive.value) {
     baseClasses.push("bg-primary/10 text-primary font-medium sidebar-item-active");
-  } else if (hasActiveChild.value && hasChildren.value) {
+  }
+  else if (hasActiveChild.value && hasChildren.value) {
     // Parent with active child
     baseClasses.push("text-primary/80 hover:bg-base-200/50");
-  } else {
+  }
+  else {
     // Default state
     baseClasses.push("text-neutral/70 hover:bg-base-200 hover:text-neutral");
   }
@@ -241,4 +244,3 @@ const itemClasses = computed(() => {
   box-shadow: none !important;
 }
 </style>
-

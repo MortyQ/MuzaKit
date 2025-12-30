@@ -17,7 +17,7 @@ const handleLoadingClick = () => {
 // Code examples
 const basicExample = `<script setup>
 import VButton from '@/shared/ui/common/VButton.vue';
-</` + `script>
+  </` + `script>
 
 <template>
   <!-- Basic button -->
@@ -531,4 +531,3 @@ const advancedExample = `// With loading state
   @apply text-sm text-secondaryText;
 }
 </style>
-

@@ -45,7 +45,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           {
             path: "feedback",
             name: RouteNames.UI_GALLERY_FEEDBACK,
-            component: () => import("@/pages/UIGallery/Feedback.vue"),
+            component: () => import("@/pages/UIGallery/FeedbackBlock.vue"),
             meta: {
               title: "Feedback",
               menuTitle: "Feedback",
@@ -56,7 +56,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           {
             path: "forms",
             name: RouteNames.UI_GALLERY_FORMS,
-            component: () => import("@/pages/UIGallery/Forms.vue"),
+            component: () => import("@/pages/UIGallery/FormsBlock.vue"),
             meta: {
               title: "Forms",
               menuTitle: "Forms",
@@ -67,7 +67,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           {
             path: "display",
             name: RouteNames.UI_GALLERY_DISPLAY,
-            component: () => import("@/pages/UIGallery/Display.vue"),
+            component: () => import("@/pages/UIGallery/DisplayBlock.vue"),
             meta: {
               title: "Display",
               menuTitle: "Display",
@@ -78,7 +78,7 @@ const componentRoutes: AppRouteRecordRaw[] = [
           {
             path: "layout",
             name: RouteNames.UI_GALLERY_LAYOUT,
-            component: () => import("@/pages/UIGallery/Layout.vue"),
+            component: () => import("@/pages/UIGallery/LayoutBlock.vue"),
             meta: {
               title: "Layout",
               menuTitle: "Layout",

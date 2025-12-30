@@ -12,10 +12,10 @@ import {
 } from "@/shared/utils/kpi";
 
 interface VKpiComparisonProps {
-  comparison: KpiComparison;
+  comparison: KpiComparison
   // eslint-disable-next-line vue/require-default-prop
-  format?: KpiFormatOptions;
-  reverse?: boolean;
+  format?: KpiFormatOptions
+  reverse?: boolean
 }
 
 const props = withDefaults(defineProps<VKpiComparisonProps>(), {

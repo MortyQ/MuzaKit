@@ -2,18 +2,18 @@
 import { computed, ref, useId, watchEffect } from "vue";
 
 interface Props {
-  modelValue?: boolean | string | number | any;
-  id?: string;
-  label?: string;
-  value?: string | number | boolean | any;
-  disabled?: boolean;
-  indeterminate?: boolean;
+  modelValue?: boolean | string | number | any
+  id?: string
+  label?: string
+  value?: string | number | boolean | any
+  disabled?: boolean
+  indeterminate?: boolean
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<{
-  // eslint-disable-next-line no-unused-vars
-  (event: "update:modelValue", value: boolean | string | number | any): void;
+
+  (event: "update:modelValue", value: boolean | string | number | any): void
 }>();
 
 // Generate unique ID if not provided

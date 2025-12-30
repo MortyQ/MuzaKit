@@ -1,4 +1,4 @@
-export { default as Sidebar } from "./Sidebar.vue";
+export { default as Sidebar } from "./SideBar.vue";
 export { useSidebar } from "./composables/useSidebar";
 export type { SidebarNavItem, SidebarConfig, SidebarState } from "./types";
 import type { RouteRecordRaw } from "vue-router";
@@ -10,19 +10,19 @@ import type { SidebarNavItem } from "./types";
  */
 export interface SidebarRouteMeta {
   /** Display label in sidebar */
-  label?: string;
+  label?: string
   /** Icon name */
-  icon?: string;
+  icon?: string
   /** Hide from sidebar */
-  hideInSidebar?: boolean;
+  hideInSidebar?: boolean
   /** Order in sidebar (lower = higher) */
-  order?: number;
+  order?: number
   /** Badge text or count */
-  badge?: string | number;
+  badge?: string | number
   /** Parent item (for grouping) */
-  parent?: string;
+  parent?: string
   /** Disabled state */
-  disabled?: boolean;
+  disabled?: boolean
 }
 
 /**
@@ -83,13 +83,13 @@ export function createSidebarItem(
   label: string,
   icon: string,
   options?: {
-    to?: string | { name: string; params?: Record<string, never> };
-    children?: SidebarNavItem[];
-    disabled?: boolean;
-    badge?: string | number;
-    external?: boolean;
-    hidden?: boolean;
-    meta?: Record<string, never>;
+    to?: string | { name: string, params?: Record<string, never> }
+    children?: SidebarNavItem[]
+    disabled?: boolean
+    badge?: string | number
+    external?: boolean
+    hidden?: boolean
+    meta?: Record<string, never>
   },
 ): SidebarNavItem {
   return {
@@ -105,4 +105,3 @@ export function createSidebarItem(
     meta: options?.meta,
   };
 }
-

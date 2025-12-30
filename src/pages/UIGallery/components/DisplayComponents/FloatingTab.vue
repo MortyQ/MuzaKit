@@ -7,10 +7,10 @@ import VFloating from "@/shared/ui/common/VFloating.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 
 interface LoadingItem {
-  label: string;
-  value: string;
-  icon: string;
-  loading?: boolean;
+  label: string
+  value: string
+  icon: string
+  loading?: boolean
 }
 
 const selectedAction = ref<string | number | null>(null);
@@ -924,4 +924,3 @@ const handleLoadingAction = (value: string | number) => {
 <style scoped lang="scss">
 @use "@/shared/assets/styles/shared-info-card-styles.scss";
 </style>
-

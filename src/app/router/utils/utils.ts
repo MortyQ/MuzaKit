@@ -1,8 +1,8 @@
 import type { RouteRecordRaw } from "vue-router";
 
-import { hasAnyPermission, hasPermissions } from "./guards";
 import type { MenuItem, RouteMeta } from "../types/types";
 
+import { hasAnyPermission, hasPermissions } from "./guards";
 
 import { useAuthStore } from "@/features/auth/store/authStore";
 

@@ -7,24 +7,24 @@ export interface ToolbarConfig {
    * Enable toolbar
    * @default false
    */
-  enabled?: boolean;
+  enabled?: boolean
 
   /**
    * Table title
    */
-  title?: string;
+  title?: string
 
   /**
    * Optional subtitle
    */
-  subtitle?: string;
+  subtitle?: string
 
   /**
    * Search configuration
    */
   search?: boolean | {
-    placeholder?: string;
-  };
+    placeholder?: string
+  }
 
   /**
    * Toolbar actions
@@ -36,7 +36,7 @@ export interface ToolbarConfig {
      * - 'custom': Only emits @toolbar:refresh event, no built-in behavior
      * - false: Button hidden
      */
-    refresh?: boolean | "default" | "custom";
+    refresh?: boolean | "default" | "custom"
 
     /**
      * Reset sort button behavior
@@ -44,7 +44,7 @@ export interface ToolbarConfig {
      * - 'custom': Only emits @toolbar:reset-sort event, no built-in behavior
      * - false: Button hidden
      */
-    resetSort?: boolean | "default" | "custom";
+    resetSort?: boolean | "default" | "custom"
 
     /**
      * Export functionality configuration
@@ -74,24 +74,24 @@ export interface ToolbarConfig {
        * - 'single': One export button (default format: csv)
        * - 'multi': Dropdown with multiple export options
        */
-      mode: "single" | "multi";
+      mode: "single" | "multi"
 
       /**
        * Available export formats (required for 'multi' mode)
        */
-      formats?: ExportFormat[];
+      formats?: ExportFormat[]
 
       /**
        * Export only selected rows
        * @default false
        */
-      selectedOnly?: boolean;
+      selectedOnly?: boolean
 
       /**
        * Global loading state for all exports
        */
-      loading?: boolean;
-    };
+      loading?: boolean
+    }
 
     /**
      * Column setup button configuration
@@ -119,49 +119,48 @@ export interface ToolbarConfig {
        * If provided, column settings will be persisted automatically
        * @example 'myTable_columns'
        */
-      key?: string;
+      key?: string
 
       /**
        * Storage type
        * @default 'indexedDB'
        */
-      type?: "indexedDB" | "localStorage" | "sessionStorage";
+      type?: "indexedDB" | "localStorage" | "sessionStorage"
 
       /**
        * Enable column reordering via drag-and-drop
        * @default true
        */
-      allowReorder?: boolean;
+      allowReorder?: boolean
 
       /**
        * Initially visible columns (by key)
        * If not provided, all columns are visible
        * Note: This is overridden by saved state if storage key is provided
        */
-      initialVisible?: string[];
-    };
-  };
+      initialVisible?: string[]
+    }
+  }
 }
 
 export interface ExportFormat {
   /**
    * Display label
    */
-  label: string;
+  label: string
 
   /**
    * Format value (csv, excel, pdf, etc.)
    */
-  value: string;
+  value: string
 
   /**
    * Optional icon
    */
-  icon?: string;
+  icon?: string
 
   /**
    * Loading state for this format
    */
-  loading?: boolean;
+  loading?: boolean
 }
-

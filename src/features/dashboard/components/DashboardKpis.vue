@@ -6,7 +6,7 @@ import KpiViewController from "@/shared/ui/kpis/KpiViewController.vue";
 import VKpiCard from "@/shared/ui/kpis/VKpiCard.vue";
 
 withDefaults(defineProps<{
-  loading?: boolean;
+  loading?: boolean
 }>(), {
   loading: false,
 });
@@ -151,12 +151,11 @@ const realKpiData = [
   // },
 ];
 
-const kpiData = ref<any[]>(realKpiData.map(kpi => ({
+const kpiData = ref<any[]>(realKpiData.map((kpi) => ({
   ...kpi,
   value: 0,
   comparisons: [],
 })));
-
 
 const showAllComparisons = ref(false);
 

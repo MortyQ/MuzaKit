@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { BaseValidation } from "@vuelidate/core";
 import DOMPurify from "dompurify";
 import debounceFunc from "lodash.debounce";
@@ -8,25 +8,25 @@ import VIcon from "@/shared/ui/common/VIcon.vue";
 
 // Flexible validation type compatible with Vuelidate
 type ValidationProp = BaseValidation | {
-  $error?: boolean;
-  $errors?: Array<{ $message: string | Ref<string> }>;
+  $error?: boolean
+  $errors?: Array<{ $message: string | Ref<string> }>
 };
 
 type Props = {
-  name?: string;
-  modelValue?: string | number;
-  type?: string;
-  disabled?: boolean;
-  helperText?: string;
-  validation?: ValidationProp;
-  icon?: string;
-  size?: "sm" | "md" | "lg";
-  id?: string;
+  name?: string
+  modelValue?: string | number
+  type?: string
+  disabled?: boolean
+  helperText?: string
+  validation?: ValidationProp
+  icon?: string
+  size?: "sm" | "md" | "lg"
+  id?: string
   // New props from VSearch
-  debounce?: boolean | number; // true = 800ms, number = custom delay
-  loading?: boolean; // show loading spinner in icon
-  textarea?: boolean; // use textarea instead of input
-  rows?: number; // rows for textarea
+  debounce?: boolean | number // true = 800ms, number = custom delay
+  loading?: boolean // show loading spinner in icon
+  textarea?: boolean // use textarea instead of input
+  rows?: number // rows for textarea
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -51,6 +51,7 @@ const inputId = computed(() => props.id || `v-input-${useId()}`);
 
 const emit = defineEmits<{
   "update:modelValue": [value: string | number]
+  clear: []
 }>();
 
 const slots = useSlots();
@@ -61,6 +62,15 @@ const inputRef = ref<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
 // Local state for the input value
 const localValue = ref<string | number>(props.modelValue ?? "");
+
+// Clear input value
+const clearInput = () => {
+  localValue.value = "";
+  emit("update:modelValue", "");
+  emit("clear");
+  // Focus back on input after clear
+  inputRef.value?.focus();
+};
 
 // Debounce logic
 const debounceDelay = computed(() => {
@@ -97,9 +107,14 @@ const showLeftIcon = computed(() => {
   return props.icon || isSearchType.value || !!slots["icon-left"] || props.loading;
 });
 
-// Show right icon: password toggle or slot
+// Show right icon: password toggle, clear button for textarea, or slot
 const showRightIcon = computed(() => {
-  return props.type === "password" || !!slots["icon-right"];
+  return props.type === "password" || showClearButton.value || !!slots["icon-right"];
+});
+
+// Show clear button for textarea when it has content
+const showClearButton = computed(() => {
+  return props.textarea && localValue.value && String(localValue.value).length > 0;
 });
 
 // Get left icon name
@@ -135,7 +150,8 @@ const handleInput = (event: Event) => {
   // Emit update (debounced or immediate)
   if (debounceDelay.value > 0) {
     debouncedEmitUpdate(finalValue);
-  } else {
+  }
+  else {
     emit("update:modelValue", finalValue);
   }
 };
@@ -170,18 +186,18 @@ onUnmounted(() => {
 
     <!-- Input Container -->
     <div
-      class="v-input-container"
       :class="{ 'is-focused': isFocused }"
+      class="v-input-container"
     >
       <!-- Left Icon Slot -->
       <div
         v-if="showLeftIcon"
-        class="v-input-icon v-input-icon-left"
         :class="{
           'v-input-icon-textarea': textarea,
           'text-primary': isFocused && isSearchType || loading,
           'text-secondaryText': !isFocused || !isSearchType,
         }"
+        class="v-input-icon v-input-icon-left"
       >
         <slot name="icon-left">
           <VIcon
@@ -199,13 +215,6 @@ onUnmounted(() => {
         :id="inputId"
         :key="`${textarea ? 'textarea' : 'input'}-${inputId}`"
         ref="inputRef"
-        :value="localValue"
-        v-bind="{
-          ...$attrs,
-          type: textarea ? undefined : currentInputType,
-          rows: textarea ? rows : undefined,
-        }"
-        class="v-input"
         :class="[
           textarea ? 'v-input-textarea' : sizeClasses,
           {
@@ -217,23 +226,48 @@ onUnmounted(() => {
           },
         ]"
         :disabled="disabled"
-        @input="handleInput"
-        @focus="isFocused = true"
+        :value="localValue"
+        class="v-input"
+        v-bind="{
+          ...$attrs,
+          type: textarea ? undefined : currentInputType,
+          rows: textarea ? rows : undefined,
+        }"
         @blur="isFocused = false"
+        @focus="isFocused = true"
+        @input="handleInput"
       />
 
       <!-- Right Icon / Actions -->
       <div
         v-if="showRightIcon"
-        class="v-input-icon v-input-icon-right"
         :class="{ 'v-input-icon-textarea': textarea }"
+        class="v-input-icon v-input-icon-right"
       >
         <slot name="icon-right">
+          <!-- Clear Button for Textarea -->
+          <button
+            v-if="showClearButton"
+            class="
+              flex items-center justify-center w-6 h-6 rounded-md
+              text-secondaryText hover:text-error hover:bg-lightError
+              transition-colors cursor-pointer
+            "
+            title="Clear"
+            type="button"
+            @click="clearInput"
+          >
+            <VIcon
+              class="w-4 h-4"
+              icon="lucide:x"
+            />
+          </button>
+
           <!-- Password Toggle -->
           <button
-            v-if="props.type === 'password'"
-            type="button"
+            v-else-if="props.type === 'password'"
             class="v-input-password-toggle"
+            type="button"
             @click="changeInputType"
           >
             <VIcon
@@ -257,8 +291,8 @@ onUnmounted(() => {
 
     <!-- Error Message -->
     <transition
-      name="error-slide"
       mode="out-in"
+      name="error-slide"
     >
       <slot name="error-message">
         <p
@@ -271,4 +305,3 @@ onUnmounted(() => {
     </transition>
   </div>
 </template>
-

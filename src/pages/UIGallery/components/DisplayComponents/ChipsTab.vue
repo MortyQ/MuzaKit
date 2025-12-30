@@ -26,7 +26,7 @@ const selectedChip = ref<SingleSelectValue<string>>("option1");
 const multiSelectChips = ref<MultipleSelectValue<string>>(["feature1", "feature3"]);
 
 // V-Model with objects example
-type User = { id: number; name: string };
+type User = { id: number, name: string };
 const selectedUser = ref<SingleSelectValue<User>>({ id: 2, name: "Alice" });
 const users: User[] = [
   { id: 1, name: "John" },
@@ -39,7 +39,8 @@ const toggleFilter = (id: string) => {
   const index = selectedFilters.value.indexOf(id);
   if (index > -1) {
     selectedFilters.value.splice(index, 1);
-  } else {
+  }
+  else {
     selectedFilters.value.push(id);
   }
 };
@@ -53,7 +54,7 @@ const selectedChip = ref<SingleSelectValue<string>>('option1');
 
 // Multiple selection (type-safe)
 const multiSelectChips = ref<MultipleSelectValue<string>>(['feature1', 'feature3']);
-</` + `script>
+  </` + `script>
 
 <template>
   <!-- Single Selection -->
@@ -79,7 +80,6 @@ const multiSelectChips = ref<MultipleSelectValue<string>>(['feature1', 'feature3
 const removeTag = (index: number) => {
   tags.value.splice(index, 1);
 };
-
 
 const removeSubcategory = (index: number) => {
   selectedSubcategories.value.splice(index, 1);
@@ -1217,7 +1217,6 @@ const comparator: ValueComparator&lt;Product&gt; = (a, b) => a.id === b.id;</cod
     </VCard>
   </div>
 </template>
-
 
 <style scoped lang="scss">
 @use "@/shared/assets/styles/shared-info-card-styles.scss";

@@ -4,11 +4,11 @@ import { animateValue } from "@/shared/utils/kpi";
 
 interface UseAnimatedValueOptions {
   /** Whether to animate value changes */
-  animate?: boolean;
+  animate?: boolean
   /** Animation duration in milliseconds */
-  duration?: number;
+  duration?: number
   /** Multiplier to apply to the value */
-  multiply?: number;
+  multiply?: number
 }
 
 /**
@@ -57,7 +57,8 @@ export function useAnimatedValue(
       animateValue(0, targetValue, duration, (val) => {
         animatedValue.value = val;
       });
-    } else {
+    }
+    else {
       animatedValue.value = targetValue;
     }
 
@@ -92,4 +93,3 @@ export function useAnimatedValue(
     isInitialized: isInitialized as Ref<boolean>,
   };
 }
-

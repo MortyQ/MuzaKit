@@ -2,13 +2,8 @@
 import { nextTick, onBeforeUnmount, ref } from "vue";
 import Multiselect from "vue-multiselect";
 
+import { Option } from "@/shared/types/ui";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-
-type Option = {
-  label: string
-  value: string | number
-  [key: string]: unknown
-};
 
 type Props = {
   modelValue?: Option | Option[] | null
@@ -26,6 +21,7 @@ type Props = {
   maxHeight?: number
   optionsLimit?: number
   teleportToBody?: boolean
+  name?: string
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -44,6 +40,7 @@ const props = withDefaults(defineProps<Props>(), {
   maxHeight: 300,
   optionsLimit: 1000,
   teleportToBody: true,
+  name: "",
 });
 
 const emit = defineEmits<{
@@ -162,7 +159,17 @@ onBeforeUnmount(() => disableFloating());
 </script>
 
 <template>
-  <div class="v-multiselect-wrapper">
+  <div class="v-multiselect-wrapper flex flex-col gap-2">
+    <!-- Label -->
+    <slot name="label">
+      <label
+        v-if="props.name"
+        class="v-input-label mb-0"
+      >
+        {{ props.name }}
+      </label>
+    </slot>
+
     <Multiselect
       ref="msRef"
       :clear-on-select="props.clearOnSelect"
@@ -223,17 +230,19 @@ onBeforeUnmount(() => disableFloating());
 }
 
 .v-multiselect-wrapper {
-  @apply w-full;
+  @apply w-full ;
   :deep(.multiselect) {
     @apply min-h-[44px] relative;
-    border: none !important;
     box-shadow: none !important;
 
     .multiselect__tags {
-      @apply bg-inputBg border border-base-300 rounded-lg shadow-sm
+      @apply bg-inputBg rounded-lg border-cardBorder shadow-md
       text-neutral transition-all duration-200 min-h-[44px] px-3 py-2;
+      border-style: solid !important;
+      border-width: 1px !important;
+
       &:hover {
-        @apply border-primary;
+        border-color: hsl(var(--p)) !important;
       }
 
       &:focus-within {
@@ -314,10 +323,14 @@ onBeforeUnmount(() => disableFloating());
 
     .multiselect__tag {
       @apply bg-primary text-white text-sm font-medium rounded-md mb-0 mr-2
-      inline-flex items-center;
+      inline-flex items-center border-[2px] border-cardBorder;
       padding: 4px 28px 4px 12px;
       gap: 8px;
       position: relative;
+    }
+
+    .multiselect__tags-wrap {
+      @apply pr-[15px];
     }
 
     .multiselect__tag-icon {
@@ -362,7 +375,7 @@ onBeforeUnmount(() => disableFloating());
 
     &.multiselect--active {
       .multiselect__tags {
-        @apply border-primary;
+        border-color: hsl(var(--p)) !important;
         box-shadow: 0 0 0 3px hsl(var(--p) / 0.2);
       }
 

@@ -2,9 +2,9 @@
 import { reactive, ref } from "vue";
 
 import VMultiSelect from "@/shared/ui/common/VMultiSelect.vue";
-import Table from "@/widgets/table/VTable.vue";
 import { Column, type RequestPayload } from "@/widgets/table/types";
 import { mockDataExpandable, mockDataExpandableTotalRow } from "@/widgets/table/utils/mockData";
+import Table from "@/widgets/table/VTable.vue";
 
 const pagination = reactive({
   page: 1,
@@ -22,25 +22,25 @@ const loaders = reactive({
 });
 
 const columnsExpandable: Column[] = [
-  { key: "name", label: "Name", width:"150px", sortable: true  },
-  { key: "count", label: "Count",width:"150px",  sortable: true,
+  { key: "name", label: "Name", width: "150px", sortable: true },
+  { key: "count", label: "Count", width: "150px", sortable: true,
     onHeaderClick: ({ column }) => {
       console.log("CLICKED HEADER", column);
     },
   },
-  { key: "salary", label: "Salary", format: { currency: true }, width:"150px",  sortable: true },
-  { key: "email", label: "Email", width:"150px"  },
-  { key: "phone", label: "Phone", width:"150px",  sortable: true },
-  { key: "position", label: "Position",width:"150px"  },
-  { key: "status", label: "Status",width:"150px"  },
-  { key: "performance", label: "Rating", width:"150px",  sortable: true },
+  { key: "salary", label: "Salary", format: { currency: true }, width: "150px", sortable: true },
+  { key: "email", label: "Email", width: "150px" },
+  { key: "phone", label: "Phone", width: "150px", sortable: true },
+  { key: "position", label: "Position", width: "150px" },
+  { key: "status", label: "Status", width: "150px" },
+  { key: "performance", label: "Rating", width: "150px", sortable: true },
   { key: "accountStatus", label: "Account Status", width: "200px" },
-  { key: "startDate", label: "Start Date", format: { date: "long" }, width:"150px"  },
-  { key: "projects", label: "Projects",width:"150px"  },
-  { key: "location", label: "Location",width:"150px"  },
-  { key: "manager", label: "Manager",width:"150px"  },
-  { key: "budget", label: "Budget", format: { currency: true }, width:"150px"  },
-  { key: "revenue", label: "Revenue", format: { currency: true }, width:"150px"   },
+  { key: "startDate", label: "Start Date", format: { date: "long" }, width: "150px" },
+  { key: "projects", label: "Projects", width: "150px" },
+  { key: "location", label: "Location", width: "150px" },
+  { key: "manager", label: "Manager", width: "150px" },
+  { key: "budget", label: "Budget", format: { currency: true }, width: "150px" },
+  { key: "revenue", label: "Revenue", format: { currency: true }, width: "150px" },
 ];
 
 const accountStatusList = [

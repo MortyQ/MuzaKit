@@ -16,20 +16,20 @@ export type KpiUnit = "dollar" | "percentage" | "number";
 /**
  * Color variant for KPI icon background
  */
-export type KpiIconColor =
-  | "primary"
-  | "success"
-  | "error"
-  | "warning"
-  | "info"
-  | "secondary"
-  | "purple"
-  | "pink"
-  | "orange"
-  | "green"
-  | "red"
-  | "blue"
-  | "cyan";
+export type KpiIconColor
+  = | "primary"
+    | "success"
+    | "error"
+    | "warning"
+    | "info"
+    | "secondary"
+    | "purple"
+    | "pink"
+    | "orange"
+    | "green"
+    | "red"
+    | "blue"
+    | "cyan";
 
 /**
  * Size variant for KPI cards (same as CardSize from VCard)
@@ -42,14 +42,14 @@ export type KpiSize = "fit" | "sm" | "md" | "lg" | "xl" | "full";
  */
 export interface KpiFormatOptions {
   /** Unit type for display (dollar, percentage, number) */
-  unit?: KpiUnit;
+  unit?: KpiUnit
   /** Show decimal places (true = 2 decimals, or specify number for custom) */
-  decimals?: boolean | number;
+  decimals?: boolean | number
   /** Multiplier for value conversion (e.g., 0.01 for cents to dollars) */
-  multiply?: number;
+  multiply?: number
   /** Custom formatter function (highest priority) */
-  // eslint-disable-next-line no-unused-vars
-  formatter?: (val: number | string) => string;
+
+  formatter?: (val: number | string) => string
 }
 
 /**
@@ -57,13 +57,13 @@ export interface KpiFormatOptions {
  */
 export interface KpiComparison {
   /** Period name (PoP, MoM, WoW, YoY) */
-  name: KpiPeriod;
+  name: KpiPeriod
   /** Value difference (absolute) */
-  difference: number;
+  difference: number
   /** Percentage change */
-  percentage: number;
+  percentage: number
   /** Optional tooltip text */
-  tooltip?: string;
+  tooltip?: string
 }
 
 /**
@@ -71,31 +71,31 @@ export interface KpiComparison {
  */
 export interface VKpiCardProps {
   /** KPI title/label */
-  title: string;
+  title: string
   /** Main KPI value */
-  value: number | string;
+  value: number | string
   /** Icon name in format "collection:name" (e.g., "mdi:currency-usd") */
-  icon: string;
+  icon: string
   /** Color variant for icon background */
-  iconColor?: KpiIconColor;
+  iconColor?: KpiIconColor
   /** Formatting options for value display */
-  format?: KpiFormatOptions;
+  format?: KpiFormatOptions
   /** Array of comparison data (PoP, MoM, WoW, YoY) */
-  comparisons?: KpiComparison[];
+  comparisons?: KpiComparison[]
   /** Show all comparisons or only the first one */
-  showAllComparisons?: boolean;
+  showAllComparisons?: boolean
   /** Loading state */
-  loading?: boolean;
+  loading?: boolean
   /** Custom tooltip for the info icon */
-  tooltip?: string;
+  tooltip?: string
   /** Reverse color logic (red for positive, green for negative) */
-  reverse?: boolean;
+  reverse?: boolean
   /** Size variant */
-  size?: KpiSize;
+  size?: KpiSize
   /** Animate value changes (default: true) */
-  animate?: boolean;
+  animate?: boolean
   /** Custom CSS class */
-  class?: string;
+  class?: string
 }
 
 /**

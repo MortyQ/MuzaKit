@@ -17,7 +17,7 @@ import { ref } from 'vue';
 import VSwitch from '@/shared/ui/common/VSwitch.vue';
 
 const enabled = ref(false);
-</` + `script>
+  </` + `script>
 
 <template>
   <VSwitch
@@ -209,7 +209,6 @@ const advancedExample = `// Colored switch
         />
       </section>
     </VCard>
-
 
     <!-- Basic Usage -->
     <VCard class="code-example-card">

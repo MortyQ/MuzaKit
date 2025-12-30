@@ -2,12 +2,12 @@
 import { onMounted, onUnmounted, ref } from "vue";
 
 interface Blob {
-  x: number;
-  y: number;
-  radius: number;
-  vx: number;
-  vy: number;
-  color: string;
+  x: number
+  y: number
+  radius: number
+  vx: number
+  vy: number
+  color: string
 }
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
@@ -122,4 +122,3 @@ onUnmounted(() => {
     class="fixed inset-0 z-10 bg-gradient-to-br from-primary/5 via-accent/5 to-info/5"
   />
 </template>
-

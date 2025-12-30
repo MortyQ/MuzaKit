@@ -18,47 +18,46 @@ export type CardPadding = "none" | "sm" | "md" | "lg" | "xl";
 
 type CardProps = {
   // Main content
-  title?: string;
-  subtitle?: string;
-  description?: string;
+  title?: string
+  subtitle?: string
+  description?: string
 
   // Visual settings
-  variant?: CardVariant;
-  size?: CardSize;
-  radius?: CardRadius;
-  padding?: CardPadding;
+  variant?: CardVariant
+  size?: CardSize
+  radius?: CardRadius
+  padding?: CardPadding
 
   // States
-  loading?: boolean;
-  disabled?: boolean;
-  clickable?: boolean;
+  loading?: boolean
+  disabled?: boolean
+  clickable?: boolean
 
   // Icons
-  icon?: string;
+  icon?: string
 
   // Additional settings
-  as?: string;
-  href?: string;
-  target?: "_blank" | "_self" | "_parent" | "_top";
+  as?: string
+  href?: string
+  target?: "_blank" | "_self" | "_parent" | "_top"
 };
 
 // Component events
 type CardEmits = {
-  click: [event: MouseEvent];
+  click: [event: MouseEvent]
 };
 
 // Component slots
 type CardSlots = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  default?: () => any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  header?: () => any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  footer?: () => any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  loading?: () => any;
-};
 
+  default?: () => any
+
+  header?: () => any
+
+  footer?: () => any
+
+  loading?: () => any
+};
 
 const props = withDefaults(defineProps<CardProps>(), {
   variant: "glass",
@@ -80,7 +79,7 @@ const emit = defineEmits<CardEmits>();
 
 // Computed properties
 const hasHeader = computed(() => props.title
-    || props.subtitle || props.icon || !!slots.header);
+  || props.subtitle || props.icon || !!slots.header);
 
 const hasFooter = computed(() => !!slots.footer);
 

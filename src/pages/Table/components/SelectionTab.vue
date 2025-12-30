@@ -4,13 +4,13 @@ import { ref } from "vue";
 import VCard from "@/shared/ui/common/VCard.vue";
 import VCheckbox from "@/shared/ui/common/VCheckbox.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import Table from "@/widgets/table/VTable.vue";
 import type { Column, ExpandableRow, MultiSelectConfig } from "@/widgets/table/types";
 import { mockDataExpandable, mockDataExpandableTotalRow } from "@/widgets/table/utils/mockData";
+import Table from "@/widgets/table/VTable.vue";
 
 const columns: Column[] = [
   // All left fixed columns in a row
-  { key: "name", label: "Name"  },
+  { key: "name", label: "Name" },
   { key: "count", label: "Count" },
   { key: "salary", label: "Salary" },
   // Regular scrollable columns
@@ -27,7 +27,6 @@ const columns: Column[] = [
   { key: "revenue", label: "Revenue" },
   // Right fixed at the end
 ];
-
 
 // Selected rows state
 const selectedRows = ref<ExpandableRow[]>([]);

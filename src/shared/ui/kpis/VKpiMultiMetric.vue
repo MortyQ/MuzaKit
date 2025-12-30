@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
+import type { VKpiMultiMetric, VKpiMultiMetricColumns } from "./types/VKpiMultiMetric.types";
 import VKpiMultiMetricHeader from "./VKpiMultiMetricHeader.vue";
 import VKpiMultiMetricItem from "./VKpiMultiMetricItem.vue";
-import type { VKpiMultiMetric, VKpiMultiMetricColumns } from "./types/VKpiMultiMetric.types";
 
 interface Props {
   /** Title of the card */
@@ -32,7 +32,6 @@ const props = withDefaults(defineProps<Props>(), {
   animate: true,
   class: "",
 });
-
 
 // Compute grid columns based on columns prop or metrics count
 const gridCols = computed(() => {

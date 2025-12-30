@@ -4,12 +4,12 @@ import { computed } from "vue";
 import { useModal } from "@/shared/composables/useModal";
 
 interface Props {
-  id: string;
-  title?: string;
-  showCloseButton?: boolean;
-  closeOnBackdrop?: boolean;
-  closeOnEscape?: boolean;
-  maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+  id: string
+  title?: string
+  showCloseButton?: boolean
+  closeOnBackdrop?: boolean
+  closeOnEscape?: boolean
+  maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "full"
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -21,8 +21,8 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  close: [];
-  open: [];
+  close: []
+  open: []
 }>();
 
 const { isOpen, close, zIndex } = useModal(props.id);

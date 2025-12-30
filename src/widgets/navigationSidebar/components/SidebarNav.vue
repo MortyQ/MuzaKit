@@ -6,7 +6,7 @@ import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
 
 interface Props {
   /** Navigation items */
-  items: SidebarNavItem[];
+  items: SidebarNavItem[]
 }
 
 defineProps<Props>();
@@ -56,4 +56,3 @@ const { isCollapsed } = useSidebar();
 
 /* Navigation items container - smooth layout with grid */
 </style>
-

@@ -245,4 +245,3 @@ import type {
 } from "@/widgets/table/types";
 \`\`\`
 `;
-

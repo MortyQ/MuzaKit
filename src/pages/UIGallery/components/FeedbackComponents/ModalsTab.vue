@@ -14,7 +14,7 @@ import { useModal } from '@/shared/composables/useModal';
 import VModal from '@/shared/ui/common/VModal.vue';
 
 const modal = useModal('my-modal');
-</` + `script>
+  </` + `script>
 
 <template>
   <button @click="modal.open">Open Modal</button>

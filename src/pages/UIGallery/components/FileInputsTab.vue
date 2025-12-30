@@ -9,7 +9,7 @@ const handleUpload = (files: File[]) => {
   if (files.length > 0) {
     toast.info(
       `${files.length} file${files.length > 1 ? "s" : ""} added`,
-      files.map(f => f.name).join(", "),
+      files.map((f) => f.name).join(", "),
     );
   }
 };
@@ -28,7 +28,8 @@ const submitFiles = (files: File[], clearFiles: () => void) => {
       if (Math.random() > 0.2) {
         resolve({ success: true });
         clearFiles();
-      } else {
+      }
+      else {
         reject(new Error("Upload failed"));
       }
     }, 2000);

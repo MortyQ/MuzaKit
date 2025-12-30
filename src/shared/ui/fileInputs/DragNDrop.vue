@@ -8,21 +8,21 @@ import { truncateString, formatBytes, getFileExtension } from "@/shared/utils/fo
 
 interface DragNDropProps {
   /** Show loading state */
-  loading?: boolean;
+  loading?: boolean
   /** Allow multiple files */
-  multiple?: boolean;
+  multiple?: boolean
   /** Show submit button */
-  button?: boolean;
+  button?: boolean
   /** Unique ID for input */
-  id?: string;
+  id?: string
   /** Accept file types (e.g., "image/*,.pdf") */
-  accept?: string;
+  accept?: string
   /** Maximum file size in bytes */
-  maxSize?: number;
+  maxSize?: number
   /** Maximum number of files (only for multiple mode) */
-  maxFiles?: number;
+  maxFiles?: number
   /** Disabled state */
-  disabled?: boolean;
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<DragNDropProps>(), {
@@ -37,9 +37,9 @@ const props = withDefaults(defineProps<DragNDropProps>(), {
 });
 
 const emits = defineEmits<{
-  upload: [files: File[], callback: () => void];
-  submit: [files: File[], callback: () => void];
-  error: [error: string];
+  upload: [files: File[], callback: () => void]
+  submit: [files: File[], callback: () => void]
+  error: [error: string]
 }>();
 
 // State
@@ -110,7 +110,8 @@ const handleFiles = (newFiles: File[]) => {
 
   if (!props.multiple) {
     files.value = [validFiles[0]];
-  } else {
+  }
+  else {
     const remainingSlots = props.maxFiles - files.value.length;
     const filesToAdd = validFiles.slice(0, remainingSlots);
 

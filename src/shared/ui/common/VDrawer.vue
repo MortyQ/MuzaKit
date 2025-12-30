@@ -1,17 +1,18 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed } from "vue";
 
 import { useModal } from "@/shared/composables/useModal";
 
 interface Props {
-  id: string;
-  title?: string;
-  showCloseButton?: boolean;
-  closeOnBackdrop?: boolean;
-  closeOnEscape?: boolean;
-  position?: "left" | "right";
-  width?: "sm" | "md" | "lg" | "xl" | "full";
-  backdropBlur?: "none" | "xs" | "sm" | "md" | "lg";
+  id: string
+  title?: string
+  showCloseButton?: boolean
+  closeOnBackdrop?: boolean
+  closeOnEscape?: boolean
+  position?: "left" | "right"
+  width?: "sm" | "md" | "lg" | "xl" | "full"
+  backdropBlur?: "none" | "xs" | "sm" | "md" | "lg"
+  keepAlive?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -22,11 +23,12 @@ const props = withDefaults(defineProps<Props>(), {
   position: "right",
   width: "md",
   backdropBlur: "xs",
+  keepAlive: false,
 });
 
 const emit = defineEmits<{
-  close: [];
-  open: [];
+  close: []
+  open: []
 }>();
 
 const { isOpen, close, zIndex } = useModal(props.id);
@@ -82,16 +84,17 @@ const handleKeydown = (event: KeyboardEvent) => {
       @after-enter="emit('open')"
     >
       <div
-        v-if="isOpen"
-        class="drawer-backdrop"
+        v-if="keepAlive ? true : isOpen"
+        v-show="keepAlive ? isOpen : true"
         :class="backdropBlurClass"
         :style="{ zIndex }"
+        class="drawer-backdrop"
         @click="handleBackdropClick"
         @keydown="handleKeydown"
       >
         <div
-          class="drawer-container"
           :class="[widthClass, positionClass]"
+          class="drawer-container"
           @click.stop
         >
           <!-- Header -->
@@ -109,32 +112,32 @@ const handleKeydown = (event: KeyboardEvent) => {
             </slot>
             <button
               v-if="showCloseButton"
+              aria-label="Close drawer"
               class="drawer-close-btn"
               type="button"
-              aria-label="Close drawer"
               @click="handleClose"
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
                 fill="none"
+                height="24"
                 stroke="currentColor"
-                stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
               >
                 <line
                   x1="18"
-                  y1="6"
                   x2="6"
+                  y1="6"
                   y2="18"
                 />
                 <line
                   x1="6"
-                  y1="6"
                   x2="18"
+                  y1="6"
                   y2="18"
                 />
               </svg>
@@ -158,4 +161,3 @@ const handleKeydown = (event: KeyboardEvent) => {
     </Transition>
   </Teleport>
 </template>
-

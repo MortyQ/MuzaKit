@@ -20,7 +20,8 @@ const loadState = () => {
       state.value.isCollapsed = parsed.isCollapsed ?? false;
       state.value.expandedItems = new Set(parsed.expandedItems ?? []);
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.warn("[useSidebar] Failed to load state from localStorage:", error);
   }
 };
@@ -33,7 +34,8 @@ const saveState = () => {
       expandedItems: Array.from(state.value.expandedItems),
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
-  } catch (error) {
+  }
+  catch (error) {
     console.warn("[useSidebar] Failed to save state to localStorage:", error);
   }
 };
@@ -88,7 +90,8 @@ export function useSidebar() {
   const toggleExpanded = (itemId: string) => {
     if (state.value.expandedItems.has(itemId)) {
       state.value.expandedItems.delete(itemId);
-    } else {
+    }
+    else {
       state.value.expandedItems.add(itemId);
     }
     // Trigger reactivity
@@ -127,4 +130,3 @@ export function useSidebar() {
     expandAll,
   };
 }
-

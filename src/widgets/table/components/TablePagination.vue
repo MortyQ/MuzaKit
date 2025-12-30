@@ -5,16 +5,16 @@ import VIcon from "@/shared/ui/common/VIcon.vue";
 import { formatNumber } from "@/shared/utils";
 
 interface Props {
-  page: number               // Current page (1-based)
-  pageSize: number           // Items per page
-  total: number              // Total items
+  page: number // Current page (1-based)
+  pageSize: number // Items per page
+  total: number // Total items
   pageSizeOptions?: number[] // Available page sizes
-  showSizeChanger?: boolean  // Show page size selector
-  loading?: boolean          // Loading state (disables all controls)
+  showSizeChanger?: boolean // Show page size selector
+  loading?: boolean // Loading state (disables all controls)
 }
 
 interface Emits {
-  // eslint-disable-next-line no-unused-vars
+
   (e: "page-change", payload: { page: number, pageSize: number }): void
 }
 
@@ -61,11 +61,13 @@ const visiblePages = computed(() => {
     pages.push(2, 3, 4);
     pages.push("ellipsis");
     pages.push(total);
-  } else if (current >= total - 2) {
+  }
+  else if (current >= total - 2) {
     // Near the end: 1, ..., last-3, last-2, last-1, last
     pages.push("ellipsis");
     pages.push(total - 3, total - 2, total - 1, total);
-  } else {
+  }
+  else {
     // Middle: 1, ..., current-1, current, current+1, ..., last
     pages.push("ellipsis");
     pages.push(current - 1, current, current + 1);

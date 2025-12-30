@@ -34,7 +34,7 @@ const meta = {
     },
     icon: {
       control: "text",
-      description: 'Icon identifier (e.g., "lucide:plus")',
+      description: "Icon identifier (e.g., \"lucide:plus\")",
     },
     disabled: {
       control: "boolean",
@@ -63,4 +63,3 @@ export const Primary: Story = {
     variant: "primary",
   },
 };
-

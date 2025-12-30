@@ -17,4 +17,3 @@ import VCard from "@/shared/ui/common/VCard.vue";
 <style scoped lang="scss">
 @use "./documentation-styles.scss";
 </style>
-

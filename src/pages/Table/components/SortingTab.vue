@@ -3,9 +3,9 @@ import { reactive, ref } from "vue";
 
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import Table from "@/widgets/table/VTable.vue";
 import type { Column, RequestPayload, SortItem } from "@/widgets/table/types";
 import { mockDataUsers } from "@/widgets/table/utils/mockData";
+import Table from "@/widgets/table/VTable.vue";
 
 // Server-side sorting example
 const serverData = ref([...mockDataUsers]);
@@ -27,8 +27,8 @@ const pagination = reactive({
 // With width = fixed (resizable)
 const serverColumns: Column[] = [
   { key: "id", label: "ID", width: "80px", sortable: true },
-  { key: "name", label: "Name", width:"250px",  sortable: true },        // Flexible
-  { key: "email", label: "Email",  width: "250px", sortable: true },      // Flexible
+  { key: "name", label: "Name", width: "250px", sortable: true }, // Flexible
+  { key: "email", label: "Email", width: "250px", sortable: true }, // Flexible
   { key: "age", label: "Age", width: "100px", sortable: true },
   { key: "position", label: "Position", sortable: true }, // Flexible
   { key: "status", label: "Status" },
@@ -61,7 +61,6 @@ const handleServerRequest = async ({ sort, page }: RequestPayload) => {
       return 0;
     });
   }
-
 
   serverData.value = sortedData;
   serverLoading.value = false;

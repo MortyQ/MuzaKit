@@ -31,4 +31,3 @@ export const transitionClasses = {
   leaveFrom: "opacity-100 scale-100",
   leaveTo: "opacity-0 scale-95",
 };
-

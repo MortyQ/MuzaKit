@@ -769,4 +769,3 @@ import VIcon from "@/shared/ui/common/VIcon.vue";
 <style scoped lang="scss">
 @use "@/shared/assets/styles/shared-info-card-styles.scss";
 </style>
-

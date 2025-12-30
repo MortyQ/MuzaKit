@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import Table from "@/widgets/table/VTable.vue";
 import type { Column, ExpandableRow } from "@/widgets/table/types";
 import { mockDataUsers, mockDataUsersTotalRow } from "@/widgets/table/utils/mockData";
+import Table from "@/widgets/table/VTable.vue";
 
 // Example: Custom row styling based on data (using theme colors)
 const rowClassName = (row: ExpandableRow): string => {
@@ -27,7 +27,7 @@ const columnsRegular: Column[] = [
     key: "age",
     label: "Age",
     align: "center",
-    width:"100px",
+    width: "100px",
     // Heatmap with background color
     cellStyle: ({ value }) => {
       const num = Number(value);
@@ -39,14 +39,17 @@ const columnsRegular: Column[] = [
 
       if (num < 25) {
         backgroundColor = "#22c55e"; // green-500
-      } else if (num < 35) {
+      }
+      else if (num < 35) {
         backgroundColor = "#84cc16"; // lime-500
-      } else if (num < 45) {
+      }
+      else if (num < 45) {
         backgroundColor = "#eab308"; // yellow-500
-      } else if (num < 55) {
-
+      }
+      else if (num < 55) {
         backgroundColor = "#dc2626"; // red-600
-      } else {
+      }
+      else {
         backgroundColor = "#f59e0b"; // amber-500
       }
 
@@ -70,7 +73,7 @@ const columnsRegular: Column[] = [
     label: "Status",
     width: "150px",
   },
-  { key: "performance", label: "Rating", width:"100px" },
+  { key: "performance", label: "Rating", width: "100px" },
   { key: "startDate", label: "Start Date", format: { date: "long" }, width: "130px" },
   { key: "projects", label: "Projects", width: "100px" },
   {

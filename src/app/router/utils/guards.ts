@@ -132,12 +132,12 @@ function findFirstAccessibleRoute(routes: RouteRecordNormalized[]): RouteLocatio
     // Skip: public routes, unnamed, hidden, system routes, redirects, wildcards
     if (
       meta.requiresAuth === false
-            || !route.name
-            || meta.showInMenu === false
-            || route.redirect
-            || route.path.includes("*")
-            || EXCLUDED_ROUTES.has(routeName)
-            || EXCLUDED_PATHS.has(route.path)
+      || !route.name
+      || meta.showInMenu === false
+      || route.redirect
+      || route.path.includes("*")
+      || EXCLUDED_ROUTES.has(routeName)
+      || EXCLUDED_PATHS.has(route.path)
     ) {
       continue;
     }

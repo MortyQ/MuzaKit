@@ -88,7 +88,7 @@ export async function mockGetMe(): Promise<User> {
 export async function mockLogin(
   email: string,
   password: string,
-): Promise<{ user: User; token: string }> {
+): Promise<{ user: User, token: string }> {
   await delay(800);
 
   // Simple validation
@@ -136,4 +136,3 @@ export async function mockUpdateProfile(
     updatedAt: new Date().toISOString(),
   };
 }
-

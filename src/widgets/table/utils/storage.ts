@@ -8,13 +8,13 @@ import { KeyvIndexedDB } from "keyv-browser";
 export type StorageType = "indexedDB" | "localStorage" | "sessionStorage";
 
 export interface StorageAdapter {
-  // eslint-disable-next-line no-unused-vars
-  get<T>(key: string): Promise<T | null>;
-  // eslint-disable-next-line no-unused-vars
-  set<T>(key: string, value: T): Promise<void>;
-  // eslint-disable-next-line no-unused-vars
-  delete(key: string): Promise<void>;
-  clear(): Promise<void>;
+
+  get<T>(key: string): Promise<T | null>
+
+  set<T>(key: string, value: T): Promise<void>
+
+  delete(key: string): Promise<void>
+  clear(): Promise<void>
 }
 
 /**
@@ -36,7 +36,8 @@ class IndexedDBAdapter implements StorageAdapter {
     try {
       const value = await this.keyv.get<T>(key);
       return value ?? null;
-    } catch (error) {
+    }
+    catch (error) {
       console.error("IndexedDB get error:", error);
       return null;
     }
@@ -45,7 +46,8 @@ class IndexedDBAdapter implements StorageAdapter {
   async set<T>(key: string, value: T): Promise<void> {
     try {
       await this.keyv.set(key, value);
-    } catch (error) {
+    }
+    catch (error) {
       console.error("IndexedDB set error:", error);
       throw error;
     }
@@ -54,7 +56,8 @@ class IndexedDBAdapter implements StorageAdapter {
   async delete(key: string): Promise<void> {
     try {
       await this.keyv.delete(key);
-    } catch (error) {
+    }
+    catch (error) {
       console.error("IndexedDB delete error:", error);
       throw error;
     }
@@ -63,7 +66,8 @@ class IndexedDBAdapter implements StorageAdapter {
   async clear(): Promise<void> {
     try {
       await this.keyv.clear();
-    } catch (error) {
+    }
+    catch (error) {
       console.error("IndexedDB clear error:", error);
       throw error;
     }
@@ -85,7 +89,8 @@ class WebStorageAdapter implements StorageAdapter {
     try {
       const item = this.storage.getItem(key);
       return Promise.resolve(item ? JSON.parse(item) : null);
-    } catch (error) {
+    }
+    catch (error) {
       console.error("WebStorage get error:", error);
       return Promise.resolve(null);
     }
@@ -95,7 +100,8 @@ class WebStorageAdapter implements StorageAdapter {
     try {
       this.storage.setItem(key, JSON.stringify(value));
       return Promise.resolve();
-    } catch (error) {
+    }
+    catch (error) {
       console.error("WebStorage set error:", error);
       // Handle quota exceeded error
       if (error instanceof DOMException && error.name === "QuotaExceededError") {
@@ -109,7 +115,8 @@ class WebStorageAdapter implements StorageAdapter {
     try {
       this.storage.removeItem(key);
       return Promise.resolve();
-    } catch (error) {
+    }
+    catch (error) {
       console.error("WebStorage delete error:", error);
       return Promise.reject(error);
     }
@@ -119,7 +126,8 @@ class WebStorageAdapter implements StorageAdapter {
     try {
       this.storage.clear();
       return Promise.resolve();
-    } catch (error) {
+    }
+    catch (error) {
       console.error("WebStorage clear error:", error);
       return Promise.reject(error);
     }
@@ -219,4 +227,3 @@ export { TableStorageManager };
 // Export singleton instance as default
 const tableStorage = TableStorageManager.getInstance();
 export default tableStorage;
-

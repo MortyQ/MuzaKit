@@ -19,7 +19,7 @@ const controlledTabs: ITab[] = [
 
 const lastSelected = ref("first");
 
-const handleControlled = (payload: { tabId: string; callback: () => void }) => {
+const handleControlled = (payload: { tabId: string, callback: () => void }) => {
   // Simulate async validation before switching
   setTimeout(() => {
     lastSelected.value = payload.tabId;
@@ -35,7 +35,7 @@ const tabs = [
   { id: 'overview', label: 'Overview' },
   { id: 'details', label: 'Details' },
 ];
-</` + `script>
+  </` + `script>
 
 <template>
   <VTabs :tabs="tabs" />

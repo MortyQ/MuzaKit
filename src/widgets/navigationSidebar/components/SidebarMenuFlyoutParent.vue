@@ -8,7 +8,7 @@ import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
 
 interface Props {
   /** Parent item to display (has children but no route) */
-  item: SidebarNavItem & { level: number };
+  item: SidebarNavItem & { level: number }
 }
 
 const props = defineProps<Props>();
@@ -49,4 +49,3 @@ const itemClasses = computed(() => {
     </span>
   </div>
 </template>
-

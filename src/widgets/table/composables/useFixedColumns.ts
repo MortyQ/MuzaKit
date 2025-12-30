@@ -61,10 +61,12 @@ export function useFixedColumns(
           const dynamicWidth = widths.get(col.key);
           if (dynamicWidth !== undefined) {
             width = dynamicWidth;
-          } else {
+          }
+          else {
             width = parseColumnWidth(col.width) || 150;
           }
-        } else {
+        }
+        else {
           width = parseColumnWidth(col.width) || 150;
         }
 
@@ -95,10 +97,12 @@ export function useFixedColumns(
         const dynamicWidth = widths.get(col.key);
         if (dynamicWidth !== undefined) {
           width = dynamicWidth;
-        } else {
+        }
+        else {
           width = parseColumnWidth(col.width) || 150;
         }
-      } else {
+      }
+      else {
         width = parseColumnWidth(col.width) || 150;
       }
 
@@ -232,4 +236,3 @@ function parseColumnWidth(width?: string): number | null {
   }
   return null;
 }
-
