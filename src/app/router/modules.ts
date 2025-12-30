@@ -13,14 +13,13 @@ import { useAuthStore } from "@/features/auth/store/authStore";
  * All application routes
  */
 const modules: Array<AppRouteRecordRaw> = [
-  // Home route (public)
   {
     path: "/",
     name: "Root",
     meta: {
       title: "Home",
       showInMenu: false,
-      isRootRedirect: true, // Special flag to trigger smart redirect in guard
+      isRootRedirect: true,
     },
   },
   {
@@ -57,14 +56,13 @@ const modules: Array<AppRouteRecordRaw> = [
       title: "403 Forbidden",
       layout: "empty",
       showInMenu: false,
-      requiresAuth: false, // Public page - show error even to non-authenticated users
+      requiresAuth: false,
     },
   },
   // Feature routes
   ...coreRoutes,
   ...componentRoutes,
   ...authRoutes,
-  // Catch-all route (must be last!)
   {
     path: "/:pathMatch(.*)*",
     redirect: "/not-found",
@@ -94,12 +92,5 @@ export function getMenuItems(authStore: ReturnType<typeof useAuthStore>) {
     filterRoutesByPermissions(menuModules as RouteRecordRaw[], authStore),
   );
 }
-
-/**
- * Generate menu items from routes (static, without permission filtering)
- * Use this in layouts/components to render sidebar
- * @deprecated Use getMenuItems(authStore) in computed for reactivity with permissions
- */
-export const menuItems = routesToMenuItems(menuModules as RouteRecordRaw[]);
 
 export default modules as Array<RouteRecordRaw>;

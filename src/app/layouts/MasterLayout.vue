@@ -1,12 +1,11 @@
-<script setup lang="ts">
-import { computed, type Component, watch } from "vue";
-import { useRoute } from "vue-router";
+<script lang="ts" setup>
+import { computed, watch, type Component } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import AuthLayout from "./AuthLayout.vue";
 import DefaultLayout from "./DefaultLayout.vue";
 import EmptyLayout from "./EmptyLayout.vue";
 
-import router from "@/app/router";
 import { useAuthStore } from "@/features/auth/store/authStore";
 import { useThemeStore } from "@/features/theme";
 import { useGlobalFiltersStore } from "@/shared/stores";
@@ -18,8 +17,9 @@ const layouts: Record<string, Component> = {
 };
 
 const route = useRoute();
-const authStore = useAuthStore();
+const router = useRouter();
 const themeStore = useThemeStore();
+const authStore = useAuthStore();
 const globalFiltersStore = useGlobalFiltersStore();
 
 // Initialize theme immediately (synchronous)

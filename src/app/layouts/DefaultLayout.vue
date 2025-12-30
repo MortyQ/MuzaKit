@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed } from "vue";
 import { RouterView } from "vue-router";
 
@@ -14,8 +14,8 @@ import { Sidebar, useSidebar } from "@/widgets/navigationSidebar";
 import type { SidebarConfig } from "@/widgets/navigationSidebar";
 
 const authStore = useAuthStore();
-const { isCollapsed, toggleMobile } = useSidebar();
 const globalFiltersStore = useGlobalFiltersStore();
+const { isCollapsed, toggleMobile } = useSidebar();
 
 // Footer items - can add additional items here if needed
 const footerItems = computed(() => {
@@ -26,7 +26,6 @@ const footerItems = computed(() => {
     to?: { name: string }
     onClick?: () => void
   }> = [];
-
   return items;
 });
 
@@ -36,7 +35,7 @@ const sidebarConfig = computed<SidebarConfig>(() => {
   // Pass authStore to filter menu items by permissions
   // Computed automatically reacts to authStore.user changes
   return menuItemsToSidebarConfig(getMenuItems(authStore), {
-    brandName: "MuzaKit",
+    brandName: "SO Insights",
     footerItems: footerItems.value,
     showThemeToggle: true,
     showUserMenu: true,
@@ -62,24 +61,26 @@ const contentMargin = computed(() => ({
 
     <!-- Main Content Area -->
     <div
+      :class="contentMargin"
       class="flex-1 flex flex-col transition-all duration-300
       overflow-x-hidden bg-cardBg rounded-xl shadow-glass-soft"
-      :class="contentMargin"
     >
       <!-- Top Header with Mobile Menu Toggle -->
       <header
-        class="bg-base-100 shadow-sm border-b border-base-300 flex-shrink-0 lg:hidden"
+        class="bg-base-100 shadow-sm border-b
+        border-base-300 flex-shrink-0 lg:hidden"
       >
         <div class="flex items-center justify-between h-16 px-4">
           <button
-            type="button"
-            class="p-2 rounded-lg hover:bg-base-200 text-neutral transition-colors"
             aria-label="Open menu"
+            class="p-2 rounded-lg hover:bg-base-200
+            text-neutral transition-colors"
+            type="button"
             @click="toggleMobile"
           >
             <VIcon
-              icon="mdi:menu"
               :size="24"
+              icon="mdi:menu"
             />
           </button>
           <h1 class="text-lg font-semibold text-primary">
@@ -102,11 +103,11 @@ const contentMargin = computed(() => ({
           >
             <HeaderFilters />
           </header>
-
           <!-- Page Content -->
-          <RouterView v-slot="{ Component }">
+          <RouterView v-slot="{ Component, route }">
             <component
               :is="Component"
+              :key="route.path"
               class="flex-1 min-w-0"
             />
           </RouterView>

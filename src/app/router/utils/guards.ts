@@ -97,21 +97,8 @@ export function hasAnyPermission(
 /**
  * Error/system routes that should never be auto-selected
  */
-const EXCLUDED_ROUTES = new Set([
-  "403",
-  "404",
-  "Forbidden",
-  "NotFound",
-  "Root",
-]);
-const EXCLUDED_PATHS = new Set([
-  "/",
-  "/403",
-  "/404",
-  "/login",
-  "/password-forgot",
-  "/reset-password",
-]);
+const EXCLUDED_ROUTES = new Set(["403", "404", "Forbidden", "NotFound", "Root"]);
+const EXCLUDED_PATHS = new Set(["/", "/403", "/404", "/login", "/password-forgot", "/reset-password"]);
 
 /**
  * Smart route finder with priority-based selection.

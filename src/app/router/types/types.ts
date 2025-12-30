@@ -42,6 +42,13 @@ export interface RouteMeta {
 
   /** Special flag for root route to always trigger redirect to first accessible route */
   isRootRedirect?: boolean
+
+  filters?: {
+    /** Filters to hide on this page */
+    hide?: string[]
+    /** Filters to show on this page */
+    show?: string[]
+  }
 }
 
 /**
