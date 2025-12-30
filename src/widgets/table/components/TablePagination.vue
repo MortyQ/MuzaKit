@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed } from "vue";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
@@ -20,7 +20,7 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
   pageSizeOptions: () => [10, 25, 50, 100],
-  showSizeChanger: true,
+  showSizeChanger: false,
   loading: false,
 });
 
@@ -128,14 +128,14 @@ const isNextDisabled = computed(() => props.loading || props.page >= totalPages.
     <div class="table-pagination-controls">
       <!-- Previous button -->
       <button
-        class="table-pagination-btn"
         :disabled="isPrevDisabled"
         aria-label="Previous page"
+        class="table-pagination-btn"
         @click="goToPreviousPage"
       >
         <VIcon
-          icon="mdi:chevron-left"
           :size="18"
+          icon="mdi:chevron-left"
         />
       </button>
 
@@ -146,9 +146,9 @@ const isNextDisabled = computed(() => props.loading || props.page >= totalPages.
       >
         <button
           v-if="pageItem !== 'ellipsis'"
-          class="table-pagination-btn"
           :class="{ 'table-pagination-btn--active': pageItem === page }"
           :disabled="loading"
+          class="table-pagination-btn"
           @click="goToPage(pageItem)"
         >
           {{ pageItem }}
@@ -163,14 +163,14 @@ const isNextDisabled = computed(() => props.loading || props.page >= totalPages.
 
       <!-- Next button -->
       <button
-        class="table-pagination-btn"
         :disabled="isNextDisabled"
         aria-label="Next page"
+        class="table-pagination-btn"
         @click="goToNextPage"
       >
         <VIcon
-          icon="mdi:chevron-right"
           :size="18"
+          icon="mdi:chevron-right"
         />
       </button>
     </div>
@@ -183,8 +183,8 @@ const isNextDisabled = computed(() => props.loading || props.page >= totalPages.
       <label for="pagination-size">Rows:</label>
       <select
         id="pagination-size"
-        :value="pageSize"
         :disabled="loading"
+        :value="pageSize"
         @change="changePageSize(Number(($event.target as HTMLSelectElement).value))"
       >
         <option

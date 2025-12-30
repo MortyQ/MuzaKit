@@ -46,7 +46,7 @@ export interface MultiSelectConfig {
   /**
    * Custom function to determine if a row can be selected
    */
-
+  // eslint-disable-next-line no-unused-vars
   isRowSelectable?: (row: ExpandableRow) => boolean
 
   /**

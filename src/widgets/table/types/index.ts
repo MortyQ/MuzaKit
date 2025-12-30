@@ -8,7 +8,8 @@ export type NumberFormatter = "default" | "compact" | "percent" | "decimal";
 
 export interface ColumnFormatOptions {
   // Currency formatting
-  currency?: boolean | CurrencyFormatter | { code: CurrencyFormatter, decimals?: number }
+  // Usage: currency: true (defaults to USD), currency: "EUR", currency: { code: "GBP", decimals: 2 }
+  currency?: boolean | CurrencyFormatter | { code?: CurrencyFormatter, decimals?: number }
 
   // Percentage formatting
   percentage?: boolean | { decimals?: number, multiplier?: boolean }
@@ -50,7 +51,7 @@ export interface HeaderContext {
 export interface Column {
   key: string // Key from data object
   label: string // Header text
-  width?: string // Fixed width (e.g., "150px") - makes column resizable. Without width, column is flexible (not resizable)
+  width?: string | "flex" // Fixed width (e.g., "150px") - makes column resizable. Without width, column is flexible (not resizable)
   align?: "left" | "center" | "right"
   interactive?: boolean // Whether column contains interactive elements (select, dropdown, etc.)
   fixed?: "left" | "right" // Fix column (sticky) to left or right
@@ -78,6 +79,9 @@ export interface Column {
   // Example: onHeaderClick: ({ columnKey, event }) => { console.log('Clicked:', columnKey); }
 
   onHeaderClick?: (context: HeaderContext) => void
+
+  // Tooltip text for header info icon
+  tooltip?: string
 }
 
 export interface HeaderCell {
@@ -91,9 +95,10 @@ export interface HeaderCell {
 }
 
 export interface ExpandableRow {
-  id: string | number
+  id?: string | number
   children?: ExpandableRow[]
-  [key: string]: unknown
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any
 }
 
 export interface FlattenedRow extends ExpandableRow {
@@ -121,7 +126,7 @@ export type SortOrder = "asc" | "desc";
 export type SortType = "front" | "server";
 
 export interface SortItem {
-  column: string // Column key
+  field: string // Column key
   order: SortOrder // Sort direction
 }
 
@@ -137,7 +142,7 @@ export interface RequestPayload {
 }
 
 export interface FrontSortPayload {
-  column: string
+  field: string
   order: SortOrder
   sortState: SortItem[] // Full sort state for multi-sort
 }

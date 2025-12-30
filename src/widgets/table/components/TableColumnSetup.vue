@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref, computed, watch } from "vue";
 
 import type { Column } from "../types";
@@ -43,7 +43,11 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<Emits>();
 
 // Load saved state from storage (async)
-const loadFromStorage = async (): Promise<{ visible: string[], order: string[], fixed?: Record<string, "left" | "right"> } | null> => {
+const loadFromStorage = async (): Promise<{
+  visible: string[]
+  order: string[]
+  fixed?: Record<string, "left" | "right">
+} | null> => {
   if (!props.config?.key) return null;
 
   try {
@@ -103,7 +107,11 @@ const flattenColumns = (columns: Column[]): Column[] => {
 };
 
 // Create setup items from columns
-const createSetupItems = (savedState?: { visible: string[], order: string[], fixed?: Record<string, "left" | "right"> } | null): ColumnSetupItem[] => {
+const createSetupItems = (savedState?: {
+  visible: string[]
+  order: string[]
+  fixed?: Record<string, "left" | "right">
+} | null): ColumnSetupItem[] => {
   const flatCols = flattenColumns(props.columns);
 
   // If we have saved state, use it
@@ -426,9 +434,9 @@ const handleReset = async () => {
         <span>Column Settings</span>
       </div>
       <VButton
-        variant="default"
-        size="small"
         icon="mdi:refresh"
+        size="small"
+        variant="default"
         @click="handleReset"
       />
     </div>
@@ -436,8 +444,8 @@ const handleReset = async () => {
     <!-- Toggle all checkbox -->
     <div class="column-setup-toggle-all">
       <VCheckbox
-        :model-value="allVisible"
         :indeterminate="someVisible"
+        :model-value="allVisible"
         label="Toggle All"
         @update:model-value="handleToggleAll"
       />
@@ -451,7 +459,6 @@ const handleReset = async () => {
       <div
         v-for="(item, index) in items"
         :key="item.key"
-        class="column-setup-item"
         :class="{
           'column-setup-item--dragging': draggedIndex === index,
           'column-setup-item--drag-over': dragOverIndex === index,
@@ -459,11 +466,12 @@ const handleReset = async () => {
           'column-setup-item--no-reorder': config?.allowReorder === false,
         }"
         :draggable="config?.allowReorder !== false"
-        @dragstart="handleDragStart(index, $event)"
-        @dragover="handleDragOver(index, $event)"
-        @dragleave="handleDragLeave"
-        @drop="handleDrop(index, $event)"
+        class="column-setup-item"
         @dragend="handleDragEnd"
+        @dragleave="handleDragLeave"
+        @dragover="handleDragOver(index, $event)"
+        @dragstart="handleDragStart(index, $event)"
+        @drop="handleDrop(index, $event)"
       >
         <!-- Drag handle -->
         <div
@@ -492,9 +500,9 @@ const handleReset = async () => {
         <!-- Fixed toggle button (only for first 2 positions) -->
         <button
           v-if="canBeFixed(index)"
-          class="column-setup-item-fixed-btn"
           :class="{ 'column-setup-item-fixed-btn--active': isFixedLeft(item) }"
           :title="isFixedLeft(item) ? 'Unpin column' : 'Pin column to left'"
+          class="column-setup-item-fixed-btn"
           @click.stop="toggleFixed(index)"
         >
           <VIcon
@@ -531,10 +539,10 @@ const handleReset = async () => {
       </span>
 
       <VButton
-        variant="primary"
+        :disabled="!hasUnsavedChanges"
         size="small"
         text="Apply Changes"
-        :disabled="!hasUnsavedChanges"
+        variant="primary"
         @click="handleApply"
       />
     </div>
@@ -543,57 +551,84 @@ const handleReset = async () => {
 
 <style lang="scss" scoped>
 .column-setup {
-  width: 360px;
-  max-height: 600px;
+  width: 100%;
+  max-width: 360px;
+  max-height: min(500px, 70vh);
   display: flex;
   flex-direction: column;
   background: var(--color-base-100, #ffffff);
   border: 1px solid var(--color-card-border, #e2e8f0);
   border-radius: 12px;
-  box-shadow:
-    0 10px 15px -3px rgb(0 0 0 / 0.1),
-    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+  0 4px 6px -4px rgb(0 0 0 / 0.1);
   overflow: hidden;
   position: relative;
   z-index: 1;
   @apply bg-base-100;
+
+  @media (max-width: 400px) {
+    max-width: 100%;
+    max-height: 60vh;
+    border-radius: 8px;
+  }
 }
 
 .column-setup-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--color-neutral-200, #e2e8f0);
   background: var(--color-base-200, #f8fafc);
   border-radius: 12px 12px 0 0;
+  flex-shrink: 0;
+
+  @media (max-width: 400px) {
+    padding: 10px 12px;
+    border-radius: 8px 8px 0 0;
+  }
 }
 
 .column-setup-title {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
   color: var(--color-text-primary);
   letter-spacing: -0.01em;
+
+  @media (max-width: 400px) {
+    font-size: 13px;
+    gap: 6px;
+  }
 }
 
 .column-setup-toggle-all {
-  padding: 16px 20px;
+  padding: 10px 16px;
   border-bottom: 1px solid var(--color-neutral-200);
   background: var(--color-base-100);
+  flex-shrink: 0;
+
+  @media (max-width: 400px) {
+    padding: 8px 12px;
+  }
 }
 
 .column-setup-list {
   flex: 1;
   overflow-y: auto;
-  padding: 12px;
+  padding: 8px;
   background: var(--color-base-200);
+  min-height: 0;
+
+  @media (max-width: 400px) {
+    padding: 6px;
+  }
 
   /* Modern scrollbar */
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
 
   &::-webkit-scrollbar-track {
@@ -603,7 +638,7 @@ const handleReset = async () => {
   &::-webkit-scrollbar-thumb {
     background: var(--color-neutral-300);
     border-radius: 10px;
-    border: 2px solid transparent;
+    border: 1px solid transparent;
     background-clip: padding-box;
 
     &:hover {
@@ -616,40 +651,42 @@ const handleReset = async () => {
 .column-setup-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  margin-bottom: 6px;
+  gap: 8px;
+  padding: 8px 10px;
+  margin-bottom: 4px;
   border-radius: var(--radius-lg);
   cursor: move;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.15s ease;
   border: 1px solid transparent;
   background: var(--color-base-100);
+
+  @media (max-width: 400px) {
+    padding: 6px 8px;
+    gap: 6px;
+    margin-bottom: 3px;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   &:hover {
     background: var(--color-neutral-50);
     border-color: var(--color-neutral-200);
-    box-shadow:
-      0 1px 3px 0 rgb(0 0 0 / 0.1),
-      0 1px 2px -1px rgb(0 0 0 / 0.1);
-    transform: translateY(-1px);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   }
 
   &--dragging {
     opacity: 0.6;
     cursor: grabbing;
-    transform: scale(1.02) rotate(2deg);
-    box-shadow:
-      0 10px 15px -3px rgb(0 0 0 / 0.1),
-      0 4px 6px -4px rgb(0 0 0 / 0.1);
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px -2px rgb(0 0 0 / 0.1);
   }
 
   &--drag-over {
     border-color: var(--color-primary-500);
     background: var(--color-primary-50);
-    box-shadow:
-      0 0 0 2px var(--color-primary-500),
-      0 4px 6px -1px rgb(0 0 0 / 0.1);
-    transform: scale(1.02);
+    box-shadow: 0 0 0 2px var(--color-primary-500);
   }
 
   &--fixed {
@@ -673,8 +710,9 @@ const handleReset = async () => {
   align-items: center;
   color: var(--color-text-tertiary);
   cursor: grab;
-  opacity: 0.6;
-  transition: opacity 0.2s ease;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+  flex-shrink: 0;
 
   &:hover {
     opacity: 1;
@@ -688,30 +726,40 @@ const handleReset = async () => {
 .column-setup-item-checkbox {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .column-setup-item-label {
   flex: 1;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--color-text-primary);
   user-select: none;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+
+  @media (max-width: 400px) {
+    font-size: 12px;
+  }
 }
 
 .column-setup-item-fixed-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border: 1px solid var(--color-neutral-200);
   border-radius: var(--radius-md);
   background: var(--color-base-100);
   color: var(--color-neutral-500);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
 
   &:hover {
     background: var(--color-neutral-50);
@@ -733,14 +781,15 @@ const handleReset = async () => {
 .column-setup-item-badge {
   display: flex;
   align-items: center;
-  padding: 4px 8px;
+  padding: 2px 6px;
   border-radius: var(--radius-sm);
   background: var(--color-neutral-100);
   color: var(--color-neutral-600);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
 
   &--warning {
     background: var(--color-warning-100);
@@ -752,43 +801,55 @@ const handleReset = async () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 16px 20px;
+  gap: 8px;
+  padding: 12px 16px;
   border-top: 1px solid var(--color-neutral-200, #e2e8f0);
   background: var(--color-base-200, #f8fafc);
   border-radius: 0 0 12px 12px;
+  flex-shrink: 0;
+
+  @media (max-width: 400px) {
+    padding: 10px 12px;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 0 0 8px 8px;
+  }
 }
 
 .column-setup-hint {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
+  gap: 6px;
+  font-size: 11px;
   font-weight: 500;
   color: var(--color-text-tertiary);
   flex: 1;
   letter-spacing: -0.01em;
+
+  @media (max-width: 400px) {
+    font-size: 10px;
+    text-align: center;
+    justify-content: center;
+  }
 }
 
-/* Animation for list items */
-@keyframes slideIn {
+/* Animation for list items - simplified for better performance */
+.column-setup-item {
+  animation: fadeIn 0.2s ease backwards;
+
+  @for $i from 1 through 15 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.02}s;
+    }
+  }
+}
+
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.column-setup-item {
-  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) backwards;
-
-  @for $i from 1 through 20 {
-    &:nth-child(#{$i}) {
-      animation-delay: #{$i * 0.03}s;
-    }
   }
 }
 </style>

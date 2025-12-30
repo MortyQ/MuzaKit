@@ -12,7 +12,7 @@ const serverData = ref([...mockDataUsers]);
 // ✅ PRESET: Initial sort by name (ascending)
 // You can set initial sort state - table will apply it on mount
 const serverSortState = ref<SortItem[]>([
-  { column: "name", order: "desc" },
+  { field: "name", order: "desc" },
 ]);
 const serverLoading = ref(false);
 
@@ -47,8 +47,8 @@ const handleServerRequest = async ({ sort, page }: RequestPayload) => {
   if (sort.length > 0) {
     sortedData.sort((a, b) => {
       for (const sortItem of sort) {
-        const aValue = a[sortItem.column];
-        const bValue = b[sortItem.column];
+        const aValue = a[sortItem.field];
+        const bValue = b[sortItem.field];
 
         if (aValue === bValue) continue;
 
@@ -70,8 +70,8 @@ const handleServerRequest = async ({ sort, page }: RequestPayload) => {
 const frontData = ref([...mockDataUsers]);
 // ✅ PRESET: Multi-sort - first by age (desc), then by name (asc)
 const frontSortState = ref<SortItem[]>([
-  { column: "age", order: "desc" },
-  { column: "name", order: "asc" },
+  { field: "age", order: "desc" },
+  { field: "name", order: "asc" },
 ]);
 
 // Example: All flexible columns - fill container width equally
@@ -118,9 +118,9 @@ const handleSingleRequest = async ({ sort }: RequestPayload) => {
 
   let sorted = [...mockDataUsers];
   if (sort.length > 0) {
-    const { column, order } = sort[0];
+    const { field, order } = sort[0];
     sorted.sort((a, b) => {
-      const comparison = String(a[column]).localeCompare(String(b[column]), undefined, {
+      const comparison = String(a[field]).localeCompare(String(b[field]), undefined, {
         numeric: true,
       });
       return order === "asc" ? comparison : -comparison;

@@ -78,8 +78,8 @@ const handleServerRequest = async ({ sort, page }: RequestPayload) => {
   if (sort.length > 0) {
     sortedData.sort((a, b) => {
       for (const sortItem of sort) {
-        const aValue = a[sortItem.column];
-        const bValue = b[sortItem.column];
+        const aValue = a[sortItem.field];
+        const bValue = b[sortItem.field];
 
         if (aValue === bValue) continue;
 

@@ -18,11 +18,8 @@ interface UseTableSortOptions<T = Record<string, unknown>> {
   // For frontend sorting
   data?: Ref<T[]>
   // Callbacks
-
   onRequest?: (payload: RequestPayload) => void
-
   onSort?: (payload: FrontSortPayload) => void
-
   onUpdateSortState?: (sortState: SortItem[]) => void
 }
 
@@ -81,8 +78,8 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
   // ========================================
 
   /**
-   * Get value from row by key with support for sortValue
-   */
+     * Get value from row by key with support for sortValue
+     */
   const getRowValue = (row: T, columnKey: string): unknown => {
     // Find column definition
     const column = columns.value.find((col) => col.key === columnKey);
@@ -105,8 +102,8 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
   };
 
   /**
-   * Compare two values for sorting
-   */
+     * Compare two values for sorting
+     */
   const compareValues = (a: unknown, b: unknown, order: SortOrder): number => {
     // Handle null/undefined
     if (a == null && b == null) return 0;
@@ -140,8 +137,8 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
   };
 
   /**
-   * Sort data array by multiple columns (multi-sort support)
-   */
+     * Sort data array by multiple columns (multi-sort support)
+     */
   const sortDataByMultiple = (dataToSort: T[], sortItems: SortItem[]): T[] => {
     // If no sorting applied, return original order
     if (sortItems.length === 0) {
@@ -154,8 +151,8 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
     return [...dataToSort].sort((a, b) => {
       // Compare by each sort column in order
       for (const sortItem of sortItems) {
-        const aValue = getRowValue(a, sortItem.column);
-        const bValue = getRowValue(b, sortItem.column);
+        const aValue = getRowValue(a, sortItem.field);
+        const bValue = getRowValue(b, sortItem.field);
         const comparison = compareValues(aValue, bValue, sortItem.order);
 
         // If values are different, return comparison result
@@ -170,8 +167,8 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
   };
 
   /**
-   * Sorted data (reactive) - only for frontend sorting
-   */
+     * Sorted data (reactive) - only for frontend sorting
+     */
   const sortedData = computed<T[]>(() => {
     if (sortConfig.value.type !== "front" || !data) {
       return data?.value || [];
@@ -186,10 +183,10 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
   // ========================================
 
   /**
-   * Get sort state for specific column
-   */
+     * Get sort state for specific column
+     */
   const getSortState = (columnKey: string) => {
-    const sortItem = internalSortState.value.find((item) => item.column === columnKey);
+    const sortItem = internalSortState.value.find((item) => item.field === columnKey);
     return {
       isSorted: !!sortItem,
       order: sortItem?.order || null,
@@ -198,8 +195,8 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
   };
 
   /**
-   * Toggle sort order: none -> asc -> desc -> none
-   */
+     * Toggle sort order: none -> asc -> desc -> none
+     */
   const getNextSortOrder = (currentOrder: SortOrder | null): SortOrder | null => {
     if (!currentOrder) return "asc";
     if (currentOrder === "asc") return "desc";
@@ -207,9 +204,9 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
   };
 
   /**
-   * Handle sort click on column header
-   * Multi-sort is default behavior - no Shift key needed
-   */
+     * Handle sort click on column header
+     * Multi-sort is default behavior - no Shift key needed
+     */
   const handleSortClick = (column: Column) => {
     if (!column.sortable) return;
 
@@ -223,17 +220,17 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
       // Multi-sort mode (default)
       if (nextOrder === null) {
         // Remove from sort (triple-click reset)
-        newSortState = internalSortState.value.filter((item) => item.column !== columnKey);
+        newSortState = internalSortState.value.filter((item) => item.field !== columnKey);
       }
       else if (currentSort.isSorted) {
         // Update existing sort order (asc -> desc or desc -> none)
         newSortState = internalSortState.value.map((item) =>
-          item.column === columnKey ? { column: columnKey, order: nextOrder } : item,
+          item.field === columnKey ? { field: columnKey, order: nextOrder } : item,
         );
       }
       else {
         // Add new sort column
-        newSortState = [...internalSortState.value, { column: columnKey, order: nextOrder }];
+        newSortState = [...internalSortState.value, { field: columnKey, order: nextOrder }];
       }
     }
     else {
@@ -242,7 +239,7 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
         newSortState = [];
       }
       else {
-        newSortState = [{ column: columnKey, order: nextOrder }];
+        newSortState = [{ field: columnKey, order: nextOrder }];
       }
     }
 
@@ -257,10 +254,10 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
       // Frontend sort - emit @sort event
       if (newSortState.length > 0) {
         // Emit for the most recently changed column
-        const changedSort = newSortState.find((item) => item.column === columnKey);
+        const changedSort = newSortState.find((item) => item.field === columnKey);
         if (changedSort) {
           onSort?.({
-            column: columnKey,
+            field: columnKey,
             order: changedSort.order,
             sortState: newSortState,
           });
@@ -280,13 +277,13 @@ export const useTableSort = <T = Record<string, unknown>>(options: UseTableSortO
   };
 
   /**
-   * Check if any column is sorted
-   */
+     * Check if any column is sorted
+     */
   const hasSortedColumns = computed(() => internalSortState.value.length > 0);
 
   /**
-   * Reset all sorting
-   */
+     * Reset all sorting
+     */
   const resetSort = () => {
     internalSortState.value = [];
     onUpdateSortState?.([]);

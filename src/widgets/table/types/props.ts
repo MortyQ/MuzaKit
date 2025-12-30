@@ -17,11 +17,11 @@ export type TableProps = {
   selectedRows?: ExpandableRow[] // Pre-selected rows (v-model support)
   multiSelect?: MultiSelectConfig // Multi-select configuration
   /**
-   * Expand behavior mode:
-   * - 'auto' (default): Rows expand/collapse automatically on click
-   * - 'controlled': Expansion is controlled via @expand-click callback
-   *   Parent must call the provided callback to toggle expansion
-   */
+     * Expand behavior mode:
+     * - 'auto' (default): Rows expand/collapse automatically on click
+     * - 'controlled': Expansion is controlled via @expand-click callback
+     *   Parent must call the provided callback to toggle expansion
+     */
   expandMode?: "auto" | "controlled"
 
   // Sorting configuration
@@ -38,15 +38,15 @@ export type TableProps = {
   search?: string
 
   /**
-   * Custom class name for table rows
-   * Can be a string (applied to all rows) or a function that returns class name based on row data
-   * @example
-   * // String
-   * rowClassName="custom-row"
-   *
-   * // Function
-   * :rowClassName="(row, index) => row.isModified ? 'bg-blue-100 dark:bg-blue-900' : ''"
-   */
+     * Custom class name for table rows
+     * Can be a string (applied to all rows) or a function that returns class name based on row data
+     * @example
+     * // String
+     * rowClassName="custom-row"
+     *
+     * // Function
+     * :rowClassName="(row, index) => row.isModified ? 'bg-blue-100 dark:bg-blue-900' : ''"
+     */
   rowClassName?: string | RowClassNameFunction
 };
 

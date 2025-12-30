@@ -52,8 +52,8 @@ const handleServerRequest = async ({ page, pageSize, sort }: RequestPayload) => 
   if (sort.length > 0) {
     sortedData.sort((a, b) => {
       for (const sortItem of sort) {
-        const aValue = a[sortItem.column];
-        const bValue = b[sortItem.column];
+        const aValue = a[sortItem.field];
+        const bValue = b[sortItem.field];
 
         if (aValue === bValue) continue;
 
@@ -97,8 +97,8 @@ const handleServerRequest2 = async ({ page, pageSize, sort }: RequestPayload) =>
   if (sort.length > 0) {
     sortedData.sort((a, b) => {
       for (const sortItem of sort) {
-        const aValue = a[sortItem.column];
-        const bValue = b[sortItem.column];
+        const aValue = a[sortItem.field];
+        const bValue = b[sortItem.field];
         if (aValue === bValue) continue;
         const comparison = String(aValue).localeCompare(String(bValue),
           undefined, { numeric: true });
@@ -134,8 +134,8 @@ const handleServerRequest3 = async ({ page, pageSize, sort }: RequestPayload) =>
   if (sort.length > 0) {
     sortedData.sort((a, b) => {
       for (const sortItem of sort) {
-        const aValue = a[sortItem.column];
-        const bValue = b[sortItem.column];
+        const aValue = a[sortItem.field];
+        const bValue = b[sortItem.field];
         if (aValue === bValue) continue;
         const comparison = String(aValue).localeCompare(String(bValue),
           undefined, { numeric: true });

@@ -89,8 +89,7 @@
     z-index: -1;
 
     // Soft shadow with blur but no spread for clean appearance
-    box-shadow: 0 $table-shadow-offset $table-shadow-blur 0
-                color-mix(in srgb, theme('colors.mainText') 8%, transparent 92%);
+    box-shadow: 0 $table-shadow-offset $table-shadow-blur 0 color-mix(in srgb, theme('colors.mainText') 8%, transparent 92%);
   }
 
   // No resize handle on groups
@@ -118,9 +117,9 @@
 
   // Modern gradient background - more contrast for dark theme
   background: linear-gradient(
-    to bottom,
-    color-mix(in srgb, theme('colors.cardBg') 100%, theme('colors.primary') 3%),
-    color-mix(in srgb, theme('colors.cardBg') 100%, theme('colors.mainText') 2%)
+                  to bottom,
+                  color-mix(in srgb, theme('colors.cardBg') 100%, theme('colors.primary') 3%),
+                  color-mix(in srgb, theme('colors.cardBg') 100%, theme('colors.mainText') 2%)
   );
 
   // Enhanced borders for better visibility on dark theme
@@ -171,8 +170,7 @@
     z-index: -1;
 
     // Soft shadow with blur but no spread for clean appearance
-    box-shadow: 0 $table-shadow-offset $table-shadow-blur 0
-                color-mix(in srgb, theme('colors.mainText') 8%, transparent 92%);
+    box-shadow: 0 $table-shadow-offset $table-shadow-blur 0 color-mix(in srgb, theme('colors.mainText') 8%, transparent 92%);
   }
 
   // Grouped leaf header (header that is part of a group)
@@ -226,10 +224,10 @@
       right: 0;
       height: 2px;
       background: linear-gradient(
-        90deg,
-        transparent 0%,
-        color-mix(in srgb, theme('colors.primary') 30%, transparent 70%) 50%,
-        transparent 100%
+                      90deg,
+                      transparent 0%,
+                      color-mix(in srgb, theme('colors.primary') 30%, transparent 70%) 50%,
+                      transparent 100%
       );
       opacity: 0.4;
       transition: opacity 0.2s ease;
@@ -249,9 +247,9 @@
 
   &--sorted {
     background: linear-gradient(
-      to bottom,
-      rgb(var(--color-primary) / 0.12),
-      rgb(var(--color-primary) / 0.05)
+                    to bottom,
+                    rgb(var(--color-primary) / 0.12),
+                    rgb(var(--color-primary) / 0.05)
     );
 
     // Accent border for sorted column
@@ -296,9 +294,9 @@
 
     &:hover {
       background: linear-gradient(
-        to bottom,
-        color-mix(in srgb, theme('colors.cardBg') 92%, theme('colors.primary') 8%),
-        color-mix(in srgb, theme('colors.cardBg') 96%, theme('colors.primary') 4%)
+                      to bottom,
+                      color-mix(in srgb, theme('colors.cardBg') 92%, theme('colors.primary') 8%),
+                      color-mix(in srgb, theme('colors.cardBg') 96%, theme('colors.primary') 4%)
       );
 
       .table-header-label {
@@ -314,9 +312,9 @@
 
     &:active {
       background: linear-gradient(
-        to bottom,
-        color-mix(in srgb, theme('colors.cardBg') 88%, theme('colors.primary') 12%),
-        color-mix(in srgb, theme('colors.cardBg') 94%, theme('colors.primary') 6%)
+                      to bottom,
+                      color-mix(in srgb, theme('colors.cardBg') 88%, theme('colors.primary') 12%),
+                      color-mix(in srgb, theme('colors.cardBg') 94%, theme('colors.primary') 6%)
       );
       transform: translateY(1px);
     }

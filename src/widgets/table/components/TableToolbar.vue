@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed } from "vue";
 
 import type { ToolbarConfig } from "../types/toolbar";
@@ -138,9 +138,9 @@ const handleSingleExport = () => {
         >
           <VInput
             v-model="searchModel"
-            type="search"
-            debounce
             :placeholder="searchConfig.placeholder"
+            debounce
+            type="search"
           />
         </div>
       </slot>
@@ -152,28 +152,28 @@ const handleSingleExport = () => {
       <!-- Refresh button -->
       <VButton
         v-if="config?.actions?.refresh"
+        icon="lucide:refresh-cw"
         variant="default"
-        icon="mdi:refresh"
         @click="handleRefresh"
       />
 
       <!-- Reset sort button -->
       <VButton
         v-if="config?.actions?.resetSort"
-        variant="default"
-        icon="mdi:sort-variant-remove"
+        icon="lucide:arrow-up-down"
         text="Reset Sort"
+        variant="default"
         @click="handleResetSort"
       />
 
       <!-- Single Export button -->
       <VButton
         v-if="isExportEnabled && exportMode === 'single'"
-        variant="primary"
-        icon="mdi:download"
-        text="Export"
-        :loading="isExportLoading"
         :disabled="isExportLoading"
+        :loading="isExportLoading"
+        icon="lucide:file-down"
+        text="Export"
+        variant="primary"
         @click="handleSingleExport"
       />
 
@@ -186,10 +186,10 @@ const handleSingleExport = () => {
       >
         <template #trigger>
           <VButton
-            variant="primary"
-            icon="mdi:download"
-            text="Export"
             :loading="isAnyFormatLoading"
+            icon="lucide:file-down"
+            text="Export"
+            variant="primary"
           />
         </template>
 
@@ -203,8 +203,8 @@ const handleSingleExport = () => {
         <template #item-loader="{ item }">
           <VLoader
             v-if="item.loading"
-            variant="primary"
             size="small"
+            variant="primary"
           />
         </template>
       </VFloating>
