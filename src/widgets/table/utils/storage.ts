@@ -8,11 +8,11 @@ import { KeyvIndexedDB } from "keyv-browser";
 export type StorageType = "indexedDB" | "localStorage" | "sessionStorage";
 
 export interface StorageAdapter {
-  // eslint-disable-next-line no-unused-vars
+
   get<T>(key: string): Promise<T | null>
-  // eslint-disable-next-line no-unused-vars
+
   set<T>(key: string, value: T): Promise<void>
-  // eslint-disable-next-line no-unused-vars
+
   delete(key: string): Promise<void>
   clear(): Promise<void>
 }

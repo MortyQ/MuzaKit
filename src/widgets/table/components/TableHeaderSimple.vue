@@ -5,17 +5,17 @@ import TableHeader from "./TableHeader.vue";
 
 interface Props {
   columns: Column[]
-  // eslint-disable-next-line no-unused-vars
+
   getColumnClasses: (_column: Column) => string[]
-  // eslint-disable-next-line no-unused-vars
+
   getFixedStyles: (_column: Column) => Record<string, string>
-  // eslint-disable-next-line no-unused-vars
+
   getSortState: (_columnKey: string) => {
     isSorted: boolean
     order: "asc" | "desc" | null
     index: number
   }
-  // eslint-disable-next-line no-unused-vars
+
   isColumnResizable: (_column: Column) => boolean
 }
 

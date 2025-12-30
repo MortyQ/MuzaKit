@@ -15,8 +15,8 @@ export interface ColumnSetupItem {
 export interface ColumnSetupConfig {
   columns: Column[]
   initialVisible?: string[] // Keys of initially visible columns
-  // eslint-disable-next-line no-unused-vars
-  onUpdate?: (visibleColumns: Column[]) => void // eslint-disable-line no-unused-vars
+
+  onUpdate?: (visibleColumns: Column[]) => void
   storage?: {
     key: string
     type?: StorageType // Now supports: 'indexedDB' | 'localStorage' | 'sessionStorage'
