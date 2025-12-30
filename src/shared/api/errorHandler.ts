@@ -42,10 +42,10 @@ export function parseAxiosError(error: AxiosError | TypedAxiosError): ApiError {
 
   // Try to extract message from different response formats
   const message
-    = (data as Record<string, unknown>)?.message as string
-      || (data as Record<string, unknown>)?.error as string
-      || error.message
-      || getDefaultErrorMessage(status);
+        = (data as Record<string, unknown>)?.message as string
+          || (data as Record<string, unknown>)?.error as string
+          || error.message
+          || getDefaultErrorMessage(status);
 
   return {
     message,
@@ -81,8 +81,8 @@ export function getDefaultErrorMessage(status: number): string {
  */
 export class ErrorHandler {
   /**
-   * Handle error
-   */
+     * Handle error
+     */
   static handle(
     error: AxiosError | TypedAxiosError,
     options: ErrorHandlerOptions = {},
@@ -126,8 +126,8 @@ export class ErrorHandler {
   }
 
   /**
-   * Handle validation errors
-   */
+     * Handle validation errors
+     */
   static handleValidationErrors(errors: Record<string, string[]>): string[] {
     const messages: string[] = [];
 
@@ -141,29 +141,29 @@ export class ErrorHandler {
   }
 
   /**
-   * Check if error is an authorization error
-   */
+     * Check if error is an authorization error
+     */
   static isAuthError(error: ApiError): boolean {
     return error.status === 401;
   }
 
   /**
-   * Check if error is a validation error
-   */
+     * Check if error is a validation error
+     */
   static isValidationError(error: ApiError): boolean {
     return error.status === 422 && !!error.errors;
   }
 
   /**
-   * Check if error is a network error
-   */
+     * Check if error is a network error
+     */
   static isNetworkError(error: ApiError): boolean {
     return error.status === 0;
   }
 
   /**
-   * Create ApiError from any error
-   */
+     * Create ApiError from any error
+     */
   static fromError(error: unknown): ApiError {
     if (error instanceof Error) {
       return {

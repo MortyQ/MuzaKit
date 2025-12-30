@@ -28,9 +28,10 @@ export function useAbortController() {
      * Call this when global filters change
      */
   const abort = () => {
+    // IMPORTANT: Increment count BEFORE aborting, so handlers see the new value
+    abortCount.value++;
     abortController.abort();
     abortController = new AbortController();
-    abortCount.value++;
   };
 
   /**

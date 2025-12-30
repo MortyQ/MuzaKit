@@ -20,7 +20,7 @@ function createApiClient(): AxiosInstance {
   const instance = axios.create({
     baseURL: import.meta.env.VITE_API_URL
       ? `${import.meta.env.VITE_API_URL}`
-      : "https://todo-list-backend-seven-mauve.vercel.app/api",
+      : "/api",
     timeout: 30000,
     headers: {
       "Content-Type": "application/json",

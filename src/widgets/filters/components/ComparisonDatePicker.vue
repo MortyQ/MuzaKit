@@ -1,24 +1,27 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed } from "vue";
 
-import { useDatePresets } from "./useDatePresets";
+import { useDatePresets } from "../composables/useDatePresets";
 
+import { useGlobalFiltersSync } from "@/shared/composables/useGlobalFiltersSync";
 import { useGlobalFiltersStore } from "@/shared/stores";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import { VDatepicker } from "@/shared/ui/date-picker";
 
 // Use date presets composable
 const { comparisonPresetDates } = useDatePresets();
+const { updateSecondaryInterval } = useGlobalFiltersSync();
 
 // Use global filters store
 const filtersStore = useGlobalFiltersStore();
 
 // Create computed with getter/setter for v-model binding
 const dateRange = computed({
-  get: () => filtersStore.comparisonDateRange as [Date, Date],
+  get: () => filtersStore.secondaryInterval as [Date, Date],
   set: (value: [Date, Date] | Date[]) => {
-    if (value.length === 2) {
-      filtersStore.setComparisonDateRange([value[0], value[1]]);
+    if (!value.some((date: Date) => date === null)) {
+      filtersStore.setSecondaryIntervalRange([value[0], value[1]]);
+      updateSecondaryInterval();
     }
   },
 });
@@ -27,14 +30,14 @@ const dateRange = computed({
 <template>
   <VDatepicker
     v-model="dateRange"
-    range
-    size="md"
     :enable-time-picker="false"
-    :time-config="{ enableTimePicker: false }"
     :input-attrs="{ alwaysClearable: false }"
     :preset-dates="comparisonPresetDates"
-    width="230px"
+    :time-config="{ enableTimePicker: false }"
     icon="lucide:git-compare"
+    range
+    size="md"
+    width="230px"
   >
     <template #clear-icon />
     <template #top-extra>

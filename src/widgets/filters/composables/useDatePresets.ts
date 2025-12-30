@@ -10,17 +10,17 @@ import { computed } from "vue";
  */
 export function useDatePresets() {
   /**
-   * Get current UTC date at start of day
-   * "Today" is always the current UTC day (e.g., 2025-12-11T00:00:00Z)
-   */
+     * Get current UTC date at start of day
+     * "Today" is always the current UTC day (e.g., 2025-12-11T00:00:00Z)
+     */
   const getStartOfToday = (): DateTime => {
     return DateTime.utc().startOf("day");
   };
 
   /**
-   * Get the start of the week (Sunday) for a given date
-   * Luxon uses Monday by default (ISO), but we need Sunday
-   */
+     * Get the start of the week (Sunday) for a given date
+     * Luxon uses Monday by default (ISO), but we need Sunday
+     */
   const getStartOfWeek = (date: DateTime): DateTime => {
     const dayOfWeek = date.weekday; // 1=Mon, 7=Sun
     if (dayOfWeek === 7) {
@@ -30,17 +30,17 @@ export function useDatePresets() {
   };
 
   /**
-   * Get the end of the week (Saturday) for a given date
-   */
+     * Get the end of the week (Saturday) for a given date
+     */
   const getEndOfWeek = (date: DateTime): DateTime => {
     const startOfWeek = getStartOfWeek(date);
     return startOfWeek.plus({ days: 6 }).endOf("day");
   };
 
   /**
-   * Get default date range (last 3 months / 90 days)
-   * Returns native Date objects for UTC-mode VueDatePicker
-   */
+     * Get default date range (last 3 months / 90 days)
+     * Returns native Date objects for UTC-mode VueDatePicker
+     */
   const getDefaultDateRange = (): [Date, Date] => {
     const today = getStartOfToday();
     const threeMonthsAgo = today.minus({ days: 90 });
@@ -49,10 +49,10 @@ export function useDatePresets() {
   };
 
   /**
-   * Get default comparison date range
-   * Range: 180 days ago to 91 days ago (previous 90-day period)
-   * Returns native Date objects for UTC-mode VueDatePicker
-   */
+     * Get default comparison date range
+     * Range: 180 days ago to 91 days ago (previous 90-day period)
+     * Returns native Date objects for UTC-mode VueDatePicker
+     */
   const getDefaultComparisonDateRange = (): [Date, Date] => {
     const today = getStartOfToday();
     const startDate = today.minus({ days: 180 });
@@ -62,10 +62,10 @@ export function useDatePresets() {
   };
 
   /**
-   * Computed preset dates for quick selection
-   * All dates are calculated relative to UTC "Today"
-   * Reduced to most popular and essential ranges
-   */
+     * Computed preset dates for quick selection
+     * All dates are calculated relative to UTC "Today"
+     * Reduced to most popular and essential ranges
+     */
   const presetDates = computed(() => {
     const today = getStartOfToday();
 
@@ -118,9 +118,9 @@ export function useDatePresets() {
   });
 
   /**
-   * Computed preset dates for comparison date picker
-   * Implements "Prior" period logic for comparison analysis
-   */
+     * Computed preset dates for comparison date picker
+     * Implements "Prior" period logic for comparison analysis
+     */
   const comparisonPresetDates = computed(() => {
     const today = getStartOfToday();
 
@@ -147,15 +147,15 @@ export function useDatePresets() {
   });
 
   /**
-   * Helper to convert Date to UTC DateTime
-   */
+     * Helper to convert Date to UTC DateTime
+     */
   const toUTCDateTime = (date: Date): DateTime => {
     return DateTime.fromJSDate(date, { zone: "utc" });
   };
 
   /**
-   * Helper to format date range for display (in UTC)
-   */
+     * Helper to format date range for display (in UTC)
+     */
   const formatDateRange = (start: Date, end: Date, format = "MMM dd, yyyy"): string => {
     const startDt = toUTCDateTime(start);
     const endDt = toUTCDateTime(end);

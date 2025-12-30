@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { RouterView, useRoute } from "vue-router";
+import { RouterView } from "vue-router";
 
 import { getMenuItems } from "@/app/router/modules";
 import { menuItemsToSidebarConfig } from "@/app/router/utils/adapters";
 import { useAuthStore } from "@/features/auth/store/authStore";
+import { useGlobalFiltersStore } from "@/shared/stores";
 import VIcon from "@/shared/ui/common/VIcon.vue";
+import VLoader from "@/shared/ui/common/VLoader.vue";
+import GlobalFilterSidebar from "@/widgets/filters/GlobalFilterSidebar.vue";
 import HeaderFilters from "@/widgets/filters/HeaderFilters.vue";
 import { Sidebar, useSidebar } from "@/widgets/navigationSidebar";
 import type { SidebarConfig } from "@/widgets/navigationSidebar";
 
-const route = useRoute();
 const authStore = useAuthStore();
 const { isCollapsed, toggleMobile } = useSidebar();
+const globalFiltersStore = useGlobalFiltersStore();
 
 // Footer items - can add additional items here if needed
 const footerItems = computed(() => {
@@ -54,6 +57,9 @@ const contentMargin = computed(() => ({
     <!-- Sidebar -->
     <Sidebar :config="sidebarConfig" />
 
+    <!-- Global Filter Sidebar (keep-alive - mounts once) -->
+    <GlobalFilterSidebar />
+
     <!-- Main Content Area -->
     <div
       class="flex-1 flex flex-col transition-all duration-300
@@ -84,18 +90,16 @@ const contentMargin = computed(() => ({
       </header>
 
       <!-- Main Content -->
-      <main class="flex-1 flex flex-col overflow-x-hidden">
+      <main
+        v-if="globalFiltersStore.isInitialized"
+        class="flex-1 flex flex-col overflow-x-hidden"
+      >
         <div class="flex-1 py-4 px-4 sm:px-6 flex flex-col min-w-0">
           <!-- Page Header -->
           <header
             class="min-h-16 mb-4 pb-4 xl:justify-between
           border-b border-base-300 flex flex-wrap items-center gap-3"
           >
-            <h1
-              class="text-3xl font-bold text-mainText flex-shrink-0"
-            >
-              {{ route.meta.title || "" }}
-            </h1>
             <HeaderFilters />
           </header>
 
@@ -108,6 +112,12 @@ const contentMargin = computed(() => ({
           </RouterView>
         </div>
       </main>
+      <div
+        v-else
+        class="h-full flex justify-center items-center"
+      >
+        <VLoader />
+      </div>
     </div>
   </div>
 </template>
