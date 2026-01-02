@@ -28,7 +28,7 @@ import {
   useTablePeriodSelect,
   type PeriodOption,
   type PeriodRequestParams,
-} from "@/widgets/table/composables/useTablePeriodSelect";
+} from "@/shared/ui/table/composables/useTablePeriodSelect";
 
 // ==================== Types ====================
 

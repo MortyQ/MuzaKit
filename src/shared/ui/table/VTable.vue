@@ -7,6 +7,7 @@ import TableColumnSetup from "./components/TableColumnSetup.vue";
 import TableHeaderCheckbox from "./components/TableHeaderCheckbox.vue";
 import TableHeaderGrouped from "./components/TableHeaderGrouped.vue";
 import TableHeaderSimple from "./components/TableHeaderSimple.vue";
+import TablePagination from "./components/TablePagination.vue";
 import TableRow from "./components/TableRow.vue";
 import TableToolbar from "./components/TableToolbar.vue";
 import { useColumnResize } from "./composables/useColumnResize";
@@ -17,15 +18,14 @@ import { useTableFormatters } from "./composables/useTableFormatters";
 import { useTableSelection } from "./composables/useTableSelection";
 import { useTableSort } from "./composables/useTableSort";
 import { useVirtualTable } from "./composables/useVirtualTable";
-import type { Column, ExpandableRow, HeaderCell } from "./types/index";
+import type { Column, ExpandableRow, HeaderCell } from "./types";
 import tableStorage from "./utils/storage";
 
 import VButton from "@/shared/ui/common/VButton.vue";
 import VFloating from "@/shared/ui/common/VFloating.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VLoader from "@/shared/ui/common/VLoader.vue";
-import TablePagination from "@/widgets/table/components/TablePagination.vue";
-import { TableEmits, TableProps } from "@/widgets/table/types/props";
+import { TableEmits, TableProps } from "@/shared/ui/table/types/props";
 
 const props = withDefaults(defineProps<TableProps>(), {
   loading: false,
@@ -1095,5 +1095,5 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
-@use './assets/styles/table.scss';
+@use 'assets/styles/table';
 </style>

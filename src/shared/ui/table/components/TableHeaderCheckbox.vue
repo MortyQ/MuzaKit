@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import VCheckbox from "@/shared/ui/common/VCheckbox.vue";
-import type { CheckboxState } from "@/widgets/table/types";
+import type { CheckboxState } from "@/shared/ui/table/types";
 
 interface Props {
   state: CheckboxState

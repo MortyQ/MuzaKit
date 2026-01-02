@@ -3,9 +3,9 @@ import { reactive, ref } from "vue";
 
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import type { Column, RequestPayload, SortItem } from "@/widgets/table/types";
-import { mockDataUsers } from "@/widgets/table/utils/mockData";
-import Table from "@/widgets/table/VTable.vue";
+import type { Column, RequestPayload, SortItem } from "@/shared/ui/table/types";
+import { mockDataUsers } from "@/shared/ui/table/utils/mockData";
+import Table from "@/shared/ui/table/VTable.vue";
 
 // Server-side sorting example
 const serverData = ref([...mockDataUsers]);

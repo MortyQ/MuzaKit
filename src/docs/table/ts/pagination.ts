@@ -51,8 +51,8 @@ interface RequestPayload {
 \`\`\`vue
 <script setup lang="ts">
 import { ref } from "vue";
-import Table from "@/widgets/table/VTable.vue";
-import type { RequestPayload } from "@/widgets/table/types";
+import Table from "@/shared/ui/table/VTable.vue";
+import type { RequestPayload } from "@/shared/ui/table/types";
 
 const data = ref([]);
 const loading = ref(false);
@@ -127,7 +127,7 @@ Pagination automatically integrates with sorting through the \`@request\` event:
 \`\`\`vue
 <script setup lang="ts">
 import { ref } from "vue";
-import type { RequestPayload, SortItem } from "@/widgets/table/types";
+import type { RequestPayload, SortItem } from "@/shared/ui/table/types";
 
 const sortState = ref<SortItem[]>([]);
 

@@ -3,26 +3,26 @@
 // Main file that imports all modular styles
 
 // 1. Design tokens & Variables
-@use './variables' as *;
+@use 'variables' as *;
 
 // 2. Layout Components
-@use './wrapper';
-@use './grid';
+@use 'wrapper';
+@use 'grid';
 
 // 3. Table Elements
-@use './header';
-@use './row';
-@use './cell';
-@use './total';
+@use 'header';
+@use 'row';
+@use 'cell';
+@use 'total';
 
 // 4. Features
-@use './fixed';
-@use './pagination';
+@use 'fixed';
+@use 'pagination';
 
 // 5. Utilities
-@use './utilities';
+@use 'utilities';
 
-@use './overlay';
-@use './sort';
-@use './loader';
-@use './toolbar';
+@use 'overlay';
+@use 'sort';
+@use 'loader';
+@use 'toolbar';

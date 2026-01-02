@@ -28,8 +28,8 @@ Enterprise-grade data table component with advanced features for modern web appl
 
 \`\`\`vue
 <script setup lang="ts">
-import Table from "@/widgets/table/VTable.vue";
-import type { Column } from "@/widgets/table/types";
+import Table from "@/shared/ui/table/VTable.vue";
+import type { Column } from "@/shared/ui/table/types";
 
 const columns: Column[] = [
   { key: "id", label: "ID", width: "80px" },

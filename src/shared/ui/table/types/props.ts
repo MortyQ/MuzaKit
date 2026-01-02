@@ -2,7 +2,7 @@ import type {
   Column, ExpandableRow, MultiSelectConfig,
   SortConfig, SortItem, RequestPayload,
   FrontSortPayload, PaginationConfig, ToolbarConfig,
-} from "@/widgets/table/types/index";
+} from "@/shared/ui/table/types/index";
 
 export type RowClassNameFunction = (row: ExpandableRow, index: number) => string;
 

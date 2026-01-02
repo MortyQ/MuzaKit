@@ -1,4 +1,4 @@
-import type { ExpandableRow } from "@/widgets/table/types/index";
+import type { ExpandableRow } from "@/shared/ui/table/types/index";
 
 /**
  * Selection mode for table rows

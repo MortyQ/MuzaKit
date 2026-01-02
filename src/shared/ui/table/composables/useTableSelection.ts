@@ -5,7 +5,7 @@ import type {
   ExpandableRow,
   FlattenedRow,
   MultiSelectConfig,
-} from "@/widgets/table/types";
+} from "@/shared/ui/table/types";
 
 interface UseTableSelectionOptions {
   config: Ref<MultiSelectConfig | undefined>

@@ -1,6 +1,6 @@
 import { type Ref } from "vue";
 
-import { UseTableProps } from "@/widgets/table/types/props";
+import { UseTableProps } from "@/shared/ui/table/types/props";
 
 export function useTable(props: Ref<UseTableProps>) {
   const testProps = props.value;

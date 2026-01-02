@@ -44,7 +44,7 @@ rowClassName?: string | ((row: ExpandableRow, index: number) => string)
 
 \`\`\`vue
 <script setup lang="ts">
-import type { ExpandableRow } from "@/widgets/table/types";
+import type { ExpandableRow } from "@/shared/ui/table/types";
 
 const rowClassName = (row: ExpandableRow, index: number): string => {
   // Highlight high performance

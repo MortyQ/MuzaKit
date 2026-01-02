@@ -1,6 +1,6 @@
 import { ref, computed, type Ref } from "vue";
 
-import { ExpandableRow, FlattenedRow } from "@/widgets/table/types";
+import { ExpandableRow, FlattenedRow } from "@/shared/ui/table/types";
 
 export function useExpandableTable(data: Ref<ExpandableRow[]>) {
   // State of expanded rows (Set for O(1) lookup)

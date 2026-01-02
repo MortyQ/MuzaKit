@@ -3,9 +3,9 @@ import { ref } from "vue";
 
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import type { Column } from "@/widgets/table/types";
-import { mockDataVirtualScroll } from "@/widgets/table/utils/mockData";
-import Table from "@/widgets/table/VTable.vue";
+import type { Column } from "@/shared/ui/table/types";
+import { mockDataVirtualScroll } from "@/shared/ui/table/utils/mockData";
+import Table from "@/shared/ui/table/VTable.vue";
 
 const STORAGE_KEY = "columnSetupDemo_columns";
 

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import TableToolbar from "@/widgets/table/components/TableToolbar.vue";
-import { Column } from "@/widgets/table/types";
-import { mockDataUsers, mockDataUsersTotalRow } from "@/widgets/table/utils/mockData";
-import Table from "@/widgets/table/VTable.vue";
+import TableToolbar from "@/shared/ui/table/components/TableToolbar.vue";
+import { Column } from "@/shared/ui/table/types";
+import { mockDataUsers, mockDataUsersTotalRow } from "@/shared/ui/table/utils/mockData";
+import Table from "@/shared/ui/table/VTable.vue";
 
 const columnsGood: Column[] = [
   { key: "id", label: "ID", width: "80px", align: "center", fixed: "left" },

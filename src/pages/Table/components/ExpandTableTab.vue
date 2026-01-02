@@ -4,9 +4,9 @@ import { reactive, ref } from "vue";
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VMultiSelect from "@/shared/ui/common/VMultiSelect.vue";
-import { Column, type RequestPayload } from "@/widgets/table/types";
-import { mockDataExpandable, mockDataExpandableTotalRow } from "@/widgets/table/utils/mockData";
-import Table from "@/widgets/table/VTable.vue";
+import { Column, type RequestPayload } from "@/shared/ui/table/types";
+import { mockDataExpandable, mockDataExpandableTotalRow } from "@/shared/ui/table/utils/mockData";
+import Table from "@/shared/ui/table/VTable.vue";
 
 const pagination = reactive({
   page: 1,

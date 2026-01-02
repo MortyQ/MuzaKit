@@ -1,7 +1,7 @@
 import { useVirtualizer } from "@tanstack/vue-virtual";
 import { computed, onUnmounted, type Ref } from "vue";
 
-import { VirtualTableOptions } from "@/widgets/table/types";
+import { VirtualTableOptions } from "@/shared/ui/table/types";
 
 export function useVirtualTable(
   scrollContainerRef: Ref<HTMLElement | null>,

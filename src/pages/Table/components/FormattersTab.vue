@@ -5,9 +5,9 @@ import VAccordion from "@/shared/ui/common/VAccordion.vue";
 import type { AccordionItem } from "@/shared/ui/common/VAccordion.vue";
 import VCard from "@/shared/ui/common/VCard.vue";
 import VIcon from "@/shared/ui/common/VIcon.vue";
+import type { Column } from "@/shared/ui/table/types";
+import Table from "@/shared/ui/table/VTable.vue";
 import { formatCurrency } from "@/shared/utils";
-import type { Column } from "@/widgets/table/types";
-import Table from "@/widgets/table/VTable.vue";
 
 // Sample data for formatters demo
 const formatterData = ref([
