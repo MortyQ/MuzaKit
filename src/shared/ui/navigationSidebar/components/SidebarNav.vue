@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import SidebarNavItemComponent from "./SidebarNavItem.vue";
 
-import { useSidebar } from "@/widgets/navigationSidebar/composables/useSidebar";
-import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
+import { useSidebar } from "@/shared/ui/navigationSidebar/composables/useSidebar";
+import type { SidebarNavItem } from "@/shared/ui/navigationSidebar/types";
 
 interface Props {
   /** Navigation items */

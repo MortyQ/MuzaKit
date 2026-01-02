@@ -85,5 +85,5 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@use './assets/styles/sidebar.scss';
+@use 'assets/styles/sidebar';
 </style>

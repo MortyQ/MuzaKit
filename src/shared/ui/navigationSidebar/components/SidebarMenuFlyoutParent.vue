@@ -4,7 +4,7 @@ import { computed } from "vue";
 import { flyoutItemClasses } from "./SidebarMenuFlyout.styles";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
+import type { SidebarNavItem } from "@/shared/ui/navigationSidebar/types";
 
 interface Props {
   /** Parent item to display (has children but no route) */

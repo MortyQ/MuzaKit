@@ -3,7 +3,7 @@ import SidebarMobileNavItem from "./SidebarMobileNavItem.vue";
 
 import { UserMenu } from "@/features/auth";
 import { ThemeToggle } from "@/features/theme";
-import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
+import type { SidebarNavItem } from "@/shared/ui/navigationSidebar/types";
 
 interface Props {
   /** Footer items */
@@ -19,6 +19,7 @@ withDefaults(defineProps<Props>(), {
   showUserMenu: true,
 });
 </script>
+
 <template>
   <div class="sidebar-mobile-footer border-t border-base-300/50 px-3 py-4">
     <!-- User Menu -->

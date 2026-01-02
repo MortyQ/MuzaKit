@@ -8,10 +8,10 @@ import { useAuthStore } from "@/features/auth/store/authStore";
 import { useGlobalFiltersStore } from "@/shared/stores";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VLoader from "@/shared/ui/common/VLoader.vue";
+import { Sidebar, useSidebar } from "@/shared/ui/navigationSidebar";
+import type { SidebarConfig } from "@/shared/ui/navigationSidebar";
 import GlobalFilterSidebar from "@/widgets/filters/GlobalFilterSidebar.vue";
 import HeaderFilters from "@/widgets/filters/HeaderFilters.vue";
-import { Sidebar, useSidebar } from "@/widgets/navigationSidebar";
-import type { SidebarConfig } from "@/widgets/navigationSidebar";
 
 const authStore = useAuthStore();
 const globalFiltersStore = useGlobalFiltersStore();

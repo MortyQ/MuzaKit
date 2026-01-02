@@ -6,7 +6,7 @@ import { flyoutItemClasses } from "./SidebarMenuFlyout.styles";
 
 import { prefetchRoute } from "@/app/router/utils/prefetch";
 import VIcon from "@/shared/ui/common/VIcon.vue";
-import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
+import type { SidebarNavItem } from "@/shared/ui/navigationSidebar/types";
 
 interface Props {
   /** Child item to display */

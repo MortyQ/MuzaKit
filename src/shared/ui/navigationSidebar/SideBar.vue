@@ -54,5 +54,5 @@ const { isCollapsed } = useSidebar();
 </template>
 
 <style lang="scss">
-@use './assets/styles/sidebar.scss';
+@use 'assets/styles/sidebar';
 </style>

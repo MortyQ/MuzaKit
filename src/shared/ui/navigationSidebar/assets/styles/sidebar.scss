@@ -4,16 +4,16 @@
 // Uses Tailwind theme () function for seamless light/dark mode support
 
 // 1. Design tokens & Variables
-@use './variables' as *;
+@use 'variables' as *;
 
 // 2. Layout Components
-@use './container'; // Main container (desktop & mobile)
-@use './header';    // Logo & brand
-@use './footer';    // Footer items
+@use 'container'; // Main container (desktop & mobile)
+@use 'header';    // Logo & brand
+@use 'footer';    // Footer items
 
 // 3. Navigation Elements
-@use './item';      // Navigation items
-@use './flyout';    // Submenu flyout
+@use 'item';      // Navigation items
+@use 'flyout';    // Submenu flyout
 
 // ════════════════════════════════════════════════════════════════
 // GLOBAL SIDEBAR UTILITIES

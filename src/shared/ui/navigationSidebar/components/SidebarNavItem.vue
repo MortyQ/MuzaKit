@@ -8,8 +8,8 @@ import { prefetchRoute } from "@/app/router/utils/prefetch";
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import VTag from "@/shared/ui/common/VTag.vue";
 import VTooltip from "@/shared/ui/common/VTooltip.vue";
-import { useSidebar } from "@/widgets/navigationSidebar/composables/useSidebar";
-import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
+import { useSidebar } from "@/shared/ui/navigationSidebar/composables/useSidebar";
+import type { SidebarNavItem } from "@/shared/ui/navigationSidebar/types";
 
 interface Props {
   /** Navigation item */

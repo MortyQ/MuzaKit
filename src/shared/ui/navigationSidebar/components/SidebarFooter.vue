@@ -3,8 +3,8 @@ import SidebarNavItemComponent from "./SidebarNavItem.vue";
 
 import { UserMenu } from "@/features/auth";
 import { ThemeToggle } from "@/features/theme";
-import { useSidebar } from "@/widgets/navigationSidebar/composables/useSidebar";
-import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
+import { useSidebar } from "@/shared/ui/navigationSidebar/composables/useSidebar";
+import type { SidebarNavItem } from "@/shared/ui/navigationSidebar/types";
 
 interface Props {
   /** Footer navigation items (e.g., Settings) */

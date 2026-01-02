@@ -1,5 +1,5 @@
 import type { MenuItem } from "@/app/router/types/types";
-import type { SidebarNavItem } from "@/widgets/navigationSidebar/types";
+import type { SidebarNavItem } from "@/shared/ui/navigationSidebar/types";
 
 /**
  * Options for converting MenuItems to SidebarConfig
