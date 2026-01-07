@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { nextTick, onBeforeUnmount, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, ref } from "vue";
 import Multiselect from "vue-multiselect";
 
 import { Option } from "@/shared/types/ui";
@@ -41,6 +41,26 @@ const props = withDefaults(defineProps<Props>(), {
   optionsLimit: 1000,
   teleportToBody: true,
   name: "",
+});
+
+// Hide placeholder if floating label (name) is used to avoid duplication/collision
+const computedPlaceholder = computed(() => {
+  if (!props.name) return props.placeholder;
+  // MUI logic: Show placeholder only when focused if a floating label exists
+  return isFocused.value ? props.placeholder : "";
+});
+
+const isFocused = ref(false);
+const hasValue = computed(() => {
+  if (Array.isArray(props.modelValue)) {
+    return props.modelValue.length > 0;
+  }
+  // Check if modelValue is an object and not null
+  if (props.modelValue && typeof props.modelValue === "object") {
+    // Treat object with empty value string as a value (e.g. "All" option)
+    return true;
+  }
+  return props.modelValue !== null && props.modelValue !== undefined;
 });
 
 const emit = defineEmits<{
@@ -147,11 +167,13 @@ const disableFloating = () => {
 
 const handleOpen = () => {
   enableFloating();
+  isFocused.value = true;
   emit("open");
 };
 
 const handleClose = () => {
   disableFloating();
+  isFocused.value = false;
   emit("close");
 };
 
@@ -159,17 +181,17 @@ onBeforeUnmount(() => disableFloating());
 </script>
 
 <template>
-  <div class="v-multiselect-wrapper flex flex-col gap-2">
-    <!-- Label -->
-    <slot name="label">
-      <label
-        v-if="props.name"
-        class="v-input-label mb-0"
-      >
-        {{ props.name }}
-      </label>
-    </slot>
+  <div class="v-multiselect-wrapper relative w-full group self-start">
+    <!-- 1. The Label -->
+    <label
+      v-if="props.name"
+      :class="{ 'v-label--active': isFocused || hasValue }"
+      class="v-label"
+    >
+      {{ props.name }}
+    </label>
 
+    <!-- 2. The Input Wrapper (Multiselect) -->
     <Multiselect
       ref="msRef"
       :clear-on-select="props.clearOnSelect"
@@ -182,7 +204,7 @@ onBeforeUnmount(() => disableFloating());
       :multiple="props.multiple"
       :options="props.options"
       :options-limit="props.optionsLimit"
-      :placeholder="props.placeholder"
+      :placeholder="computedPlaceholder"
       :searchable="props.searchable"
       :show-labels="false"
       :taggable="props.taggable"
@@ -218,6 +240,20 @@ onBeforeUnmount(() => disableFloating());
         />
       </template>
     </Multiselect>
+
+    <!-- 3. The Fieldset (The Border) -->
+    <fieldset
+      :class="{ 'v-fieldset--active': isFocused }"
+      aria-hidden="true"
+      class="v-fieldset"
+    >
+      <legend
+        :class="{ 'v-legend--visible': props.name && (hasValue || isFocused) }"
+        class="v-legend"
+      >
+        <span>{{ props.name }}</span>
+      </legend>
+    </fieldset>
   </div>
 </template>
 
@@ -230,33 +266,80 @@ onBeforeUnmount(() => disableFloating());
 }
 
 .v-multiselect-wrapper {
-  @apply w-full ;
+  @apply w-full;
+
+  /* 1. Label Styling */
+  .v-label {
+    @apply absolute left-3 top-0 text-neutral/60 text-sm transition-all duration-200 pointer-events-none origin-top-left;
+    transform: translate(0, 12px) scale(1);
+    z-index: 20;
+    max-width: calc(100% - 24px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &.v-label--active {
+      transform: translate(0, -9px) scale(0.75);
+      @apply text-primary font-medium;
+    }
+  }
+
+  /* 2. Fieldset (Border) Styling */
+  .v-fieldset {
+    @apply absolute inset-0 rounded-lg pointer-events-none transition-colors duration-200 border-cardBorder shadow-md;
+    margin: 0;
+    padding: 0 8px;
+    border-width: 1px;
+    border-style: solid;
+    top: 0;
+
+    &.v-fieldset--active {
+      @apply border-primary;
+      border-width: 2px;
+    }
+  }
+
+  .v-legend {
+    @apply h-0 text-sm transition-all duration-200 border-none p-0;
+    max-width: 0;
+    width: auto;
+    white-space: nowrap;
+    overflow: hidden;
+
+    span {
+      @apply opacity-0 inline-block;
+    }
+
+    &.v-legend--visible {
+      max-width: 100%;
+      @apply px-1;
+    }
+  }
+
+  /* 3. Multiselect Overrides */
   :deep(.multiselect) {
     @apply min-h-[44px] relative;
     box-shadow: none !important;
 
     .multiselect__tags {
-      @apply bg-inputBg rounded-lg border-cardBorder shadow-md
-      text-neutral transition-all duration-200 min-h-[44px] px-3 py-2;
-      border-style: solid !important;
-      border-width: 1px !important;
+      @apply bg-transparent border-none shadow-none text-neutral transition-all duration-200 min-h-[44px] px-3 py-2;
+      border: none !important;
+      box-shadow: none !important;
 
       &:hover {
-        border-color: hsl(var(--p)) !important;
-      }
-
-      &:focus-within {
-        box-shadow: 0 0 0 3px hsl(var(--p) / 0.2);
+        border-color: transparent !important;
       }
     }
 
+    /* Input text styling */
     .multiselect__single {
       @apply bg-transparent text-neutral text-sm font-normal mb-0 leading-normal pt-1;
       border: none !important;
+      padding-left: 0;
     }
 
     .multiselect__input {
-      @apply bg-transparent text-neutral text-sm border-none outline-none ring-0 mb-0 py-1 px-0;
+      @apply bg-transparent text-neutral text-sm border-none outline-none ring-0 mb-0 pt-1 px-0;
       &::placeholder {
         color: hsl(var(--n) / 0.5);
       }
@@ -267,6 +350,70 @@ onBeforeUnmount(() => disableFloating());
       color: hsl(var(--n) / 0.5);
     }
 
+    /* Arrow/Caret */
+    .multiselect__select {
+      @apply absolute right-1 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center
+      justify-center cursor-pointer transition-all duration-200;
+      background: transparent !important;
+
+      &::before {
+        display: none;
+      }
+
+      svg {
+        color: hsl(var(--n) / 0.6);
+      }
+    }
+
+    &.multiselect--active {
+      .multiselect__select svg {
+        @apply rotate-180;
+      }
+    }
+
+    &.multiselect--disabled {
+      .multiselect__tags {
+        @apply bg-base-200 cursor-not-allowed;
+        opacity: 1 !important;
+      }
+
+      .multiselect__single {
+        @apply text-neutral/70;
+      }
+
+      .multiselect__placeholder {
+        @apply text-neutral/60;
+      }
+
+      .multiselect__select {
+        @apply cursor-not-allowed opacity-100;
+
+        svg {
+          @apply text-neutral/40;
+        }
+      }
+    }
+
+    /* Chips/Tags styling */
+    .multiselect__tag {
+      @apply bg-primary text-white text-sm font-medium rounded-md mb-0 mr-2
+      inline-flex items-center border-[2px] border-cardBorder;
+      padding: 4px 28px 4px 12px;
+      gap: 8px;
+    }
+
+    .multiselect__tag-icon {
+      @apply cursor-pointer rounded-full transition-all duration-150;
+      &:hover {
+        background-color: hsl(var(--p) / 0.8);
+      }
+    }
+
+    .multiselect__spinner {
+      display: none !important;
+    }
+
+    /* Content/Dropdown - Keeping existing dropdown styles */
     .multiselect__content-wrapper {
       @apply bg-base-100 border border-base-300 rounded-lg shadow-lg mt-1
       overflow-y-auto overflow-x-hidden;
@@ -288,7 +435,6 @@ onBeforeUnmount(() => disableFloating());
 
     .multiselect__option.multiselect__option--selected {
       @apply bg-primary text-white font-medium;
-
       &, & * {
         color: white !important;
       }
@@ -306,99 +452,19 @@ onBeforeUnmount(() => disableFloating());
       &:hover {
         @apply bg-base-300;
       }
+    }
 
-      &.multiselect__option--highlight {
-        @apply bg-base-300 text-primary;
-      }
+    .multiselect__option.multiselect__option--group.multiselect__option--highlight {
+      @apply bg-base-300 text-primary;
+    }
 
-      &.multiselect__option--selected {
-        @apply bg-primary/10 text-primary;
-      }
+    .multiselect__option.multiselect__option--group.multiselect__option--selected {
+      @apply bg-primary/10 text-primary;
     }
 
     .multiselect__option.multiselect__option--disabled {
       @apply cursor-not-allowed bg-transparent;
       color: hsl(var(--n) / 0.3);
-    }
-
-    .multiselect__tag {
-      @apply bg-primary text-white text-sm font-medium rounded-md mb-0 mr-2
-      inline-flex items-center border-[2px] border-cardBorder;
-      padding: 4px 28px 4px 12px;
-      gap: 8px;
-      position: relative;
-    }
-
-    .multiselect__tags-wrap {
-      @apply pr-[15px];
-    }
-
-    .multiselect__tag-icon {
-      @apply cursor-pointer rounded-full transition-all duration-150;
-      position: absolute;
-      right: 4px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      &::after {
-        @apply text-white;
-        font-size: 16px;
-        line-height: 1;
-      }
-
-      &:hover {
-        background-color: hsl(var(--p) / 0.8);
-        transform: translateY(-50%) scale(1.1);
-      }
-    }
-
-    .multiselect__spinner {
-      display: none !important;
-    }
-
-    .multiselect__select {
-      @apply absolute right-1 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center
-      justify-center cursor-pointer transition-all duration-200;
-      &::before {
-        display: none;
-      }
-
-      svg {
-        color: hsl(var(--n) / 0.6);
-      }
-    }
-
-    &.multiselect--active {
-      .multiselect__tags {
-        border-color: hsl(var(--p)) !important;
-        box-shadow: 0 0 0 3px hsl(var(--p) / 0.2);
-      }
-
-      .multiselect__select svg {
-        @apply rotate-180;
-      }
-    }
-
-    &.multiselect--above {
-      .multiselect__content-wrapper {
-        border: none !important;
-        @apply border border-base-300 rounded-lg;
-      }
-    }
-
-    &.multiselect--disabled {
-      .multiselect__tags {
-        @apply bg-base-200 cursor-not-allowed opacity-60;
-      }
-
-      .multiselect__select {
-        @apply cursor-not-allowed opacity-60;
-      }
     }
   }
 }
