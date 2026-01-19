@@ -24,7 +24,7 @@
 .sort-icon {
   opacity: 0.3;
   transition: all 0.2s ease;
-  color: theme('colors.secondaryText');
+  color: theme('colors.white');
 
   &--active {
     opacity: 1;
@@ -32,7 +32,7 @@
     filter: drop-shadow(0 0 4px color-mix(in srgb, theme('colors.primary') 40%, transparent 60%));
 
     // Add subtle background highlight for better visibility
-    background-color: color-mix(in srgb, theme('colors.primary') 10%, transparent 90%);
+    background-color: color-mix(in srgb, theme('colors.primary') 100%, transparent 10%);
     border-radius: 4px;
     padding: 2px;
   }

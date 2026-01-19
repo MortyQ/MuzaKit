@@ -28,6 +28,7 @@ type Props = {
   loading?: boolean // show loading spinner in icon
   textarea?: boolean // use textarea instead of input
   rows?: number // rows for textarea
+  showClearButton?: boolean // show clear button for textarea
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -45,6 +46,7 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   textarea: false,
   rows: 4,
+  showClearButton: true,
 });
 
 // Generate unique ID for input if not provided
@@ -115,7 +117,11 @@ const showRightIcon = computed(() => {
 
 // Show clear button for textarea when it has content
 const showClearButton = computed(() => {
-  return props.textarea && localValue.value && String(localValue.value).length > 0;
+  return props.type !== "password"
+    && localValue.value
+    && String(localValue.value).length > 0
+    && props.showClearButton;
+  // return props.textarea && localValue.value && String(localValue.value).length > 0;
 });
 
 // Get left icon name
@@ -263,7 +269,7 @@ onUnmounted(() => {
         class="z-20 pr-3 absolute right-0 flex items-center justify-center"
       >
         <slot name="icon-right">
-          <!-- Clear Button for Textarea -->
+          <!-- Clear Button for Input -->
           <button
             v-if="showClearButton"
             class="
@@ -344,6 +350,19 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .v-input-wrapper {
+  /* Hide native search input clear button */
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input[type="search"]::-webkit-search-decoration,
+  input[type="search"]::-webkit-search-results-button,
+  input[type="search"]::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
   /* 1. Label Styling */
   .v-label {
     @apply absolute text-neutral/60 text-sm transition-all duration-200 pointer-events-none origin-top-left;

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, VNode } from "vue";
 
 import VIcon from "@/shared/ui/common/VIcon.vue";
 import BaseLoader from "@/shared/ui/common/VLoader.vue";
@@ -49,14 +49,10 @@ type CardEmits = {
 
 // Component slots
 type CardSlots = {
-
-  default?: () => any
-
-  header?: () => any
-
-  footer?: () => any
-
-  loading?: () => any
+  default?: () => VNode[]
+  header?: () => VNode[]
+  footer?: () => VNode[]
+  loading?: () => VNode[]
 };
 
 const props = withDefaults(defineProps<CardProps>(), {

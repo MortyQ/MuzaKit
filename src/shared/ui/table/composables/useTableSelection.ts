@@ -11,7 +11,6 @@ interface UseTableSelectionOptions {
   config: Ref<MultiSelectConfig | undefined>
   flattenedData: Ref<FlattenedRow[]>
   selectedRows: Ref<ExpandableRow[]>
-
   onSelectionChange: (selected: ExpandableRow[]) => void
 }
 
@@ -274,7 +273,6 @@ export function useTableSelection(options: UseTableSelectionOptions) {
     // Get original data from flattenedData to maintain structure
     const originalData = flattenedData.value.map((row) => {
       // Remove flattened-specific properties
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { depth, parentId, hasChildren, isExpanded, ...originalRow } = row;
       return originalRow as ExpandableRow;
     });

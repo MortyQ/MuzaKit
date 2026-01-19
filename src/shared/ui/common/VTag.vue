@@ -3,20 +3,18 @@ import { computed } from "vue";
 
 import VIcon from "./VIcon.vue";
 
-export type TagVariant
-  = | "solid"
-    | "soft"
-    | "outline"
-    | "ghost";
+export type TagVariant = "solid"
+  | "soft"
+  | "outline"
+  | "ghost";
 
-export type TagColor
-  = | "primary"
-    | "success"
-    | "warning"
-    | "error"
-    | "info"
-    | "neutral"
-    | "gray";
+export type TagColor = "primary"
+  | "success"
+  | "warning"
+  | "error"
+  | "info"
+  | "neutral"
+  | "gray";
 
 export type TagSize = "xs" | "sm" | "md" | "lg";
 

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { Column } from "../types";
 
 import TableHeader from "./TableHeader.vue";
@@ -48,19 +48,41 @@ const handleSortClick = (column: Column) => {
     <TableHeader
       v-for="column in columns"
       :key="column.key"
-      :column="column"
-      :label="column.label"
       :align="column.align"
-      :column-key="column.key"
-      :resizable="props.isColumnResizable(column)"
-      :is-sorted="getSortState(column.key).isSorted"
-      :sort-order="getSortState(column.key).order"
-      :sort-index="getSortState(column.key).index"
       :class="getColumnClasses(column)"
+      :column="column"
+      :column-key="column.key"
+      :is-sorted="getSortState(column.key).isSorted"
+      :label="column.label"
+      :resizable="props.isColumnResizable(column)"
+      :sort-index="getSortState(column.key).index"
+      :sort-order="getSortState(column.key).order"
       :style="getFixedStyles(column)"
       @sort-click="handleSortClick(column)"
       @resize-start="handleResizeStart"
       @resize-dblclick="handleResizeDblClick"
-    />
+    >
+      <!-- Forward custom icon slot -->
+      <template
+        v-if="$slots[`header-icon-${column.key}`]"
+        #icon="slotProps"
+      >
+        <slot
+          :name="`header-icon-${column.key}`"
+          v-bind="slotProps"
+        />
+      </template>
+
+      <!-- Forward custom header slot -->
+      <template
+        v-if="$slots[`header-${column.key}`]"
+        #default="slotProps"
+      >
+        <slot
+          :name="`header-${column.key}`"
+          v-bind="slotProps"
+        />
+      </template>
+    </TableHeader>
   </div>
 </template>

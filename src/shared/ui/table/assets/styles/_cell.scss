@@ -1,11 +1,12 @@
 // Table Cell Styles - Modern Edition
 // ============================================
-@use 'variables' as *;
+@use './variables' as *;
 
 // ...existing code...
 .table-cell {
   padding: $table-cell-padding-y $table-cell-padding-x;
 
+  min-height: 50px;
   // Enhanced borders for better visibility on dark theme
   border-bottom: 1px solid color-mix(in srgb, theme('colors.cardBorder') 100%, transparent 0%);
   border-right: 1px solid color-mix(in srgb, theme('colors.cardBorder') 70%, transparent 30%);

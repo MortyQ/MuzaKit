@@ -1,9 +1,9 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed } from "vue";
 
 interface Props {
   value?: unknown
-  align?: "left" | "center" | "right"
+  align?: "left" | "center" | "right" | string
   depth?: number
   isFirstColumn?: boolean
 }
@@ -26,7 +26,6 @@ const computedPaddingLeft = computed(() => {
 
 <template>
   <div
-    class="table-cell"
     :class="{
       'table-cell--left': align === 'left',
       'table-cell--center': align === 'center',
@@ -34,6 +33,7 @@ const computedPaddingLeft = computed(() => {
       'table-cell--indented': isFirstColumn && depth > 0
     }"
     :style="{ paddingLeft: computedPaddingLeft }"
+    class="table-cell"
   >
     <slot />
   </div>

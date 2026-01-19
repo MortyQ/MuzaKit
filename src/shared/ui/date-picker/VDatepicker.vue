@@ -1,5 +1,5 @@
-<script setup lang="ts">
-import { VueDatePicker, type ModelValue } from "@vuepic/vue-datepicker";
+<script lang="ts" setup>
+import { ModelValue, VueDatePicker } from "@vuepic/vue-datepicker";
 import { useSlots } from "vue";
 
 import "@vuepic/vue-datepicker/dist/main.css";
@@ -63,9 +63,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 <template>
   <div
-    class="v-datepicker-wrapper"
     :class="`v-datepicker--${size}`"
     :style="{ width: props.width }"
+    class="v-datepicker-wrapper"
   >
     <!-- Label -->
     <label
@@ -78,10 +78,8 @@ const props = withDefaults(defineProps<Props>(), {
     <!-- Datepicker - All library props via $attrs -->
     <VueDatePicker
       v-model="model"
-      v-bind="$attrs"
       :auto-apply="props.autoApply"
-      :timezone="'UTC'"
-      :week-start="0"
+      :calendar-class-name="'v-datepicker-calendar'"
       :class="[
         'v-datepicker',
         {
@@ -96,7 +94,9 @@ const props = withDefaults(defineProps<Props>(), {
         },
       ]"
       :menu-class-name="'v-datepicker-menu'"
-      :calendar-class-name="'v-datepicker-calendar'"
+      :timezone="'UTC'"
+      :week-start="0"
+      v-bind="$attrs"
     >
       <!-- Calendar Icon Slot - Parent can override -->
       <template
@@ -117,9 +117,14 @@ const props = withDefaults(defineProps<Props>(), {
         </div>
       </template>
 
+      <template
+        v-if="!props.clearable"
+        #clear-icon
+      />
+
       <!-- Clear Icon Slot - Parent can override, only shown when clearable -->
       <template
-        v-if="props.clearable && slots['clear-icon']"
+        v-else-if="props.clearable && slots['clear-icon']"
         #clear-icon="slotProps"
       >
         <slot
@@ -128,13 +133,13 @@ const props = withDefaults(defineProps<Props>(), {
         />
       </template>
       <template
-        v-else-if="props.clearable"
+        v-else
         #clear-icon="{ clear }"
       >
         <div class="flex items-center mr-2">
           <VIcon
-            icon="lucide:x"
             class="v-datepicker-clear-icon"
+            icon="lucide:x"
             @click="clear"
           />
         </div>
@@ -152,8 +157,8 @@ const props = withDefaults(defineProps<Props>(), {
         #arrow-left
       >
         <VIcon
-          icon="lucide:chevron-left"
           class="v-datepicker-arrow-icon"
+          icon="lucide:chevron-left"
         />
       </template>
 
@@ -169,8 +174,8 @@ const props = withDefaults(defineProps<Props>(), {
         #arrow-right
       >
         <VIcon
-          icon="lucide:chevron-right"
           class="v-datepicker-arrow-icon"
+          icon="lucide:chevron-right"
         />
       </template>
 
@@ -186,8 +191,8 @@ const props = withDefaults(defineProps<Props>(), {
         #arrow-up
       >
         <VIcon
-          icon="lucide:chevron-up"
           class="v-datepicker-arrow-icon"
+          icon="lucide:chevron-up"
         />
       </template>
 
@@ -203,8 +208,8 @@ const props = withDefaults(defineProps<Props>(), {
         #arrow-down
       >
         <VIcon
-          icon="lucide:chevron-down"
           class="v-datepicker-arrow-icon"
+          icon="lucide:chevron-down"
         />
       </template>
 
@@ -220,8 +225,8 @@ const props = withDefaults(defineProps<Props>(), {
         #clock-icon
       >
         <VIcon
-          icon="lucide:clock"
           class="v-datepicker-clock-icon"
+          icon="lucide:clock"
         />
       </template>
 
@@ -244,7 +249,7 @@ const props = withDefaults(defineProps<Props>(), {
 
       <!-- Pass through any other slots from parent -->
       <template
-        v-for="(_, slotName) in slots"
+        v-for="(__, slotName) in slots"
         :key="slotName"
         #[slotName]="slotProps"
       >
@@ -266,8 +271,8 @@ const props = withDefaults(defineProps<Props>(), {
 
     <!-- Error Message -->
     <transition
-      name="error-slide"
       mode="out-in"
+      name="error-slide"
     >
       <p
         v-if="validation?.$error"

@@ -52,7 +52,7 @@ export interface Column {
   key: string // Key from data object
   label: string // Header text
   width?: string | "flex" // Fixed width (e.g., "150px") - makes column resizable. Without width, column is flexible (not resizable)
-  align?: "left" | "center" | "right"
+  align?: "left" | "center" | "right" | string
   interactive?: boolean // Whether column contains interactive elements (select, dropdown, etc.)
   fixed?: "left" | "right" // Fix column (sticky) to left or right
   children?: Column[] // Nested columns for grouped headers (AG-Grid style)
@@ -97,6 +97,7 @@ export interface HeaderCell {
 export interface ExpandableRow {
   id?: string | number
   children?: ExpandableRow[]
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
 }

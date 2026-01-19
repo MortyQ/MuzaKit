@@ -1,19 +1,24 @@
 <script lang="ts" setup>
 import { computed, ref, useId, watchEffect } from "vue";
 
+// Checkbox can work with:
+// - boolean (single checkbox)
+// - array of values (checkbox group)
+type CheckboxValue = string | number | boolean;
+type CheckboxModelValue = boolean | CheckboxValue[];
+
 interface Props {
-  modelValue?: boolean | string | number | any
+  modelValue?: CheckboxModelValue
   id?: string
   label?: string
-  value?: string | number | boolean | any
+  value?: CheckboxValue
   disabled?: boolean
   indeterminate?: boolean
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<{
-
-  (event: "update:modelValue", value: boolean | string | number | any): void
+  (event: "update:modelValue", value: CheckboxModelValue): void
 }>();
 
 // Generate unique ID if not provided

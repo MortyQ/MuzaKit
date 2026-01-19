@@ -33,7 +33,6 @@ interface Props {
 }
 
 interface Emits {
-
   (e: "select", value: string | number): void
 }
 

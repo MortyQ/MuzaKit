@@ -5,7 +5,7 @@ import { useModal } from "@/shared/composables";
 import { useGlobalFiltersStore } from "@/shared/stores";
 import VButton from "@/shared/ui/common/VButton.vue";
 import VCard from "@/shared/ui/common/VCard.vue";
-import ComparisonDatePicker from "@/widgets/filters/components/ComparisonDatePicker.vue";
+// import ComparisonDatePicker from "@/widgets/filters/components/ComparisonDatePicker.vue";
 import GranularityFilter from "@/widgets/filters/components/GranularityFilter.vue";
 import MainDatePicker from "@/widgets/filters/components/MainDatePicker.vue";
 

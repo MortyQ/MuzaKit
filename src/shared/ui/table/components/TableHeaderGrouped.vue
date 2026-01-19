@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { Column, HeaderCell } from "../types";
 
 import TableHeader from "./TableHeader.vue";
@@ -23,6 +23,7 @@ interface Props {
 
   isColumnResizable: (_column: Column) => boolean
 }
+
 const props = defineProps<Props>();
 const emit = defineEmits<{
   "resize-start": [columnKey: string, event: MouseEvent]
@@ -45,8 +46,8 @@ const handleSortClick = (column: Column) => {
   <div
     v-for="(level, levelIndex) in columns"
     :key="`header-level-${levelIndex}`"
-    class="table-header-row"
     :class="`table-header-row-level-${levelIndex}`"
+    class="table-header-row"
   >
     <!-- Checkbox column header (slot) - only in first level -->
     <slot
@@ -63,8 +64,8 @@ const handleSortClick = (column: Column) => {
       <TableHeaderGroup
         v-if="cell.isGroup"
         :cell="cell"
-        :group-width="getGroupWidth(cell.column)"
         :class="getColumnClasses(cell.column)"
+        :group-width="getGroupWidth(cell.column)"
         :style="{
           gridColumn: `span ${cell.colspan}`,
           gridRow: cell.rowspan > 1 ? `span ${cell.rowspan}` : undefined,
@@ -75,14 +76,7 @@ const handleSortClick = (column: Column) => {
       <!-- Leaf header (no children) - with sorting and resize -->
       <TableHeader
         v-else
-        :column="cell.column"
-        :label="cell.label"
         :align="cell.column.align"
-        :column-key="cell.column.key"
-        :resizable="props.isColumnResizable(cell.column)"
-        :is-sorted="getSortState(cell.column.key).isSorted"
-        :sort-order="getSortState(cell.column.key).order"
-        :sort-index="getSortState(cell.column.key).index"
         :class="[
           getColumnClasses(cell.column),
           {
@@ -90,6 +84,13 @@ const handleSortClick = (column: Column) => {
             'table-header-cell--rowspan': cell.rowspan > 1
           }
         ]"
+        :column="cell.column"
+        :column-key="cell.column.key"
+        :is-sorted="getSortState(cell.column.key).isSorted"
+        :label="cell.label"
+        :resizable="props.isColumnResizable(cell.column)"
+        :sort-index="getSortState(cell.column.key).index"
+        :sort-order="getSortState(cell.column.key).order"
         :style="{
           gridRow: cell.rowspan > 1 ? `span ${cell.rowspan}` : undefined,
           ...getFixedStyles(cell.column),
@@ -97,7 +98,29 @@ const handleSortClick = (column: Column) => {
         @sort-click="handleSortClick(cell.column)"
         @resize-start="handleResizeStart"
         @resize-dblclick="handleResizeDblClick"
-      />
+      >
+        <!-- Forward custom icon slot -->
+        <template
+          v-if="$slots[`header-icon-${cell.column.key}`]"
+          #icon="slotProps"
+        >
+          <slot
+            :name="`header-icon-${cell.column.key}`"
+            v-bind="slotProps"
+          />
+        </template>
+
+        <!-- Forward custom header slot -->
+        <template
+          v-if="$slots[`header-${cell.column.key}`]"
+          #default="slotProps"
+        >
+          <slot
+            :name="`header-${cell.column.key}`"
+            v-bind="slotProps"
+          />
+        </template>
+      </TableHeader>
     </template>
   </div>
 </template>

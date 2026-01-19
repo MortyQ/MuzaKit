@@ -2,6 +2,7 @@ export { default as DeltaValue } from "./DeltaValue.vue";
 export { default as TableCell } from "./TableCell.vue";
 export { default as TableCheckboxCell } from "./TableCheckboxCell.vue";
 export { default as TableColumnSetup } from "./TableColumnSetup.vue";
+export { default as TableExpandAdditionalHeadersButton } from "./TableExpandAdditionalHeadersButton.vue";
 export { default as TableHeader } from "./TableHeader.vue";
 export { default as TableHeaderCheckbox } from "./TableHeaderCheckbox.vue";
 export { default as TableHeaderGroup } from "./TableHeaderGroup.vue";

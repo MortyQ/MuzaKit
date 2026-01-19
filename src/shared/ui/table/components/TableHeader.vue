@@ -12,7 +12,7 @@ const tableSlots = inject<{ headerCellCustomAction?: Slot }>("tableSlots", {});
 interface Props {
   column: Column
   label: string
-  align?: "left" | "center" | "right"
+  align?: "left" | "center" | "right" | string
   columnKey: string
   resizable?: boolean // Whether column can be resized
   isSorted?: boolean
@@ -98,6 +98,8 @@ const handleSortKeyDown = (event: KeyboardEvent) => {
         class="table-header-label-wrapper"
         @click="handleHeaderLabelClick"
       >
+        <!-- Custom icon slot (before label) -->
+
         <!-- Slot for custom header content -->
         <slot
           :column="column"
@@ -106,6 +108,11 @@ const handleSortKeyDown = (event: KeyboardEvent) => {
         >
           <span class="table-header-label">{{ label }}</span>
         </slot>
+
+        <slot
+          :column="column"
+          name="icon"
+        />
 
         <!-- Info Tooltip -->
         <VTooltip
@@ -180,6 +187,14 @@ const handleSortKeyDown = (event: KeyboardEvent) => {
 </template>
 
 <style scoped>
+/* Custom icon slot - positioned before label */
+:deep(.table-header-icon-slot) {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
 .table-header-info-icon {
   color: #9ca3af;
   cursor: help;

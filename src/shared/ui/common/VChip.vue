@@ -3,20 +3,19 @@ import { computed } from "vue";
 
 import VIcon from "./VIcon.vue";
 
-import { SelectValue, VModelValue } from "@/shared/types";
+import { SelectValue, ValueComparator, VModelValue } from "@/shared/types";
 import VTag, { type TagColor } from "@/shared/ui/common/VTag.vue";
 
 export type ChipVariant = "filled" | "outlined" | "soft";
 
-export type ChipColor
-  = | "default"
-    | "primary"
-    | "secondary"
-    | "success"
-    | "warning"
-    | "error"
-    | "info"
-    | "neutral";
+export type ChipColor = "default"
+  | "primary"
+  | "secondary"
+  | "success"
+  | "warning"
+  | "error"
+  | "info"
+  | "neutral";
 
 export type ChipSize = "sm" | "md" | "lg";
 
@@ -46,17 +45,16 @@ interface Props {
   /** Custom class */
   class?: string
   /** Value for v-model (unique identifier for this chip) */
-  value?: any
+  value?: VModelValue
   /** Model value for v-model */
-  modelValue?: any
+  modelValue?: SelectValue
   /** Multiple selection mode (for array modelValue) */
   multiple?: boolean
   /**
    * Custom comparison function for complex values (objects)
    * If not provided, uses JSON.stringify for objects, === for primitives
    */
-
-  valueComparator?: (a: any, b: any) => boolean
+  valueComparator?: ValueComparator
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -85,7 +83,7 @@ const emit = defineEmits<{
 }>();
 
 // Helper function to compare values (supports primitives and objects)
-const isEqual = <T = VModelValue>(a: T, b: T): boolean => {
+const isEqual = (a: VModelValue, b: VModelValue): boolean => {
   // Use custom comparator if provided
   if (props.valueComparator) {
     return props.valueComparator(a, b);

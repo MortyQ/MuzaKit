@@ -15,7 +15,6 @@ export interface ColumnSetupItem {
 export interface ColumnSetupConfig {
   columns: Column[]
   initialVisible?: string[] // Keys of initially visible columns
-
   onUpdate?: (visibleColumns: Column[]) => void
   storage?: {
     key: string

@@ -134,10 +134,14 @@ const handleSingleExport = () => {
       <slot name="search">
         <div
           v-if="searchConfig"
-          class="toolbar-search-split"
+          class="toolbar-search-split flex h-full items-center"
         >
+          <span
+            class="w-px h-5 bg-base-300 -ml-4 mr-4"
+          />
           <VInput
             v-model="searchModel"
+            :name="searchConfig.placeholder"
             :placeholder="searchConfig.placeholder"
             debounce
             type="search"
